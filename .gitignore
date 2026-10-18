@@ -1,2 +1,4 @@
 target/
 .cooperators/
+spec/states/
+spec/*_TTrace_*.tla

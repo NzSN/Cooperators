@@ -26,6 +26,7 @@ the gate and commits between waves. Status column is the live tracker.
 | T2 | M1 core: registry+token auth (0600), `send/wait/ack` inboxes with peek cursors, presence heartbeats/stale transitions, dedupe by idempotency key | M1 integration suite incl. `kill -9` → replay durability | **done** (17 tests; real-daemon test skips in-sandbox) |
 | T3 | M2: channels (publish/read+replay), queues with leases+fencing+dead-letters, documents publish/claim (CAS, edit leases, blob store ≤64KiB inline) | lease/fence/dead-letter suite + doc CAS/claim suite | **done** (38 tests green, fmt clean) |
 | T4 | M3: `coop mcp-stdio` adapter (rmcp transport-io) + streamable HTTP endpoint; golden-transcript conformance proving UDS/stdio/HTTP parity | conformance suite green + automated MCP-client integration test | **done** (12 suites green; live UDS path deferred to host-side run) |
+| T6 | TLA+ spec of broker semantics (log, messaging, queue fencing, doc CAS/claim, crash) + TLC evidence | all 9 invariants + `TaskResolved` temporal property, exhaustive small model | **done** (1.67M distinct states, no error) |
 | T5 | M4: backpressure caps, `/healthz`+`/metrics`, perf smoke vs §11 targets, real README + config reference + operator docs | perf smoke recorded in `docs/impl/perf-smoke.md`; docs complete | **done** (56 tests green; append-throughput target MISSED — fsync-bound, recorded) |
 
 ## Log
@@ -37,3 +38,4 @@ the gate and commits between waves. Status column is the live tracker.
 - 2026-10-18 — T3 done: channels/queues/docs + shared lease manager; 14 new RPC routes; structured CONFLICT_CLAIMED/VERSION_CONFLICT data; blob spillover >64KiB.
 - 2026-10-18 — T4 done: 21 `coop_*` MCP tools over stdio (rmcp 3.2.0) + streamable HTTP /mcp on 127.0.0.1:7420 with bearer auth; golden transcripts in tests/conformance/ run against both dispatch layers; `--embedded` in-process mode for socketless testing. Live-daemon↔stdio↔UDS path must be exercised host-side.
 - 2026-10-18 — T5 done: inbox caps, /healthz + bearer /metrics, stdio 4MiB cap, README + docs/operator.md + docs/impl/perf-smoke.md. Perf: send-ack p50 2.674ms PASS, wait-delivery 0.010ms PASS, replay 6.1s/1M PASS, sustained append 335msg/s MISS (fsync-bound on WSL2 ext4; durability contract kept; group commit is the documented follow-up).
+- 2026-10-18 — T6 done: spec/Cooperators.tla + .cfg; TLC exhaustive at Len(log)<=6, Agents=2, Keys=1, MaxAttempts=2: 1,673,205 distinct states, no error, TaskResolved holds. Larger bounds timed out (interim-clean, not claimed).
