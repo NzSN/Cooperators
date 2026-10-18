@@ -1,0 +1,221 @@
+{
+  "name": "m2-docs",
+  "steps": [
+    {
+      "label": "register editor",
+      "method": "register_agent",
+      "tool": "coop_register_agent",
+      "args": {"name": "editor", "kind": "editor"},
+      "expect": {
+        "ok": true,
+        "result": {
+          "agent_id": {"$any": "ulid"},
+          "token": {"$any": "token"},
+          "name": "editor",
+          "kind": "editor",
+          "capabilities": [],
+          "rotated": false
+        }
+      }
+    },
+    {
+      "label": "publish version 1",
+      "method": "publish_doc",
+      "tool": "coop_publish_doc",
+      "args": {"name": "plan", "mime": "text/markdown", "text": "# one", "title": "Plan"},
+      "expect": {
+        "ok": true,
+        "result": {
+          "name": "plan",
+          "version": 1,
+          "head_version": 1,
+          "title": "Plan",
+          "mime": "text/markdown",
+          "storage": "inline",
+          "blob": null,
+          "seq": 1,
+          "ts": {"$any": "ts"}
+        }
+      }
+    },
+    {
+      "label": "publishing an existing document is rejected",
+      "method": "publish_doc",
+      "tool": "coop_publish_doc",
+      "args": {"name": "plan", "text": "again"},
+      "expect": {
+        "ok": false,
+        "error": {
+          "code": -32005,
+          "message": "document \"plan\" already exists",
+          "data": {"code": "EXISTS"}
+        }
+      }
+    },
+    {
+      "label": "CAS update to version 2",
+      "method": "update_doc",
+      "tool": "coop_update_doc",
+      "args": {"name": "plan", "base_version": 1, "text": "# two"},
+      "expect": {
+        "ok": true,
+        "result": {
+          "name": "plan",
+          "version": 2,
+          "head_version": 2,
+          "title": "Plan",
+          "mime": "text/plain",
+          "storage": "inline",
+          "blob": null,
+          "seq": 2,
+          "ts": {"$any": "ts"}
+        }
+      }
+    },
+    {
+      "label": "stale base version conflicts",
+      "method": "update_doc",
+      "tool": "coop_update_doc",
+      "args": {"name": "plan", "base_version": 1, "text": "stale"},
+      "expect": {
+        "ok": false,
+        "error": {
+          "code": -32006,
+          "message": "base_version 1 does not match head 2",
+          "data": {"code": "VERSION_CONFLICT", "head_version": 2}
+        }
+      }
+    },
+    {
+      "label": "read the document head",
+      "method": "read_doc",
+      "tool": "coop_read_doc",
+      "args": {"name": "plan"},
+      "expect": {
+        "ok": true,
+        "result": {
+          "name": "plan",
+          "version": 2,
+          "head_version": 2,
+          "title": "Plan",
+          "mime": "text/plain",
+          "body": {"mime": "text/plain", "text": "# two"},
+          "storage": "inline",
+          "blob": null,
+          "claim": null,
+          "fence": 0,
+          "versions": 2,
+          "updated_at": {"$any": "ts"}
+        }
+      }
+    },
+    {
+      "label": "claim the document",
+      "method": "claim_doc",
+      "tool": "coop_claim_doc",
+      "args": {"name": "plan", "lease_ttl_s": 30},
+      "capture": {"doc_lease_id": "lease_id", "doc_fence": "fence"},
+      "expect": {
+        "ok": true,
+        "result": {
+          "name": "plan",
+          "lease_id": {"$any": "ulid"},
+          "fence": 3,
+          "head_version": 2,
+          "expires_at": {"$any": "ts"},
+          "lease_ttl_s": 30
+        }
+      }
+    },
+    {
+      "label": "update under the edit lease",
+      "method": "update_doc",
+      "tool": "coop_update_doc",
+      "args": {
+        "name": "plan",
+        "base_version": 2,
+        "text": "# three",
+        "lease_id": "${doc_lease_id}",
+        "fence": 3
+      },
+      "expect": {
+        "ok": true,
+        "result": {
+          "name": "plan",
+          "version": 3,
+          "head_version": 3,
+          "title": "Plan",
+          "mime": "text/plain",
+          "storage": "inline",
+          "blob": null,
+          "seq": 4,
+          "ts": {"$any": "ts"}
+        }
+      }
+    },
+    {
+      "label": "release the edit lease",
+      "method": "release_doc",
+      "tool": "coop_release_doc",
+      "args": {"lease_id": "${doc_lease_id}", "fence": 3},
+      "expect": {
+        "ok": true,
+        "result": {
+          "name": "plan",
+          "lease_id": "${doc_lease_id}",
+          "fence": 3,
+          "new_fence": 5,
+          "released": true,
+          "seq": 5
+        }
+      }
+    },
+    {
+      "label": "read a pinned historical version",
+      "method": "read_doc",
+      "tool": "coop_read_doc",
+      "args": {"name": "plan", "version": 1},
+      "expect": {
+        "ok": true,
+        "result": {
+          "name": "plan",
+          "version": 1,
+          "head_version": 3,
+          "title": "Plan",
+          "mime": "text/markdown",
+          "body": {"mime": "text/markdown", "text": "# one"},
+          "storage": "inline",
+          "blob": null,
+          "claim": null,
+          "fence": 5,
+          "versions": 3,
+          "updated_at": {"$any": "ts"}
+        }
+      }
+    },
+    {
+      "label": "list documents",
+      "method": "list_docs",
+      "tool": "coop_list_docs",
+      "args": {},
+      "expect": {
+        "ok": true,
+        "result": {
+          "prefix": null,
+          "docs": [
+            {
+              "name": "plan",
+              "head_version": 3,
+              "title": "Plan",
+              "mime": "text/plain",
+              "versions": 3,
+              "updated_at": {"$any": "ts"},
+              "fence": 5,
+              "claim": null
+            }
+          ]
+        }
+      }
+    }
+  ]
+}

@@ -1,0 +1,194 @@
+{
+  "name": "m2-queues",
+  "steps": [
+    {
+      "label": "register worker",
+      "method": "register_agent",
+      "tool": "coop_register_agent",
+      "args": {"name": "worker", "kind": "worker"},
+      "expect": {
+        "ok": true,
+        "result": {
+          "agent_id": {"$any": "ulid"},
+          "token": {"$any": "token"},
+          "name": "worker",
+          "kind": "worker",
+          "capabilities": [],
+          "rotated": false
+        }
+      }
+    },
+    {
+      "label": "create the jobs queue",
+      "method": "create_queue",
+      "tool": "coop_create_queue",
+      "args": {"queue": "jobs"},
+      "expect": {
+        "ok": true,
+        "result": {
+          "queue": "jobs",
+          "created_seq": 1,
+          "created_at": {"$any": "ts"}
+        }
+      }
+    },
+    {
+      "label": "duplicate queue creation is rejected",
+      "method": "create_queue",
+      "tool": "coop_create_queue",
+      "args": {"name": "jobs"},
+      "expect": {
+        "ok": false,
+        "error": {
+          "code": -32005,
+          "message": "queue \"jobs\" already exists",
+          "data": {"code": "EXISTS"}
+        }
+      }
+    },
+    {
+      "label": "enqueue one task",
+      "method": "enqueue",
+      "tool": "coop_enqueue",
+      "args": {"queue": "jobs", "payload": {"n": 1}, "max_attempts": 2},
+      "capture": {"task_id": "task_id"},
+      "expect": {
+        "ok": true,
+        "result": {
+          "queue": "jobs",
+          "task_id": {"$any": "ulid"},
+          "seq": 2,
+          "max_attempts": 2,
+          "attempts": 0,
+          "enqueued_at": {"$any": "ts"}
+        }
+      }
+    },
+    {
+      "label": "first claim",
+      "method": "claim_task",
+      "tool": "coop_claim_task",
+      "args": {"queue": "jobs", "lease_ttl_s": 30},
+      "capture": {"lease_id": "lease_id", "fence": "fence"},
+      "expect": {
+        "ok": true,
+        "result": {
+          "queue": "jobs",
+          "task": {
+            "task_id": "${task_id}",
+            "payload": {"n": 1},
+            "max_attempts": 2,
+            "attempts": 1,
+            "attempt": 1,
+            "enqueued_at": {"$any": "ts"},
+            "state": "leased",
+            "lease": {
+              "lease_id": {"$any": "ulid"},
+              "fence": 3,
+              "agent_id": {"$any": "ulid"},
+              "agent_name": "worker",
+              "expires_at": {"$any": "ts"},
+              "lease_ttl_s": 30,
+              "attempt": 1
+            }
+          },
+          "lease_id": {"$any": "ulid"},
+          "fence": 3,
+          "expires_at": {"$any": "ts"},
+          "lease_ttl_s": 30
+        }
+      }
+    },
+    {
+      "label": "renew the lease",
+      "method": "renew_lease",
+      "tool": "coop_renew_lease",
+      "args": {"lease_id": "${lease_id}"},
+      "expect": {
+        "ok": true,
+        "result": {
+          "lease_id": "${lease_id}",
+          "kind": "task",
+          "fence": 3,
+          "expires_at": {"$any": "ts"},
+          "lease_ttl_s": 30
+        }
+      }
+    },
+    {
+      "label": "fail the first attempt",
+      "method": "fail_task",
+      "tool": "coop_fail_task",
+      "args": {"lease_id": "${lease_id}", "fence": 3, "reason": "boom"},
+      "expect": {
+        "ok": true,
+        "result": {
+          "queue": "jobs",
+          "task_id": "${task_id}",
+          "lease_id": "${lease_id}",
+          "fence": 3,
+          "status": "requeued",
+          "attempts": 1,
+          "max_attempts": 2,
+          "next_attempt": 2,
+          "dead_letter_seq": null,
+          "seq": 5,
+          "reason": "boom"
+        }
+      }
+    },
+    {
+      "label": "second claim after requeue",
+      "method": "claim_task",
+      "tool": "coop_claim_task",
+      "args": {"queue": "jobs", "lease_ttl_s": 30},
+      "capture": {"lease_id": "lease_id"},
+      "expect": {
+        "ok": true,
+        "result": {
+          "queue": "jobs",
+          "task": {
+            "task_id": "${task_id}",
+            "payload": {"n": 1},
+            "max_attempts": 2,
+            "attempts": 2,
+            "attempt": 2,
+            "enqueued_at": {"$any": "ts"},
+            "state": "leased",
+            "lease": {
+              "lease_id": {"$any": "ulid"},
+              "fence": 6,
+              "agent_id": {"$any": "ulid"},
+              "agent_name": "worker",
+              "expires_at": {"$any": "ts"},
+              "lease_ttl_s": 30,
+              "attempt": 2
+            }
+          },
+          "lease_id": {"$any": "ulid"},
+          "fence": 6,
+          "expires_at": {"$any": "ts"},
+          "lease_ttl_s": 30
+        }
+      }
+    },
+    {
+      "label": "complete the task",
+      "method": "complete_task",
+      "tool": "coop_complete_task",
+      "args": {"lease_id": "${lease_id}", "fence": 6, "outcome": {"ok": true}, "receipt": {"note": "done"}},
+      "expect": {
+        "ok": true,
+        "result": {
+          "queue": "jobs",
+          "task_id": "${task_id}",
+          "lease_id": "${lease_id}",
+          "fence": 6,
+          "status": "completed",
+          "seq": 7,
+          "outcome": {"ok": true}
+        }
+      }
+    }
+  ]
+}

@@ -30,6 +30,7 @@ pub mod envelope;
 pub mod error;
 pub mod id;
 pub mod leases;
+pub mod mcp;
 pub mod messaging;
 pub mod paths;
 pub mod presence;

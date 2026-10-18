@@ -1,0 +1,224 @@
+{
+  "name": "m1-messaging",
+  "steps": [
+    {
+      "label": "register alice",
+      "method": "register_agent",
+      "tool": "coop_register_agent",
+      "args": {"name": "alice", "kind": "codex", "capabilities": ["review"]},
+      "capture": {"alice_token": "token", "alice_agent_id": "agent_id"},
+      "expect": {
+        "ok": true,
+        "result": {
+          "agent_id": {"$any": "ulid"},
+          "token": {"$any": "token"},
+          "name": "alice",
+          "kind": "codex",
+          "capabilities": ["review"],
+          "rotated": false
+        }
+      }
+    },
+    {
+      "label": "register bob",
+      "method": "register_agent",
+      "tool": "coop_register_agent",
+      "args": {"name": "bob", "kind": "claude", "capabilities": []},
+      "capture": {"bob_token": "token", "bob_agent_id": "agent_id"},
+      "expect": {
+        "ok": true,
+        "result": {
+          "agent_id": {"$any": "ulid"},
+          "token": {"$any": "token"},
+          "name": "bob",
+          "kind": "claude",
+          "capabilities": [],
+          "rotated": false
+        }
+      }
+    },
+    {
+      "label": "bob sends a request to alice",
+      "method": "send_message",
+      "tool": "coop_send_message",
+      "args": {"to": "alice", "kind": "request", "text": "hello", "idempotency_key": "m1-1"},
+      "capture": {"message_id": "message_id"},
+      "expect": {
+        "ok": true,
+        "result": {
+          "message_id": {"$any": "ulid"},
+          "seq": 1,
+          "duplicate": false,
+          "to": "alice",
+          "to_agent_id": "${alice_agent_id}",
+          "idempotency_key": "m1-1"
+        }
+      }
+    },
+    {
+      "label": "duplicate send returns the original message",
+      "method": "send_message",
+      "tool": "coop_send_message",
+      "args": {"to": "alice", "kind": "request", "text": "ignored", "idempotency_key": "m1-1"},
+      "expect": {
+        "ok": true,
+        "result": {
+          "message_id": "${message_id}",
+          "seq": 1,
+          "duplicate": true,
+          "to": "alice",
+          "to_agent_id": "${alice_agent_id}",
+          "idempotency_key": "m1-1"
+        }
+      }
+    },
+    {
+      "label": "rotate alice's token and switch session identity",
+      "method": "register_agent",
+      "tool": "coop_register_agent",
+      "args": {"name": "alice", "kind": "codex", "capabilities": ["review"], "token": "${alice_token}"},
+      "capture": {"alice_token": "token"},
+      "expect": {
+        "ok": true,
+        "result": {
+          "agent_id": "${alice_agent_id}",
+          "token": {"$any": "token"},
+          "name": "alice",
+          "kind": "codex",
+          "capabilities": ["review"],
+          "rotated": true
+        }
+      }
+    },
+    {
+      "label": "alice peeks her inbox",
+      "method": "wait_message",
+      "tool": "coop_wait_message",
+      "args": {"timeout_s": 0},
+      "capture": {"next_cursor": "next_cursor"},
+      "expect": {
+        "ok": true,
+        "result": {
+          "messages": [
+            {
+              "v": 1,
+              "id": {"$any": "ulid"},
+              "seq": 1,
+              "ts": {"$any": "ts"},
+              "from": "bob",
+              "to": "alice",
+              "kind": "request",
+              "reply_to": null,
+              "idempotency_key": "m1-1",
+              "body": {"mime": "text/plain", "text": "hello"},
+              "prev_hash": {"$any": "hash"}
+            }
+          ],
+          "next_cursor": "1",
+          "cursor": "0",
+          "acked_cursor": "0",
+          "timed_out": false
+        }
+      }
+    },
+    {
+      "label": "alice acknowledges the batch",
+      "method": "ack",
+      "tool": "coop_ack",
+      "args": {"cursor": "${next_cursor}"},
+      "expect": {"ok": true, "result": {"acked_cursor": "1"}}
+    },
+    {
+      "label": "acked wait returns an empty batch",
+      "method": "wait_message",
+      "tool": "coop_wait_message",
+      "args": {"timeout_s": 0},
+      "expect": {
+        "ok": true,
+        "result": {
+          "messages": [],
+          "next_cursor": "1",
+          "cursor": "1",
+          "acked_cursor": "1",
+          "timed_out": true
+        }
+      }
+    },
+    {
+      "label": "heartbeat",
+      "method": "heartbeat",
+      "tool": "coop_heartbeat",
+      "args": {},
+      "expect": {
+        "ok": true,
+        "result": {
+          "agent_id": "${alice_agent_id}",
+          "state": "active",
+          "last_seen": {"$any": "ts"}
+        }
+      }
+    },
+    {
+      "label": "list active agents",
+      "method": "list_agents",
+      "tool": "coop_list_agents",
+      "args": {"include_stale": false},
+      "expect": {
+        "ok": true,
+        "result": {
+          "agents": [
+            {
+              "agent_id": "${alice_agent_id}",
+              "name": "alice",
+              "kind": "codex",
+              "capabilities": ["review"],
+              "state": "active",
+              "last_seen": {"$any": "ts"},
+              "registered_at": {"$any": "ts"}
+            },
+            {
+              "agent_id": "${bob_agent_id}",
+              "name": "bob",
+              "kind": "claude",
+              "capabilities": [],
+              "state": "active",
+              "last_seen": {"$any": "ts"},
+              "registered_at": {"$any": "ts"}
+            }
+          ]
+        }
+      }
+    },
+    {
+      "label": "list agents including stale",
+      "method": "list_agents",
+      "tool": "coop_list_agents",
+      "args": {"include_stale": true},
+      "expect": {
+        "ok": true,
+        "result": {
+          "agents": [
+            {
+              "agent_id": "${alice_agent_id}",
+              "name": "alice",
+              "kind": "codex",
+              "capabilities": ["review"],
+              "state": "active",
+              "last_seen": {"$any": "ts"},
+              "registered_at": {"$any": "ts"}
+            },
+            {
+              "agent_id": "${bob_agent_id}",
+              "name": "bob",
+              "kind": "claude",
+              "capabilities": [],
+              "state": "active",
+              "last_seen": {"$any": "ts"},
+              "registered_at": {"$any": "ts"}
+            }
+          ]
+        }
+      }
+    }
+  ]
+}

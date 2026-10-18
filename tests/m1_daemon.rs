@@ -47,6 +47,9 @@ impl DaemonProcess {
         let child = Command::new(env!("CARGO_BIN_EXE_coop"))
             .args(["daemon", "run"])
             .env("COOPERATORS_HOME", root)
+            // The M3 HTTP listener is not under test here; keep the daemon
+            // from binding a fixed port during socket-side acceptance runs.
+            .env("COOP_HTTP_ADDR", "off")
             .env_remove("COOP_SOCKET")
             .stdout(Stdio::null())
             .stderr(Stdio::from(log))

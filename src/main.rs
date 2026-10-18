@@ -2,12 +2,13 @@
 
 use std::path::PathBuf;
 use std::process::ExitCode;
+use std::sync::Arc;
 use std::time::Duration;
 
 use clap::{Parser, Subcommand};
 use serde_json::{json, Value};
 
-use cooperators::{client, paths, server};
+use cooperators::{client, mcp, paths, server};
 
 /// Environment variable read when `--token` is absent.
 const TOKEN_ENV: &str = "COOP_TOKEN";
@@ -37,6 +38,13 @@ enum Command {
     Daemon {
         #[command(subcommand)]
         command: DaemonCommand,
+    },
+    /// Run an MCP server over stdin/stdout, forwarding tool calls to the daemon
+    McpStdio {
+        /// Dispatch against the bus root in-process instead of a daemon socket
+        /// (tests and single-process debugging; the daemon must not be running)
+        #[arg(long)]
+        embedded: bool,
     },
     /// Register a new agent name (or rotate an existing token)
     Register {
@@ -103,7 +111,12 @@ enum Command {
 #[derive(Debug, Subcommand)]
 enum DaemonCommand {
     /// Run the broker daemon in the foreground
-    Run,
+    Run {
+        /// Streamable-HTTP MCP listen address; "off" disables it
+        /// (default: 127.0.0.1:7420, or $COOP_HTTP_ADDR)
+        #[arg(long, value_name = "ADDR")]
+        http_addr: Option<String>,
+    },
 }
 
 #[tokio::main]
@@ -113,14 +126,45 @@ async fn main() -> ExitCode {
 
     match cli.command {
         Command::Daemon {
-            command: DaemonCommand::Run,
-        } => match server::run(&root).await {
-            Ok(()) => ExitCode::SUCCESS,
-            Err(error) => {
-                eprintln!("coop daemon: {error}");
-                ExitCode::FAILURE
+            command: DaemonCommand::Run { http_addr },
+        } => {
+            let http_addr = match resolve_http_addr(http_addr) {
+                Ok(address) => address,
+                Err(message) => {
+                    eprintln!("coop daemon: {message}");
+                    return ExitCode::from(2);
+                }
+            };
+            let options = server::ServerOptions { http_addr };
+            match server::run_with_options(&root, options).await {
+                Ok(()) => ExitCode::SUCCESS,
+                Err(error) => {
+                    eprintln!("coop daemon: {error}");
+                    ExitCode::FAILURE
+                }
             }
-        },
+        }
+        Command::McpStdio { embedded } => {
+            let token = token_option(&cli.token);
+            let backend = if embedded {
+                match server::DaemonState::with_config(server::DaemonConfig::new(root.clone())) {
+                    Ok(state) => mcp::Backend::embedded(Arc::new(state)),
+                    Err(error) => {
+                        eprintln!("coop mcp-stdio: initialize bus root: {error}");
+                        return ExitCode::FAILURE;
+                    }
+                }
+            } else {
+                mcp::Backend::uds(paths::socket_path(&root))
+            };
+            match mcp::serve_stdio(mcp::CoopMcpHandler::stdio(backend, token)).await {
+                Ok(()) => ExitCode::SUCCESS,
+                Err(error) => {
+                    eprintln!("coop mcp-stdio: {error}");
+                    ExitCode::FAILURE
+                }
+            }
+        }
         Command::Status => match client::call(&root, "daemon.status", json!({})).await {
             Ok(value) => print_json(&value),
             Err(error) => report("status", &error),
@@ -269,4 +313,23 @@ fn require_token(flag: &Option<String>) -> Result<String, ExitCode> {
         eprintln!("coop: missing agent token; pass --token or set {TOKEN_ENV}");
         ExitCode::from(2)
     })
+}
+
+/// Resolves the streamable-HTTP listen address from `--http-addr`, then
+/// `$COOP_HTTP_ADDR`, then the design default. `off`/`none` disables it.
+fn resolve_http_addr(flag: Option<String>) -> Result<Option<std::net::SocketAddr>, String> {
+    let raw = flag
+        .filter(|value| !value.is_empty())
+        .or_else(|| {
+            std::env::var("COOP_HTTP_ADDR")
+                .ok()
+                .filter(|value| !value.is_empty())
+        })
+        .unwrap_or_else(|| mcp::DEFAULT_HTTP_ADDR.to_string());
+    if raw.eq_ignore_ascii_case("off") || raw.eq_ignore_ascii_case("none") {
+        return Ok(None);
+    }
+    raw.parse()
+        .map(Some)
+        .map_err(|error| format!("invalid HTTP address {raw:?}: {error}"))
 }

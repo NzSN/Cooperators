@@ -1,0 +1,269 @@
+{
+  "name": "errors",
+  "steps": [
+    {
+      "label": "missing token",
+      "method": "heartbeat",
+      "tool": "coop_heartbeat",
+      "args": {},
+      "expect": {
+        "ok": false,
+        "error": {
+          "code": -32001,
+          "message": "missing agent token; pass params.token or set COOP_TOKEN",
+          "data": {"code": "UNAUTHENTICATED"}
+        }
+      }
+    },
+    {
+      "label": "register alice",
+      "method": "register_agent",
+      "tool": "coop_register_agent",
+      "args": {"name": "alice", "kind": "codex"},
+      "capture": {"alice_agent_id": "agent_id"},
+      "expect": {
+        "ok": true,
+        "result": {
+          "agent_id": {"$any": "ulid"},
+          "token": {"$any": "token"},
+          "name": "alice",
+          "kind": "codex",
+          "capabilities": [],
+          "rotated": false
+        }
+      }
+    },
+    {
+      "label": "re-registering without the old token conflicts",
+      "method": "register_agent",
+      "tool": "coop_register_agent",
+      "args": {"name": "alice", "kind": "codex", "token": "00000000000000000000000000000000"},
+      "expect": {
+        "ok": false,
+        "error": {
+          "code": -32004,
+          "message": "token does not match the registered agent name \"alice\"",
+          "data": {"code": "CONFLICT"}
+        }
+      }
+    },
+    {
+      "label": "invalid token",
+      "method": "heartbeat",
+      "tool": "coop_heartbeat",
+      "args": {"token": "00000000000000000000000000000000"},
+      "expect": {
+        "ok": false,
+        "error": {
+          "code": -32001,
+          "message": "invalid agent token",
+          "data": {"code": "UNAUTHENTICATED"}
+        }
+      }
+    },
+    {
+      "label": "ack beyond the inbox head",
+      "method": "ack",
+      "tool": "coop_ack",
+      "args": {"cursor": "999"},
+      "expect": {
+        "ok": false,
+        "error": {
+          "code": -32602,
+          "message": "cursor 999 is beyond the inbox head 0",
+          "data": null
+        }
+      }
+    },
+    {
+      "label": "send without a body",
+      "method": "send_message",
+      "tool": "coop_send_message",
+      "args": {"to": "alice", "kind": "request"},
+      "expect": {
+        "ok": false,
+        "error": {
+          "code": -32602,
+          "message": "body or text is required",
+          "data": null
+        }
+      }
+    },
+    {
+      "label": "wait timeout above the daemon limit",
+      "method": "wait_message",
+      "tool": "coop_wait_message",
+      "args": {"timeout_s": 601},
+      "expect": {
+        "ok": false,
+        "error": {
+          "code": -32602,
+          "message": "timeout_s must be at most 600 seconds",
+          "data": null
+        }
+      }
+    },
+    {
+      "label": "unknown channel",
+      "method": "read_channel",
+      "tool": "coop_read_channel",
+      "args": {"channel": "never", "cursor": "0"},
+      "expect": {
+        "ok": false,
+        "error": {
+          "code": -32002,
+          "message": "unknown channel \"never\"",
+          "data": {"code": "NOT_FOUND"}
+        }
+      }
+    },
+    {
+      "label": "unknown queue",
+      "method": "claim_task",
+      "tool": "coop_claim_task",
+      "args": {"queue": "jobs", "lease_ttl_s": 30},
+      "expect": {
+        "ok": false,
+        "error": {
+          "code": -32002,
+          "message": "unknown queue \"jobs\"",
+          "data": {"code": "NOT_FOUND"}
+        }
+      }
+    },
+    {
+      "label": "unknown document",
+      "method": "read_doc",
+      "tool": "coop_read_doc",
+      "args": {"name": "plan"},
+      "expect": {
+        "ok": false,
+        "error": {
+          "code": -32002,
+          "message": "unknown document \"plan\"",
+          "data": {"code": "NOT_FOUND"}
+        }
+      }
+    },
+    {
+      "label": "publish a document for the claim conflict",
+      "method": "publish_doc",
+      "tool": "coop_publish_doc",
+      "args": {"name": "plan", "text": "# one"},
+      "expect": {
+        "ok": true,
+        "result": {
+          "name": "plan",
+          "version": 1,
+          "head_version": 1,
+          "title": "",
+          "mime": "text/plain",
+          "storage": "inline",
+          "blob": null,
+          "seq": 1,
+          "ts": {"$any": "ts"}
+        }
+      }
+    },
+    {
+      "label": "duplicate document publish",
+      "method": "publish_doc",
+      "tool": "coop_publish_doc",
+      "args": {"name": "plan", "text": "again"},
+      "expect": {
+        "ok": false,
+        "error": {
+          "code": -32005,
+          "message": "document \"plan\" already exists",
+          "data": {"code": "EXISTS"}
+        }
+      }
+    },
+    {
+      "label": "version conflict",
+      "method": "update_doc",
+      "tool": "coop_update_doc",
+      "args": {"name": "plan", "base_version": 99, "text": "stale"},
+      "expect": {
+        "ok": false,
+        "error": {
+          "code": -32006,
+          "message": "base_version 99 does not match head 1",
+          "data": {"code": "VERSION_CONFLICT", "head_version": 1}
+        }
+      }
+    },
+    {
+      "label": "claim the document",
+      "method": "claim_doc",
+      "tool": "coop_claim_doc",
+      "args": {"name": "plan", "lease_ttl_s": 30},
+      "capture": {"doc_lease_id": "lease_id"},
+      "expect": {
+        "ok": true,
+        "result": {
+          "name": "plan",
+          "lease_id": {"$any": "ulid"},
+          "fence": 2,
+          "head_version": 1,
+          "expires_at": {"$any": "ts"},
+          "lease_ttl_s": 30
+        }
+      }
+    },
+    {
+      "label": "second claim is rejected while held",
+      "method": "claim_doc",
+      "tool": "coop_claim_doc",
+      "args": {"name": "plan", "lease_ttl_s": 30},
+      "expect": {
+        "ok": false,
+        "error": {
+          "code": -32007,
+          "message": {"$prefix": "document is claimed by alice until "},
+          "data": {
+            "code": "CONFLICT_CLAIMED",
+            "holder": {"agent_id": "${alice_agent_id}", "name": "alice"},
+            "holder_agent_id": "${alice_agent_id}",
+            "holder_name": "alice",
+            "expires_at": {"$any": "ts"},
+            "expires_at_ms": {"$any": "number"},
+            "fence": 2,
+            "head_version": 1
+          }
+        }
+      }
+    },
+    {
+      "label": "completing an unknown lease loses",
+      "method": "complete_task",
+      "tool": "coop_complete_task",
+      "args": {"lease_id": "no-such-lease", "fence": 1, "outcome": {}},
+      "expect": {
+        "ok": false,
+        "error": {
+          "code": -32008,
+          "message": "unknown lease",
+          "data": {"code": "LEASE_LOST"}
+        }
+      }
+    },
+    {
+      "label": "daemon status",
+      "method": "daemon.status",
+      "tool": "coop_get_status",
+      "args": {},
+      "expect": {
+        "ok": true,
+        "result": {
+          "version": "${version}",
+          "pid": {"$any": "number"},
+          "uptime_s": {"$any": "number"},
+          "root": "${root}",
+          "started_at": {"$any": "ts"},
+          "seq_heads": {"$any": "object"}
+        }
+      }
+    }
+  ]
+}

@@ -1,0 +1,159 @@
+{
+  "name": "m2-channels",
+  "steps": [
+    {
+      "label": "register publisher",
+      "method": "register_agent",
+      "tool": "coop_register_agent",
+      "args": {"name": "publisher", "kind": "agent"},
+      "expect": {
+        "ok": true,
+        "result": {
+          "agent_id": {"$any": "ulid"},
+          "token": {"$any": "token"},
+          "name": "publisher",
+          "kind": "agent",
+          "capabilities": [],
+          "rotated": false
+        }
+      }
+    },
+    {
+      "label": "publish hello",
+      "method": "publish",
+      "tool": "coop_publish",
+      "args": {"channel": "build", "text": "hello", "idempotency_key": "build-1"},
+      "capture": {"channel_message_id": "message_id"},
+      "expect": {
+        "ok": true,
+        "result": {
+          "channel": "build",
+          "message_id": {"$any": "ulid"},
+          "seq": 1,
+          "ts": {"$any": "ts"},
+          "duplicate": false,
+          "idempotency_key": "build-1",
+          "cursor": {"file": "channels/build.jsonl", "seq": 1}
+        }
+      }
+    },
+    {
+      "label": "duplicate publish is deduped",
+      "method": "publish",
+      "tool": "coop_publish",
+      "args": {"channel": "build", "text": "ignored", "idempotency_key": "build-1"},
+      "expect": {
+        "ok": true,
+        "result": {
+          "channel": "build",
+          "message_id": "${channel_message_id}",
+          "seq": 1,
+          "ts": {"$any": "ts"},
+          "duplicate": true,
+          "idempotency_key": "build-1",
+          "cursor": {"file": "channels/build.jsonl", "seq": 1}
+        }
+      }
+    },
+    {
+      "label": "read from the start",
+      "method": "read_channel",
+      "tool": "coop_read_channel",
+      "args": {"channel": "build", "cursor": "0", "limit": 10},
+      "expect": {
+        "ok": true,
+        "result": {
+          "channel": "build",
+          "file": "channels/build.jsonl",
+          "messages": [
+            {
+              "v": 1,
+              "id": {"$any": "ulid"},
+              "seq": 1,
+              "ts": {"$any": "ts"},
+              "from": "publisher",
+              "to": "build",
+              "kind": "publish",
+              "reply_to": null,
+              "idempotency_key": "build-1",
+              "body": {"mime": "text/plain", "text": "hello"},
+              "prev_hash": {"$any": "hash"}
+            }
+          ],
+          "cursor": {"file": "channels/build.jsonl", "seq": 0},
+          "next_cursor": {"file": "channels/build.jsonl", "seq": 1},
+          "head": {"file": "channels/build.jsonl", "seq": 1},
+          "timed_out": false
+        }
+      }
+    },
+    {
+      "label": "empty read does not advance the cursor",
+      "method": "read_channel",
+      "tool": "coop_read_channel",
+      "args": {"channel": "build", "cursor": "1", "wait_s": 0},
+      "expect": {
+        "ok": true,
+        "result": {
+          "channel": "build",
+          "file": "channels/build.jsonl",
+          "messages": [],
+          "cursor": {"file": "channels/build.jsonl", "seq": 1},
+          "next_cursor": {"file": "channels/build.jsonl", "seq": 1},
+          "head": {"file": "channels/build.jsonl", "seq": 1},
+          "timed_out": true
+        }
+      }
+    },
+    {
+      "label": "publish structured body",
+      "method": "publish",
+      "tool": "coop_publish",
+      "args": {"channel": "build", "body": {"mime": "text/markdown", "text": "# two"}},
+      "expect": {
+        "ok": true,
+        "result": {
+          "channel": "build",
+          "message_id": {"$any": "ulid"},
+          "seq": 2,
+          "ts": {"$any": "ts"},
+          "duplicate": false,
+          "idempotency_key": null,
+          "cursor": {"file": "channels/build.jsonl", "seq": 2}
+        }
+      }
+    },
+    {
+      "label": "read the second record",
+      "method": "read_channel",
+      "tool": "coop_read_channel",
+      "args": {"channel": "build", "cursor": {"file": "channels/build.jsonl", "seq": 1}},
+      "expect": {
+        "ok": true,
+        "result": {
+          "channel": "build",
+          "file": "channels/build.jsonl",
+          "messages": [
+            {
+              "v": 1,
+              "id": {"$any": "ulid"},
+              "seq": 2,
+              "ts": {"$any": "ts"},
+              "from": "publisher",
+              "to": "build",
+              "kind": "publish",
+              "reply_to": null,
+              "idempotency_key": null,
+              "body": {"mime": "text/markdown", "text": "# two"},
+              "prev_hash": {"$any": "hash"}
+            }
+          ],
+          "cursor": {"file": "channels/build.jsonl", "seq": 1},
+          "next_cursor": {"file": "channels/build.jsonl", "seq": 2},
+          "head": {"file": "channels/build.jsonl", "seq": 2},
+          "timed_out": false
+        }
+      }
+    }
+  ]
+}

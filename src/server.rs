@@ -23,6 +23,7 @@
 use std::collections::HashMap;
 use std::fs;
 use std::io;
+use std::net::SocketAddr;
 use std::os::unix::fs::{FileTypeExt, PermissionsExt};
 use std::os::unix::net::UnixStream as StdUnixStream;
 use std::path::{Path, PathBuf};
@@ -255,8 +256,31 @@ pub fn bind(root: &Path) -> io::Result<(UnixListener, PathBuf)> {
     Ok((listener, socket))
 }
 
-/// Runs the daemon until the listener fails.
+/// Daemon startup options.
+#[derive(Debug, Clone)]
+pub struct ServerOptions {
+    /// Streamable-HTTP MCP listen address; `None` disables the endpoint.
+    pub http_addr: Option<SocketAddr>,
+}
+
+impl Default for ServerOptions {
+    fn default() -> Self {
+        Self {
+            http_addr: crate::mcp::DEFAULT_HTTP_ADDR.parse().ok(),
+        }
+    }
+}
+
+/// Runs the daemon with the default HTTP listener.
 pub async fn run(root: &Path) -> io::Result<()> {
+    run_with_options(root, ServerOptions::default()).await
+}
+
+/// Runs the daemon until the UDS listener fails.
+///
+/// The HTTP listener is best-effort: a port already in use degrades the
+/// daemon to UDS-only instead of taking the broker down.
+pub async fn run_with_options(root: &Path, options: ServerOptions) -> io::Result<()> {
     let config = DaemonConfig::new(root.to_path_buf());
     let state = Arc::new(
         DaemonState::with_config(config)
@@ -270,6 +294,23 @@ pub async fn run(root: &Path) -> io::Result<()> {
         socket.display(),
         root.display()
     );
+
+    if let Some(address) = options.http_addr {
+        match tokio::net::TcpListener::bind(address).await {
+            Ok(http_listener) => {
+                let http_state = Arc::clone(&state);
+                tokio::spawn(async move {
+                    if let Err(error) = crate::mcp::serve_http(http_listener, http_state).await {
+                        eprintln!("coop daemon: MCP HTTP listener stopped: {error}");
+                    }
+                });
+            }
+            Err(error) => {
+                eprintln!("coop daemon: MCP HTTP listener {address} unavailable: {error}");
+            }
+        }
+    }
+
     serve(listener, state).await
 }
 
