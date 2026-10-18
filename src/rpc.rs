@@ -70,6 +70,20 @@ impl RpcError {
         }
     }
 
+    /// Like [`Self::application`], but merges additional structured fields
+    /// into `error.data`. The canonical `code` field always wins.
+    pub fn application_with_data(code: ErrorCode, detail: impl Into<String>, data: Value) -> Self {
+        let mut error = Self::application(code, detail);
+        if let (Some(Value::Object(target)), Value::Object(extra)) = (&mut error.data, data) {
+            for (key, value) in extra {
+                if key != "code" {
+                    target.insert(key, value);
+                }
+            }
+        }
+        error
+    }
+
     pub fn parse_error(message: impl Into<String>) -> Self {
         Self::new(PARSE_ERROR, message)
     }

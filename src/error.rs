@@ -119,6 +119,10 @@ impl std::fmt::Display for ErrorCode {
 pub enum BrokerError {
     /// A canonical broker error with a human-readable detail string.
     Application(ErrorCode, String),
+    /// A canonical broker error carrying structured context in
+    /// `error.data` (for example the holder and expiry of a conflicting
+    /// claim).
+    ApplicationData(ErrorCode, String, serde_json::Value),
     /// The request parameters were malformed or failed validation.
     Invalid(String),
     /// An unexpected server-side failure.
@@ -131,6 +135,16 @@ impl BrokerError {
     /// Creates an application error.
     pub fn application(code: ErrorCode, detail: impl Into<String>) -> Self {
         Self::Application(code, detail.into())
+    }
+
+    /// Creates an application error with structured context merged into the
+    /// JSON-RPC `error.data` object alongside `code`.
+    pub fn application_with_data(
+        code: ErrorCode,
+        detail: impl Into<String>,
+        data: serde_json::Value,
+    ) -> Self {
+        Self::ApplicationData(code, detail.into(), data)
     }
 
     /// Creates an invalid-parameter error.
@@ -147,6 +161,9 @@ impl BrokerError {
     pub fn into_rpc_error(self) -> crate::rpc::RpcError {
         match self {
             Self::Application(code, detail) => crate::rpc::RpcError::application(code, detail),
+            Self::ApplicationData(code, detail, data) => {
+                crate::rpc::RpcError::application_with_data(code, detail, data)
+            }
             Self::Invalid(detail) => crate::rpc::RpcError::invalid_params(detail),
             Self::Internal(detail) => crate::rpc::RpcError::internal(detail),
             Self::Io(error) => crate::rpc::RpcError::internal(error.to_string()),
@@ -157,7 +174,9 @@ impl BrokerError {
 impl std::fmt::Display for BrokerError {
     fn fmt(&self, formatter: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
         match self {
-            Self::Application(code, detail) => write!(formatter, "{code}: {detail}"),
+            Self::Application(code, detail) | Self::ApplicationData(code, detail, _) => {
+                write!(formatter, "{code}: {detail}")
+            }
             Self::Invalid(detail) => write!(formatter, "invalid parameters: {detail}"),
             Self::Internal(detail) => write!(formatter, "internal error: {detail}"),
             Self::Io(error) => write!(formatter, "I/O error: {error}"),

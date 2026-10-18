@@ -274,34 +274,6 @@ pub(crate) fn load_all_inboxes(root: &Path) -> Result<LoadedInboxes, BrokerError
     Ok((inboxes, dedupe))
 }
 
-/// Opens (creating if needed) one channel log, emitting a recovery record
-/// when replay repaired a torn tail.
-pub(crate) fn open_channel_log(
-    root: &Path,
-    channel: &str,
-) -> Result<LogFile<Envelope>, BrokerError> {
-    validate_channel_name(channel)?;
-    let path = root.join("channels").join(format!("{channel}.jsonl"));
-    let (mut log, report) = LogFile::open(&path).map_err(BrokerError::from)?;
-    if report.was_truncated() {
-        let body = Body::new(
-            "application/json",
-            json!({
-                "event": "recovery",
-                "channel": channel,
-                "truncated_bytes": report.truncated_bytes,
-                "last_valid_offset": report.last_valid_offset,
-                "at": id::now_rfc3339(),
-            })
-            .to_string(),
-        );
-        let mut recovery = Envelope::new(DAEMON_SENDER, channel, "recovery", body)
-            .map_err(|error| BrokerError::internal(error.to_string()))?;
-        log.append(&mut recovery)?;
-    }
-    Ok(log)
-}
-
 /// Validates a channel name before it is used as a file stem.
 pub fn validate_channel_name(name: &str) -> Result<(), BrokerError> {
     if name.is_empty() || name.len() > 128 {
@@ -614,7 +586,7 @@ impl DaemonState {
         validate_channel_name(channel)?;
         let mut logs = self.channel_logs.lock().await;
         if !logs.contains_key(channel) {
-            let log = open_channel_log(&self.root, channel)?;
+            let log = crate::channels::open_channel(&self.root, channel)?;
             logs.insert(channel.to_string(), log);
         }
         let log = logs
@@ -622,6 +594,9 @@ impl DaemonState {
             .expect("channel log is present after insertion");
         let mut envelope = Envelope::new(from, channel, kind, body)
             .map_err(|error| BrokerError::internal(error.to_string()))?;
-        log.append(&mut envelope).map_err(BrokerError::from)
+        let receipt = log.log.append(&mut envelope)?;
+        log.records.push(envelope);
+        Arc::clone(&log.notify).notify_waiters();
+        Ok(receipt)
     }
 }

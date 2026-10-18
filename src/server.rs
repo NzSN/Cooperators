@@ -10,16 +10,15 @@
 //! `params.token`; after a successful call the connection remembers the token
 //! so later requests on the same socket may omit it.
 //!
-//! # M2 extension points
+//! # M2 state
 //!
-//! `DaemonState` keeps its replay-derived maps in `pub(crate)` fields.
-//! Channels, queues, and documents should follow the inbox pattern: one
+//! `DaemonState` keeps replay-derived maps in `pub(crate)` fields. Channels,
+//! queues, and documents each follow the inbox pattern: one
 //! `LogFile<Record>` per log behind a `tokio::sync::Mutex`, with a
-//! `storage::ChainRecord` implementation. Add the new method names to the
-//! authenticated-method list and a match arm in `route`; `state.authenticate`
-//! already refreshes presence, and `DaemonState::append_channel_event` shows
-//! the channel-log hook. Use `send_lock` when a mutation spans several logs
-//! and needs one global order.
+//! `storage::ChainRecord` implementation and a parallel replay-derived
+//! runtime index. `send_lock` gives mutations one global order when a
+//! transition spans several logs (claim selection, dead-lettering, lease
+//! renewal).
 
 use std::collections::HashMap;
 use std::fs;
@@ -37,12 +36,15 @@ use tokio::io::{AsyncBufReadExt, AsyncRead, AsyncWrite, AsyncWriteExt, BufReader
 use tokio::net::{UnixListener, UnixStream};
 use tokio::sync::{Mutex, RwLock};
 
-use crate::envelope::{Body, Envelope};
+use crate::channels::ChannelLog;
+use crate::docs::{self, DocEvent, DocRuntime};
+use crate::envelope::Body;
 use crate::error::{BrokerError, ErrorCode};
 use crate::id;
 use crate::messaging::{self, DedupeEntry, Inbox};
 use crate::paths;
 use crate::presence::Presence;
+use crate::queues::{self, QueueEvent, QueueRuntime};
 use crate::registry::{AgentIdentity, Registry};
 use crate::rpc::{self, RpcError, RpcRequest, RpcResponse};
 use crate::status::{self, StatusResponse};
@@ -50,12 +52,26 @@ use crate::storage::LogFile;
 use crate::VERSION;
 
 /// Methods that require a valid agent token.
-const AUTHENTICATED_METHODS: [&str; 5] = [
+const AUTHENTICATED_METHODS: [&str; 19] = [
     "send_message",
     "wait_message",
     "ack",
     "heartbeat",
     "list_agents",
+    "publish",
+    "read_channel",
+    "create_queue",
+    "enqueue",
+    "claim_task",
+    "renew_lease",
+    "complete_task",
+    "fail_task",
+    "publish_doc",
+    "update_doc",
+    "claim_doc",
+    "release_doc",
+    "read_doc",
+    "list_docs",
 ];
 
 /// Daemon tunables. Presence TTLs are injectable so tests can use
@@ -69,6 +85,8 @@ pub struct DaemonConfig {
     pub gone_after: Duration,
     /// Background presence sweep interval.
     pub presence_sweep_interval: Duration,
+    /// Background queue/document lease sweep interval.
+    pub lease_sweep_interval: Duration,
     /// Maximum messages returned by one `wait_message` call.
     pub wait_batch_limit: usize,
 }
@@ -81,6 +99,7 @@ impl DaemonConfig {
             stale_after: Duration::from_secs(45),
             gone_after: Duration::from_secs(600),
             presence_sweep_interval: Duration::from_secs(5),
+            lease_sweep_interval: Duration::from_secs(1),
             wait_batch_limit: 100,
         }
     }
@@ -98,7 +117,15 @@ pub struct DaemonState {
     pub(crate) inboxes: Mutex<HashMap<String, Inbox>>,
     pub(crate) dedupe: Mutex<HashMap<(String, String), DedupeEntry>>,
     pub(crate) send_lock: Mutex<()>,
-    pub(crate) channel_logs: Mutex<HashMap<String, LogFile<Envelope>>>,
+    pub(crate) channel_logs: Mutex<HashMap<String, ChannelLog>>,
+    /// Open queue logs, one per queue name (design §7).
+    pub(crate) queues: Mutex<HashMap<String, LogFile<QueueEvent>>>,
+    /// Replay-derived queue state parallel to `queues`.
+    pub(crate) queue_states: Mutex<HashMap<String, QueueRuntime>>,
+    /// Open document logs, one per document name (design §8).
+    pub(crate) docs: Mutex<HashMap<String, LogFile<DocEvent>>>,
+    /// Replay-derived document state parallel to `docs`.
+    pub(crate) doc_states: Mutex<HashMap<String, DocRuntime>>,
 }
 
 impl DaemonState {
@@ -124,9 +151,12 @@ impl DaemonState {
                 inboxes.insert(record.agent_id.clone(), inbox);
             }
         }
-        let presence_log = messaging::open_channel_log(&config.root, "#presence")?;
+        let presence_log = crate::channels::open_channel(&config.root, "#presence")?;
         let mut channel_logs = HashMap::new();
         channel_logs.insert("#presence".to_string(), presence_log);
+
+        let (queues, queue_states) = queues::load_all_queues(&config.root)?;
+        let (docs, doc_states) = docs::load_all_docs(&config.root)?;
 
         let mut presence = Presence::default();
         let now_ms = id::unix_millis();
@@ -145,6 +175,10 @@ impl DaemonState {
             dedupe: Mutex::new(dedupe),
             send_lock: Mutex::new(()),
             channel_logs: Mutex::new(channel_logs),
+            queues: Mutex::new(queues),
+            queue_states: Mutex::new(queue_states),
+            docs: Mutex::new(docs),
+            doc_states: Mutex::new(doc_states),
         })
     }
 
@@ -230,6 +264,7 @@ pub async fn run(root: &Path) -> io::Result<()> {
     );
     let (listener, socket) = bind(root)?;
     state.spawn_presence_sweeper();
+    state.spawn_lease_sweeper();
     eprintln!(
         "coop daemon: listening on {} (root {})",
         socket.display(),
@@ -367,6 +402,162 @@ async fn route(
                         .map_err(BrokerError::into_rpc_error)?;
                     Ok(json!({ "agents": agents }))
                 }
+                "publish" => {
+                    let params: PublishParams = parse_params(&request.params)?;
+                    let body = parse_body_fields(params.body.as_ref(), params.text.as_deref())?;
+                    let receipt = state
+                        .publish(&identity, &params.channel, body, params.idempotency_key)
+                        .await
+                        .map_err(BrokerError::into_rpc_error)?;
+                    to_value(receipt)
+                }
+                "read_channel" => {
+                    let params: ReadChannelParams = parse_params(&request.params)?;
+                    let cursor = params
+                        .cursor
+                        .as_ref()
+                        .map(|value| crate::channels::parse_channel_cursor(value, &params.channel))
+                        .transpose()
+                        .map_err(BrokerError::into_rpc_error)?;
+                    let wait_s = params.wait_s.unwrap_or(0);
+                    if wait_s > crate::channels::MAX_READ_WAIT_SECS {
+                        return Err(RpcError::invalid_params(format!(
+                            "wait_s must be at most {} seconds",
+                            crate::channels::MAX_READ_WAIT_SECS
+                        )));
+                    }
+                    let batch = state
+                        .read_channel(
+                            &params.channel,
+                            cursor,
+                            params.limit.unwrap_or(100),
+                            Duration::from_secs(wait_s),
+                        )
+                        .await
+                        .map_err(BrokerError::into_rpc_error)?;
+                    to_value(batch)
+                }
+                "create_queue" => {
+                    let params: CreateQueueParams = parse_params(&request.params)?;
+                    let receipt = state
+                        .create_queue(&params.queue)
+                        .await
+                        .map_err(BrokerError::into_rpc_error)?;
+                    to_value(receipt)
+                }
+                "enqueue" => {
+                    let params: EnqueueParams = parse_params(&request.params)?;
+                    let receipt = state
+                        .enqueue(&params.queue, params.payload, params.max_attempts)
+                        .await
+                        .map_err(BrokerError::into_rpc_error)?;
+                    to_value(receipt)
+                }
+                "claim_task" => {
+                    let params: ClaimTaskParams = parse_params(&request.params)?;
+                    let receipt = state
+                        .claim_task(&identity, &params.queue, params.lease_ttl_s.unwrap_or(60))
+                        .await
+                        .map_err(BrokerError::into_rpc_error)?;
+                    to_value(receipt)
+                }
+                "renew_lease" => {
+                    let params: RenewLeaseParams = parse_params(&request.params)?;
+                    let receipt = state
+                        .renew_lease(&identity, &params.lease_id)
+                        .await
+                        .map_err(BrokerError::into_rpc_error)?;
+                    to_value(receipt)
+                }
+                "complete_task" => {
+                    let params: CompleteTaskParams = parse_params(&request.params)?;
+                    let receipt = state
+                        .complete_task(
+                            &identity,
+                            &params.lease_id,
+                            params.fence,
+                            params.outcome,
+                            params.receipt,
+                        )
+                        .await
+                        .map_err(BrokerError::into_rpc_error)?;
+                    to_value(receipt)
+                }
+                "fail_task" => {
+                    let params: FailTaskParams = parse_params(&request.params)?;
+                    let receipt = state
+                        .fail_task(&identity, &params.lease_id, params.fence, &params.reason)
+                        .await
+                        .map_err(BrokerError::into_rpc_error)?;
+                    to_value(receipt)
+                }
+                "publish_doc" => {
+                    let params: PublishDocParams = parse_params(&request.params)?;
+                    let body = parse_body_fields(params.body.as_ref(), params.text.as_deref())?;
+                    let mime = params.mime.unwrap_or_else(|| body.mime.clone());
+                    let receipt = state
+                        .publish_doc(&identity, &params.name, &mime, body, params.title)
+                        .await
+                        .map_err(BrokerError::into_rpc_error)?;
+                    to_value(receipt)
+                }
+                "update_doc" => {
+                    let params: UpdateDocParams = parse_params(&request.params)?;
+                    let body = parse_body_fields(params.body.as_ref(), params.text.as_deref())?;
+                    let lease = match (params.lease_id.as_deref(), params.fence) {
+                        (Some(lease_id), Some(fence)) => Some((lease_id, fence)),
+                        (None, None) => None,
+                        _ => {
+                            return Err(RpcError::invalid_params(
+                                "lease_id and fence must be supplied together",
+                            ))
+                        }
+                    };
+                    let receipt = state
+                        .update_doc(
+                            &identity,
+                            &params.name,
+                            params.base_version,
+                            body,
+                            params.title,
+                            lease,
+                        )
+                        .await
+                        .map_err(BrokerError::into_rpc_error)?;
+                    to_value(receipt)
+                }
+                "claim_doc" => {
+                    let params: ClaimDocParams = parse_params(&request.params)?;
+                    let receipt = state
+                        .claim_doc(&identity, &params.name, params.lease_ttl_s.unwrap_or(60))
+                        .await
+                        .map_err(BrokerError::into_rpc_error)?;
+                    to_value(receipt)
+                }
+                "release_doc" => {
+                    let params: ReleaseDocParams = parse_params(&request.params)?;
+                    let receipt = state
+                        .release_doc(&identity, &params.lease_id, params.fence)
+                        .await
+                        .map_err(BrokerError::into_rpc_error)?;
+                    to_value(receipt)
+                }
+                "read_doc" => {
+                    let params: ReadDocParams = parse_params(&request.params)?;
+                    let response = state
+                        .read_doc(&params.name, params.version)
+                        .await
+                        .map_err(BrokerError::into_rpc_error)?;
+                    to_value(response)
+                }
+                "list_docs" => {
+                    let params: ListDocsParams = parse_params(&request.params)?;
+                    let response = state
+                        .list_docs(params.prefix.as_deref())
+                        .await
+                        .map_err(BrokerError::into_rpc_error)?;
+                    to_value(response)
+                }
                 other => Err(RpcError::method_not_found(other)),
             }
         }
@@ -419,7 +610,11 @@ fn parse_params<T: DeserializeOwned>(params: &Value) -> Result<T, RpcError> {
 }
 
 fn parse_body(params: &SendParams) -> Result<Body, RpcError> {
-    if let Some(body) = &params.body {
+    parse_body_fields(params.body.as_ref(), params.text.as_deref())
+}
+
+fn parse_body_fields(body: Option<&Value>, text: Option<&str>) -> Result<Body, RpcError> {
+    if let Some(body) = body {
         return match body {
             Value::String(text) => Ok(Body::new("text/plain", text.clone())),
             Value::Object(object) => {
@@ -441,10 +636,7 @@ fn parse_body(params: &SendParams) -> Result<Body, RpcError> {
             )),
         };
     }
-    params
-        .text
-        .as_ref()
-        .map(|text| Body::new("text/plain", text.clone()))
+    text.map(|text| Body::new("text/plain", text.to_string()))
         .ok_or_else(|| RpcError::invalid_params("body or text is required"))
 }
 
@@ -685,4 +877,123 @@ mod tests {
         assert_eq!(result["pid"], std::process::id());
         assert!(result["seq_heads"].is_object());
     }
+}
+
+#[derive(Debug, Deserialize)]
+struct PublishParams {
+    channel: String,
+    #[serde(default)]
+    body: Option<Value>,
+    #[serde(default)]
+    text: Option<String>,
+    #[serde(default)]
+    idempotency_key: Option<String>,
+}
+
+#[derive(Debug, Deserialize)]
+struct ReadChannelParams {
+    channel: String,
+    #[serde(default)]
+    cursor: Option<Value>,
+    #[serde(default)]
+    limit: Option<usize>,
+    #[serde(default)]
+    wait_s: Option<u64>,
+}
+
+#[derive(Debug, Deserialize)]
+struct CreateQueueParams {
+    #[serde(alias = "name")]
+    queue: String,
+}
+
+#[derive(Debug, Deserialize)]
+struct EnqueueParams {
+    queue: String,
+    payload: Value,
+    #[serde(default)]
+    max_attempts: Option<u64>,
+}
+
+#[derive(Debug, Deserialize)]
+struct ClaimTaskParams {
+    queue: String,
+    #[serde(default)]
+    lease_ttl_s: Option<u64>,
+}
+
+#[derive(Debug, Deserialize)]
+struct RenewLeaseParams {
+    lease_id: String,
+}
+
+#[derive(Debug, Deserialize)]
+struct CompleteTaskParams {
+    lease_id: String,
+    fence: u64,
+    outcome: Value,
+    #[serde(default)]
+    receipt: Option<Value>,
+}
+
+#[derive(Debug, Deserialize)]
+struct FailTaskParams {
+    lease_id: String,
+    fence: u64,
+    reason: String,
+}
+
+#[derive(Debug, Deserialize)]
+struct PublishDocParams {
+    name: String,
+    #[serde(default)]
+    mime: Option<String>,
+    #[serde(default)]
+    body: Option<Value>,
+    #[serde(default)]
+    text: Option<String>,
+    #[serde(default)]
+    title: Option<String>,
+}
+
+#[derive(Debug, Deserialize)]
+struct UpdateDocParams {
+    name: String,
+    base_version: u64,
+    #[serde(default)]
+    body: Option<Value>,
+    #[serde(default)]
+    text: Option<String>,
+    #[serde(default)]
+    title: Option<String>,
+    #[serde(default)]
+    lease_id: Option<String>,
+    #[serde(default)]
+    fence: Option<u64>,
+}
+
+#[derive(Debug, Deserialize)]
+struct ClaimDocParams {
+    name: String,
+    #[serde(default)]
+    lease_ttl_s: Option<u64>,
+}
+
+#[derive(Debug, Deserialize)]
+struct ReleaseDocParams {
+    lease_id: String,
+    fence: u64,
+}
+
+#[derive(Debug, Deserialize)]
+struct ReadDocParams {
+    name: String,
+    #[serde(default)]
+    version: Option<u64>,
+}
+
+#[derive(Debug, Deserialize)]
+struct ListDocsParams {
+    #[serde(default)]
+    prefix: Option<String>,
 }
