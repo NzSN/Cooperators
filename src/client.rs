@@ -1,4 +1,8 @@
 //! Minimal UDS JSON-RPC client used by the `coop` CLI.
+//!
+//! [`call`] keeps the original five-second deadline for short requests.
+//! Long-polling callers use [`call_with_timeout`] (root-relative) or
+//! [`call_at`] (explicit socket) with a deadline that covers the wait.
 
 use std::path::Path;
 use std::time::Duration;
@@ -10,6 +14,9 @@ use tokio::net::UnixStream;
 use crate::error::ErrorCode;
 use crate::paths;
 use crate::rpc::{RpcError, RpcResponse};
+
+/// Default deadline for short JSON-RPC calls.
+pub const DEFAULT_TIMEOUT: Duration = Duration::from_secs(5);
 
 /// Client-side failures. Transport failures map to `DAEMON_UNREACHABLE`.
 #[derive(Debug)]
@@ -48,10 +55,30 @@ impl std::fmt::Display for ClientError {
 
 impl std::error::Error for ClientError {}
 
-/// Calls one JSON-RPC method and returns its `result`.
+/// Calls one JSON-RPC method with the default five-second deadline.
 pub async fn call(root: &Path, method: &str, params: Value) -> Result<Value, ClientError> {
-    let socket = paths::socket_path(root);
-    let mut stream = UnixStream::connect(&socket)
+    call_with_timeout(root, method, params, DEFAULT_TIMEOUT).await
+}
+
+/// Calls one JSON-RPC method with an explicit deadline.
+pub async fn call_with_timeout(
+    root: &Path,
+    method: &str,
+    params: Value,
+    deadline: Duration,
+) -> Result<Value, ClientError> {
+    call_at(&paths::socket_path(root), method, params, deadline).await
+}
+
+/// Calls one JSON-RPC method on an explicit socket path with an explicit
+/// deadline. Useful for tests and for clients that receive `COOP_SOCKET`.
+pub async fn call_at(
+    socket: &Path,
+    method: &str,
+    params: Value,
+    deadline: Duration,
+) -> Result<Value, ClientError> {
+    let mut stream = UnixStream::connect(socket)
         .await
         .map_err(ClientError::Unreachable)?;
 
@@ -72,7 +99,7 @@ pub async fn call(root: &Path, method: &str, params: Value) -> Result<Value, Cli
 
     let mut reader = BufReader::new(stream);
     let mut line = String::new();
-    match tokio::time::timeout(Duration::from_secs(5), reader.read_line(&mut line)).await {
+    match tokio::time::timeout(deadline, reader.read_line(&mut line)).await {
         Err(_) => Err(ClientError::Timeout),
         Ok(Err(error)) => Err(ClientError::Unreachable(error)),
         Ok(Ok(0)) => Err(ClientError::Protocol(

@@ -110,3 +110,81 @@ impl std::fmt::Display for ErrorCode {
         formatter.write_str(self.as_str())
     }
 }
+
+/// Error type returned by broker services and mapped at the JSON-RPC edge.
+///
+/// Application failures carry a canonical [`ErrorCode`]; invalid parameters
+/// and internal I/O failures are protocol-level or server-side errors.
+#[derive(Debug)]
+pub enum BrokerError {
+    /// A canonical broker error with a human-readable detail string.
+    Application(ErrorCode, String),
+    /// The request parameters were malformed or failed validation.
+    Invalid(String),
+    /// An unexpected server-side failure.
+    Internal(String),
+    /// An underlying filesystem failure.
+    Io(std::io::Error),
+}
+
+impl BrokerError {
+    /// Creates an application error.
+    pub fn application(code: ErrorCode, detail: impl Into<String>) -> Self {
+        Self::Application(code, detail.into())
+    }
+
+    /// Creates an invalid-parameter error.
+    pub fn invalid(detail: impl Into<String>) -> Self {
+        Self::Invalid(detail.into())
+    }
+
+    /// Creates an internal error.
+    pub fn internal(detail: impl Into<String>) -> Self {
+        Self::Internal(detail.into())
+    }
+
+    /// Maps this error onto the JSON-RPC wire representation.
+    pub fn into_rpc_error(self) -> crate::rpc::RpcError {
+        match self {
+            Self::Application(code, detail) => crate::rpc::RpcError::application(code, detail),
+            Self::Invalid(detail) => crate::rpc::RpcError::invalid_params(detail),
+            Self::Internal(detail) => crate::rpc::RpcError::internal(detail),
+            Self::Io(error) => crate::rpc::RpcError::internal(error.to_string()),
+        }
+    }
+}
+
+impl std::fmt::Display for BrokerError {
+    fn fmt(&self, formatter: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+        match self {
+            Self::Application(code, detail) => write!(formatter, "{code}: {detail}"),
+            Self::Invalid(detail) => write!(formatter, "invalid parameters: {detail}"),
+            Self::Internal(detail) => write!(formatter, "internal error: {detail}"),
+            Self::Io(error) => write!(formatter, "I/O error: {error}"),
+        }
+    }
+}
+
+impl std::error::Error for BrokerError {
+    fn source(&self) -> Option<&(dyn std::error::Error + 'static)> {
+        match self {
+            Self::Io(error) => Some(error),
+            _ => None,
+        }
+    }
+}
+
+impl From<std::io::Error> for BrokerError {
+    fn from(error: std::io::Error) -> Self {
+        Self::Io(error)
+    }
+}
+
+impl From<crate::storage::LogError> for BrokerError {
+    fn from(error: crate::storage::LogError) -> Self {
+        match error {
+            crate::storage::LogError::Io(error) => Self::Io(error),
+            other => Self::Internal(other.to_string()),
+        }
+    }
+}
