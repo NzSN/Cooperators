@@ -1071,4 +1071,22 @@ impl DaemonState {
         }
         Ok(total)
     }
+
+    /// Forces expiry of the active claim on `name`, regardless of deadline.
+    ///
+    /// Test/MBT support only: same event path as the sweeper
+    /// (`expire_doc_claim`) with an infinite clock. Never used in production.
+    #[doc(hidden)]
+    pub async fn debug_force_expire_doc(&self, name: &str) -> Result<bool, BrokerError> {
+        let _send_guard = self.send_lock.lock().await;
+        let mut logs = self.docs.lock().await;
+        let Some(log) = logs.get_mut(name) else {
+            return Ok(false);
+        };
+        let mut states = self.doc_states.lock().await;
+        let Some(runtime) = states.get_mut(name) else {
+            return Ok(false);
+        };
+        self.expire_doc_claim(name, log, runtime, u64::MAX)
+    }
 }

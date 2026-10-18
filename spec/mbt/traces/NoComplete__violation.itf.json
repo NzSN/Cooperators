@@ -1,0 +1,315 @@
+{
+  "#meta": {
+    "format": "ITF",
+    "format-description": "https://apalache-mc.org/docs/adr/015adr-trace.html",
+    "description": "Created by Apalache on Mon Oct 19 00:27:40 CST 2026",
+    "varTypes": {
+      "ackCursor": "(Str -> Int)",
+      "parameters": "{ cursor: Int, from: Str, holder: Str, key: Str, res: Str, to: Str }",
+      "action_taken": "Str",
+      "log": "Seq({ base: Int, fence: Int, from: Str, holder: Str, key: Str, res: Str, to: Str, type: Str })"
+    }
+  },
+  "params": [
+    "D",
+    "MaxAttempts",
+    "Q",
+    "Agents",
+    "Keys"
+  ],
+  "vars": [
+    "ackCursor",
+    "parameters",
+    "action_taken",
+    "log"
+  ],
+  "states": [
+    {
+      "#meta": {
+        "index": 0
+      },
+      "Agents": {
+        "#set": [
+          "a1",
+          "a2"
+        ]
+      },
+      "D": "d0",
+      "Keys": {
+        "#set": [
+          "k1",
+          "k2"
+        ]
+      },
+      "MaxAttempts": {
+        "#bigint": "2"
+      },
+      "Q": "q0",
+      "ackCursor": {
+        "#map": [
+          [
+            "a1",
+            {
+              "#bigint": "0"
+            }
+          ],
+          [
+            "a2",
+            {
+              "#bigint": "0"
+            }
+          ]
+        ]
+      },
+      "action_taken": "init",
+      "log": [],
+      "parameters": {
+        "cursor": {
+          "#bigint": "-1"
+        },
+        "from": "-",
+        "holder": "-",
+        "key": "-",
+        "res": "-",
+        "to": "-"
+      }
+    },
+    {
+      "#meta": {
+        "index": 1
+      },
+      "Agents": {
+        "#set": [
+          "a1",
+          "a2"
+        ]
+      },
+      "D": "d0",
+      "Keys": {
+        "#set": [
+          "k1",
+          "k2"
+        ]
+      },
+      "MaxAttempts": {
+        "#bigint": "2"
+      },
+      "Q": "q0",
+      "ackCursor": {
+        "#map": [
+          [
+            "a1",
+            {
+              "#bigint": "0"
+            }
+          ],
+          [
+            "a2",
+            {
+              "#bigint": "0"
+            }
+          ]
+        ]
+      },
+      "action_taken": "send",
+      "log": [
+        {
+          "base": {
+            "#bigint": "0"
+          },
+          "fence": {
+            "#bigint": "0"
+          },
+          "from": "a1",
+          "holder": "-",
+          "key": "k2",
+          "res": "-",
+          "to": "a2",
+          "type": "msg"
+        }
+      ],
+      "parameters": {
+        "cursor": {
+          "#bigint": "-1"
+        },
+        "from": "a1",
+        "holder": "-",
+        "key": "k2",
+        "res": "-",
+        "to": "a2"
+      }
+    },
+    {
+      "#meta": {
+        "index": 2
+      },
+      "Agents": {
+        "#set": [
+          "a1",
+          "a2"
+        ]
+      },
+      "D": "d0",
+      "Keys": {
+        "#set": [
+          "k1",
+          "k2"
+        ]
+      },
+      "MaxAttempts": {
+        "#bigint": "2"
+      },
+      "Q": "q0",
+      "ackCursor": {
+        "#map": [
+          [
+            "a1",
+            {
+              "#bigint": "0"
+            }
+          ],
+          [
+            "a2",
+            {
+              "#bigint": "0"
+            }
+          ]
+        ]
+      },
+      "action_taken": "claim",
+      "log": [
+        {
+          "base": {
+            "#bigint": "0"
+          },
+          "fence": {
+            "#bigint": "0"
+          },
+          "from": "a1",
+          "holder": "-",
+          "key": "k2",
+          "res": "-",
+          "to": "a2",
+          "type": "msg"
+        },
+        {
+          "base": {
+            "#bigint": "0"
+          },
+          "fence": {
+            "#bigint": "0"
+          },
+          "from": "-",
+          "holder": "a1",
+          "key": "-",
+          "res": "q0",
+          "to": "-",
+          "type": "claim"
+        }
+      ],
+      "parameters": {
+        "cursor": {
+          "#bigint": "-1"
+        },
+        "from": "-",
+        "holder": "a1",
+        "key": "-",
+        "res": "q0",
+        "to": "-"
+      }
+    },
+    {
+      "#meta": {
+        "index": 3
+      },
+      "Agents": {
+        "#set": [
+          "a1",
+          "a2"
+        ]
+      },
+      "D": "d0",
+      "Keys": {
+        "#set": [
+          "k1",
+          "k2"
+        ]
+      },
+      "MaxAttempts": {
+        "#bigint": "2"
+      },
+      "Q": "q0",
+      "ackCursor": {
+        "#map": [
+          [
+            "a1",
+            {
+              "#bigint": "0"
+            }
+          ],
+          [
+            "a2",
+            {
+              "#bigint": "0"
+            }
+          ]
+        ]
+      },
+      "action_taken": "complete",
+      "log": [
+        {
+          "base": {
+            "#bigint": "0"
+          },
+          "fence": {
+            "#bigint": "0"
+          },
+          "from": "a1",
+          "holder": "-",
+          "key": "k2",
+          "res": "-",
+          "to": "a2",
+          "type": "msg"
+        },
+        {
+          "base": {
+            "#bigint": "0"
+          },
+          "fence": {
+            "#bigint": "0"
+          },
+          "from": "-",
+          "holder": "a1",
+          "key": "-",
+          "res": "q0",
+          "to": "-",
+          "type": "claim"
+        },
+        {
+          "base": {
+            "#bigint": "0"
+          },
+          "fence": {
+            "#bigint": "2"
+          },
+          "from": "-",
+          "holder": "a1",
+          "key": "-",
+          "res": "q0",
+          "to": "-",
+          "type": "complete"
+        }
+      ],
+      "parameters": {
+        "cursor": {
+          "#bigint": "-1"
+        },
+        "from": "-",
+        "holder": "a1",
+        "key": "-",
+        "res": "q0",
+        "to": "-"
+      }
+    }
+  ]
+}

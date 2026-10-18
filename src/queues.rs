@@ -1120,6 +1120,25 @@ impl DaemonState {
         }
         Ok(total)
     }
+
+    /// Forces expiry of every leased task in `queue`, regardless of deadline.
+    ///
+    /// Test/MBT support only: drives the exact sweeper event path
+    /// (`expire_queue_leases`) with an infinite clock. Never used in
+    /// production paths.
+    #[doc(hidden)]
+    pub async fn debug_force_expire_queue(&self, queue: &str) -> Result<u64, BrokerError> {
+        let _send_guard = self.send_lock.lock().await;
+        let mut logs = self.queues.lock().await;
+        let Some(log) = logs.get_mut(queue) else {
+            return Ok(0);
+        };
+        let mut states = self.queue_states.lock().await;
+        let Some(runtime) = states.get_mut(queue) else {
+            return Ok(0);
+        };
+        expire_queue_leases(&self.root, queue, log, runtime, u64::MAX)
+    }
 }
 
 fn lease_view(lease: &TaskLease) -> LeaseView {

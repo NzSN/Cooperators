@@ -2,3 +2,6 @@ target/
 .cooperators/
 spec/states/
 spec/*_TTrace_*.tla
+spec/_apalache-out/
+spec/mbt/target/
+**/_apalache-out/

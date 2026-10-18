@@ -1,0 +1,14 @@
+[package]
+name = "cooperators-mbt"
+version = "0.1.0"
+edition = "2021"
+description = "Model-based testing harness: replays Apalache traces of spec/MBCooperators.tla against the real coop daemon via MirrorRust/ModelMirrors"
+publish = false
+
+[dependencies]
+cooperators = { path = "../.." }
+mirrorrust = { path = "../../../MirrorRust" }
+tokio = { version = "1", features = ["full"] }
+serde_json = { version = "1", features = ["arbitrary_precision"] }
+num-bigint = "0.4"
+tempfile = "3"
