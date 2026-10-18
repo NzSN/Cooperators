@@ -1,0 +1,266 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Inter-Agent Communication Infrastructure — Design Proposals</title>
+<style>
+  :root {
+    --ink: #1a2332; --muted: #5b6675; --accent: #0f5fd7; --accent-soft: #eef4fd;
+    --line: #d9e0ea; --code-bg: #f4f6fa; --ok: #0c7a43; --warn: #9a5b00;
+  }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0; padding: 2rem 1rem 4rem;
+    font: 16px/1.65 -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+    color: var(--ink); background: #fdfdfe;
+  }
+  main { max-width: 60rem; margin: 0 auto; }
+  header.doc {
+    border-bottom: 3px solid var(--accent); padding-bottom: 1rem; margin-bottom: 2rem;
+  }
+  header.doc h1 { margin: 0 0 .35rem; font-size: 1.9rem; line-height: 1.25; }
+  .meta { color: var(--muted); font-size: .9rem; }
+  .meta span { margin-right: 1.2rem; white-space: nowrap; }
+  h2 { font-size: 1.35rem; margin: 2.4rem 0 .8rem; padding-top: .4rem; border-top: 1px solid var(--line); }
+  h3 { font-size: 1.08rem; margin: 1.6rem 0 .5rem; }
+  p, li { max-width: 62ch; }
+  a { color: var(--accent); }
+  code { background: var(--code-bg); padding: .1em .35em; border-radius: 4px; font-size: .92em; }
+  pre {
+    background: var(--code-bg); border: 1px solid var(--line); border-radius: 8px;
+    padding: 1rem 1.2rem; overflow-x: auto; font-size: .85rem; line-height: 1.5;
+  }
+  pre code { background: none; padding: 0; }
+  table { border-collapse: collapse; width: 100%; margin: 1rem 0; font-size: .92rem; }
+  th, td { border: 1px solid var(--line); padding: .55rem .7rem; text-align: left; vertical-align: top; }
+  th { background: var(--accent-soft); }
+  .tag { display: inline-block; font-size: .75rem; font-weight: 600; letter-spacing: .02em;
+         padding: .15em .55em; border-radius: 999px; vertical-align: middle; margin-left: .4rem; }
+  .tag.rec { background: #e2f4ea; color: var(--ok); border: 1px solid #b7e2cc; }
+  .tag.substrate { background: var(--accent-soft); color: var(--accent); border: 1px solid #c3d9f6; }
+  .tag.defer { background: #fdf3e3; color: var(--warn); border: 1px solid #efd9ae; }
+  .callout {
+    border-left: 4px solid var(--accent); background: var(--accent-soft);
+    padding: .8rem 1.1rem; border-radius: 0 8px 8px 0; margin: 1.2rem 0;
+  }
+  .proscons { display: grid; grid-template-columns: 1fr 1fr; gap: 0 2rem; }
+  @media (max-width: 700px) { .proscons { grid-template-columns: 1fr; } }
+  footer { margin-top: 3rem; padding-top: 1rem; border-top: 1px solid var(--line);
+           color: var(--muted); font-size: .85rem; }
+</style>
+</head>
+<body>
+<main>
+<header class="doc">
+  <h1>Inter-Agent Communication Infrastructure — Design Proposals</h1>
+  <div class="meta">
+    <span><strong>Project:</strong> Cooperators</span>
+    <span><strong>Date:</strong> 2026-10-18</span>
+    <span><strong>Type:</strong> chatdoc (design survey, pre-decision)</span>
+  </div>
+</header>
+
+<section id="context">
+<h2>1. Context and grounding</h2>
+<p>This document surveys design options for an inter-agent communication substrate in the
+<strong>Cooperators</strong> repository. Repository state at time of writing: greenfield
+(empty <code>README.md</code>, no source, no docs). The proposals are therefore grounded in the
+surrounding environment rather than in existing project code:</p>
+<ul>
+  <li><strong>In-process collaboration already exists.</strong> The local Codex fork provides
+  plaintext collaboration between agents of one session tree: <code>spawn_agent</code>,
+  <code>send_message</code>, <code>wait_agent</code>, <code>followup_task</code>,
+  <code>interrupt_agent</code>, <code>list_agents</code>, task-path addressing
+  (<code>/root/task1/task_3</code>), fixed concurrency slots. Scope: one orchestrator process,
+  parent-child trees only.</li>
+  <li><strong>A proven localhost-daemon pattern exists.</strong> kimi-webbridge drives a real
+  Windows browser via HTTP + WebSocket on <code>127.0.0.1:10086</code> from WSL — evidence that a
+  small single-purpose local daemon is an acceptable operational shape in this workspace.</li>
+  <li><strong>Workspace conventions favor auditable artifacts.</strong> Append-only JSONL logs,
+  retained receipts, and revision-scoped claims are established practice
+  (e.g. rollout summaries, qualification evidence).</li>
+</ul>
+<div class="callout">
+<strong>Scope assumption.</strong> The proposals target communication between
+<em>independent agent processes on one machine</em> (multiple Codex sessions, Claude CLI invoked
+through the host-mode bridge, browser-driven agents, CI bots). Intra-session messaging is already
+solved; cross-machine networking is deferred as an extension axis, not a v1 requirement.
+</div>
+</section>
+
+<section id="axes">
+<h2>2. Design axes</h2>
+<table>
+  <thead><tr><th>Axis</th><th>Choices</th><th>Notes</th></tr></thead>
+  <tbody>
+    <tr><td>Topology</td><td>in-orchestrator tree / local broker / distributed bus</td><td>Tree exists today; broker is the gap.</td></tr>
+    <tr><td>Transport</td><td>filesystem files / Unix socket / HTTP+WS / MCP / NATS / A2A</td><td>MCP is the cross-CLI lingua franca: both Codex and Claude Code consume MCP tools.</td></tr>
+    <tr><td>Addressing</td><td>task paths / registered names / cryptographic identities</td><td>Start with registered names; task paths remain the in-tree scheme.</td></tr>
+    <tr><td>Semantics</td><td>fire-and-forget / request-response / work-queue with leases</td><td>All three are needed eventually; leases matter for multi-agent task claims.</td></tr>
+    <tr><td>Durability</td><td>ephemeral / event log with replay</td><td>Event log is non-negotiable for evidence-bound workflows.</td></tr>
+    <tr><td>Trust boundary</td><td>localhost trust / token auth / per-agent keys</td><td>v1: localhost + shared token. Any local process can otherwise impersonate any agent.</td></tr>
+  </tbody>
+</table>
+</section>
+
+<section id="p0">
+<h2>3. Proposal P0 — Mailbox substrate (files + CLI) <span class="tag substrate">substrate</span></h2>
+<p>A durable, daemon-free message format and command-line tool. Everything else builds on this.</p>
+<pre><code>~/.local/share/cooperators/
+  registry.json                 # agent registrations: name, kind, pid, heartbeat
+  channels/&lt;name&gt;.jsonl         # append-only channel logs, monotonic seq
+  agents/&lt;id&gt;/inbox.jsonl       # per-agent direct inbox
+  dead/&lt;id&gt;.jsonl               # undeliverable / expired messages</code></pre>
+<p>Each record: <code>{seq, id (uuid), ts, from, to, kind, reply_to, idempotency_key, body, prev_hash}</code>
+— hash-chained per file for tamper-evidence, mirroring the append-only evidence pattern already
+used for rollout summaries. A small <code>coop</code> CLI (<code>register | send | poll | watch | ack</code>)
+makes the substrate usable from any shell, including sandboxed agent shells. Delivery semantics:
+at-least-once; consumers track cursors; dedupe by <code>idempotency_key</code>.</p>
+<div class="proscons">
+<div><h3>Pros</h3><ul>
+  <li>Zero runtime dependencies; works from any process that can write files.</li>
+  <li>The log <em>is</em> the audit trail — replay, forensics, and evidence export come free.</li>
+  <li>Debuggable with <code>tail</code>, <code>jq</code>, <code>rg</code>.</li>
+</ul></div>
+<div><h3>Cons</h3><ul>
+  <li>Polling latency (mitigate with inotify/fswatch in the CLI's <code>watch</code> mode).</li>
+  <li>No presence, leases, or backpressure without a process on top.</li>
+  <li>Home-directory writes may need sandbox escalation from some agents; a repo-local
+      <code>.cooperators/</code> fallback should be supported.</li>
+</ul></div>
+</div>
+</section>
+
+<section id="p1">
+<h2>4. Proposal P1 — Broker daemon + MCP facade <span class="tag rec">recommended core</span></h2>
+<p>A single-binary localhost daemon (<code>cooperatorsd</code>) following the kimi-webbridge
+operational pattern: Unix socket for RPC, optional HTTP+WebSocket on <code>127.0.0.1</code> for
+dashboards and non-MCP clients. It fronts the P0 log with live routing and exposes an
+<strong>MCP server</strong>, so Codex, Claude Code, and any other MCP-capable CLI join the bus with a
+config stanza — no per-tool plugins.</p>
+<h3>Tool surface (MCP)</h3>
+<pre><code>register_agent(name, kind, capabilities) -&gt; agent_id, token
+send_message(to | channel, kind, body, reply_to?, idempotency_key)
+wait_message(cursor, timeout)             # long-poll; the wait_agent equivalent
+list_agents()                             # presence via heartbeats
+claim_task(queue, lease_ttl)              # work-queue with leases
+complete_task(task_id, outcome, receipt)
+publish(channel, body) / subscribe(channel)</code></pre>
+<p>Internals: in-memory routing indexes over the JSONL log; per-agent cursors; idempotency-key
+dedupe; heartbeats for presence; leases for safe multi-agent task claiming. Implementation language:
+<strong>Rust</strong> (matches the surrounding systems work, single static binary) or TypeScript/Node for
+faster iteration — decide once P0 settles.</p>
+<div class="proscons">
+<div><h3>Pros</h3><ul>
+  <li>Cross-CLI interop via MCP — the one protocol every target agent already speaks.</li>
+  <li>Near-real-time delivery (long-poll/WS) without giving up the file-backed audit log.</li>
+  <li>Adds the semantics files can't provide: presence, leases, backpressure.</li>
+</ul></div>
+<div><h3>Cons</h3><ul>
+  <li>One more daemon to supervise (systemd user unit / launchd / manual).</li>
+  <li>MCP tool naming must not collide with the Codex fork's built-in collaboration tools;
+      namespace everything <code>coop_*</code>.</li>
+</ul></div>
+</div>
+</section>
+
+<section id="p2">
+<h2>5. Proposal P2 — Extend the Codex fork cross-session</h2>
+<p>Add a shared on-disk registry to the fork's existing plaintext-collaboration layer so separate
+<code>codex</code> processes discover one another and route <code>send_message</code> across sessions,
+using P0/P1 as the wire.</p>
+<div class="proscons">
+<div><h3>Pros</h3><ul>
+  <li>Zero new protocol for the primary tool; reuses task-path addressing.</li>
+  <li>Smallest diff to daily workflow.</li>
+</ul></div>
+<div><h3>Cons</h3><ul>
+  <li>Codex-only: Claude/Kimi/CI agents remain outside.</li>
+  <li>Increases the fork's upstream-merge burden — this workspace already carries a
+      preservation-heavy Codex fork.</li>
+</ul></div>
+</div>
+<p><strong>Verdict:</strong> pursue as a thin adapter over P1, not as the primary mechanism.</p>
+</section>
+
+<section id="p3">
+<h2>6. Proposal P3 — External standards (A2A / NATS) <span class="tag defer">defer</span></h2>
+<p>Adopt Google's Agent2Agent protocol or a brokered bus (NATS/Redis Streams) for maximal
+interoperability with outside ecosystems and multi-machine topologies. Heavier operational and
+conceptual weight; premature while all agents are local and the message schema is still evolving.
+Revisit when cross-machine or third-party agent interop becomes a real requirement — the P0
+envelope is designed to map onto both.</p>
+</section>
+
+<section id="comparison">
+<h2>7. Comparison</h2>
+<table>
+<thead><tr><th></th><th>Effort</th><th>Latency</th><th>Cross-CLI</th><th>Audit/replay</th><th>Presence &amp; leases</th><th>Merge burden</th></tr></thead>
+<tbody>
+  <tr><td><strong>P0</strong> mailbox + CLI</td><td>1–2 days</td><td>poll / fs-events</td><td>any process</td><td>yes (log is the store)</td><td>no</td><td>none</td></tr>
+  <tr><td><strong>P1</strong> broker + MCP</td><td>~1–2 weeks</td><td>ms (long-poll/WS)</td><td>any MCP client</td><td>yes (via P0)</td><td>yes</td><td>none</td></tr>
+  <tr><td><strong>P2</strong> fork extension</td><td>days</td><td>ms</td><td>Codex only</td><td>via P0/P1</td><td>partial</td><td>yes</td></tr>
+  <tr><td><strong>P3</strong> A2A / NATS</td><td>weeks</td><td>ms</td><td>broad</td><td>needs own log</td><td>yes</td><td>none</td></tr>
+</tbody>
+</table>
+</section>
+
+<section id="recommendation">
+<h2>8. Recommended path</h2>
+<ol>
+  <li><strong>Phase 0 — Contract.</strong> Specify and implement P0: envelope schema, directory
+  layout, <code>coop</code> CLI, repo-local fallback root. This freezes the durable contract
+  everything else speaks.</li>
+  <li><strong>Phase 1 — Broker.</strong> Implement <code>cooperatorsd</code> with the MCP tool
+  surface over the P0 log. Onboard one Codex session and one Claude CLI session as the proving pair.</li>
+  <li><strong>Phase 2 — Adapters.</strong> Wire the Codex fork's collaboration layer to the broker
+  (P2) so in-tree and cross-session messaging share one substrate.</li>
+  <li><strong>Phase 3 — Optional interop.</strong> Evaluate A2A/NATS mapping only when an external
+  consumer of the bus exists.</li>
+</ol>
+<div class="callout"><strong>Do not skip Phase 0.</strong> Building the daemon before the envelope
+schema is stable is the main way this project fails; the file format is the long-lived artifact,
+the daemon is replaceable plumbing.</div>
+</section>
+
+<section id="envelope">
+<h2>9. Message envelope (v0 draft)</h2>
+<pre><code>{
+  "v": 1,
+  "id": "01J…",                  // uuid/ulid
+  "seq": 412,                    // per-file monotonic
+  "ts": "2026-10-18T07:12:03Z",
+  "from": "codex:/root/task1",   // kind:name addressing
+  "to": "claude:reviewer-1",     // or "#channel"
+  "kind": "request",             // request | response | event | receipt
+  "reply_to": "01J…",            // correlation
+  "idempotency_key": "sha256:…",
+  "body": { "mime": "text/markdown", "text": "…" },
+  "prev_hash": "sha256:…"        // per-file hash chain
+}</code></pre>
+</section>
+
+<section id="open-questions">
+<h2>10. Open questions</h2>
+<ol>
+  <li>Cross-machine scope: confirm deferral, or is Windows-side↔WSL agent traffic a v1 requirement
+      (kimi-webbridge already crosses that boundary)?</li>
+  <li>Agent roster: Codex + Claude CLI only, or also Kimi browser agents and CI bots from day one?</li>
+  <li>Identity: is a shared local token enough, or do agents need per-agent keys (matters once
+      agents can <em>claim tasks</em>, not just chat)?</li>
+  <li>Retention: rotate channel logs by age/size, or keep everything forever as evidence?</li>
+  <li>Implementation language for P1: Rust (single binary) vs TypeScript (iteration speed).</li>
+</ol>
+</section>
+
+<footer>
+<p>Provenance: chatdoc rendered from a chat design survey on 2026-10-18. Repository state at
+capture: greenfield (empty README.md, no source). This is a pre-decision survey, not a canonical
+design; promoting the chosen option to <code>docs/</code> is a separate step after review.
+Archive: <code>chatdocs/</code> (placed outside <code>.agents/</code> because that mount is
+read-only in the current sandbox).</p>
+</footer>
+</main>
+</body>
+</html>

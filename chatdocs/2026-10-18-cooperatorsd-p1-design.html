@@ -1,0 +1,342 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>cooperatorsd — P1 Design Report</title>
+<style>
+  :root {
+    --ink: #1a2332; --muted: #5b6675; --accent: #0f5fd7; --accent-soft: #eef4fd;
+    --line: #d9e0ea; --code-bg: #f4f6fa;
+  }
+  * { box-sizing: border-box; }
+  body { margin: 0; padding: 2rem 1rem 4rem;
+    font: 16px/1.65 -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+    color: var(--ink); background: #fdfdfe; }
+  main { max-width: 62rem; margin: 0 auto; }
+  header.doc { border-bottom: 3px solid var(--accent); padding-bottom: 1rem; margin-bottom: 2rem; }
+  header.doc h1 { margin: 0 0 .35rem; font-size: 1.8rem; line-height: 1.25; }
+  .meta { color: var(--muted); font-size: .9rem; }
+  .meta span { margin-right: 1.2rem; }
+  .canonical { border-left: 4px solid var(--accent); background: var(--accent-soft);
+    padding: .8rem 1.1rem; border-radius: 0 8px 8px 0; margin: 1.2rem 0; font-size: .95rem; }
+  h2 { font-size: 1.3rem; margin: 2.2rem 0 .8rem; padding-top: .4rem; border-top: 1px solid var(--line); }
+  h3 { font-size: 1.08rem; margin: 1.6rem 0 .5rem; }
+  a { color: var(--accent); }
+  code { background: var(--code-bg); padding: .1em .35em; border-radius: 4px; font-size: .92em; }
+  pre { background: var(--code-bg); border: 1px solid var(--line); border-radius: 8px;
+    padding: 1rem 1.2rem; overflow-x: auto; font-size: .82rem; line-height: 1.5; }
+  pre code { background: none; padding: 0; }
+  table { border-collapse: collapse; width: 100%; margin: 1rem 0; font-size: .92rem; }
+  th, td { border: 1px solid var(--line); padding: .55rem .7rem; text-align: left; vertical-align: top; }
+  th { background: var(--accent-soft); }
+  footer { margin-top: 3rem; padding-top: 1rem; border-top: 1px solid var(--line);
+    color: var(--muted); font-size: .85rem; }
+</style>
+</head>
+<body>
+<main>
+<header class="doc">
+  <h1>cooperatorsd — Local Broker Daemon + MCP Facade (P1 Design)</h1>
+  <div class="meta">
+    <span><strong>Project:</strong> Cooperators</span>
+    <span><strong>Date:</strong> 2026-10-18</span>
+    <span><strong>Type:</strong> chatdoc report (archival presentation copy)</span>
+  </div>
+</header>
+<div class="canonical">
+  <strong>Canonical source:</strong> <a href="../docs/design/0001-cooperatorsd-broker.md"><code>docs/design/0001-cooperatorsd-broker.md</code></a>.
+  This page is a faithful HTML rendering of that document for archive browsing; the Markdown is
+  authoritative and this copy is regenerated from it, not edited. Supersedes the option survey in
+  <a href="2026-10-18-inter-agent-communication-proposals.html">2026-10-18-inter-agent-communication-proposals</a> for the P1 scope.
+</div>
+<ul>
+<li><strong>Status:</strong> Draft, pre-implementation</li>
+<li><strong>Date:</strong> 2026-10-18</li>
+<li><strong>Context:</strong> <a href="2026-10-18-inter-agent-communication-proposals.html">chatdocs survey</a> selected <strong>P1</strong> as the core mechanism for inter-agent communication. P0 (mailbox file contract) is the substrate this daemon owns; P2 (Codex-fork adapter) and P3 (A2A/NATS) are explicitly downstream.</li>
+<li><strong>Scope:</strong> independent agent processes on <strong>one machine</strong> — multiple Codex sessions, Claude CLI via host-mode bridge, CI bots. Cross-machine transport is a non-goal for v1.</li>
+</ul>
+<h2 id="1-design-goals">1. Design goals</h2>
+<table>
+<thead>
+<tr class="header">
+<th>Goal</th>
+<th>Consequence</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>One shared message bus per machine</td>
+<td>A single daemon owns all writes; agents are thin clients</td>
+</tr>
+<tr class="even">
+<td>Cross-CLI reach</td>
+<td>MCP is the primary facade: every target agent (Codex, Claude Code) already speaks it</td>
+</tr>
+<tr class="odd">
+<td>Evidence-grade auditability</td>
+<td>The P0 append-only JSONL logs are the source of truth; the daemon is replaceable plumbing</td>
+</tr>
+<tr class="even">
+<td>Crash-safe durability</td>
+<td>A send is acknowledged only after it is durable</td>
+</tr>
+<tr class="odd">
+<td>Work distribution, not just chat</td>
+<td>First-class queues with leases and fencing tokens</td>
+</tr>
+<tr class="even">
+<td>Shared mutable artifacts</td>
+<td>Named documents with version CAS and exclusive edit leases (same lease machinery, no second lock scheme)</td>
+</tr>
+<tr class="odd">
+<td>No collision with fork tooling</td>
+<td>All MCP tools are prefixed <code>coop_</code></td>
+</tr>
+</tbody>
+</table>
+<p>Non-goals for v1: TLS, multi-machine routing, message encryption, rich presence UI, schema evolution beyond envelope v1.</p>
+<h2 id="2-architecture">2. Architecture</h2>
+<pre><code> Codex session A      Claude CLI B       Codex session C       curl / dashboard
+  (MCP stdio)          (MCP stdio)         (MCP streamable HTTP)     (HTTP)
+      │                    │                      │                     │
+      ▼                    ▼                      ▼                     ▼
+ ┌─────────┐         ┌─────────┐        ┌───────────────────────────────────┐
+ │ coop    │         │ coop    │        │ cooperatorsd HTTP listener        │
+ │ mcp-stdio│        │ mcp-stdio│       │  127.0.0.1:7420 (/mcp, /healthz)  │
+ │ adapter │         │ adapter │        └───────────────┬───────────────────┘
+ └────┬────┘         └────┬────┘                        │
+      │  NDJSON JSON-RPC  │                             │ in-process
+      ▼                   ▼                             ▼
+ ┌──────────────────────────────────────────────────────────────────────┐
+ │ cooperatorsd core (single process, async)                            │
+ │  router ── sequencer (per log) ── append+fsync ── index ── notifiers │
+ │  registry/auth │ presence │ queue &amp; lease manager │ dead-letters     │
+ └───────────────────────────────┬──────────────────────────────────────┘
+                                 ▼
+              $COOP_HOME  (default ~/.local/share/cooperators)
+                registry.json (0600)     channels/&lt;name&gt;.jsonl
+                agents/&lt;id&gt;/inbox.jsonl  queues/&lt;name&gt;.jsonl
+                dead/&lt;name&gt;.jsonl        docs/&lt;name&gt;.jsonl
+                blobs/sha256/…         run/daemon.sock (0600)</code></pre>
+<p><strong>Transports</strong></p>
+<ol type="1">
+<li><strong>Unix domain socket</strong> (<code>run/daemon.sock</code>, mode 0600) carrying newline-delimited JSON-RPC 2.0. This is the single internal protocol; everything else is an adapter over it. Inspectable with <code>socat</code>/<code>jq</code>.</li>
+<li><strong><code>coop mcp-stdio</code></strong> — a thin stdio MCP server shipped in the same binary. Each MCP client spawns its own adapter process; the adapter authenticates to the daemon and forwards tool calls. Universal: works with any MCP client regardless of HTTP support.</li>
+<li><strong>Streamable HTTP MCP endpoint</strong> (<code>POST /mcp</code>) — optional convenience for clients configured for HTTP MCP, plus <code>/healthz</code> and a plain JSON REST mirror for debugging. Bound to <code>127.0.0.1</code> only.</li>
+</ol>
+<p>Transport 2 is the primary integration path; transport 3 must expose the identical tool surface and is validated by the same conformance suite.</p>
+<h2 id="3-storage-and-durability">3. Storage and durability</h2>
+<p>The P0 envelope is normative and unchanged:</p>
+<div class="sourceCode" id="cb2"><pre class="sourceCode json"><code class="sourceCode json"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="fu">{</span><span class="dt">&quot;v&quot;</span><span class="fu">:</span><span class="dv">1</span><span class="fu">,</span><span class="dt">&quot;id&quot;</span><span class="fu">:</span><span class="st">&quot;01J…&quot;</span><span class="fu">,</span><span class="dt">&quot;seq&quot;</span><span class="fu">:</span><span class="dv">412</span><span class="fu">,</span><span class="dt">&quot;ts&quot;</span><span class="fu">:</span><span class="st">&quot;…Z&quot;</span><span class="fu">,</span><span class="dt">&quot;from&quot;</span><span class="fu">:</span><span class="st">&quot;codex:/root/task1&quot;</span><span class="fu">,</span></span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a> <span class="dt">&quot;to&quot;</span><span class="fu">:</span><span class="st">&quot;claude:reviewer-1&quot;</span><span class="fu">,</span><span class="dt">&quot;kind&quot;</span><span class="fu">:</span><span class="st">&quot;request&quot;</span><span class="fu">,</span><span class="dt">&quot;reply_to&quot;</span><span class="fu">:</span><span class="st">&quot;01J…&quot;</span><span class="fu">,</span></span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a> <span class="dt">&quot;idempotency_key&quot;</span><span class="fu">:</span><span class="st">&quot;sha256:…&quot;</span><span class="fu">,</span><span class="dt">&quot;body&quot;</span><span class="fu">:{</span><span class="dt">&quot;mime&quot;</span><span class="fu">:</span><span class="st">&quot;text/markdown&quot;</span><span class="fu">,</span><span class="dt">&quot;text&quot;</span><span class="fu">:</span><span class="st">&quot;…&quot;</span><span class="fu">},</span></span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a> <span class="dt">&quot;prev_hash&quot;</span><span class="fu">:</span><span class="st">&quot;sha256:…&quot;</span><span class="fu">}</span></span></code></pre></div>
+<ul>
+<li><strong>Single writer.</strong> Only the daemon appends. Offline CLI append from P0 is disallowed while the daemon owns the root (<code>coop send</code> without a daemon fails fast with <code>DAEMON_UNREACHABLE</code>; a deliberate <code>--offline</code> escape hatch appends with a warning header record and is excluded from hash-chain continuity guarantees).</li>
+<li><strong>Sequencing.</strong> One sequencer task per log file assigns <code>seq</code> strictly monotonically; ordering is total per file, absent across files.</li>
+<li><strong>Durability.</strong> <code>append → fsync → ack</code>. Agent messaging is low-rate; fsync-per-message is acceptable at target scale. Send acknowledgement means durable.</li>
+<li><strong>Crash recovery.</strong> On startup the daemon replays each log, verifies the hash chain, and <strong>drops a torn tail</strong> (last record fails hash/JSON parse ⇒ truncate at last valid offset, emit <code>recovery</code> event into the log). In-memory indexes (cursors, dedupe map, leases) are fully rebuilt from the logs; no separate state files to corrupt except <code>registry.json</code>.</li>
+<li><strong>Registry.</strong> <code>registry.json</code> holds <code>{name → {agent_id, token_hash, kind, capabilities, registered_at}}</code>. Written tmp+rename, mode 0600. Tokens are 128-bit random, shown once at registration; only hashes persist.</li>
+<li><strong>Rotation.</strong> Channel/queue logs rotate at a configurable size (default 256 MiB) into <code>&lt;name&gt;.&lt;seq_hi&gt;.jsonl</code>; cursors address <code>(file, seq)</code> so rotation never invalidates a reader. Retention: keep everything (evidence discipline); deletion is a manual, logged operation.</li>
+<li><strong>Documents and blobs.</strong> Doc logs rotate like channels. Doc bodies ≤ 64 KiB are inline in the log; larger bodies go to content-addressed <code>blobs/sha256/&lt;hash&gt;</code> (referenced by hash + size), so logs stay small and blob integrity is checkable. Blobs are immutable; garbage collection of unreferenced blobs is deferred (§16).</li>
+</ul>
+<h2 id="4-identity-authentication-trust-boundary">4. Identity, authentication, trust boundary</h2>
+<ul>
+<li>The boundary is <strong>loopback + filesystem permissions</strong>: UDS at 0600, HTTP on 127.0.0.1, root dir 0700. Any local process able to open the socket still needs a token.</li>
+<li><code>register_agent</code> issues <code>(agent_id, token)</code>. Names are display claims; <strong>tokens are the identity</strong>. Re-registration of an existing name requires the old token and returns a rotated one.</li>
+<li>Sandboxed agents that cannot read the home directory get the socket path and token via their MCP server config (<code>command: coop mcp-stdio</code>, <code>env: {COOP_TOKEN, COOP_SOCKET}</code>), which is the standard MCP provisioning channel.</li>
+</ul>
+<h2 id="5-message-lifecycle">5. Message lifecycle</h2>
+<ol type="1">
+<li>Client calls <code>coop_send_message(to, kind, body, reply_to?, idempotency_key?, ttl_s?)</code>.</li>
+<li>Daemon validates envelope, checks sender token, resolves recipient.</li>
+<li><strong>Dedupe:</strong> <code>(sender, idempotency_key)</code> present in the dedupe index ⇒ return the original <code>{message_id, seq}</code> without appending. The index is derived at replay, so dedupe survives restarts.</li>
+<li>Sequencer assigns <code>seq</code>, appends with <code>prev_hash</code>, fsyncs, then updates indexes and wakes long-pollers.</li>
+<li>Recipient's <code>coop_wait_message(cursor, timeout_s)</code> long-polls its inbox from <code>cursor</code>; returns a batch plus <code>next_cursor</code>. <strong>Wait is a peek</strong> — the cursor is not advanced until <code>coop_ack(cursor)</code> succeeds. Default <code>auto_ack</code> is false so a crashing agent cannot lose messages silently.</li>
+<li>Unknown recipient ⇒ synchronous <code>NOT_FOUND</code> (fail fast; no dead-letter for direct messages).</li>
+</ol>
+<p>Error codes: <code>UNAUTHENTICATED</code>, <code>NOT_FOUND</code>, <code>RESOURCE_EXHAUSTED</code> (backpressure), <code>CONFLICT</code> (name re-registration without token), <code>EXISTS</code> (doc/queue name taken), <code>VERSION_CONFLICT</code> (doc CAS base mismatch), <code>CONFLICT_CLAIMED</code> (doc under another agent's lease), <code>LEASE_LOST</code>, <code>DAEMON_UNREACHABLE</code> (client-side).</p>
+<h2 id="6-presence">6. Presence</h2>
+<ul>
+<li>Agents heartbeat every 15 s (<code>coop_heartbeat</code> or implicitly via any authenticated call).</li>
+<li>Daemon marks an agent <code>stale</code> after 45 s silence, <code>gone</code> after 10 min; both transitions are events in the agent's inbox and in <code>#presence</code> channel so supervisors can react.</li>
+<li><code>coop_list_agents(include_stale=false)</code> reports name, kind, capabilities, state, last-seen.</li>
+</ul>
+<h2 id="7-work-queues-and-leases">7. Work queues and leases</h2>
+<p>Queues are the mechanism that turns "chat" into "coordination".</p>
+<ul>
+<li><code>coop_create_queue(name)</code>; <code>coop_enqueue(queue, payload, max_attempts=5)</code>.</li>
+<li><code>coop_claim_task(queue, lease_ttl_s)</code> ⇒ <code>{task, lease_id, fence}</code> where <code>fence</code> is the claim's log sequence number. Completing requires the matching <code>lease_id</code> <strong>and</strong> current fence; a reclaimed (expired and re-issued) task carries a higher fence, so a stale worker's <code>complete</code> is rejected with <code>LEASE_LOST</code>.</li>
+<li>Lease expiry re-queues the task with <code>attempts+1</code>; exceeding <code>max_attempts</code> moves it to <code>dead/&lt;queue&gt;.jsonl</code> with the full attempt history.</li>
+<li><code>coop_complete_task(lease_id, fence, outcome, receipt?)</code> and <code>coop_fail_task(lease_id, fence, reason)</code>; <code>coop_renew_lease(lease_id)</code> extends the deadline.</li>
+<li>Receipts are first-class: <code>receipt</code> is an envelope body recorded in the queue log, giving the evidence trail for "who did what, when, with what result".</li>
+</ul>
+<h2 id="8-documents-publishclaim-semantics">8. Documents: publish/claim semantics</h2>
+<p>Messaging moves information; coordination also needs <strong>named, mutable artifacts</strong> — plans, design docs, shared results — with provenance and conflict control. Documents reuse the lease/fence machinery of §7 rather than inventing a second locking scheme.</p>
+<p><strong>Model.</strong> A document is a named chain of immutable versions recorded as events in <code>docs/&lt;name&gt;.jsonl</code> (<code>doc_published</code>, <code>doc_updated</code>, <code>doc_claimed</code>, <code>doc_released</code>, <code>doc_claim_expired</code>). Version numbers are per-doc monotonic from 1. Every mutation is a log event with actor, ts, seq, <code>prev_hash</code> — the document's provenance <em>is</em> the log; there is no separate history table.</p>
+<p><strong>Rules</strong></p>
+<ul>
+<li><strong>Reads are always open.</strong> <code>coop_read_doc(name, version?)</code> returns head (or a pinned version) plus current claim state. <code>name@7</code> is a reproducible reference suitable for task inputs and receipts.</li>
+<li><strong>Create.</strong> <code>coop_publish_doc(name, mime, body, title?)</code> ⇒ v1; fails <code>EXISTS</code> if the name is taken. Names are not recyclable; deletion is a manual, logged operation.</li>
+<li><strong>Update is compare-and-swap.</strong> <code>coop_update_doc(name, base_version, body, title?)</code> requires <code>base_version</code> == current head, else <code>VERSION_CONFLICT</code> — the client re-reads and retries.</li>
+<li><strong>Claim is an exclusive edit lease.</strong> <code>coop_claim_doc(name, lease_ttl_s)</code> ⇒ <code>{lease_id, fence, head_version}</code>. While a claim is active, updates must present the matching <code>lease_id</code> + <code>fence</code>; claims by other agents fail <code>CONFLICT_CLAIMED</code> with holder and expiry. <code>coop_renew_lease</code> extends; <code>coop_release_doc(lease_id, fence)</code> releases explicitly; expiry logs <code>doc_claim_expired</code> and frees the name.</li>
+<li><strong>Two write paths, both fenced.</strong> Unclaimed doc: open CAS updates (optimistic concurrency). Claimed doc: holder-only writes (leased exclusivity). A stale holder writing after expiry is rejected <code>LEASE_LOST</code> because expiry advanced the fence.</li>
+<li><strong>No implicit claim on publish.</strong> Publishing creates a readable artifact; claiming is a separate, explicit act, so "publish then hand off" is a first-class workflow.</li>
+</ul>
+<p><strong>MCP tools (M2):</strong> <code>coop_publish_doc</code>, <code>coop_update_doc</code>, <code>coop_claim_doc</code>, <code>coop_release_doc</code>, <code>coop_read_doc</code>, <code>coop_list_docs(prefix?)</code>. <code>coop_renew_lease</code> is generic across queues and documents.</p>
+<p><strong>Interactions.</strong> Tasks and receipts reference <code>name@version</code> to pin inputs and outputs. Channels stay append-only streams; docs are the versioned artifacts those streams discuss. A doc claim is the mechanism two agents use to co-edit a plan without merge collisions.</p>
+<h2 id="9-mcp-tool-surface-v1">9. MCP tool surface (v1)</h2>
+<p>All tools prefixed <code>coop_</code>, versioned by envelope <code>v</code>, described with JSON Schema in the MCP manifest:</p>
+<table>
+<thead>
+<tr class="header">
+<th>Tool</th>
+<th>Purpose</th>
+<th>Milestone</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><code>coop_register_agent</code></td>
+<td>name → (agent_id, token)</td>
+<td>M1</td>
+</tr>
+<tr class="even">
+<td><code>coop_send_message</code> / <code>coop_wait_message</code> / <code>coop_ack</code></td>
+<td>direct messaging, peek+ack cursors</td>
+<td>M1</td>
+</tr>
+<tr class="odd">
+<td><code>coop_heartbeat</code> / <code>coop_list_agents</code></td>
+<td>presence</td>
+<td>M1</td>
+</tr>
+<tr class="even">
+<td><code>coop_publish</code> / <code>coop_read_channel</code></td>
+<td>channel fan-out and replay (<code>subscribe</code> = read + wait loop)</td>
+<td>M2</td>
+</tr>
+<tr class="odd">
+<td><code>coop_create_queue</code> / <code>coop_enqueue</code> / <code>coop_claim_task</code> / <code>coop_renew_lease</code> / <code>coop_complete_task</code> / <code>coop_fail_task</code></td>
+<td>work distribution with fencing</td>
+<td>M2</td>
+</tr>
+<tr class="even">
+<td><code>coop_publish_doc</code> / <code>coop_update_doc</code> / <code>coop_claim_doc</code> / <code>coop_release_doc</code> / <code>coop_read_doc</code> / <code>coop_list_docs</code></td>
+<td>versioned docs with edit-lease fencing (<code>coop_renew_lease</code> is shared)</td>
+<td>M2</td>
+</tr>
+<tr class="odd">
+<td><code>coop_get_status</code></td>
+<td>daemon version, counts, health</td>
+<td>M3</td>
+</tr>
+</tbody>
+</table>
+<p>Backpressure: per-inbox cap (default 10 000 messages or 64 MiB) ⇒ <code>RESOURCE_EXHAUSTED</code> to senders; channels bounded only by rotation.</p>
+<h2 id="10-implementation-choices">10. Implementation choices</h2>
+<ul>
+<li><strong>Language: Rust</strong>, single static binary (<code>coop</code> CLI and <code>cooperatorsd</code> as subcommands: <code>coop daemon run</code>). Rationale: matches the surrounding systems work (Codex fork, MirrorRust), trivial deployment, tokio ecosystem for async + UDS + HTTP. The TypeScript alternative was considered and rejected: a second runtime to supervise, weaker single-binary story.</li>
+<li><strong>Async core:</strong> tokio; per-log sequencer tasks; <code>tokio::sync::Notify</code> fan-out to wake long-pollers; no locks on the hot path beyond per-log mutexes.</li>
+<li><strong>MCP SDK:</strong> the official <code>rmcp</code> crate for both the stdio adapter and the streamable HTTP endpoint, so protocol drift is upstream's problem.</li>
+<li><strong>Config:</strong> <code>$COOP_HOME/config.toml</code>; root resolution <code>COOPERATORS_HOME</code> env → <code>--root</code> flag → platform default. One repo-scoped root (<code>.cooperators/</code>) is supported for project-local buses.</li>
+</ul>
+<h2 id="11-performance-targets-acceptance-relevant-local-scale">11. Performance targets (acceptance-relevant, local scale)</h2>
+<table>
+<thead>
+<tr class="header">
+<th>Metric</th>
+<th>Target</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>send ack latency (fsynced)</td>
+<td>p50 &lt; 10 ms</td>
+</tr>
+<tr class="even">
+<td>wait delivery after send</td>
+<td>p50 &lt; 25 ms</td>
+</tr>
+<tr class="odd">
+<td>sustained append</td>
+<td>≥ 5 000 msg/s</td>
+</tr>
+<tr class="even">
+<td>restart replay</td>
+<td>1 M records &lt; 10 s</td>
+</tr>
+<tr class="odd">
+<td>agents per daemon</td>
+<td>100 without degradation</td>
+</tr>
+</tbody>
+</table>
+<p>These are gates, not aspirations; the M4 hardening milestone exists to meet or revise them with measurements.</p>
+<h2 id="12-observability">12. Observability</h2>
+<ul>
+<li><code>coop status</code>: uptime, per-log sizes/seq heads, registered agents, queue depths, stale agents.</li>
+<li><code>coop tail &lt;channel|agent&gt;</code>: follow any log as rendered text (debugging without jq).</li>
+<li>Structured daemon log (tracing, JSON) at <code>$COOP_HOME/daemon.log</code>; <code>/healthz</code> and optional Prometheus <code>/metrics</code> on the HTTP listener.</li>
+</ul>
+<h2 id="13-testing-and-acceptance">13. Testing and acceptance</h2>
+<ul>
+<li><strong>Unit:</strong> envelope validation, hash-chain verification, sequencer monotonicity, dedupe, lease expiry/fencing, rotation cursor stability.</li>
+<li><strong>Integration (in-process):</strong> two-agent echo; channel fan-out; claim→expire→requeue→dead-letter; restart durability across <code>kill -9</code>; torn-tail recovery.</li>
+<li><strong>Conformance:</strong> golden JSON-RPC transcripts replayed against both the UDS API and each MCP transport — the stdio adapter and HTTP endpoint cannot silently diverge.</li>
+<li><strong>Installed acceptance (M3 gate):</strong> one real Codex session and one real Claude CLI session exchange messages and a claimed task through <code>coop mcp-stdio</code>, with the logs retained as evidence. Partial completion of a gate is recorded as failed, not passed.</li>
+</ul>
+<h2 id="14-milestones">14. Milestones</h2>
+<table>
+<thead>
+<tr class="header">
+<th>MS</th>
+<th>Content</th>
+<th>Gate</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>M1</td>
+<td>daemon core: registry/auth, send/wait/ack, inbox logs, replay recovery, UDS</td>
+<td>integration + kill −9 durability green</td>
+</tr>
+<tr class="even">
+<td>M2</td>
+<td>channels, queues, leases, dead-letters, documents (publish/claim)</td>
+<td>lease/fence/dead-letter + doc CAS/claim suite green</td>
+</tr>
+<tr class="odd">
+<td>M3</td>
+<td><code>coop mcp-stdio</code> adapter + HTTP endpoint</td>
+<td>cross-CLI installed acceptance</td>
+</tr>
+<tr class="even">
+<td>M4</td>
+<td>backpressure, metrics, perf targets, operator docs</td>
+<td>§11 measured and recorded</td>
+</tr>
+</tbody>
+</table>
+<h2 id="15-open-questions">15. Open questions</h2>
+<ol type="1">
+<li>Default HTTP port (7420 proposed; must not collide with local services such as the 10086 webbridge).</li>
+<li>Whether <code>coop_wait_message</code> gets server-side filtering (<code>kind</code>, <code>from</code>) in v1 or v1.1 — filtering reduces token spend on busy inboxes.</li>
+<li>Repo-local root (<code>.cooperators/</code>) vs home default when both exist — current rule: env/flag wins, else home; a repo root is used only when explicitly requested.</li>
+<li>Whether P2 (Codex-fork adapter) speaks UDS directly or also goes through MCP — recommended: MCP, one less protocol to maintain.</li>
+<li>Claim force-takeover (admin break-lease) and claim handoff between agents — both deferred from v1; add only if a real workflow demands it.</li>
+<li>Blob garbage collection for superseded doc versions — default is retain-all, matching evidence discipline.</li>
+</ol>
+<h2 id="16-deferred">16. Deferred</h2>
+<p>Multi-machine transport, TLS, encryption at rest, A2A/NATS bridges (P3), presence UI, envelope v2 (schemas, attachments), full-text doc search/index, claim force-takeover, blob GC. Each is compatible with this design; none is required by it.</p>
+<footer>
+<p>Provenance: rendered with pandoc (gfm → html) from the canonical design doc on 2026-10-18
+(rev 2: adds §8 doc publish/claim semantics, doc tools, blob storage, related error codes and
+milestones); only the back-link target was rewritten for this archive location.
+Archive: <code>chatdocs/</code> (outside <code>.agents/</code>, which is a read-only mount in the
+authoring sandbox).</p>
+</footer>
+</main>
+</body>
+</html>
