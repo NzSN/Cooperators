@@ -54,6 +54,14 @@ pub(crate) struct Presence {
     entries: HashMap<String, PresenceEntry>,
 }
 
+/// Read-only presence counts used by `/metrics`.
+#[derive(Debug, Clone, Copy, Default)]
+pub(crate) struct AgentStateCounts {
+    pub active: usize,
+    pub stale: usize,
+    pub gone: usize,
+}
+
 #[derive(Debug, Clone)]
 struct Transition {
     agent_id: String,
@@ -140,6 +148,28 @@ impl Presence {
 
     fn touch(&mut self, identity: &AgentIdentity, now_ms: u64) -> Option<Transition> {
         self.register(identity, now_ms)
+    }
+
+    /// Counts agents by the state they would have at `now_ms` without
+    /// mutating presence or emitting transitions.
+    pub(crate) fn counts(
+        &self,
+        now_ms: u64,
+        stale_after_ms: u64,
+        gone_after_ms: u64,
+    ) -> AgentStateCounts {
+        let mut counts = AgentStateCounts::default();
+        for entry in self.entries.values() {
+            let silence = now_ms.saturating_sub(entry.last_seen_ms);
+            if silence >= gone_after_ms {
+                counts.gone += 1;
+            } else if silence >= stale_after_ms {
+                counts.stale += 1;
+            } else {
+                counts.active += 1;
+            }
+        }
+        counts
     }
 
     fn classify(

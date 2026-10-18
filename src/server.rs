@@ -27,6 +27,7 @@ use std::net::SocketAddr;
 use std::os::unix::fs::{FileTypeExt, PermissionsExt};
 use std::os::unix::net::UnixStream as StdUnixStream;
 use std::path::{Path, PathBuf};
+use std::sync::atomic::{AtomicBool, Ordering};
 use std::sync::Arc;
 use std::time::{Duration, Instant};
 
@@ -75,6 +76,11 @@ const AUTHENTICATED_METHODS: [&str; 19] = [
     "list_docs",
 ];
 
+/// Default per-inbox pending-message limit (design §9/§10).
+pub const DEFAULT_MAX_INBOX_MESSAGES: usize = 10_000;
+/// Default per-inbox pending-byte limit (design §9/§10): 64 MiB.
+pub const DEFAULT_MAX_INBOX_BYTES: u64 = 64 * 1024 * 1024;
+
 /// Daemon tunables. Presence TTLs are injectable so tests can use
 /// millisecond-scale windows without sleeping for 45 seconds.
 #[derive(Debug, Clone)]
@@ -90,10 +96,19 @@ pub struct DaemonConfig {
     pub lease_sweep_interval: Duration,
     /// Maximum messages returned by one `wait_message` call.
     pub wait_batch_limit: usize,
+    /// Maximum unacknowledged messages held by one inbox. A send that would
+    /// exceed either this count or [`Self::max_inbox_bytes`] fails with
+    /// `RESOURCE_EXHAUSTED`.
+    pub max_inbox_messages: usize,
+    /// Maximum unacknowledged bytes held by one inbox (serialized envelope
+    /// bytes). A send that would exceed this fails with
+    /// `RESOURCE_EXHAUSTED`.
+    pub max_inbox_bytes: u64,
 }
 
 impl DaemonConfig {
-    /// Design defaults: stale at 45 s, gone at 10 min, sweep every 5 s.
+    /// Design defaults: stale at 45 s, gone at 10 min, sweep every 5 s,
+    /// inbox caps 10 000 messages / 64 MiB.
     pub fn new(root: impl Into<PathBuf>) -> Self {
         Self {
             root: root.into(),
@@ -102,6 +117,8 @@ impl DaemonConfig {
             presence_sweep_interval: Duration::from_secs(5),
             lease_sweep_interval: Duration::from_secs(1),
             wait_batch_limit: 100,
+            max_inbox_messages: DEFAULT_MAX_INBOX_MESSAGES,
+            max_inbox_bytes: DEFAULT_MAX_INBOX_BYTES,
         }
     }
 }
@@ -127,6 +144,10 @@ pub struct DaemonState {
     pub(crate) docs: Mutex<HashMap<String, LogFile<DocEvent>>>,
     /// Replay-derived document state parallel to `docs`.
     pub(crate) doc_states: Mutex<HashMap<String, DocRuntime>>,
+    /// True while the streamable-HTTP listener is answering requests.
+    http_listener: AtomicBool,
+    /// In-process HTTP request counters and size-rejection counters.
+    pub(crate) metrics: crate::metrics::Metrics,
 }
 
 impl DaemonState {
@@ -180,6 +201,8 @@ impl DaemonState {
             queue_states: Mutex::new(queue_states),
             docs: Mutex::new(docs),
             doc_states: Mutex::new(doc_states),
+            http_listener: AtomicBool::new(false),
+            metrics: crate::metrics::Metrics::default(),
         })
     }
 
@@ -193,12 +216,27 @@ impl DaemonState {
         &self.config
     }
 
+    /// Seconds since this daemon state was constructed.
+    pub fn uptime_s(&self) -> u64 {
+        self.started.elapsed().as_secs()
+    }
+
+    /// Whether the HTTP listener is currently serving.
+    pub fn http_listener(&self) -> bool {
+        self.http_listener.load(Ordering::Relaxed)
+    }
+
+    /// Publishes the HTTP listener state to `/healthz`.
+    pub fn set_http_listener(&self, listening: bool) {
+        self.http_listener.store(listening, Ordering::Relaxed);
+    }
+
     /// Builds the current `daemon.status` payload.
     pub fn status(&self) -> StatusResponse {
         StatusResponse {
             version: VERSION.to_string(),
             pid: std::process::id(),
-            uptime_s: self.started.elapsed().as_secs(),
+            uptime_s: self.uptime_s(),
             root: self.root.display().to_string(),
             started_at: self.started_at.clone(),
             seq_heads: status::scan_seq_heads(&self.root),
@@ -298,17 +336,24 @@ pub async fn run_with_options(root: &Path, options: ServerOptions) -> io::Result
     if let Some(address) = options.http_addr {
         match tokio::net::TcpListener::bind(address).await {
             Ok(http_listener) => {
+                state.set_http_listener(true);
                 let http_state = Arc::clone(&state);
                 tokio::spawn(async move {
-                    if let Err(error) = crate::mcp::serve_http(http_listener, http_state).await {
+                    let result =
+                        crate::mcp::serve_http(http_listener, Arc::clone(&http_state)).await;
+                    http_state.set_http_listener(false);
+                    if let Err(error) = result {
                         eprintln!("coop daemon: MCP HTTP listener stopped: {error}");
                     }
                 });
             }
             Err(error) => {
+                state.set_http_listener(false);
                 eprintln!("coop daemon: MCP HTTP listener {address} unavailable: {error}");
             }
         }
+    } else {
+        state.set_http_listener(false);
     }
 
     serve(listener, state).await

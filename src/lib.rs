@@ -19,6 +19,7 @@
 //! - [`leases`] — shared lease renewal and the expiry sweeper.
 //! - [`presence`] — heartbeats, stale/gone transitions, `#presence` events.
 //! - [`status`] — per-log sequence-head scan for `daemon.status`.
+//! - [`metrics`] — Prometheus text metrics for `/metrics`.
 //! - [`error`] — canonical broker error taxonomy and JSON-RPC mapping.
 //! - [`paths`] — root/socket resolution and layout creation.
 //! - [`id`] — ULID and RFC 3339 helpers.
@@ -32,6 +33,7 @@ pub mod id;
 pub mod leases;
 pub mod mcp;
 pub mod messaging;
+pub mod metrics;
 pub mod paths;
 pub mod presence;
 pub mod queues;

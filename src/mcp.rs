@@ -22,12 +22,14 @@ use std::convert::Infallible;
 use std::fmt::Display;
 use std::io;
 use std::path::PathBuf;
+use std::pin::Pin;
 use std::sync::{Arc, OnceLock};
+use std::task::{Context, Poll};
 use std::time::Duration;
 
 use bytes::Bytes;
 use http::header;
-use http::{HeaderMap, Request, Response, StatusCode};
+use http::{HeaderMap, Method, Request, Response, StatusCode};
 use http_body::Body;
 use http_body_util::combinators::BoxBody;
 use http_body_util::{BodyExt, Full};
@@ -42,6 +44,7 @@ use rmcp::transport::streamable_http_server::{StreamableHttpServerConfig, Stream
 use rmcp::ErrorData as McpError;
 use rmcp::ServiceExt;
 use serde_json::{json, Value};
+use tokio::io::{AsyncRead, ReadBuf};
 use tokio::net::TcpListener;
 use tokio::sync::RwLock;
 use tower_service::Service;
@@ -54,6 +57,10 @@ use crate::VERSION;
 
 /// Default streamable-HTTP listen address (design §2).
 pub const DEFAULT_HTTP_ADDR: &str = "127.0.0.1:7420";
+
+/// Maximum bytes accepted for one newline-delimited stdio message. Matches
+/// the rmcp streamable-HTTP body limit (4 MiB).
+pub const MAX_STDIO_MESSAGE_BYTES: usize = 4 * 1024 * 1024;
 
 /// Deadline used for ordinary forwarded calls.
 const CALL_TIMEOUT: Duration = Duration::from_secs(30);
@@ -394,15 +401,27 @@ pub struct CoopMcpHandler {
     backend: Backend,
     token: Arc<RwLock<Option<String>>>,
     auth: AuthMode,
+    /// Per-call serialized-argument cap, applied to stdio calls.
+    max_message_bytes: usize,
 }
 
 impl CoopMcpHandler {
     /// Handler for `coop mcp-stdio`.
     pub fn stdio(backend: Backend, token: Option<String>) -> Self {
+        Self::stdio_with_limit(backend, token, MAX_STDIO_MESSAGE_BYTES)
+    }
+
+    /// Handler for `coop mcp-stdio` with an explicit message-size cap.
+    pub fn stdio_with_limit(
+        backend: Backend,
+        token: Option<String>,
+        max_message_bytes: usize,
+    ) -> Self {
         Self {
             backend,
             token: Arc::new(RwLock::new(token)),
             auth: AuthMode::Captured,
+            max_message_bytes,
         }
     }
 
@@ -412,6 +431,7 @@ impl CoopMcpHandler {
             backend,
             token: Arc::new(RwLock::new(None)),
             auth: AuthMode::HttpHeader,
+            max_message_bytes: usize::MAX,
         }
     }
 
@@ -452,7 +472,27 @@ impl CoopMcpHandler {
             AuthMode::HttpHeader => http_token,
         };
 
-        let mut params = Value::Object(arguments.unwrap_or_default());
+        let arguments = arguments.unwrap_or_default();
+        if self.auth == AuthMode::Captured {
+            let encoded_len =
+                serde_json::to_vec(&arguments).map_or(usize::MAX, |bytes| bytes.len());
+            if encoded_len > self.max_message_bytes {
+                if let Backend::Embedded(state) = &self.backend {
+                    state.metrics.record_size_rejection();
+                }
+                return tool_error(
+                    ErrorCode::ResourceExhausted.rpc_code(),
+                    format!(
+                        "message exceeds the {}-byte stdio limit",
+                        self.max_message_bytes
+                    ),
+                    "RESOURCE_EXHAUSTED",
+                )
+                .into();
+            }
+        }
+
+        let mut params = Value::Object(arguments);
         if let Some(token) = token {
             if let Value::Object(map) = &mut params {
                 map.entry("token").or_insert(Value::String(token));
@@ -530,9 +570,83 @@ impl ServerHandler for CoopMcpHandler {
 // stdio transport
 // ---------------------------------------------------------------------------
 
+/// Async reader that fails once a single newline-delimited message exceeds
+/// `max` bytes. rmcp's stdio transport reads lines without a bound; this
+/// wrapper supplies the same 4 MiB ceiling as the HTTP body limit.
+#[derive(Debug)]
+pub struct LineCappedReader<R> {
+    inner: R,
+    max: usize,
+    current: usize,
+}
+
+impl<R> LineCappedReader<R> {
+    /// Wraps `inner` with a per-line byte cap.
+    pub fn new(inner: R, max: usize) -> Self {
+        Self {
+            inner,
+            max,
+            current: 0,
+        }
+    }
+}
+
+impl<R: AsyncRead + Unpin> AsyncRead for LineCappedReader<R> {
+    fn poll_read(
+        mut self: Pin<&mut Self>,
+        cx: &mut Context<'_>,
+        buf: &mut ReadBuf<'_>,
+    ) -> Poll<io::Result<()>> {
+        if buf.remaining() == 0 {
+            return Poll::Ready(Ok(()));
+        }
+        let this = self.as_mut().get_mut();
+        // One extra byte is allowed so a message exactly at the limit can
+        // still be terminated by its newline.
+        let allowance = this.max.saturating_sub(this.current).saturating_add(1);
+        let limit = allowance.min(buf.remaining()).min(16 * 1024);
+        if limit == 0 {
+            return Poll::Ready(Err(too_large(this.max)));
+        }
+
+        let mut scratch = [0u8; 16 * 1024];
+        let mut limited = ReadBuf::new(&mut scratch[..limit]);
+        match Pin::new(&mut this.inner).poll_read(cx, &mut limited) {
+            Poll::Ready(Ok(())) => {
+                let filled = limited.filled();
+                if filled.is_empty() {
+                    return Poll::Ready(Ok(()));
+                }
+                buf.put_slice(filled);
+                for byte in filled {
+                    if *byte == b'\n' {
+                        this.current = 0;
+                    } else {
+                        this.current += 1;
+                    }
+                }
+                if this.current > this.max {
+                    Poll::Ready(Err(too_large(this.max)))
+                } else {
+                    Poll::Ready(Ok(()))
+                }
+            }
+            other => other,
+        }
+    }
+}
+
+fn too_large(max: usize) -> io::Error {
+    io::Error::new(
+        io::ErrorKind::InvalidData,
+        format!("stdio message exceeds the {max}-byte limit"),
+    )
+}
+
 /// Runs the MCP server over stdin/stdout until the client closes the pipe.
 pub async fn serve_stdio(handler: CoopMcpHandler) -> Result<(), Box<dyn std::error::Error>> {
-    let (stdin, stdout) = rmcp::transport::stdio();
+    let stdin = LineCappedReader::new(tokio::io::stdin(), MAX_STDIO_MESSAGE_BYTES);
+    let stdout = tokio::io::stdout();
     let running = handler.serve((stdin, stdout)).await?;
     let _ = running.waiting().await?;
     Ok(())
@@ -561,7 +675,8 @@ pub fn http_service(state: Arc<DaemonState>) -> CoopHttpService {
     )
 }
 
-/// Serves `/mcp` on an already-bound listener until it fails.
+/// Serves `/mcp`, `/healthz`, and `/metrics` on an already-bound listener
+/// until it fails.
 pub async fn serve_http(listener: TcpListener, state: Arc<DaemonState>) -> io::Result<()> {
     let address = listener.local_addr()?;
     let service = http_service(Arc::clone(&state));
@@ -597,25 +712,67 @@ where
     B: Body<Data = Bytes> + Send + 'static,
     B::Error: Display,
 {
-    if request.uri().path() != "/mcp" {
-        return http_json(
+    let path = request.uri().path().to_string();
+    let response = match path.as_str() {
+        "/healthz" => {
+            if request.method() != Method::GET {
+                method_not_allowed()
+            } else {
+                http_json(
+                    StatusCode::OK,
+                    json!({
+                        "status": "ok",
+                        "version": VERSION,
+                        "uptime_s": state.uptime_s(),
+                        "http_listener": state.http_listener(),
+                    }),
+                )
+            }
+        }
+        "/metrics" => {
+            if request.method() != Method::GET {
+                method_not_allowed()
+            } else {
+                match bearer_token(request.headers()) {
+                    None => unauthorized("missing Authorization: Bearer token"),
+                    Some(token) => {
+                        if state.authenticate(&token).await.is_err() {
+                            unauthorized("invalid bearer token")
+                        } else {
+                            http_text(StatusCode::OK, crate::metrics::render(state).await)
+                        }
+                    }
+                }
+            }
+        }
+        "/mcp" => match bearer_token(request.headers()) {
+            None => unauthorized("missing Authorization: Bearer token"),
+            Some(token) => {
+                if state.authenticate(&token).await.is_err() {
+                    unauthorized("invalid bearer token")
+                } else {
+                    let mut service = service.clone();
+                    match service.call(request).await {
+                        Ok(response) => response,
+                        Err(never) => match never {},
+                    }
+                }
+            }
+        },
+        _ => http_json(
             StatusCode::NOT_FOUND,
-            json!({"error": "not found; the MCP endpoint is POST /mcp"}),
-        );
-    }
-
-    let Some(token) = bearer_token(request.headers()) else {
-        return unauthorized("missing Authorization: Bearer token");
+            json!({"error": "not found; endpoints are POST /mcp, GET /healthz, GET /metrics"}),
+        ),
     };
-    if state.authenticate(&token).await.is_err() {
-        return unauthorized("invalid bearer token");
-    }
 
-    let mut service = service.clone();
-    match service.call(request).await {
-        Ok(response) => response,
-        Err(never) => match never {},
-    }
+    let metric_path = match path.as_str() {
+        "/mcp" | "/healthz" | "/metrics" => path.as_str(),
+        _ => "other",
+    };
+    state
+        .metrics
+        .record_http(metric_path, response.status().as_u16());
+    response
 }
 
 fn unauthorized(message: &str) -> Response<BoxBody<Bytes, Infallible>> {
@@ -637,6 +794,28 @@ fn http_json(status: StatusCode, body: Value) -> Response<BoxBody<Bytes, Infalli
         .header(header::CONTENT_TYPE, "application/json")
         .body(Full::new(Bytes::from(bytes)).boxed())
         .expect("valid HTTP response")
+}
+
+fn http_text(status: StatusCode, body: String) -> Response<BoxBody<Bytes, Infallible>> {
+    Response::builder()
+        .status(status)
+        .header(
+            header::CONTENT_TYPE,
+            "text/plain; version=0.0.4; charset=utf-8",
+        )
+        .body(Full::new(Bytes::from(body.into_bytes())).boxed())
+        .expect("valid HTTP response")
+}
+
+fn method_not_allowed() -> Response<BoxBody<Bytes, Infallible>> {
+    let mut response = http_json(
+        StatusCode::METHOD_NOT_ALLOWED,
+        json!({"error": "method not allowed"}),
+    );
+    response
+        .headers_mut()
+        .insert(header::ALLOW, header::HeaderValue::from_static("GET"));
+    response
 }
 
 fn bearer_token(headers: &HeaderMap) -> Option<String> {

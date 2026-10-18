@@ -134,9 +134,19 @@ pub(crate) struct Inbox {
     pub records: Vec<Envelope>,
     pub notify: Arc<Notify>,
     pub acked_seq: u64,
+    /// Unacknowledged messages (`seq > acked_seq`), including expired ones.
+    /// Expiry does not reclaim backlog; ack does.
+    pub pending_messages: usize,
+    /// Serialized bytes of the unacknowledged messages (one line each).
+    pub pending_bytes: u64,
     expiry_log: Option<LogFile<ExpiryRecord>>,
     expiry_path: PathBuf,
     pub expires: HashMap<String, u64>,
+}
+
+/// Serialized size of one inbox line, including its newline separator.
+fn envelope_line_bytes(envelope: &Envelope) -> u64 {
+    serde_json::to_vec(envelope).map_or(0, |bytes| bytes.len() as u64 + 1)
 }
 
 impl Inbox {
@@ -181,11 +191,15 @@ impl Inbox {
             (None, HashMap::new())
         };
 
+        let pending_messages = records.len();
+        let pending_bytes = records.iter().map(envelope_line_bytes).sum();
         Ok(Self {
             log,
             records,
             notify: Arc::new(Notify::new()),
             acked_seq: 0,
+            pending_messages,
+            pending_bytes,
             expiry_log,
             expiry_path,
             expires,
@@ -444,10 +458,37 @@ impl DaemonState {
             let inbox = inboxes
                 .get_mut(&recipient.agent_id)
                 .expect("inbox is present after insertion");
+
+            // Size the envelope as it will be persisted so the byte cap is
+            // exact rather than an estimate.
+            envelope.seq = inbox.log.next_seq();
+            envelope.prev_hash = inbox.log.last_hash().to_string();
+            let projected_bytes = envelope_line_bytes(&envelope);
+            let over_messages = inbox.pending_messages >= self.config.max_inbox_messages;
+            let over_bytes =
+                inbox.pending_bytes.saturating_add(projected_bytes) > self.config.max_inbox_bytes;
+            if over_messages || over_bytes {
+                return Err(BrokerError::application(
+                    ErrorCode::ResourceExhausted,
+                    format!(
+                        "inbox for {:?} is full (pending {} messages, {} bytes; limits {} messages, {} bytes)",
+                        recipient.name,
+                        inbox.pending_messages,
+                        inbox.pending_bytes,
+                        self.config.max_inbox_messages,
+                        self.config.max_inbox_bytes
+                    ),
+                ));
+            }
+
             if let Some(expires_at_ms) = expires_at_ms {
                 inbox.append_expiry(&envelope.id, expires_at_ms)?;
             }
             let receipt = inbox.log.append(&mut envelope)?;
+            inbox.pending_messages += 1;
+            inbox.pending_bytes = inbox
+                .pending_bytes
+                .saturating_add(envelope_line_bytes(&envelope));
             inbox.records.push(envelope.clone());
             inbox.notify.notify_waiters();
             receipt
@@ -567,7 +608,18 @@ impl DaemonState {
             )));
         }
         if seq > inbox.acked_seq {
+            let previous = inbox.acked_seq;
+            let mut released_messages = 0usize;
+            let mut released_bytes = 0u64;
+            for record in &inbox.records {
+                if record.seq > previous && record.seq <= seq {
+                    released_messages += 1;
+                    released_bytes = released_bytes.saturating_add(envelope_line_bytes(record));
+                }
+            }
             inbox.acked_seq = seq;
+            inbox.pending_messages = inbox.pending_messages.saturating_sub(released_messages);
+            inbox.pending_bytes = inbox.pending_bytes.saturating_sub(released_bytes);
         }
         Ok(AckReceipt {
             acked_cursor: inbox.acked_seq.to_string(),
