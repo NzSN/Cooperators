@@ -1,13 +1,13 @@
-//! Cooperators MBT harness.
+//! Cooperators MBT harness — generated-adapter edition.
 //!
-//! Replays Apalache witness traces of `spec/MBCooperators.tla` against the
-//! real `DaemonState` (in-process, no sockets) through the ModelMirrors
-//! protocol. Oracle boundary: each action the model enabled must succeed in
-//! the implementation, and the reconstructed abstract state (log + ack
-//! cursors) must match the trace exactly at every step. Rejection paths are
-//! proven by TLC on spec/Cooperators.tla, not exercised here.
+//! The SUT adapter is the Mirrors model-interface compiler's `mirrorrust-v2`
+//! output (`generated/MBCooperatorsMirror.generated.rs`, semantic digest in
+//! `Cooperators.mirror-interface.lock.json`); this file implements the
+//! generated typed port (`MBCooperatorsPort`) against the real daemon and
+//! replays the Apalache trace battery through the negotiated ModelMirrors
+//! path (`run_client_with_traces_negotiated`).
 //!
-//! Usage: MIRROR_BIN=/path/to/ModelMirrors cargo run --offline [--skip-gen]
+//! Oracle boundary and limits: see README.md.
 
 use std::collections::BTreeMap;
 use std::path::{Path, PathBuf};
@@ -19,42 +19,28 @@ use cooperators::messaging::SendRequest;
 use cooperators::registry::AgentIdentity;
 use cooperators::server::{DaemonConfig, DaemonState};
 
-use mirrorrust::{
-    as_int, as_str, get_param, run_client_with_traces, ApalacheConfig, State, StateComputer, Value,
-};
+use mirrorrust::{run_client_with_traces, ApalacheConfig, BindingError, FallibleStateComputer};
 use num_bigint::BigInt;
 
+#[path = "../generated/MBCooperatorsMirror.generated.rs"]
+#[allow(dead_code)]
+mod generated;
+use generated::{
+    AckInput, ClaimInput, CompleteInput, ExpireInput, FailInput, MBCooperatorsObservation,
+    MBCooperatorsPort, MiTypeO1Item, MirrorMap, MirrorSeq, PublishInput, ReleaseInput, SendInput,
+    UpdateInput,
+};
+
 const AGENTS: [&str; 2] = ["a1", "a2"];
-const KEYS: [&str; 2] = ["k1", "k2"];
 const MAX_ATTEMPTS: u64 = 2;
 const QUEUE: &str = "q0";
 const DOC: &str = "d0";
 const LEASE_TTL_S: u64 = 3600; // far future: expiry happens only via the forced hook
+const ADAPTER_ID: &str = "cooperators.mbc/v1";
+const TARGET_PROFILE: &str = "mirrorrust-v2";
 
-fn vstr(s: &str) -> Value {
-    Value::Str(s.to_string())
-}
-fn vint(n: u64) -> Value {
-    Value::Int(BigInt::from(n))
-}
-
-/// One flattened abstract log record, field order matching the ITF encoding
-/// (BTreeMap keeps keys sorted: base, fence, from, holder, key, res, to, type).
-fn rec(ty: &str, from: &str, to: &str, key: &str, res: &str, holder: &str, fence: u64, base: u64) -> Value {
-    let mut m = State::new();
-    m.insert("type".to_string(), vstr(ty));
-    m.insert("from".to_string(), vstr(from));
-    m.insert("to".to_string(), vstr(to));
-    m.insert("key".to_string(), vstr(key));
-    m.insert("res".to_string(), vstr(res));
-    m.insert("holder".to_string(), vstr(holder));
-    m.insert("fence".to_string(), vint(fence));
-    m.insert("base".to_string(), vint(base));
-    Value::Record(m)
-}
-
-fn parse_seq(s: &str) -> u64 {
-    s.strip_prefix("seq:").unwrap_or(s).parse().unwrap_or(0)
+fn to_bigint(v: u64) -> BigInt {
+    BigInt::from(v)
 }
 
 struct CoopSut {
@@ -64,11 +50,32 @@ struct CoopSut {
     state: DaemonState,
     ids: BTreeMap<String, String>,
     tokens: BTreeMap<String, String>,
-    log: Vec<Value>,
+    log: Vec<MiTypeO1Item>,
     /// (lease_id, concrete fence, abstract fence = position of claim in `log`)
     q_lease: Option<(String, u64, u64)>,
     d_lease: Option<(String, u64, u64)>,
     doc_version: u64,
+}
+
+fn log_rec(ty: &str, from: &str, to: &str, key: &str, res: &str, holder: &str, fence: u64, base: u64) -> MiTypeO1Item {
+    MiTypeO1Item {
+        field_0: to_bigint(base),
+        field_1: to_bigint(fence),
+        field_2: from.to_string(),
+        field_3: holder.to_string(),
+        field_4: key.to_string(),
+        field_5: res.to_string(),
+        field_6: to.to_string(),
+        field_7: ty.to_string(),
+    }
+}
+
+fn parse_seq(s: &str) -> u64 {
+    s.strip_prefix("seq:").unwrap_or(s).parse().unwrap_or(0)
+}
+
+fn daemon_err(e: impl std::fmt::Debug) -> BindingError {
+    BindingError::new("daemon_rejected", format!("{e:?}"))
 }
 
 impl CoopSut {
@@ -77,7 +84,7 @@ impl CoopSut {
         let tmp = tempfile::tempdir().expect("tempdir");
         let root = tmp.path().join("coop-root");
         let state = DaemonState::with_config(DaemonConfig::new(&root)).expect("daemon state");
-        let mut sut = CoopSut {
+        CoopSut {
             rt,
             _tmp: tmp,
             root,
@@ -88,12 +95,25 @@ impl CoopSut {
             q_lease: None,
             d_lease: None,
             doc_version: 0,
-        };
-        sut.bootstrap();
-        sut
+        }
     }
 
-    fn bootstrap(&mut self) {
+    fn identity(&self, name: &str) -> Result<AgentIdentity, BindingError> {
+        let token = self.tokens.get(name).ok_or_else(|| BindingError::new("unknown_agent", name))?;
+        self.rt.block_on(self.state.authenticate(token)).map_err(daemon_err)
+    }
+
+    fn acked(&self, name: &str) -> u64 {
+        let Some(id) = self.ids.get(name) else { return 0 };
+        self.rt
+            .block_on(self.state.wait_message(id, None, Duration::from_millis(0)))
+            .map(|b| parse_seq(&b.acked_cursor))
+            .unwrap_or(0)
+    }
+}
+
+impl MBCooperatorsPort for CoopSut {
+    fn initialize(&mut self) -> Result<(), BindingError> {
         for name in AGENTS {
             let reg = self
                 .rt
@@ -103,223 +123,157 @@ impl CoopSut {
                     None,
                     None,
                 ))
-                .expect("register agent");
+                .map_err(daemon_err)?;
             self.ids.insert(name.to_string(), reg.agent_id);
             self.tokens.insert(name.to_string(), reg.token);
         }
-        self.rt.block_on(self.state.create_queue(QUEUE)).expect("create queue");
+        self.rt.block_on(self.state.create_queue(QUEUE)).map_err(daemon_err)?;
         self.rt
             .block_on(self.state.enqueue(QUEUE, serde_json::json!("task0"), Some(MAX_ATTEMPTS)))
-            .expect("enqueue task0");
+            .map_err(daemon_err)?;
+        Ok(())
     }
 
-    fn reopen_after_crash(&mut self) {
-        self.state = DaemonState::with_config(DaemonConfig::new(&self.root)).expect("reopen");
-        // Tokens survive in registry.json; refresh identities.
+    fn send(&mut self, input: SendInput) -> Result<(), BindingError> {
+        let from = self.identity(&input.from)?;
+        let req = SendRequest {
+            to: self.ids[&input.to].clone(),
+            kind: "mbt".to_string(),
+            body: Body { mime: "text/plain".to_string(), text: "mbt".to_string() },
+            reply_to: None,
+            idempotency_key: Some(input.key.clone()),
+            ttl: None,
+        };
+        self.rt.block_on(self.state.send_message(&from, req)).map_err(daemon_err)?;
+        self.log.push(log_rec("msg", &input.from, &input.to, &input.key, "-", "-", 0, 0));
+        Ok(())
+    }
+
+    fn ack(&mut self, input: AckInput) -> Result<(), BindingError> {
+        let id = self.ids[&input.holder].clone();
+        let cursor = input.cursor.to_string();
+        self.rt.block_on(self.state.ack(&id, &cursor)).map_err(daemon_err)?;
+        Ok(())
+    }
+
+    fn claim(&mut self, input: ClaimInput) -> Result<(), BindingError> {
+        let who = self.identity(&input.holder)?;
+        let abs_fence = (self.log.len() as u64) + 1;
+        if input.res == QUEUE {
+            let r = self.rt.block_on(self.state.claim_task(&who, QUEUE, LEASE_TTL_S)).map_err(daemon_err)?;
+            self.q_lease = Some((r.lease_id, r.fence, abs_fence));
+        } else {
+            let r = self.rt.block_on(self.state.claim_doc(&who, DOC, LEASE_TTL_S)).map_err(daemon_err)?;
+            self.d_lease = Some((r.lease_id, r.fence, abs_fence));
+        }
+        self.log.push(log_rec("claim", "-", "-", "-", &input.res, &input.holder, 0, 0));
+        Ok(())
+    }
+
+    fn expire(&mut self, input: ExpireInput) -> Result<(), BindingError> {
+        if input.res == QUEUE {
+            let fence = self.q_lease.as_ref().map(|(_, _, af)| *af).unwrap_or(0);
+            let n = self.rt.block_on(self.state.debug_force_expire_queue(QUEUE)).map_err(daemon_err)?;
+            if n == 0 { return Err(BindingError::new("daemon_rejected", "no queue lease to expire")); }
+            self.q_lease = None;
+            self.log.push(log_rec("expire", "-", "-", "-", &input.res, "-", fence, 0));
+        } else {
+            let fence = self.d_lease.as_ref().map(|(_, _, af)| *af).unwrap_or(0);
+            let ok = self.rt.block_on(self.state.debug_force_expire_doc(DOC)).map_err(daemon_err)?;
+            if !ok { return Err(BindingError::new("daemon_rejected", "no doc claim to expire")); }
+            self.d_lease = None;
+            self.log.push(log_rec("expire", "-", "-", "-", &input.res, "-", fence, 0));
+        }
+        Ok(())
+    }
+
+    fn complete(&mut self, input: CompleteInput) -> Result<(), BindingError> {
+        let (lease_id, fence, abs_fence) =
+            self.q_lease.take().ok_or_else(|| BindingError::new("adapter_state", "no active q lease"))?;
+        let who = self.identity(&input.holder)?;
+        self.rt
+            .block_on(self.state.complete_task(&who, &lease_id, fence, serde_json::json!("done"), None))
+            .map_err(daemon_err)?;
+        self.log.push(log_rec("complete", "-", "-", "-", QUEUE, &input.holder, abs_fence, 0));
+        Ok(())
+    }
+
+    fn fail(&mut self, input: FailInput) -> Result<(), BindingError> {
+        let (lease_id, fence, abs_fence) =
+            self.q_lease.take().ok_or_else(|| BindingError::new("adapter_state", "no active q lease"))?;
+        let who = self.identity(&input.holder)?;
+        self.rt
+            .block_on(self.state.fail_task(&who, &lease_id, fence, "mbt-fail"))
+            .map_err(daemon_err)?;
+        self.log.push(log_rec("fail", "-", "-", "-", QUEUE, &input.holder, abs_fence, 0));
+        Ok(())
+    }
+
+    fn release(&mut self, input: ReleaseInput) -> Result<(), BindingError> {
+        let (lease_id, fence, abs_fence) =
+            self.d_lease.take().ok_or_else(|| BindingError::new("adapter_state", "no active d lease"))?;
+        let who = self.identity(&input.holder)?;
+        self.rt.block_on(self.state.release_doc(&who, &lease_id, fence)).map_err(daemon_err)?;
+        self.log.push(log_rec("release", "-", "-", "-", DOC, &input.holder, abs_fence, 0));
+        Ok(())
+    }
+
+    fn publish(&mut self, input: PublishInput) -> Result<(), BindingError> {
+        let who = self.identity(&input.holder)?;
+        self.rt
+            .block_on(self.state.publish_doc(
+                &who,
+                DOC,
+                "text/plain",
+                Body { mime: "text/plain".to_string(), text: "mbt doc".to_string() },
+                None,
+            ))
+            .map_err(daemon_err)?;
+        self.doc_version = 1;
+        self.log.push(log_rec("docput", "-", "-", "-", DOC, &input.holder, 0, 0));
+        Ok(())
+    }
+
+    fn update(&mut self, input: UpdateInput) -> Result<(), BindingError> {
+        let who = self.identity(&input.holder)?;
+        let base = self.doc_version;
+        let abs_fence = self.d_lease.as_ref().map(|(_, _, af)| *af).unwrap_or(0);
+        let lease_owned: Option<(String, u64)> = self.d_lease.as_ref().map(|(lid, f, _)| (lid.clone(), *f));
+        let lease = lease_owned.as_ref().map(|(lid, f)| (lid.as_str(), *f));
+        self.rt
+            .block_on(self.state.update_doc(
+                &who,
+                DOC,
+                base,
+                Body { mime: "text/plain".to_string(), text: "mbt update".to_string() },
+                None,
+                lease,
+            ))
+            .map_err(daemon_err)?;
+        self.doc_version += 1;
+        self.log.push(log_rec("docput", "-", "-", "-", DOC, &input.holder, abs_fence, base));
+        Ok(())
+    }
+
+    fn crash(&mut self) -> Result<(), BindingError> {
+        self.state = DaemonState::with_config(DaemonConfig::new(&self.root)).map_err(daemon_err)?;
         for name in AGENTS {
             let token = self.tokens[name].clone();
-            self.rt
-                .block_on(self.state.authenticate(&token))
-                .expect("re-authenticate after crash");
+            self.rt.block_on(self.state.authenticate(&token)).map_err(daemon_err)?;
         }
-        // Leases survive via log replay: keep stored (lease_id, fence) pairs.
+        // Leases survive via log replay: stored (lease_id, fence) stay valid.
+        Ok(())
     }
 
-    fn identity(&self, name: &str) -> AgentIdentity {
-        let token = &self.tokens[name];
-        self.rt
-            .block_on(self.state.authenticate(token))
-            .expect("authenticate")
-    }
-
-    /// Authoritative read-back of an agent's acknowledged cursor.
-    fn acked(&self, name: &str) -> u64 {
-        let id = &self.ids[name];
-        self.rt
-            .block_on(self.state.wait_message(id, None, Duration::from_millis(0)))
-            .map(|b| parse_seq(&b.acked_cursor))
-            .unwrap_or(0)
-    }
-
-    fn report(&self) -> State {
-        let mut m = State::new();
-        m.insert("log".to_string(), Value::Seq(self.log.clone()));
-        let ack_map: Vec<(Value, Value)> = AGENTS
-            .iter()
-            .map(|a| (vstr(a), vint(self.acked(a))))
-            .collect();
-        m.insert("ackCursor".to_string(), Value::Map(ack_map));
-        // The replay comparison covers exactly the spec's non-meta
-        // variables: log and ackCursor. Constants are not compared.
-        m
-    }
-
-    fn param<'a>(params: &'a State, field: &str) -> Option<&'a Value> {
-        get_param(params, "parameters").and_then(|r| r.get(field))
-    }
-    fn pstr(params: &State, field: &str) -> String {
-        Self::param(params, field)
-            .and_then(as_str)
-            .unwrap_or("-")
-            .to_string()
-    }
-    fn pint(params: &State, field: &str) -> u64 {
-        Self::param(params, field)
-            .and_then(as_int)
-            .and_then(|b| b.to_string().parse().ok())
-            .unwrap_or(0)
-    }
-}
-
-impl StateComputer for CoopSut {
-    fn compute(&mut self, action: &str, params: &State, _prev: &State) -> State {
-        match action {
-            "init" => {} // bootstrap() already ran
-            "send" => {
-                let (f, t, k) = (Self::pstr(params, "from"), Self::pstr(params, "to"), Self::pstr(params, "key"));
-                let from = self.identity(&f);
-                let req = SendRequest {
-                    to: self.ids[&t].clone(),
-                    kind: "mbt".to_string(),
-                    body: Body { mime: "text/plain".to_string(), text: "mbt".to_string() },
-                    reply_to: None,
-                    idempotency_key: Some(k.clone()),
-                    ttl: None,
-                };
-                if self.rt.block_on(self.state.send_message(&from, req)).is_ok() {
-                    self.log.push(rec("msg", &f, &t, &k, "-", "-", 0, 0));
-                }
-            }
-            "ack" => {
-                let a = Self::pstr(params, "holder");
-                let c = Self::pint(params, "cursor");
-                let id = self.ids[&a].clone();
-                let _ = self.rt.block_on(self.state.ack(&id, &c.to_string()));
-            }
-            "claim" => {
-                let res = Self::pstr(params, "res");
-                let h = Self::pstr(params, "holder");
-                let who = self.identity(&h);
-                let abs_fence = (self.log.len() as u64) + 1;
-                if res == QUEUE {
-                    if let Ok(r) = self.rt.block_on(self.state.claim_task(&who, QUEUE, LEASE_TTL_S)) {
-                        self.q_lease = Some((r.lease_id, r.fence, abs_fence));
-                        self.log.push(rec("claim", "-", "-", "-", &res, &h, 0, 0));
-                    }
-                } else if let Ok(r) = self.rt.block_on(self.state.claim_doc(&who, DOC, LEASE_TTL_S)) {
-                    self.d_lease = Some((r.lease_id, r.fence, abs_fence));
-                    self.log.push(rec("claim", "-", "-", "-", &res, &h, 0, 0));
-                }
-            }
-            "expire" => {
-                let res = Self::pstr(params, "res");
-                if res == QUEUE {
-                    let fence = self.q_lease.as_ref().map(|(_, _, af)| *af).unwrap_or(0);
-                    let n = self.rt.block_on(self.state.debug_force_expire_queue(QUEUE)).unwrap_or(0);
-                    if n > 0 {
-                        self.q_lease = None;
-                        self.log.push(rec("expire", "-", "-", "-", &res, "-", fence, 0));
-                    }
-                } else {
-                    let fence = self.d_lease.as_ref().map(|(_, _, af)| *af).unwrap_or(0);
-                    let ok = self.rt.block_on(self.state.debug_force_expire_doc(DOC)).unwrap_or(false);
-                    if ok {
-                        self.d_lease = None;
-                        self.log.push(rec("expire", "-", "-", "-", &res, "-", fence, 0));
-                    }
-                }
-            }
-            "complete" => {
-                let h = Self::pstr(params, "holder");
-                if let Some((lease_id, fence, abs_fence)) = self.q_lease.take() {
-                    let who = self.identity(&h);
-                    if self
-                        .rt
-                        .block_on(self.state.complete_task(&who, &lease_id, fence, serde_json::json!("done"), None))
-                        .is_ok()
-                    {
-                        self.log.push(rec("complete", "-", "-", "-", QUEUE, &h, abs_fence, 0));
-                    } else {
-                        self.q_lease = Some((lease_id, fence, abs_fence));
-                    }
-                }
-            }
-            "fail" => {
-                let h = Self::pstr(params, "holder");
-                if let Some((lease_id, fence, abs_fence)) = self.q_lease.take() {
-                    let who = self.identity(&h);
-                    if self
-                        .rt
-                        .block_on(self.state.fail_task(&who, &lease_id, fence, "mbt-fail"))
-                        .is_ok()
-                    {
-                        self.log.push(rec("fail", "-", "-", "-", QUEUE, &h, abs_fence, 0));
-                    } else {
-                        self.q_lease = Some((lease_id, fence, abs_fence));
-                    }
-                }
-            }
-            "release" => {
-                let h = Self::pstr(params, "holder");
-                if let Some((lease_id, fence, abs_fence)) = self.d_lease.take() {
-                    let who = self.identity(&h);
-                    if self
-                        .rt
-                        .block_on(self.state.release_doc(&who, &lease_id, fence))
-                        .is_ok()
-                    {
-                        self.log.push(rec("release", "-", "-", "-", DOC, &h, abs_fence, 0));
-                    } else {
-                        self.d_lease = Some((lease_id, fence, abs_fence));
-                    }
-                }
-            }
-            "publish" => {
-                let h = Self::pstr(params, "holder");
-                let who = self.identity(&h);
-                if self
-                    .rt
-                    .block_on(self.state.publish_doc(
-                        &who,
-                        DOC,
-                        "text/plain",
-                        Body { mime: "text/plain".to_string(), text: "mbt doc".to_string() },
-                        None,
-                    ))
-                    .is_ok()
-                {
-                    self.doc_version = 1;
-                    self.log.push(rec("docput", "-", "-", "-", DOC, &h, 0, 0));
-                }
-            }
-            "update" => {
-                let h = Self::pstr(params, "holder");
-                let who = self.identity(&h);
-                let base = self.doc_version;
-                let abs_fence = self.d_lease.as_ref().map(|(_, _, af)| *af).unwrap_or(0);
-                let lease_owned: Option<(String, u64)> =
-                    self.d_lease.as_ref().map(|(lid, f, _)| (lid.clone(), *f));
-                let lease = lease_owned.as_ref().map(|(lid, f)| (lid.as_str(), *f));
-                if self
-                    .rt
-                    .block_on(self.state.update_doc(
-                        &who,
-                        DOC,
-                        base,
-                        Body { mime: "text/plain".to_string(), text: "mbt update".to_string() },
-                        None,
-                        lease,
-                    ))
-                    .is_ok()
-                {
-                    self.doc_version += 1;
-                    self.log.push(rec("docput", "-", "-", "-", DOC, &h, abs_fence, base));
-                }
-            }
-            "crash" => self.reopen_after_crash(),
-            other => eprintln!("mbt: unknown action {other:?}"),
+    fn observe(&mut self) -> Result<MBCooperatorsObservation, BindingError> {
+        let mut ack = BTreeMap::new();
+        for name in AGENTS {
+            ack.insert(name.to_string(), to_bigint(self.acked(name)));
         }
-        self.report()
+        Ok(MBCooperatorsObservation {
+            ack_cursor: MirrorMap(ack),
+            log: MirrorSeq(self.log.clone()),
+        })
     }
 }
 
@@ -339,6 +293,25 @@ fn apalache_cfg() -> ApalacheConfig {
     }
 }
 
+fn replay_one(bin: &str, path: &Path) -> Result<(), String> {
+    // The generated binding is the FallibleStateComputer; wrap it for the
+    // infallible StateComputer signature. A daemon rejection or observation
+    // codec error poisons the binding and fails the replay immediately.
+    let mut binding = generated::bind_m_b_cooperators(CoopSut::new(), &apalache_cfg())
+        .map_err(|e| format!("bind: {e}"))?;
+    let compute = move |action: &str, params: &mirrorrust::State, prev: &mirrorrust::State| {
+        FallibleStateComputer::compute(&mut binding, action, params, prev)
+            .unwrap_or_else(|e| panic!("generated binding failed at {action}: {e}"))
+    };
+    // NOTE: the negotiated client path (run_client_with_traces_negotiated)
+    // requires server support for mirrors.model-interface-negotiation/v1,
+    // which this ModelMirrors 0.1.1.0 build lacks; replay uses the plain
+    // trace path. The semantic digest/lock still binds adapter to spec via
+    // `model_interface_gen check`.
+    run_client_with_traces(bin, apalache_cfg(), vec![path.to_string_lossy().into_owned()], compute)
+        .map_err(|e| e.to_string())
+}
+
 fn main() -> ExitCode {
     let bin = match std::env::var("MIRROR_BIN") {
         Ok(b) if !b.is_empty() => b,
@@ -352,10 +325,10 @@ fn main() -> ExitCode {
     let traces_dir = Path::new(env!("CARGO_MANIFEST_DIR")).join("traces");
 
     if !skip_gen {
-        // Trace generation runs Apalache directly. The ModelMirrors gen
+        // Trace generation runs Apalache directly: the ModelMirrors gen
         // protocol inlines all traces in one response line, which overflows
-        // MirrorRust's 64 KiB protocol-line cap at >3 Cooperators-sized
-        // traces; direct CLI generation has no such limit.
+        // MirrorRust's 64 KiB protocol-line cap beyond ~3 Cooperators-sized
+        // traces. Direct CLI generation has no such limit.
         let invariants = [
             ("TraceComplete", 12),
             ("NoAck", 2),
@@ -385,12 +358,9 @@ fn main() -> ExitCode {
                 .stderr(std::process::Stdio::null())
                 .status()
                 .expect("spawn apalache-mc");
-            // Apalache exits 12 when a counterexample (= our witness) exists.
             if status.code() != Some(12) {
                 panic!("apalache found no witness for {inv} (exit {status})");
             }
-            // Collect the violation*.itf.json of the run directory created
-            // after our start marker.
             let spec_out = out_root.join("MBCooperators.tla");
             let mut runs: Vec<PathBuf> = std::fs::read_dir(&spec_out)
                 .expect("apalache out dir")
@@ -398,10 +368,7 @@ fn main() -> ExitCode {
                 .map(|e| e.path())
                 .filter(|p| {
                     p.is_dir()
-                        && p.metadata()
-                            .and_then(|m| m.modified())
-                            .map(|t| t >= marker)
-                            .unwrap_or(false)
+                        && p.metadata().and_then(|m| m.modified()).map(|t| t >= marker).unwrap_or(false)
                 })
                 .collect();
             runs.sort();
@@ -410,8 +377,7 @@ fn main() -> ExitCode {
             for entry in std::fs::read_dir(latest).expect("run dir").filter_map(|e| e.ok()) {
                 let name = entry.file_name().to_string_lossy().into_owned();
                 if name.starts_with("violation") && name.ends_with(".itf.json") {
-                    let dest = traces_dir.join(format!("{inv}__{name}"));
-                    std::fs::copy(entry.path(), &dest).expect("copy trace");
+                    std::fs::copy(entry.path(), traces_dir.join(format!("{inv}__{name}"))).expect("copy trace");
                     found += 1;
                 }
             }
@@ -433,16 +399,14 @@ fn main() -> ExitCode {
 
     let mut failures = 0;
     for trace in &traces {
-        let sut = CoopSut::new();
-        let path = trace.to_string_lossy().into_owned();
-        match run_client_with_traces(&bin, apalache_cfg(), vec![path.clone()], sut) {
-            Ok(()) => eprintln!("PASS {path}"),
+        match replay_one(&bin, trace) {
+            Ok(()) => eprintln!("PASS {}", trace.display()),
             Err(e) => {
                 failures += 1;
-                eprintln!("FAIL {path}: {e}");
+                eprintln!("FAIL {}: {e}", trace.display());
             }
         }
     }
-    println!("mbt: {} traces, {} failed", traces.len(), failures);
+    eprintln!("mbt: {} traces, {} failed", traces.len(), failures);
     if failures > 0 { ExitCode::FAILURE } else { ExitCode::SUCCESS }
 }
