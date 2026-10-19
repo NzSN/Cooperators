@@ -1,0 +1,6 @@
+scaffolded proposal /tmp/coop-fault-interface-brnj4r87/MBFaultInbox.mirror-interface.scaffold.json
+model-interface check clean
+{"actions":[{"count":1,"id":"ExpireInbox"},{"count":1,"id":"InboxAck"},{"count":4,"id":"InboxSend"},{"count":1,"id":"InboxWait"},{"count":1,"id":"Initialize"}],"schema":"mirrors.model-interface-coverage/v1","semanticDigest":"9213850235d76e2c14aab792cb3729480de10c8ad76b1ca442ac58f10933b93c","states":8,"traces":1,"unseenActions":[]}
+Generated fault interface bridge and selected compiler checks clean
+PASS fault-inbox /home/nzsn/Repos/Cooperators/spec/mbt/fault_interfaces/inbox/traces/NoInboxCapacityRecovery.itf.json
+fault MBT: 1 traces, 0 failed

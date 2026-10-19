@@ -1,0 +1,1 @@
+13684106cc33d15f2918e065fc8cd354a2ac92444c39dea8f45fea217f291b42  spec/mbt/target/debug/cooperators-mbt

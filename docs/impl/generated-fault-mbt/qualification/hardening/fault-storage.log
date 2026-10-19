@@ -1,0 +1,81 @@
+TLC2 Version 2.19 of 08 August 2024 (rev: 5a47802)
+Running breadth-first search Model-Checking with fp 115 and seed 5353104688315112275 with 1 worker on 12 cores with 2660MB heap and 64MB offheap memory [pid: 376295] (Linux 6.18.54.1-microsoft-standard-WSL2 amd64, Ubuntu 25.0.4.1 x86_64, MSBDiskFPSet, DiskStateQueue).
+Parsing file /home/nzsn/Repos/Cooperators/docs/impl/generated-fault-mbt/qualification/hardening/CooperatorsHardening.tla
+Parsing file /tmp/Integers.tla
+Parsing file /tmp/Sequences.tla
+Parsing file /tmp/FiniteSets.tla
+Parsing file /tmp/Naturals.tla
+Semantic processing of module Naturals
+Semantic processing of module Integers
+Semantic processing of module Sequences
+Semantic processing of module FiniteSets
+Semantic processing of module CooperatorsHardening
+Starting... (2026-10-19 17:56:44)
+Computing initial states...
+Finished computing initial states: 1 distinct state generated at 2026-10-19 17:56:45.
+Error: Invariant AcknowledgedRecordsSurvive is violated.
+Error: The behavior up to this point is:
+State 1: <Initial predicate>
+st = [ disk |-> <<>>,
+  durable |-> <<>>,
+  nextSeq |-> 1,
+  nextId |-> 1,
+  phase |-> "ready",
+  pending |-> 0,
+  acknowledged |-> {},
+  poisoned |-> FALSE ]
+
+State 2: <Next line 197, col 9 to line 203, col 50 of module CooperatorsHardening>
+st = [ disk |-> <<[id |-> 1, seq |-> 1]>>,
+  durable |-> <<>>,
+  nextSeq |-> 1,
+  nextId |-> 2,
+  phase |-> "written",
+  pending |-> 1,
+  acknowledged |-> {},
+  poisoned |-> FALSE ]
+
+State 3: <Next line 197, col 9 to line 203, col 50 of module CooperatorsHardening>
+st = [ disk |-> <<[id |-> 1, seq |-> 1]>>,
+  durable |-> <<>>,
+  nextSeq |-> 1,
+  nextId |-> 2,
+  phase |-> "ready",
+  pending |-> 0,
+  acknowledged |-> {},
+  poisoned |-> FALSE ]
+
+State 4: <Next line 197, col 9 to line 203, col 50 of module CooperatorsHardening>
+st = [ disk |-> <<[id |-> 1, seq |-> 1], [id |-> 2, seq |-> 1]>>,
+  durable |-> <<>>,
+  nextSeq |-> 1,
+  nextId |-> 3,
+  phase |-> "written",
+  pending |-> 2,
+  acknowledged |-> {},
+  poisoned |-> FALSE ]
+
+State 5: <Next line 197, col 9 to line 203, col 50 of module CooperatorsHardening>
+st = [ disk |-> <<[id |-> 1, seq |-> 1], [id |-> 2, seq |-> 1]>>,
+  durable |-> <<[id |-> 1, seq |-> 1], [id |-> 2, seq |-> 1]>>,
+  nextSeq |-> 2,
+  nextId |-> 3,
+  phase |-> "ready",
+  pending |-> 0,
+  acknowledged |-> {2},
+  poisoned |-> FALSE ]
+
+State 6: <Next line 197, col 9 to line 203, col 50 of module CooperatorsHardening>
+st = [ disk |-> <<[id |-> 1, seq |-> 1]>>,
+  durable |-> <<[id |-> 1, seq |-> 1]>>,
+  nextSeq |-> 2,
+  nextId |-> 3,
+  phase |-> "ready",
+  pending |-> 0,
+  acknowledged |-> {2},
+  poisoned |-> FALSE ]
+
+39 states generated, 25 distinct states found, 9 states left on queue.
+The depth of the complete state graph search is 6.
+The average outdegree of the complete state graph is 2 (minimum is 0, the maximum 4 and the 95th percentile is 4).
+Finished in 02s at (2026-10-19 17:56:45)

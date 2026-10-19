@@ -1,0 +1,38 @@
+TLC2 Version 2.19 of 08 August 2024 (rev: 5a47802)
+Running depth-first search Model-Checking with fp 122 and seed -3959284724423853513 with 1 worker on 12 cores with 2660MB heap and 64MB offheap memory [pid: 375113] (Linux 6.18.54.1-microsoft-standard-WSL2 amd64, Ubuntu 25.0.4.1 x86_64).
+Parsing file /home/nzsn/Repos/Cooperators/docs/impl/generated-fault-mbt/qualification/composed/CooperatorsInstances.tla
+Parsing file /tmp/Integers.tla
+Parsing file /tmp/Sequences.tla
+Parsing file /tmp/FiniteSets.tla
+Parsing file /tmp/TLC.tla
+Parsing file /tmp/Naturals.tla
+Parsing file /home/nzsn/Repos/Cooperators/docs/impl/generated-fault-mbt/qualification/composed/AgentInstances.tla
+Parsing file /home/nzsn/Repos/Cooperators/docs/impl/generated-fault-mbt/qualification/composed/Cooperators.tla
+Semantic processing of module Naturals
+Semantic processing of module Integers
+Semantic processing of module Sequences
+Semantic processing of module FiniteSets
+Semantic processing of module TLC
+Semantic processing of module AgentInstances
+Semantic processing of module Cooperators
+Semantic processing of module CooperatorsInstances
+Starting... (2026-10-19 17:56:26)
+Finished computing initial states: 1 states generated, with 1 of them distinct.
+Starting level 2: 1 states generated, 1 distinct states found.
+Starting level 3: 37 states generated, 4 distinct states found.
+Starting level 4: 177 states generated, 19 distinct states found.
+Starting level 5: 810 states generated, 80 distinct states found.
+Progress: 2958 states generated, 271 distinct states found.
+Starting level 6: 3543 states generated, 290 distinct states found.
+Progress: 11918 states generated, 893 distinct states found.
+Starting level 7: 14222 states generated, 963 distinct states found.
+Progress: 25795 states generated, 1682 distinct states found.
+Starting level 8: 53211 states generated, 2900 distinct states found.
+Progress: 70678 states generated, 2900 distinct states found.
+Model checking completed. No error has been found.
+  Estimates of the probability that TLC did not check all reachable states
+  because two distinct states had the same fingerprint:
+  calculated (optimistic):  val = 1.4E-11
+  based on the actual fingerprints:  val = .002
+92200 states generated, 2900 distinct states found.
+Finished in 27s at (2026-10-19 17:56:52)

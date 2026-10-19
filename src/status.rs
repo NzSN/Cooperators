@@ -10,7 +10,7 @@ use serde_json::Value;
 
 /// Top-level directories that hold JSONL logs (design §2 layout).
 const LOG_DIRECTORIES: [&str; 5] = ["agents", "channels", "queues", "dead", "docs"];
-/// Status reads at most this many bytes from the end of each log.
+/// Initial backward-read window. Expand when a record spans this boundary.
 const TAIL_WINDOW: u64 = 64 * 1024;
 
 /// Head metadata for one log file.
@@ -18,7 +18,7 @@ const TAIL_WINDOW: u64 = 64 * 1024;
 pub struct LogHead {
     /// Highest `seq` found in the tail of the file.
     pub seq: u64,
-    /// File size in bytes.
+    /// Total bytes in the active file and its sealed segments.
     pub bytes: u64,
 }
 
@@ -53,49 +53,80 @@ fn walk(directory: &Path, root: &Path, heads: &mut BTreeMap<String, LogHead>) {
             continue;
         };
         if file_type.is_dir() {
-            walk(&path, root, heads);
+            if entry.file_name() == ".segments" {
+                // Sealed files belong to the original logical log. Include
+                // even a log whose active file is absent during recovery.
+                if let Ok(logs) = fs::read_dir(&path) {
+                    for log in logs.flatten() {
+                        if log.file_type().is_ok_and(|kind| kind.is_dir()) {
+                            let logical = directory.join(log.file_name());
+                            if logical.extension().and_then(|ext| ext.to_str()) == Some("jsonl") {
+                                insert_head(&logical, root, heads);
+                            }
+                        }
+                    }
+                }
+            } else {
+                walk(&path, root, heads);
+            }
             continue;
         }
         if !file_type.is_file() || path.extension().and_then(|ext| ext.to_str()) != Some("jsonl") {
             continue;
         }
-        let Some(seq) = last_sequence(&path) else {
-            continue;
-        };
-        let bytes = entry.metadata().map(|metadata| metadata.len()).unwrap_or(0);
-        let key = path
-            .strip_prefix(root)
-            .unwrap_or(&path)
-            .to_string_lossy()
-            .replace('\\', "/");
-        heads.insert(key, LogHead { seq, bytes });
+        insert_head(&path, root, heads);
     }
+}
+
+fn insert_head(path: &Path, root: &Path, heads: &mut BTreeMap<String, LogHead>) {
+    let Ok(paths) = crate::storage::segment_paths(path) else {
+        return;
+    };
+    let Some(seq) = paths.iter().rev().find_map(|path| last_sequence(path)) else {
+        return;
+    };
+    let bytes = paths
+        .iter()
+        .filter_map(|path| fs::metadata(path).ok())
+        .map(|metadata| metadata.len())
+        .sum();
+    let key = path
+        .strip_prefix(root)
+        .unwrap_or(path)
+        .to_string_lossy()
+        .replace('\\', "/");
+    heads.insert(key, LogHead { seq, bytes });
 }
 
 fn last_sequence(path: &Path) -> Option<u64> {
     let mut file = fs::File::open(path).ok()?;
     let length = file.metadata().ok()?.len();
-    let start = length.saturating_sub(TAIL_WINDOW);
-    file.seek(SeekFrom::Start(start)).ok()?;
-    let mut buffer = Vec::new();
-    file.read_to_end(&mut buffer).ok()?;
-
-    let window = if start > 0 {
-        let first_newline = buffer.iter().position(|&byte| byte == b'\n')?;
-        &buffer[first_newline + 1..]
-    } else {
-        &buffer[..]
-    };
-
-    for line in window.split(|&byte| byte == b'\n').rev() {
-        if line.is_empty() {
-            continue;
-        }
-        if let Ok(value) = serde_json::from_slice::<Value>(line) {
-            if let Some(seq) = value.get("seq").and_then(Value::as_u64) {
-                return Some(seq);
+    let mut window_bytes = TAIL_WINDOW.min(length);
+    loop {
+        let start = length.saturating_sub(window_bytes);
+        file.seek(SeekFrom::Start(start)).ok()?;
+        let mut buffer = Vec::new();
+        file.read_to_end(&mut buffer).ok()?;
+        // Only complete record starts may be parsed. A final oversized line,
+        // or a torn suffix hiding the previous record, needs a larger window.
+        let window = if start > 0 {
+            buffer
+                .iter()
+                .position(|&byte| byte == b'\n')
+                .map_or(&[][..], |first| &buffer[first + 1..])
+        } else {
+            &buffer[..]
+        };
+        for line in window.split(|&byte| byte == b'\n').rev() {
+            if let Ok(value) = serde_json::from_slice::<Value>(line) {
+                if let Some(seq) = value.get("seq").and_then(Value::as_u64) {
+                    return Some(seq);
+                }
             }
         }
+        if start == 0 {
+            return None;
+        }
+        window_bytes = window_bytes.saturating_mul(2).min(length);
     }
-    None
 }

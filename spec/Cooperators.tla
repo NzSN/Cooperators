@@ -24,7 +24,7 @@
 (***************************************************************************)
 EXTENDS Integers, Sequences, FiniteSets, TLC
 
-CONSTANTS Agents,          \* agent identities
+CONSTANTS Agents,          \* canonical instance IDs; lifecycle: AgentInstances.tla
           Keys,            \* idempotency keys (per sender)
           MaxAttempts,     \* queue delivery cap before dead-letter
           Q,               \* the single modeled queue resource

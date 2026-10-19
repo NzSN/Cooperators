@@ -6,9 +6,10 @@ description = "Model-based testing harness: replays Apalache traces of spec/MBCo
 publish = false
 
 [dependencies]
-cooperators = { path = "../.." }
+cooperators = { path = "../..", features = ["mbt-injection"] }
 mirrorrust = { path = "../../../MirrorRust" }
 tokio = { version = "1", features = ["full"] }
 serde_json = { version = "1", features = ["arbitrary_precision"] }
 num-bigint = "0.4"
 tempfile = "3"
+serde = { version = "1", features = ["derive"] }

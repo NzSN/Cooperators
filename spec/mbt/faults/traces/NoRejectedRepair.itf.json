@@ -1,0 +1,166 @@
+{
+  "#meta": {
+    "format": "ITF",
+    "goal": "NoRejectedRepair",
+    "projection": "Observation only; internal state and ghost receipts omitted",
+    "scenario": "writer",
+    "source": "TLC MBFaults coverage counterexample",
+    "transitionBound": 6
+  },
+  "params": [],
+  "states": [
+    {
+      "#meta": {
+        "index": 0
+      },
+      "action_taken": "init",
+      "observation": {
+        "owners": {
+          "#set": []
+        },
+        "records": [],
+        "rejected": {
+          "#set": []
+        },
+        "torn": false
+      },
+      "parameters": {
+        "actor": "-",
+        "mode": "-",
+        "scenario": "writer",
+        "value": {
+          "#bigint": "0"
+        }
+      },
+      "result": "none"
+    },
+    {
+      "#meta": {
+        "index": 1
+      },
+      "action_taken": "start",
+      "observation": {
+        "owners": {
+          "#set": [
+            "p1"
+          ]
+        },
+        "records": [],
+        "rejected": {
+          "#set": []
+        },
+        "torn": false
+      },
+      "parameters": {
+        "actor": "p1",
+        "mode": "different",
+        "scenario": "writer",
+        "value": {
+          "#bigint": "0"
+        }
+      },
+      "result": "ok"
+    },
+    {
+      "#meta": {
+        "index": 2
+      },
+      "action_taken": "writer-append",
+      "observation": {
+        "owners": {
+          "#set": [
+            "p1"
+          ]
+        },
+        "records": [
+          {
+            "#bigint": "1"
+          }
+        ],
+        "rejected": {
+          "#set": []
+        },
+        "torn": false
+      },
+      "parameters": {
+        "actor": "p1",
+        "mode": "-",
+        "scenario": "writer",
+        "value": {
+          "#bigint": "0"
+        }
+      },
+      "result": "ok"
+    },
+    {
+      "#meta": {
+        "index": 3
+      },
+      "action_taken": "tear-tail",
+      "observation": {
+        "owners": {
+          "#set": [
+            "p1"
+          ]
+        },
+        "records": [
+          {
+            "#bigint": "1"
+          }
+        ],
+        "rejected": {
+          "#set": []
+        },
+        "torn": true
+      },
+      "parameters": {
+        "actor": "-",
+        "mode": "-",
+        "scenario": "writer",
+        "value": {
+          "#bigint": "0"
+        }
+      },
+      "result": "ok"
+    },
+    {
+      "#meta": {
+        "index": 4
+      },
+      "action_taken": "start",
+      "observation": {
+        "owners": {
+          "#set": [
+            "p1"
+          ]
+        },
+        "records": [
+          {
+            "#bigint": "1"
+          }
+        ],
+        "rejected": {
+          "#set": [
+            "p2"
+          ]
+        },
+        "torn": true
+      },
+      "parameters": {
+        "actor": "p2",
+        "mode": "same",
+        "scenario": "writer",
+        "value": {
+          "#bigint": "0"
+        }
+      },
+      "result": "busy"
+    }
+  ],
+  "vars": [
+    "action_taken",
+    "parameters",
+    "result",
+    "observation"
+  ]
+}

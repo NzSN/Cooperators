@@ -1,0 +1,25 @@
+    Blocking waiting for file lock on artifact directory
+   Compiling cooperators v0.1.0 (/home/nzsn/Repos/Cooperators)
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 51.10s
+     Running tests/log_rotation.rs (target/debug/deps/log_rotation-c7524d78a40c4ae8)
+
+running 5 tests
+test status_of_sealed_only_log_is_read_only_and_uses_logical_path ... ok
+test document_versions_and_fences_survive_dotted_log_rotation_and_restart ... ok
+test sealed_only_queue_and_document_are_discovered_on_restart ... ok
+test queue_lease_fences_survive_dotted_log_rotation_and_restart ... ok
+test channel_cursor_and_dedupe_survive_rotation_and_restart ... ok
+
+test result: ok. 5 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.39s
+
+     Running tests/runtime_faults.rs (target/debug/deps/runtime_faults-e1f1e1d52e7546f5)
+
+running 5 tests
+test status_handles_large_final_records_and_does_not_modify_tails ... ok
+test expired_inbox_returns_acknowledgeable_progress_after_restart ... ok
+test batch_cursor_never_skips_an_unreturned_live_message ... ok
+test missing_dead_letter_is_reconciled_once_from_durable_terminal_event ... ok
+test failed_initial_document_creation_can_retry_before_and_after_restart ... ok
+
+test result: ok. 5 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.13s
+

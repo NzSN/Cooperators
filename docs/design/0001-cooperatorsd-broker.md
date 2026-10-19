@@ -70,14 +70,114 @@ The P0 envelope is normative and unchanged:
 - **Durability.** `append → fsync → ack`. Agent messaging is low-rate; fsync-per-message is acceptable at target scale. Send acknowledgement means durable.
 - **Crash recovery.** On startup the daemon replays each log, verifies the hash chain, and **drops a torn tail** (last record fails hash/JSON parse ⇒ truncate at last valid offset, emit `recovery` event into the log). In-memory indexes (cursors, dedupe map, leases) are fully rebuilt from the logs; no separate state files to corrupt except `registry.json`.
 - **Registry.** `registry.json` holds `{name → {agent_id, token_hash, kind, capabilities, registered_at}}`. Written tmp+rename, mode 0600. Tokens are 128-bit random, shown once at registration; only hashes persist.
-- **Rotation.** Channel/queue logs rotate at a configurable size (default 256 MiB) into `<name>.<seq_hi>.jsonl`; cursors address `(file, seq)` so rotation never invalidates a reader. Retention: keep everything (evidence discipline); deletion is a manual, logged operation.
+- **Rotation.** Channel, queue, document, and dead-letter logs rotate at `DaemonConfig::log_rotation_bytes` (default 256 MiB). Seals live in `.segments/<original-filename>/<seq_lo>-<seq_hi>-<head_hash>.jsonl`, keeping dotted resource names unambiguous. The active filename remains stable, and sequence/hash continuity spans all segments. Cursors address the logical `(file, seq)`. An oversized record occupies its own segment. Retention keeps every segment; inbox and expiry logs remain unsegmented.
 - **Documents and blobs.** Doc logs rotate like channels. Doc bodies ≤ 64 KiB are inline in the log; larger bodies go to content-addressed `blobs/sha256/<hash>` (referenced by hash + size), so logs stay small and blob integrity is checkable. Blobs are immutable; garbage collection of unreferenced blobs is deferred (§16).
 
 ## 4. Identity, authentication, trust boundary
 
 - The boundary is **loopback + filesystem permissions**: UDS at 0600, HTTP on 127.0.0.1, root dir 0700. Any local process able to open the socket still needs a token.
-- `register_agent` issues `(agent_id, token)`. Names are display claims; **tokens are the identity**. Re-registration of an existing name requires the old token and returns a rotated one.
+- `agent_id` identifies one independently launched **agent instance**. A token is a credential for that instance; `kind` identifies its application family. Two Codex sessions must receive different IDs and credentials even when they share configuration and both have `kind = "codex"`.
+- Existing `register_agent` issues `(agent_id, token)` for a unique name. Re-registration with the old token rotates credentials for that same instance. Starting another instance must use fresh-instance enrollment, never token rotation or a shared configured instance token.
 - Sandboxed agents that cannot read the home directory get the socket path and token via their MCP server config (`command: coop mcp-stdio`, `env: {COOP_TOKEN, COOP_SOCKET}`), which is the standard MCP provisioning channel.
+
+### 4.1 Agent instance identity requirement
+
+Accepted requirement, 2026-10-19: identity is allocated per independent agent
+session. A new session receives a fresh identity. Reconnecting the same session
+preserves its identity. Internal helper processes and individual socket
+connections do not independently enroll as agent instances.
+
+| Instance | `kind` | `agent_id` | Credentials and state |
+|---|---|---|---|
+| Codex session A | `codex` | A | A's token, inbox, ack cursor, presence, and lease ownership |
+| Codex session B | `codex` | B, different from A | B's independent token and state |
+
+The existing `agent_id` is the canonical instance identity. A second overlapping
+`instance_id` field is unnecessary. Human-readable aliases can include a suffix
+to remain unique under the existing registry's name rules, for example
+`codex:<agent_id>`. Matching kind or display text never merges instances.
+
+Required properties for the identity model and its implementation tests:
+
+| Property | Required behavior |
+|---|---|
+| `InstanceIdentityUnique` | Distinct enrolled instances have distinct `agent_id` values, including two instances of the same kind. |
+| `IdentityNotReused` | An identity issued to a terminated instance is never allocated to a new session. |
+| `EnrollmentRetryStable` | Retrying enrollment for the same launch request returns that launch's identity rather than creating another instance. A new launch uses a new request identity. |
+| `CredentialBoundToInstance` | Authentication resolves a valid credential to exactly the instance to which it was issued. Rotating one instance's token cannot rotate another instance's token. |
+| `InboxAndAckIsolation` | Delivering to or acknowledging one instance cannot deliver to or advance another instance's inbox. |
+| `IdempotencyScopedToInstance` | Two Codex instances may use the same message key without suppressing each other's sends. Scope is the sender identity plus key. |
+| `PresenceAndLeaseIsolation` | Heartbeats affect one instance; another instance of the same kind cannot use its lease merely because their kind or display text matches. Existing lease ID/fence checks remain required. |
+
+These obligations are executable in
+[`AgentInstances.tla`](../../spec/AgentInstances.tla), with additional checks
+for stable identities, distinct credentials, revocation, and lease fences.
+The lifecycle model uses distinct launch request keys and canonical agent IDs;
+the launch slots are model inputs, not a second runtime identity field.
+[`CooperatorsInstances.tla`](../../spec/CooperatorsInstances.tla) now composes
+those lifecycle rules with the original broker actions. Authenticated instance
+IDs govern sends, acknowledgments, queue ownership, and document edits. Its
+finite checks include the original safety invariants, transition refinement
+monitors, and explicit request rejection/parameter checks. This is a bounded
+safety composition; the original protocol's fairness and liveness claims do
+not transfer to it.
+The generated identity port and fresh stdio provisioning are implemented.
+The execution record distinguishes generated trace coverage from direct API
+and real MCP process acceptance tests.
+
+### 4.2 Implementation plan and acceptance gates
+
+The detailed compiler-based execution sequence and the per-defect detection
+matrix are in [plan 0002](0002-generated-adapter-fault-mbt-plan.md).
+
+1. **Identity model and MBT.** The model now includes explicit enrollment,
+   enrollment retry, disconnect/reconnect, rotation, retirement, and state
+   isolation, plus composition with the existing log/queue/document protocol.
+   `MBFaults.tla` supplies failure/recovery witnesses including enrollment,
+   retries, retirement, revocation, and reconnect. Its replay contract requires
+   actual identities and bijective naming. Eight reviewed interface contracts
+   generate Rust bindings for real fault hooks. Delivery/ack, presence, and
+   cross-instance lease acceptance additionally run against direct APIs and
+   actual MCP processes; they are not all actions in the generated identity
+   port. The Python/NDJSON driver remains a tool regression prototype.
+   Observe identities, authentication results, actual inboxes, ack cursors,
+   presence, and lease outcomes from the broker. A shared token or a shadow
+   identity map in the adapter is insufficient evidence.
+2. **Instance provisioning.** Fresh-instance enrollment is implemented in the registry
+   and RPC/MCP boundary with a launch request key for retry stability. A new
+   MCP agent session obtains its own credential; ordinary reconnects preserve
+   it. Credential rotation and explicit resumption remain separate operations
+   from creating a new session. CLI provisioning and client examples allow
+   two clients can share configuration without sharing the active instance
+   token. Routing, dedupe replay, presence, and lease ownership use canonical
+   identity or its immutable unique alias. Historical identities and logs persist.
+3. **Acceptance.** Launch two real Codex-like MCP clients from the same
+   configuration with `kind = "codex"`. Verify distinct IDs/tokens, independent
+   message delivery and ack cursors, independent reuse of the same idempotency
+   key, separate presence, lease rejection across instances, stable reconnect
+   and enrollment retries, and a fresh ID for a new launch. Retain the original
+   protocol and writer suites and report their results separately.
+
+Implementation status, 2026-10-19: `enroll_agent` persists a launch-key hash,
+canonical ID, unique routing alias, repeatable display label, and credential
+hash. Initial retries return the same ID/credential; rotated or retired launch
+keys cannot restore credentials. Retirement reserves historical IDs and names.
+Every `mcp-stdio` launch enrolls independently; `--resume` explicitly selects an
+existing token. HTTP continues to authenticate bearer tokens. `instance_metadata`
+and `retire_agent` are exposed through RPC/MCP.
+
+Daemon and embedded startup acquire an OS lock on `run/owner.lock` before
+replay. Ownership remains with the state and background workers. A different
+socket cannot bypass it. The original three writer failures have retained
+failing fixtures and repaired replays in the
+[execution record](../impl/generated-fault-mbt/README.md).
+
+The implementation hardening gate is specified in
+[`spec/mbt/faults/README.md`](../../spec/mbt/faults/README.md). Model checks and
+corpus verification are prerequisites; closing a defect additionally requires
+actual failure-injected implementation replay with authoritative observations,
+plus the relevant existing protocol, writer, and progress checks. Missing
+capabilities must fail preflight rather than count as reproduced or fixed.
 
 ## 5. Message lifecycle
 

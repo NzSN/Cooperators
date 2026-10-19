@@ -1,0 +1,2 @@
+{"diagnosticControl":"storage-corrupt-observation","observation":{"receipts":[],"records":[]},"reportedObservation":{"receipts":[],"records":[]},"result":"none"}
+{"diagnosticControl":"storage-corrupt-observation","observation":{"receipts":[],"records":[{"id":1,"seq":1}]},"reportedObservation":{"receipts":[],"records":[{"id":1,"seq":2}]},"result":"pending"}

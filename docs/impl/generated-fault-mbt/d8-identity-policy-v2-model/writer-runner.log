@@ -1,0 +1,10 @@
+tlc evidence: /home/nzsn/Repos/Cooperators/docs/impl/generated-fault-mbt/d8-identity-policy-v2-model/profiles/writer
+PASS safe-writer; 651 distinct states (/home/nzsn/Repos/Cooperators/docs/impl/generated-fault-mbt/d8-identity-policy-v2-model/profiles/writer/safe-writer.log)
+PASS fault-writer; 23 distinct states (/home/nzsn/Repos/Cooperators/docs/impl/generated-fault-mbt/d8-identity-policy-v2-model/profiles/writer/fault-writer.log)
+PASS fault-prelock-replay; 174 distinct states (/home/nzsn/Repos/Cooperators/docs/impl/generated-fault-mbt/d8-identity-policy-v2-model/profiles/writer/fault-prelock-replay.log)
+PASS fault-unowned-write; 2 distinct states (/home/nzsn/Repos/Cooperators/docs/impl/generated-fault-mbt/d8-identity-policy-v2-model/profiles/writer/fault-unowned-write.log)
+PASS witness-NoWriterRejection; 23 distinct states (/home/nzsn/Repos/Cooperators/docs/impl/generated-fault-mbt/d8-identity-policy-v2-model/profiles/writer/witness-NoWriterRejection.log)
+PASS witness-NoRejectedRepair; 176 distinct states (/home/nzsn/Repos/Cooperators/docs/impl/generated-fault-mbt/d8-identity-policy-v2-model/profiles/writer/witness-NoRejectedRepair.log)
+PASS witness-NoWriterHandoff; 172 distinct states (/home/nzsn/Repos/Cooperators/docs/impl/generated-fault-mbt/d8-identity-policy-v2-model/profiles/writer/witness-NoWriterHandoff.log)
+PASS witness-NoUnownedWrite; 23 distinct states (/home/nzsn/Repos/Cooperators/docs/impl/generated-fault-mbt/d8-identity-policy-v2-model/profiles/writer/witness-NoUnownedWrite.log)
+8/8 checks passed

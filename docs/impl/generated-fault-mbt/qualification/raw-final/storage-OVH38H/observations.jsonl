@@ -1,0 +1,8 @@
+{"observation":{"receipts":[],"records":[]},"result":"none"}
+{"observation":{"receipts":[],"records":[{"id":1,"seq":1}]},"result":"pending"}
+{"observation":{"receipts":[{"id":1,"seq":1}],"records":[{"id":1,"seq":1}]},"result":"ok"}
+{"observation":{"receipts":[{"id":1,"seq":1}],"records":[{"id":1,"seq":1},{"id":2,"seq":0}]},"result":"io-error"}
+{"observation":{"receipts":[{"id":1,"seq":1}],"records":[{"id":1,"seq":1}]},"result":"ok"}
+{"observation":{"receipts":[{"id":1,"seq":1}],"records":[{"id":1,"seq":1},{"id":3,"seq":2}]},"result":"pending"}
+{"observation":{"receipts":[{"id":1,"seq":1},{"id":3,"seq":2}],"records":[{"id":1,"seq":1},{"id":3,"seq":2}]},"result":"ok"}
+{"observation":{"receipts":[{"id":1,"seq":1},{"id":3,"seq":2}],"records":[{"id":1,"seq":1},{"id":3,"seq":2}]},"result":"ok"}

@@ -1,0 +1,99 @@
+{
+  "actions": [
+    {
+      "id": "CrashDead",
+      "inputs": [],
+      "wireAction": "crash-dead",
+      "wireAliases": []
+    },
+    {
+      "id": "FailProjection",
+      "inputs": [],
+      "wireAction": "fail-projection",
+      "wireAliases": []
+    },
+    {
+      "id": "FinishProjection",
+      "inputs": [],
+      "wireAction": "finish-projection",
+      "wireAliases": []
+    },
+    {
+      "id": "MarkDead",
+      "inputs": [],
+      "wireAction": "mark-dead",
+      "wireAliases": []
+    },
+    {
+      "id": "ProjectDead",
+      "inputs": [],
+      "wireAction": "project-dead",
+      "wireAliases": []
+    },
+    {
+      "id": "RecoverDead",
+      "inputs": [],
+      "wireAction": "recover-dead",
+      "wireAliases": []
+    }
+  ],
+  "initializers": [
+    {
+      "id": "Initialize",
+      "inputs": [],
+      "wireAction": "init",
+      "wireAliases": []
+    }
+  ],
+  "interfaceVersion": "1.0.0",
+  "model": {
+    "module": "MBFaultDeadLetter",
+    "source": "spec/MBFaultDeadLetter.tla"
+  },
+  "observations": [
+    {
+      "expectedType": {
+        "fields": [
+          {
+            "type": {
+              "element": {
+                "kind": "int"
+              },
+              "kind": "seq"
+            },
+            "wireName": "deadRecords"
+          },
+          {
+            "type": {
+              "kind": "bool"
+            },
+            "wireName": "terminal"
+          },
+          {
+            "type": {
+              "kind": "bool"
+            },
+            "wireName": "up"
+          }
+        ],
+        "kind": "record"
+      },
+      "id": "Observation",
+      "provenance": "implementation",
+      "wireName": "observation"
+    },
+    {
+      "expectedType": {
+        "kind": "str"
+      },
+      "id": "Result",
+      "provenance": "implementation",
+      "wireName": "result"
+    }
+  ],
+  "schema": "mirrors.model-interface/v1",
+  "wire": {
+    "actionVariable": "action_taken",
+    "parameterVariable": "parameters"
+  }
+}

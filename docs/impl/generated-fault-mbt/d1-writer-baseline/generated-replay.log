@@ -1,0 +1,10 @@
+scaffolded reviewable proposal /tmp/coop-fault-interface-471dbblt/MBFaultWriter.mirror-interface.scaffold.json 9018e5fa360fad3e4c2ba32bd5b21a1e93e861dc0c567cb5f49421d7ac8f89a5
+model-interface check clean
+{"actions":[{"count":4,"id":"Initialize"},{"count":7,"id":"Start"},{"count":1,"id":"Stop"},{"count":1,"id":"TearTail"},{"count":3,"id":"WriterAppend"}],"schema":"mirrors.model-interface-coverage/v1","semanticDigest":"85e0bc7092f8b11bda66d2638fef9d40bfed7f429a971b4cc410e39949e1357b","states":16,"traces":4,"unseenActions":[]}
+Generated fault interface bridge and selected compiler checks clean
+writer fault fixture: /home/nzsn/Repos/Cooperators/docs/impl/generated-fault-mbt/d1-writer-baseline/generated-fixtures/writer-tBih5q
+
+thread 'main' (360881) panicked at src/fault_support.rs:49:37:
+generated fault binding failed at start: adapter_failure: startup exited exit status: 1: writer daemon failed: path must be shorter than SUN_LEN
+
+note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace

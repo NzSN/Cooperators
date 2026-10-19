@@ -1,0 +1,4 @@
+tlc evidence: /home/nzsn/Repos/Cooperators/docs/impl/generated-fault-mbt/qualification/composed-combined-bfs
+PASS safe-combined; 51871 distinct states (/home/nzsn/Repos/Cooperators/docs/impl/generated-fault-mbt/qualification/composed-combined-bfs/safe-combined.log)
+PASS witness-NoCombinedProtocol; 2825 distinct states (/home/nzsn/Repos/Cooperators/docs/impl/generated-fault-mbt/qualification/composed-combined-bfs/witness-NoCombinedProtocol.log)
+2/2 checks passed

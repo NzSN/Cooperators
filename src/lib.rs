@@ -29,6 +29,8 @@ pub mod client;
 pub mod docs;
 pub mod envelope;
 pub mod error;
+#[cfg(feature = "mbt-injection")]
+pub mod faults;
 pub mod id;
 pub mod leases;
 pub mod mcp;

@@ -1,0 +1,12 @@
+scaffolded reviewable proposal /tmp/coop-fault-interface-j5vvhzbp/MBFaultStorage.mirror-interface.scaffold.json 792436bf2f4ba6548c211c4225c3b49d9ac7ca7978531fc2132e762b3a47ce63
+model-interface check clean
+{"actions":[{"count":9,"id":"AppendBytes"},{"count":3,"id":"Initialize"},{"count":3,"id":"InspectStorage"},{"count":3,"id":"RecoverStorage"},{"count":1,"id":"SyncFail"},{"count":4,"id":"SyncOk"}],"schema":"mirrors.model-interface-coverage/v1","semanticDigest":"396ddbafc8cb224ae03c7b5cd4b82f26b8bb47151ec1975a93a661935a548ab7","states":23,"traces":3,"unseenActions":[]}
+Generated fault interface bridge and selected compiler checks clean
+storage fixture: /home/nzsn/Repos/Cooperators/docs/impl/generated-fault-mbt/d2-generated-storage-controls/wrong-receipt/fixtures/storage-xpH8vs
+FAIL fault-storage /home/nzsn/Repos/Cooperators/spec/mbt/fault_interfaces/storage/traces/NoAcknowledgedRecovery.itf.json: step mismatch on action "sync-ok": expected {"observation":{"receipts":[{"id":1,"seq":1}],"records":[{"id":1,"seq":1}]},"result":"ok"}, got {"observation":{"receipts":[{"id":1,"seq":2}],"records":[{"id":1,"seq":1}]},"result":"ok"}
+storage fixture: /home/nzsn/Repos/Cooperators/docs/impl/generated-fault-mbt/d2-generated-storage-controls/wrong-receipt/fixtures/storage-3QX4Bt
+FAIL fault-storage /home/nzsn/Repos/Cooperators/spec/mbt/fault_interfaces/storage/traces/NoPartialRecovery.itf.json: step mismatch on action "sync-ok": expected {"observation":{"receipts":[{"id":2,"seq":1}],"records":[{"id":2,"seq":1}]},"result":"ok"}, got {"observation":{"receipts":[{"id":2,"seq":2}],"records":[{"id":2,"seq":1}]},"result":"ok"}
+storage fixture: /home/nzsn/Repos/Cooperators/docs/impl/generated-fault-mbt/d2-generated-storage-controls/wrong-receipt/fixtures/storage-pzfptm
+FAIL fault-storage /home/nzsn/Repos/Cooperators/spec/mbt/fault_interfaces/storage/traces/NoStorageRecovery.itf.json: step mismatch on action "sync-ok": expected {"observation":{"receipts":[{"id":2,"seq":2}],"records":[{"id":1,"seq":1},{"id":2,"seq":2}]},"result":"ok"}, got {"observation":{"receipts":[{"id":2,"seq":3}],"records":[{"id":1,"seq":1},{"id":2,"seq":2}]},"result":"ok"}
+fault MBT: 3 traces, 3 failures
+fault MBT gate failed: 3 fault traces failed

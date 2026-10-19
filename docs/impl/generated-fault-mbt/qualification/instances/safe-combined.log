@@ -1,0 +1,25 @@
+TLC2 Version 2.19 of 08 August 2024 (rev: 5a47802)
+Running depth-first search Model-Checking with fp 33 and seed 2907989393493268449 with 1 worker on 12 cores with 2660MB heap and 64MB offheap memory [pid: 378845] (Linux 6.18.54.1-microsoft-standard-WSL2 amd64, Ubuntu 25.0.4.1 x86_64).
+Parsing file /home/nzsn/Repos/Cooperators/docs/impl/generated-fault-mbt/qualification/instances/AgentInstances.tla
+Parsing file /tmp/Integers.tla
+Parsing file /tmp/Sequences.tla
+Parsing file /tmp/FiniteSets.tla
+Parsing file /tmp/Naturals.tla
+Semantic processing of module Naturals
+Semantic processing of module Integers
+Semantic processing of module Sequences
+Semantic processing of module FiniteSets
+Semantic processing of module AgentInstances
+Starting... (2026-10-19 17:57:36)
+Finished computing initial states: 1 states generated, with 1 of them distinct.
+Starting level 2: 1 states generated, 1 distinct states found.
+Starting level 3: 13 states generated, 13 distinct states found.
+Starting level 4: 157 states generated, 121 distinct states found.
+Starting level 5: 1429 states generated, 697 distinct states found.
+Starting level 6: 9361 states generated, 3313 distinct states found.
+Starting level 7: 51481 states generated, 14209 distinct states found.
+Progress: 117104 states generated, 28396 distinct states found.
+Starting level 8: 246001 states generated, 54541 distinct states found.
+Progress: 340731 states generated, 54541 distinct states found.
+
+Command '['tlc', '-dfid', '100', '-workers', '1', '-metadir', '/home/nzsn/Repos/Cooperators/docs/impl/generated-fault-mbt/qualification/instances/safe-combined-states', '-config', 'safe-combined.cfg', 'AgentInstances.tla']' timed out after 60.0 seconds

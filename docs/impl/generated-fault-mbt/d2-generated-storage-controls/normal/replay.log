@@ -1,0 +1,11 @@
+scaffolded reviewable proposal /tmp/coop-fault-interface-ucfg7j7h/MBFaultStorage.mirror-interface.scaffold.json 792436bf2f4ba6548c211c4225c3b49d9ac7ca7978531fc2132e762b3a47ce63
+model-interface check clean
+{"actions":[{"count":9,"id":"AppendBytes"},{"count":3,"id":"Initialize"},{"count":3,"id":"InspectStorage"},{"count":3,"id":"RecoverStorage"},{"count":1,"id":"SyncFail"},{"count":4,"id":"SyncOk"}],"schema":"mirrors.model-interface-coverage/v1","semanticDigest":"396ddbafc8cb224ae03c7b5cd4b82f26b8bb47151ec1975a93a661935a548ab7","states":23,"traces":3,"unseenActions":[]}
+Generated fault interface bridge and selected compiler checks clean
+storage fixture: /home/nzsn/Repos/Cooperators/docs/impl/generated-fault-mbt/d2-generated-storage-controls/normal/fixtures/storage-PWxNhG
+PASS fault-storage /home/nzsn/Repos/Cooperators/spec/mbt/fault_interfaces/storage/traces/NoAcknowledgedRecovery.itf.json
+storage fixture: /home/nzsn/Repos/Cooperators/docs/impl/generated-fault-mbt/d2-generated-storage-controls/normal/fixtures/storage-zccw5N
+PASS fault-storage /home/nzsn/Repos/Cooperators/spec/mbt/fault_interfaces/storage/traces/NoPartialRecovery.itf.json
+storage fixture: /home/nzsn/Repos/Cooperators/docs/impl/generated-fault-mbt/d2-generated-storage-controls/normal/fixtures/storage-CdBJog
+PASS fault-storage /home/nzsn/Repos/Cooperators/spec/mbt/fault_interfaces/storage/traces/NoStorageRecovery.itf.json
+fault MBT: 3 traces, 0 failures

@@ -1,0 +1,10 @@
+tlc evidence: /home/nzsn/Repos/Cooperators/docs/impl/generated-fault-mbt/d8-identity-policy-v3-model/profiles/storage
+PASS safe-storage; 2634 distinct states (/home/nzsn/Repos/Cooperators/docs/impl/generated-fault-mbt/d8-identity-policy-v3-model/profiles/storage/safe-storage.log)
+PASS fault-continue-after-io; 139 distinct states (/home/nzsn/Repos/Cooperators/docs/impl/generated-fault-mbt/d8-identity-policy-v3-model/profiles/storage/fault-continue-after-io.log)
+PASS fault-ack-before-sync; 3 distinct states (/home/nzsn/Repos/Cooperators/docs/impl/generated-fault-mbt/d8-identity-policy-v3-model/profiles/storage/fault-ack-before-sync.log)
+PASS fault-lose-ack; 52 distinct states (/home/nzsn/Repos/Cooperators/docs/impl/generated-fault-mbt/d8-identity-policy-v3-model/profiles/storage/fault-lose-ack.log)
+PASS fault-wrong-receipt; 16 distinct states (/home/nzsn/Repos/Cooperators/docs/impl/generated-fault-mbt/d8-identity-policy-v3-model/profiles/storage/fault-wrong-receipt.log)
+PASS witness-NoStorageRecovery; 1001 distinct states (/home/nzsn/Repos/Cooperators/docs/impl/generated-fault-mbt/d8-identity-policy-v3-model/profiles/storage/witness-NoStorageRecovery.log)
+PASS witness-NoPartialRecovery; 569 distinct states (/home/nzsn/Repos/Cooperators/docs/impl/generated-fault-mbt/d8-identity-policy-v3-model/profiles/storage/witness-NoPartialRecovery.log)
+PASS witness-NoAcknowledgedRecovery; 1001 distinct states (/home/nzsn/Repos/Cooperators/docs/impl/generated-fault-mbt/d8-identity-policy-v3-model/profiles/storage/witness-NoAcknowledgedRecovery.log)
+8/8 checks passed

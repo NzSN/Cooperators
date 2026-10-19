@@ -1,0 +1,281 @@
+{
+  "actions": [
+    {
+      "id": "Authenticate",
+      "inputs": [
+        {
+          "expectedType": {
+            "kind": "str"
+          },
+          "from": {
+            "path": [
+              {
+                "field": "parameters"
+              },
+              {
+                "field": "actor"
+              }
+            ],
+            "root": "stepParameters"
+          },
+          "id": "Actor"
+        },
+        {
+          "expectedType": {
+            "kind": "str"
+          },
+          "from": {
+            "path": [
+              {
+                "field": "parameters"
+              },
+              {
+                "field": "mode"
+              }
+            ],
+            "root": "stepParameters"
+          },
+          "id": "Mode"
+        }
+      ],
+      "wireAction": "authenticate",
+      "wireAliases": []
+    },
+    {
+      "id": "Disconnect",
+      "inputs": [
+        {
+          "expectedType": {
+            "kind": "str"
+          },
+          "from": {
+            "path": [
+              {
+                "field": "parameters"
+              },
+              {
+                "field": "actor"
+              }
+            ],
+            "root": "stepParameters"
+          },
+          "id": "Actor"
+        }
+      ],
+      "wireAction": "disconnect",
+      "wireAliases": []
+    },
+    {
+      "id": "Enroll",
+      "inputs": [
+        {
+          "expectedType": {
+            "kind": "str"
+          },
+          "from": {
+            "path": [
+              {
+                "field": "parameters"
+              },
+              {
+                "field": "actor"
+              }
+            ],
+            "root": "stepParameters"
+          },
+          "id": "Actor"
+        }
+      ],
+      "wireAction": "enroll",
+      "wireAliases": []
+    },
+    {
+      "id": "Reconnect",
+      "inputs": [
+        {
+          "expectedType": {
+            "kind": "str"
+          },
+          "from": {
+            "path": [
+              {
+                "field": "parameters"
+              },
+              {
+                "field": "actor"
+              }
+            ],
+            "root": "stepParameters"
+          },
+          "id": "Actor"
+        }
+      ],
+      "wireAction": "reconnect",
+      "wireAliases": []
+    },
+    {
+      "id": "Retire",
+      "inputs": [
+        {
+          "expectedType": {
+            "kind": "str"
+          },
+          "from": {
+            "path": [
+              {
+                "field": "parameters"
+              },
+              {
+                "field": "actor"
+              }
+            ],
+            "root": "stepParameters"
+          },
+          "id": "Actor"
+        }
+      ],
+      "wireAction": "retire",
+      "wireAliases": []
+    },
+    {
+      "id": "RotateToken",
+      "inputs": [
+        {
+          "expectedType": {
+            "kind": "str"
+          },
+          "from": {
+            "path": [
+              {
+                "field": "parameters"
+              },
+              {
+                "field": "actor"
+              }
+            ],
+            "root": "stepParameters"
+          },
+          "id": "Actor"
+        }
+      ],
+      "wireAction": "rotate-token",
+      "wireAliases": []
+    }
+  ],
+  "initializers": [
+    {
+      "id": "Initialize",
+      "inputs": [],
+      "wireAction": "init",
+      "wireAliases": []
+    }
+  ],
+  "interfaceVersion": "1.0.0",
+  "model": {
+    "module": "MBFaultIdentity",
+    "source": "spec/MBFaultIdentity.tla"
+  },
+  "observations": [
+    {
+      "expectedType": {
+        "fields": [
+          {
+            "type": {
+              "element": {
+                "kind": "str"
+              },
+              "kind": "set"
+            },
+            "wireName": "active"
+          },
+          {
+            "type": {
+              "element": {
+                "kind": "str"
+              },
+              "kind": "set"
+            },
+            "wireName": "connected"
+          },
+          {
+            "type": {
+              "key": {
+                "kind": "str"
+              },
+              "kind": "map",
+              "value": {
+                "kind": "str"
+              }
+            },
+            "wireName": "currentTokens"
+          },
+          {
+            "type": {
+              "key": {
+                "kind": "str"
+              },
+              "kind": "map",
+              "value": {
+                "kind": "str"
+              }
+            },
+            "wireName": "ids"
+          },
+          {
+            "type": {
+              "key": {
+                "kind": "str"
+              },
+              "kind": "map",
+              "value": {
+                "kind": "str"
+              }
+            },
+            "wireName": "kinds"
+          },
+          {
+            "type": {
+              "key": {
+                "kind": "str"
+              },
+              "kind": "map",
+              "value": {
+                "kind": "str"
+              }
+            },
+            "wireName": "labels"
+          },
+          {
+            "type": {
+              "key": {
+                "kind": "str"
+              },
+              "kind": "map",
+              "value": {
+                "kind": "str"
+              }
+            },
+            "wireName": "replies"
+          }
+        ],
+        "kind": "record"
+      },
+      "id": "Observation",
+      "provenance": "implementation",
+      "wireName": "observation"
+    },
+    {
+      "expectedType": {
+        "kind": "str"
+      },
+      "id": "Result",
+      "provenance": "implementation",
+      "wireName": "result"
+    }
+  ],
+  "schema": "mirrors.model-interface/v1",
+  "wire": {
+    "actionVariable": "action_taken",
+    "parameterVariable": "parameters"
+  }
+}

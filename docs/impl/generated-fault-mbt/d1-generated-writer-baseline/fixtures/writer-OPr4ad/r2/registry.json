@@ -1,0 +1,19 @@
+{
+  "v": 1,
+  "agents": {
+    "receiver": {
+      "agent_id": "01M59S37B54DNP9GR660EBE1Z7",
+      "token_hash": "sha256:583fffdc6057888757e45d2f77a12dd7ca4343af1b512abaf1f6cf142271d52e",
+      "kind": "agent",
+      "capabilities": [],
+      "registered_at": "2026-10-19T09:50:14.373Z"
+    },
+    "sender": {
+      "agent_id": "01M59S37AM0DDSY29NNSVFKAFE",
+      "token_hash": "sha256:57dc77305060886acd3601b528c86ffc3ed9cef7f57331b8fe8025504a0305aa",
+      "kind": "agent",
+      "capabilities": [],
+      "registered_at": "2026-10-19T09:50:14.356Z"
+    }
+  }
+}

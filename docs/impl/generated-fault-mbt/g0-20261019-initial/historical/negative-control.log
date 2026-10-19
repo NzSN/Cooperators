@@ -1,0 +1,2 @@
+FAIL /tmp/cooperators-mbt-retry/traces/corrupted.itf.json: step mismatch on action "ack": expected {"ackCursor":[["a1",999],["a2",0]],"log":[{"base":0,"fence":0,"from":"a1","holder":"-","key":"k2","res":"-","to":"a1","type":"msg"}]}, got {"ackCursor":[["a1",1],["a2",0]],"log":[{"base":0,"fence":0,"from":"a1","holder":"-","key":"k2","res":"-","to":"a1","type":"msg"}]}
+mbt: 1 traces, 1 failed

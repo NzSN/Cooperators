@@ -1,0 +1,727 @@
+{
+  "contractSha256": "317423034b88d00bf217343ef4611600f57b75ce06d794cb82739c66f53f0f13",
+  "fixedInputTraceChecks": [
+    {
+      "case": "none-NoWriterRejection",
+      "configSha256": "a1b1496ca317226b9a98535cc4c3cd047be0c5acace948ce66f010c06a3917dd",
+      "fault": "none",
+      "logSha256": "0d73b25adf035828e74897278a6d84091849f6e26424066d5bf2601b3eee194f",
+      "probeSha256": "bc5cfabac20e3a05fe1ca23c9832fa73c1e1f969ceb09d2e8fdd625f129b3bdc",
+      "trace": "NoWriterRejection"
+    },
+    {
+      "case": "none-NoRejectedRepair",
+      "configSha256": "a1b1496ca317226b9a98535cc4c3cd047be0c5acace948ce66f010c06a3917dd",
+      "fault": "none",
+      "logSha256": "a9680b68b571586a268f410a2a64bd7a24d69f9fa07dc974636f460e745cf324",
+      "probeSha256": "c952f5483330bdf1036a9e863ce320983c7c09c94ef1b86345b5d14b01d28a05",
+      "trace": "NoRejectedRepair"
+    },
+    {
+      "case": "none-NoWriterHandoff",
+      "configSha256": "a1b1496ca317226b9a98535cc4c3cd047be0c5acace948ce66f010c06a3917dd",
+      "fault": "none",
+      "logSha256": "76e7acf4090f077daee676ce768fbd60030a33d04184b2a2c9a222d56733edf7",
+      "probeSha256": "aa144b4941059ca3a5c73c185f6799d9332bcdfed31bd97ba01cd6825f58a75a",
+      "trace": "NoWriterHandoff"
+    },
+    {
+      "case": "none-NoUnownedWrite",
+      "configSha256": "a1b1496ca317226b9a98535cc4c3cd047be0c5acace948ce66f010c06a3917dd",
+      "fault": "none",
+      "logSha256": "dfa6707c29d4c5f54d027f3fe0364f3fb37c2b9a6270215e942dcf273430edb0",
+      "probeSha256": "3eb85c33640616e515aa897741ce05cae5b941dddfc1cf2104377944bc9c6f9c",
+      "trace": "NoUnownedWrite"
+    },
+    {
+      "case": "none-NoStorageRecovery",
+      "configSha256": "1144bad5a0f1482a15a927a3d1933425fa3437c7ae0ac3d660a498b36d01a151",
+      "fault": "none",
+      "logSha256": "0e28a5ca932002dc41f604f04572748c061ed4276528246e2273eea886214179",
+      "probeSha256": "4fee4566002b6f4712df13853ea87512dbff0c8a1ab89d4e5f9a20c7b981cd11",
+      "trace": "NoStorageRecovery"
+    },
+    {
+      "case": "none-NoPartialRecovery",
+      "configSha256": "1144bad5a0f1482a15a927a3d1933425fa3437c7ae0ac3d660a498b36d01a151",
+      "fault": "none",
+      "logSha256": "d126394257d2aef1701fd754f443f76de470700ec01b947b509684f20039c9ae",
+      "probeSha256": "67feb43c53aebacdd06cc8bd6b3d021dc377e6fafb2bf2444cdd145da620efa5",
+      "trace": "NoPartialRecovery"
+    },
+    {
+      "case": "none-NoAcknowledgedRecovery",
+      "configSha256": "1144bad5a0f1482a15a927a3d1933425fa3437c7ae0ac3d660a498b36d01a151",
+      "fault": "none",
+      "logSha256": "521f473df1b019f24f019096af3373d8dd81a9ce9038506dd38e760e33efd57a",
+      "probeSha256": "17fd37b5ee083266ab5dbc1628714edf1590859a415ede3f14e6a82e3762916d",
+      "trace": "NoAcknowledgedRecovery"
+    },
+    {
+      "case": "none-NoInboxCapacityRecovery",
+      "configSha256": "a796750472072a070de43e210142792e990a2cfb1c86548411a285dd126ab030",
+      "fault": "none",
+      "logSha256": "15ec45931885369c69d637752211cc5b8594689818da5fb57c6e82810cb868f7",
+      "probeSha256": "8da88f10be12f97f705ef940d81317ef9a42505b95827c536ba1063380755e50",
+      "trace": "NoInboxCapacityRecovery"
+    },
+    {
+      "case": "none-NoProjectionRecovery",
+      "configSha256": "a620acf39daa2b9ef74776a5dabab72bd23c32f3c13415b534554546fe4ca496",
+      "fault": "none",
+      "logSha256": "e36496c17ac47b30f5c1776a75c43a89993ca976a6465c09bd2004e461f81f59",
+      "probeSha256": "388633764a44acdaa8586d58b5065dfe158165448b61a9d8cc676e0f5fd5f6e3",
+      "trace": "NoProjectionRecovery"
+    },
+    {
+      "case": "none-NoProjectionCrashRetry",
+      "configSha256": "a620acf39daa2b9ef74776a5dabab72bd23c32f3c13415b534554546fe4ca496",
+      "fault": "none",
+      "logSha256": "08714ad7d19e453e13c3370d2ba22ffabbde8c6bae5b12c3cbf50034797f223f",
+      "probeSha256": "523ca48fb97828bfde4114a9f98bcc1b01069aea46921049894b1846eca15104",
+      "trace": "NoProjectionCrashRetry"
+    },
+    {
+      "case": "none-NoDocumentRetry",
+      "configSha256": "4641259e8c873229966cddabf7d588f231eea8a2fec448706cd24580fc63fa18",
+      "fault": "none",
+      "logSha256": "abf022d05b083754fcbafca722b1df174aec1585d73ae95dca7dee44a9af81da",
+      "probeSha256": "e82e6f289523b1f7934c23f3ddca1f2dc80190c9ced173e1f8c53fae4b35f7d5",
+      "trace": "NoDocumentRetry"
+    },
+    {
+      "case": "none-NoDocumentCrashRetry",
+      "configSha256": "4641259e8c873229966cddabf7d588f231eea8a2fec448706cd24580fc63fa18",
+      "fault": "none",
+      "logSha256": "9e7e709686394f6fd6131635e09c05c9dd6ad8a0da9c303e84c14c365d4100dc",
+      "probeSha256": "92bfe8a6618112aa178a97579e7022b8dc51fff22083a40f4b32a6d515838f17",
+      "trace": "NoDocumentCrashRetry"
+    },
+    {
+      "case": "none-NoLargeStatus",
+      "configSha256": "f45bb3146211cb23931629c9e95770c0600a29aa7a45f472df6d8af7a125605d",
+      "fault": "none",
+      "logSha256": "94b276745672bc03771f2e4a0a9ab162a82590b595088506e2fb29fa827e45d9",
+      "probeSha256": "2cb0f11a6ffd911f8e8990c42abbf969cb4bfc5dc0e78c499dd2eb100919a7d2",
+      "trace": "NoLargeStatus"
+    },
+    {
+      "case": "none-NoRotatedCursor",
+      "configSha256": "2b9260c69fb7f224a7bacc2325e941ffe6496947ef9992128ba84c3fa73abd72",
+      "fault": "none",
+      "logSha256": "054cab0db69826de21add651f1a62b35de4252c09d52984584a2d0ecd7669624",
+      "probeSha256": "6b2dca5ac593819630ec2c2b275dd6a8cc2323ab6ef8167f26ffc808f8cedc68",
+      "trace": "NoRotatedCursor"
+    },
+    {
+      "case": "none-NoRotationCrashRecovery",
+      "configSha256": "2b9260c69fb7f224a7bacc2325e941ffe6496947ef9992128ba84c3fa73abd72",
+      "fault": "none",
+      "logSha256": "009b22c547e512e9ed4ce8ec16f3a266473bf39397cc14ebf02608fdd9873bad",
+      "probeSha256": "07b9ceb0922ec2d47ad18d8f8e39643320f0bfd6249767429a79d957e4b032dc",
+      "trace": "NoRotationCrashRecovery"
+    },
+    {
+      "case": "none-NoOversizedRotation",
+      "configSha256": "2b9260c69fb7f224a7bacc2325e941ffe6496947ef9992128ba84c3fa73abd72",
+      "fault": "none",
+      "logSha256": "e921b943d55cbd00d481c3d45d43e86ad3e540a78975a80026ebebbee0ca5a66",
+      "probeSha256": "bc3e8031776044ec9a8eb21716a6bcc3c67b091bcc2baf95bbbbaa4232710d7e",
+      "trace": "NoOversizedRotation"
+    },
+    {
+      "case": "none-NoSameKindEnrollment",
+      "configSha256": "bd7a793504f161a8d9a29b6f4836ca7ab547114a3f15b0a38a1ca81c18b6379d",
+      "fault": "none",
+      "logSha256": "a651298302fb7ef00e476fed327b22b87facc5a221dfe4d5ac0391bb878998a8",
+      "probeSha256": "dcee24a4d08d706d8abe4aba15a90d385509f17e0d68512c68c2ef3ee2b4b7e0",
+      "trace": "NoSameKindEnrollment"
+    },
+    {
+      "case": "none-NoRevokedAuthentication",
+      "configSha256": "bd7a793504f161a8d9a29b6f4836ca7ab547114a3f15b0a38a1ca81c18b6379d",
+      "fault": "none",
+      "logSha256": "d76cb8393b92c2e019844feedd454e660116e9c19b8d1b8b47ea08c86b92c3aa",
+      "probeSha256": "32976921c77a7dfd7a652054e1f998ecaa5d98ea7ea9faf4b60b20e7f1a7ec02",
+      "trace": "NoRevokedAuthentication"
+    },
+    {
+      "case": "none-NoStableReconnect",
+      "configSha256": "bd7a793504f161a8d9a29b6f4836ca7ab547114a3f15b0a38a1ca81c18b6379d",
+      "fault": "none",
+      "logSha256": "75ecfc8d9824e86a772726a6d90176c90373fc38a51b7afcf1670f949c8c3e73",
+      "probeSha256": "ec527f2050b9505efa01d5a552a88c762e8f2418179fd22dc41570167d24755a",
+      "trace": "NoStableReconnect"
+    },
+    {
+      "case": "writer-NoWriterRejection",
+      "configSha256": "7661025d182c8927b4769ee93e64409df542a47c84a85a1392dbf6629efc678f",
+      "fault": "writer",
+      "logSha256": "67805e8971a4822e4240f979166c2f966de666fab099fdd29a06721fd5107fe9",
+      "probeSha256": "bc5cfabac20e3a05fe1ca23c9832fa73c1e1f969ceb09d2e8fdd625f129b3bdc",
+      "trace": "NoWriterRejection"
+    },
+    {
+      "case": "prelock-replay-NoRejectedRepair",
+      "configSha256": "bf36c815a748ec3a4a4b420147483b4f1890d0ea3b8da247307a6ae3cf246673",
+      "fault": "prelock-replay",
+      "logSha256": "3b924e7addf4c4b6c56c3dfd32700f89524beb0b1c8a44248064a1fcb0f5a3e1",
+      "probeSha256": "c952f5483330bdf1036a9e863ce320983c7c09c94ef1b86345b5d14b01d28a05",
+      "trace": "NoRejectedRepair"
+    },
+    {
+      "case": "unowned-write-NoUnownedWrite",
+      "configSha256": "a3eeccd5429e41fc9e74e56d472c5b89864e96e25b845f3dcae3434762dff489",
+      "fault": "unowned-write",
+      "logSha256": "ce061edaf622ac8b5a637c4c6ef990d45dfe374ea43a8f0a39248d40f77e9093",
+      "probeSha256": "3eb85c33640616e515aa897741ce05cae5b941dddfc1cf2104377944bc9c6f9c",
+      "trace": "NoUnownedWrite"
+    },
+    {
+      "case": "continue-after-io-NoStorageRecovery",
+      "configSha256": "d404932bbf781484ec098d6f893a85fc8a0bc06e0be329fd3bf1f4f5f74411f2",
+      "fault": "continue-after-io",
+      "logSha256": "d9fff2bd773e16dde408faa5d5c88d3d215b45c4653c4e159832c23cf4893d02",
+      "probeSha256": "4fee4566002b6f4712df13853ea87512dbff0c8a1ab89d4e5f9a20c7b981cd11",
+      "trace": "NoStorageRecovery"
+    },
+    {
+      "case": "ack-before-sync-NoStorageRecovery",
+      "configSha256": "da8416454b9de68892a978e33bf403cf41edc16ecb02cc845c7d9f297139e595",
+      "fault": "ack-before-sync",
+      "logSha256": "9d667257649013b4cb8c785f7412326db032e21df373dcd0a025163c4bacdfb3",
+      "probeSha256": "4fee4566002b6f4712df13853ea87512dbff0c8a1ab89d4e5f9a20c7b981cd11",
+      "trace": "NoStorageRecovery"
+    },
+    {
+      "case": "lose-ack-NoAcknowledgedRecovery",
+      "configSha256": "84303fa816b4bc0c219bf02cded71d16ba31157845f3837bca408471728588c6",
+      "fault": "lose-ack",
+      "logSha256": "7969404997b7a1c087afc1280b68d48c5d8336ce22b7d51aeae4f491ed27ffec",
+      "probeSha256": "17fd37b5ee083266ab5dbc1628714edf1590859a415ede3f14e6a82e3762916d",
+      "trace": "NoAcknowledgedRecovery"
+    },
+    {
+      "case": "wrong-receipt-NoAcknowledgedRecovery",
+      "configSha256": "3c6165434f3cb44d66b7ef75fbfb3861b089a68d1ecbd8d016d1ff6d06987a52",
+      "fault": "wrong-receipt",
+      "logSha256": "2bc44193e7affc6aa34d4a15950fa5586286463471de317ade80d0650f8eb03d",
+      "probeSha256": "17fd37b5ee083266ab5dbc1628714edf1590859a415ede3f14e6a82e3762916d",
+      "trace": "NoAcknowledgedRecovery"
+    },
+    {
+      "case": "expired-cursor-NoInboxCapacityRecovery",
+      "configSha256": "3be8b72b08677266d5aef0af8687b4bda2fc9dfd2bb3025e9289393943b3720f",
+      "fault": "expired-cursor",
+      "logSha256": "b13a65ee4dce8bbcb1e5af74cc1984282688c4b3f10f269252847893c2fb9f6b",
+      "probeSha256": "8da88f10be12f97f705ef940d81317ef9a42505b95827c536ba1063380755e50",
+      "trace": "NoInboxCapacityRecovery"
+    },
+    {
+      "case": "drop-projection-NoProjectionRecovery",
+      "configSha256": "19001c0f24ee91b36ce0320595e6a2fdb9e6b3dc67ab30fdb9ea206e3e33ce30",
+      "fault": "drop-projection",
+      "logSha256": "05d7a2480acc26b986dc08d8e9f9f3c778b27946de921fe24e06fdd13abbfb2c",
+      "probeSha256": "388633764a44acdaa8586d58b5065dfe158165448b61a9d8cc676e0f5fd5f6e3",
+      "trace": "NoProjectionRecovery"
+    },
+    {
+      "case": "duplicate-projection-NoProjectionCrashRetry",
+      "configSha256": "3e43650e7231c9bc0f90067b7d5212f136dfd79d14c7cf0e29a6ffe785ed8fe8",
+      "fault": "duplicate-projection",
+      "logSha256": "71dd7d7c349a0ceb799e8fdcd45ce61dd2f6f927e4579bdb6a72d20e163c849e",
+      "probeSha256": "523ca48fb97828bfde4114a9f98bcc1b01069aea46921049894b1846eca15104",
+      "trace": "NoProjectionCrashRetry"
+    },
+    {
+      "case": "doc-file-gate-NoDocumentRetry",
+      "configSha256": "26116a2c2319e5713b00e487311db8bfa60ad6391387fe14b87435440c711bd6",
+      "fault": "doc-file-gate",
+      "logSha256": "8fa79cdf69c5283f5b93554dada58471b178d9d385ca705d943dd16aef30bd11",
+      "probeSha256": "e82e6f289523b1f7934c23f3ddca1f2dc80190c9ced173e1f8c53fae4b35f7d5",
+      "trace": "NoDocumentRetry"
+    },
+    {
+      "case": "early-publish-NoDocumentRetry",
+      "configSha256": "b7e06f03314e7ee4f8282cde6c78c112aaeef91b85945e2b30eb81c2c642e9f9",
+      "fault": "early-publish",
+      "logSha256": "f4f875b3f521b8a9251b1b352872200e1498f7f9b215526d98458f013f7dfada",
+      "probeSha256": "e82e6f289523b1f7934c23f3ddca1f2dc80190c9ced173e1f8c53fae4b35f7d5",
+      "trace": "NoDocumentRetry"
+    },
+    {
+      "case": "tail-window-NoLargeStatus",
+      "configSha256": "73f0e6434bf5206836a500e69cd788606610d10c04675ad77780efe0041fe1b5",
+      "fault": "tail-window",
+      "logSha256": "60a620f1668a5529ae30f082c4a71de8ce6331ce85c6545cd2c4a5f020eec308",
+      "probeSha256": "2cb0f11a6ffd911f8e8990c42abbf969cb4bfc5dc0e78c499dd2eb100919a7d2",
+      "trace": "NoLargeStatus"
+    },
+    {
+      "case": "status-mutates-NoLargeStatus",
+      "configSha256": "4f336ddcceb54b1c70acd2786d07fd6e4796132df2d06e9f0781ceb8f68fcdd2",
+      "fault": "status-mutates",
+      "logSha256": "abc2f4213fbb8ef563e364c42b2f841fb9301a4236bb23ad09ee6a4e6bb11bde",
+      "probeSha256": "2cb0f11a6ffd911f8e8990c42abbf969cb4bfc5dc0e78c499dd2eb100919a7d2",
+      "trace": "NoLargeStatus"
+    },
+    {
+      "case": "no-rotation-NoRotatedCursor",
+      "configSha256": "48311bb43cbf77e835f09cc623a7fd66f45562a564ebf45e8636940589d46314",
+      "fault": "no-rotation",
+      "logSha256": "e87fbfeb3229eb4569abf92eac46628c8896a607f5690206d77f25ddf3b47b96",
+      "probeSha256": "6b2dca5ac593819630ec2c2b275dd6a8cc2323ab6ef8167f26ffc808f8cedc68",
+      "trace": "NoRotatedCursor"
+    },
+    {
+      "case": "last-segment-NoRotatedCursor",
+      "configSha256": "8f5f8950dba79979a944f77fc3a09397247b2fa53ae59b6903206c4be2455767",
+      "fault": "last-segment",
+      "logSha256": "3c185e6d4e26754f79bb057e851ee0e1cf839eba6376e1343ae71cc3dc87950a",
+      "probeSha256": "6b2dca5ac593819630ec2c2b275dd6a8cc2323ab6ef8167f26ffc808f8cedc68",
+      "trace": "NoRotatedCursor"
+    },
+    {
+      "case": "rotation-loss-NoRotatedCursor",
+      "configSha256": "67e80b5622f6b7a2d91b5aad6456acc345a6459325ce0749b7d7d41d0d83d6ca",
+      "fault": "rotation-loss",
+      "logSha256": "ce183b3cf723ae1188d7214ca4edddb2d1ef7abfb7c308d4da2ae67ed9bb8b9f",
+      "probeSha256": "6b2dca5ac593819630ec2c2b275dd6a8cc2323ab6ef8167f26ffc808f8cedc68",
+      "trace": "NoRotatedCursor"
+    },
+    {
+      "case": "kind-identity-NoSameKindEnrollment",
+      "configSha256": "853388ab8a1aeb1349855a34dd1ebcfc6068dfd29f9f4684674f1e6db941769c",
+      "fault": "kind-identity",
+      "logSha256": "2dd7193170387a6e651438ce8b431c01580bb553f5638f5b2eaa3c1896866e0b",
+      "probeSha256": "dcee24a4d08d706d8abe4aba15a90d385509f17e0d68512c68c2ef3ee2b4b7e0",
+      "trace": "NoSameKindEnrollment"
+    },
+    {
+      "case": "reconnect-id-NoStableReconnect",
+      "configSha256": "d9124aaa20662b282ccc8f8c7927af645602fac17d90669e3467b3616435be92",
+      "fault": "reconnect-id",
+      "logSha256": "b36fce4067a410bb2291cf0503024fd70f968371123cf78ec179b23bf269a335",
+      "probeSha256": "ec527f2050b9505efa01d5a552a88c762e8f2418179fd22dc41570167d24755a",
+      "trace": "NoStableReconnect"
+    },
+    {
+      "case": "shared-token-NoSameKindEnrollment",
+      "configSha256": "71ee57cf406ed8e853e0c43a8dbeacfb512c67a22c24ae9924fca8948515664a",
+      "fault": "shared-token",
+      "logSha256": "189c294b6e5844ba48c595ca4ab4e4991ab45108b067f678b6bf7c990f2f9c45",
+      "probeSha256": "dcee24a4d08d706d8abe4aba15a90d385509f17e0d68512c68c2ef3ee2b4b7e0",
+      "trace": "NoSameKindEnrollment"
+    },
+    {
+      "case": "stale-token-NoRevokedAuthentication",
+      "configSha256": "2bfa09d4d3f48d1c31c49096c479a3f781211c08a1533fac1df0744d23a36769",
+      "fault": "stale-token",
+      "logSha256": "9fb8f2f13925b9dfdc5199d9816f09cb7a898091ddbefbad105594e36382619f",
+      "probeSha256": "32976921c77a7dfd7a652054e1f998ecaa5d98ea7ea9faf4b60b20e7f1a7ec02",
+      "trace": "NoRevokedAuthentication"
+    }
+  ],
+  "model": "MBFaults",
+  "modelChecks": [
+    {
+      "case": "safe-writer",
+      "configSha256": "694ab98cd4a095016c32a13d9411f5b98f391b66b8dec648492e64ba5ccec481",
+      "distinctStates": 651,
+      "logSha256": "aceab15002a8ea466f30be071a5018ab98fc32dad4f25aacdde4355ae0e566bb"
+    },
+    {
+      "case": "safe-storage",
+      "configSha256": "7d1e023d810a3b64b6099686dcb0eca8bfb0a0f3d75550218cc8318e027eaaf8",
+      "distinctStates": 2634,
+      "logSha256": "99a3bd84853fffed200497ac9574cd31f99e29b9f6f4dd1743157e85ea927469"
+    },
+    {
+      "case": "safe-inbox",
+      "configSha256": "14a9517d4339166c6578354310f30f227f42cfa9f6a14fd1b1968b6341cda66c",
+      "distinctStates": 414,
+      "logSha256": "519dbbb38fd6adece866cbecfd5b0af48a1864445ba6be32009ad6160892ba92"
+    },
+    {
+      "case": "safe-deadletter",
+      "configSha256": "0a014e1aec2863e9898d48965425c569f6ef3b0a97591efe989dc162ff6ac9c4",
+      "distinctStates": 58,
+      "logSha256": "02d660dda0385f6bed9e99ddc77a5bec16d8fa0658a3f8162e5472f13bfcbc49"
+    },
+    {
+      "case": "safe-document",
+      "configSha256": "94f0b781610802e36451d6763bd65d1dd1b813ef6308eda6bbd0edace11e0920",
+      "distinctStates": 188,
+      "logSha256": "cd3c50c04b053cd4314d09b7db4a16a24a180700fb27ba103abeeece87a659d4"
+    },
+    {
+      "case": "safe-status",
+      "configSha256": "b2ae9492707b137e159d2c9dfa7e1dad9e9356c242a3e7cea2365cce21e3c7c0",
+      "distinctStates": 87,
+      "logSha256": "695687959a261fbd28a6f9d4e7dc9a44f604eea3a57252b6669e8be4278f1522"
+    },
+    {
+      "case": "safe-rotation",
+      "configSha256": "cff885b56bf9f44f4b660127169f490734dbe2ab4124a7756b07c26e4d664603",
+      "distinctStates": 4617,
+      "logSha256": "45add44a6817fb8511ceeaff584e270fcd740f665659dd2fd4c099b3ca0308af"
+    },
+    {
+      "case": "safe-identity",
+      "configSha256": "8367966cd3622942b86e8fe9a5e95c8d2026908fee787cf03a806e62135a1f81",
+      "distinctStates": 10819,
+      "logSha256": "bf516dd73c869476cdfae0ae57a62591465711269a6e2e9845690fad01afc251"
+    },
+    {
+      "case": "fault-writer",
+      "configSha256": "604f6b80e0372e64741df49ac7e44ad7b55d88f483ba988f7b7a1a559062414d",
+      "distinctStates": 23,
+      "logSha256": "23862abd9047a0dbebb033c36686b1e1fde1183aed785ae2df4b08b7b0a27c6f"
+    },
+    {
+      "case": "fault-prelock-replay",
+      "configSha256": "2366ed57d783bb7a1f6f38ccdde17ca3f9c072f1a703fd59c25b073debfb5548",
+      "distinctStates": 174,
+      "logSha256": "8e687ac75a399144e8eed86e05c74d047d247b8fa1753eeacdea0286b19fffb5"
+    },
+    {
+      "case": "fault-unowned-write",
+      "configSha256": "396f8f3fe5ede93c41fe87e9e5a6302c78842bbf2d0c8b0523fe21b8af2f7152",
+      "distinctStates": 2,
+      "logSha256": "fae6082fce08bd50fa1493f69f815754dfbc71b0db8c133b56af79724573d8ce"
+    },
+    {
+      "case": "fault-continue-after-io",
+      "configSha256": "b9e160f1aa044331fb8d4b7b5de08553f0c2da5d4c152eefe6df1127a90be8b0",
+      "distinctStates": 139,
+      "logSha256": "da0ebd3d21e02ee73f698d6f4e40d8b5ecbf151146de700768d38fba5e573563"
+    },
+    {
+      "case": "fault-ack-before-sync",
+      "configSha256": "97bf111eb67ae943ca448f8689e85241c012fecce8f599851f95eb9cf4cc2347",
+      "distinctStates": 3,
+      "logSha256": "0472d6d94bcec4592bd6954fec38e5beec1280f94bc5140bc92682f3d229d20c"
+    },
+    {
+      "case": "fault-lose-ack",
+      "configSha256": "33b1a83941f104cbfe5b08070608221dcb73e2fccf10771ace2163f49cac73af",
+      "distinctStates": 52,
+      "logSha256": "0d8d31770d7835a20abe48e611605bd9c4743b6910be8224c266508313ec39e9"
+    },
+    {
+      "case": "fault-wrong-receipt",
+      "configSha256": "de5859a08086e577d314de9b7f615445f7de4b987d6ca07d8cbfd8c0634f3e4e",
+      "distinctStates": 16,
+      "logSha256": "607e181681f2642f46b0ba9a11e3fabea15da1cccf00be8b1298d145a1dc9261"
+    },
+    {
+      "case": "fault-expired-cursor",
+      "configSha256": "d1993aea75c171834e1e3352f323e87cd86b7b3e124749e7b3cab2bc0cfb87c6",
+      "distinctStates": 23,
+      "logSha256": "93a39bab7d117f74da89a851b982de1c2ca6e657bda5bf6430ff56f88e1b5916"
+    },
+    {
+      "case": "fault-drop-projection",
+      "configSha256": "8d4693da02906694aeb8641be966db72d412a2c6a798f5f11158e40ae1885f96",
+      "distinctStates": 13,
+      "logSha256": "bdda6fbc763f4c05930462baa30c976b5567a3b353dcbf665e4376f192664c0a"
+    },
+    {
+      "case": "fault-duplicate-projection",
+      "configSha256": "be08fd094deb22f23c54638db5d8fd3aae67fd466b8951ab519b7729f4886166",
+      "distinctStates": 22,
+      "logSha256": "d9bdb9d37690f3f924221666f11bbac2006f7cf41a0d879625b0ad118ceb17f8"
+    },
+    {
+      "case": "fault-doc-file-gate",
+      "configSha256": "6f885871784768c7f2ef55e24a59ff19e53b73a99f325747e84ae87f4cc56a8a",
+      "distinctStates": 27,
+      "logSha256": "92d7554cb7bc8c4ef7cba6e39fe9bb57551c26629890389e29bfdd71fc3dc919"
+    },
+    {
+      "case": "fault-early-publish",
+      "configSha256": "d66f4e0765c883fdb42a74d0240c3058bb2df1480e2055c693ddfd2e828d9047",
+      "distinctStates": 2,
+      "logSha256": "5539b7935b21ff182f188a18d1a3ab7df4adb25a4e260c8106dddff9abe27132"
+    },
+    {
+      "case": "fault-tail-window",
+      "configSha256": "9a6436ca9a20f70de69d04a9acee2936431d560b92ba3ef5b3b80327bee6dbe5",
+      "distinctStates": 13,
+      "logSha256": "b3da48668cb59961e0dc79b2075b92a3554bf62ac1246b1c7ad35dbb5120d39c"
+    },
+    {
+      "case": "fault-status-mutates",
+      "configSha256": "bf1a9b8c5bcc1663e14d75d6385a3dde69b9b9d6f7b0363c5ef3bb319da8bb1b",
+      "distinctStates": 12,
+      "logSha256": "35171279e398ad55588d570ab20832119ca9d0dcc1bb7c4b5e5262ad534e5b99"
+    },
+    {
+      "case": "fault-no-rotation",
+      "configSha256": "43153ad78e22fc9f8ec8b05cddfd729c359dbeac6d8fddeedf6fc9b4076b07c2",
+      "distinctStates": 205,
+      "logSha256": "1416c4b222f4e5f204f353dab3b5e1ea9f4be4d0a87a9ddc3c76ed4852bf4663"
+    },
+    {
+      "case": "fault-last-segment",
+      "configSha256": "dc4863a678555629621e191fd1f14c612b7a27930fb626786d9514a1bdad4589",
+      "distinctStates": 376,
+      "logSha256": "b182f2bd4ad0e1b1b038d44a28c4b62fa13538bf337848a1705f5e518b8ae70d"
+    },
+    {
+      "case": "fault-rotation-loss",
+      "configSha256": "e68cb181b46260eb58446ee60130f8f3c580e9790783ea5d4d1334ceb471a7a4",
+      "distinctStates": 111,
+      "logSha256": "e45531b307582844928fdb37eb193a87bef42e46f3f4b6634c8b4ffe5cc3ae51"
+    },
+    {
+      "case": "fault-kind-identity",
+      "configSha256": "1a8e209236e40af9fdb8a60200afe8b26688b7264931120dc8b93d4eef52601b",
+      "distinctStates": 91,
+      "logSha256": "e84c021efb18bf8b7f5fa4968684175413de31f1e1b5243c1e72c0f4743e96a0"
+    },
+    {
+      "case": "fault-reconnect-id",
+      "configSha256": "caeb0499e4347befd0a8b72bf351637ab84c7b828bddb3078814c51879982b07",
+      "distinctStates": 1135,
+      "logSha256": "1110ea1ec8cac3daf526cab742ad836dbcf2e141073b559d5f407e1e9668013d"
+    },
+    {
+      "case": "fault-shared-token",
+      "configSha256": "42fade73048ccd1638568dd09e08ff8c3117dd8f331c2b0f04744e6df55b25a9",
+      "distinctStates": 91,
+      "logSha256": "d60fd5cc6831f7d62ac612baede99e33c46577630ff72c24f7be30c2af5adc97"
+    },
+    {
+      "case": "fault-stale-token",
+      "configSha256": "a4b17ee98fed85249b4d7ef837ae620e25d3fbf2e774589fe29fef276db674e7",
+      "distinctStates": 109,
+      "logSha256": "0e94e4f2a960f541390ffd5db2ee384957faa5611d73a623200c59b9520b5071"
+    },
+    {
+      "case": "witness-NoWriterRejection",
+      "configSha256": "174082bfa9a9abd9dc8164a198ad0aee834df17d99a22ffccb7eafa8b3c5c0d8",
+      "distinctStates": 23,
+      "logSha256": "4bf8d8e11c26b5d2fb139f0a4ab416ec4f328ee42113c8da67fcc693a80923bf"
+    },
+    {
+      "case": "witness-NoRejectedRepair",
+      "configSha256": "0f58cea4cec126fcc4a525d07215f953452552a185a4a08d2cd472a4236c15ec",
+      "distinctStates": 176,
+      "logSha256": "3cab261e1de4d3f6392f7c8da6e1be80ca4ed5661be596e50f04be7104a3dc91"
+    },
+    {
+      "case": "witness-NoWriterHandoff",
+      "configSha256": "792977a33b7703b9970fe675d30654d068b2eb62399345c532a53ccd1ce0365c",
+      "distinctStates": 172,
+      "logSha256": "97c15056bc24ca16d8913df64747f2ea40785f23acaa3e739b0513751bd19cbe"
+    },
+    {
+      "case": "witness-NoUnownedWrite",
+      "configSha256": "2135e5cc0897c6a31435740e7444c5a27bd33bb029fed09eb398d29015abd0e6",
+      "distinctStates": 23,
+      "logSha256": "ecb43c5ce10fc88903e59ec1f6499b5845d5d505aae0a0ee88e31bc9f13574b2"
+    },
+    {
+      "case": "witness-NoStorageRecovery",
+      "configSha256": "2a8942be1b4052b0e8d59ae298847699b36eaba755494ffcb71d0d18423fa26b",
+      "distinctStates": 1001,
+      "logSha256": "f5f2b3ef1c2de38163f25347d645017aa9f44cb045172b60e034f97bfd1d8629"
+    },
+    {
+      "case": "witness-NoPartialRecovery",
+      "configSha256": "3a6cd3d63b0ef34e2ab4be50edc08175803e8f763fb817f721050440af136630",
+      "distinctStates": 569,
+      "logSha256": "1ff3d9d74497549286b228a876445fdbdb132a961ab47ae477aaccc2da34c8b8"
+    },
+    {
+      "case": "witness-NoAcknowledgedRecovery",
+      "configSha256": "6a4cf192781ccd7a166655bb6c8d3039d7bfe4f1a3dc859118002c288c146d0a",
+      "distinctStates": 1001,
+      "logSha256": "093364ba721861207058b5d3232c2494511c5c759b1b63ff166b788ef5e6c27c"
+    },
+    {
+      "case": "witness-NoInboxCapacityRecovery",
+      "configSha256": "2b9be1a47bcdee047418d3f56717e68c6f3c8c92fed20f35ce5be05582d1f048",
+      "distinctStates": 280,
+      "logSha256": "4e0d79d0d185162fa3f3a8b004f32e220a9646ec89c76e501d9ea0d18454a40f"
+    },
+    {
+      "case": "witness-NoProjectionRecovery",
+      "configSha256": "e6ceab6e1d2a5245b26529b1e7cdc08da0915aed4d7138948a64a31128a39c50",
+      "distinctStates": 46,
+      "logSha256": "64c81348371b5a463747d90085caae981d91dea6a9a01062bdfa96995f05c75a"
+    },
+    {
+      "case": "witness-NoProjectionCrashRetry",
+      "configSha256": "c06c760f5fccbcbdf64a7eeb2b3472e8999a0d7b93dc1ab0c621bf674b8a152c",
+      "distinctStates": 34,
+      "logSha256": "8140d079393fed6fd24136d54c3b067b9ae49575a05178fdc35330a468accb67"
+    },
+    {
+      "case": "witness-NoDocumentRetry",
+      "configSha256": "5f016ccf07fa4476e0a1f01fc7a5ac890179c1e93f9e594b429e22cd7999ac0e",
+      "distinctStates": 94,
+      "logSha256": "ca49724860a11b8b09daf97d4319cd80089e127f2bc1bfe6f915f3c3da66f6a5"
+    },
+    {
+      "case": "witness-NoDocumentCrashRetry",
+      "configSha256": "dfda3a140d3443877bbb2eb600d8851d51fe07197181d87e8a1d2871b3067205",
+      "distinctStates": 139,
+      "logSha256": "893a96eb7c2c52a43d833d3f2ed09640b38fe89a81e94b2badc055c58d1290c3"
+    },
+    {
+      "case": "witness-NoLargeStatus",
+      "configSha256": "69626fcbf0dc561ee1a92f2dfd124849bd6f8500f4db67fc455635c8d7ce9a48",
+      "distinctStates": 13,
+      "logSha256": "840876a903113c375f4c60e86328dca96ae4f80f47cb7cf5c71936120ceab291"
+    },
+    {
+      "case": "witness-NoRotatedCursor",
+      "configSha256": "9ebb53bf387b80332c55f7957fbd69663866bbde6848547b02e8b62bcfd8c122",
+      "distinctStates": 3037,
+      "logSha256": "b3203f2a98418593541dfa19cd47e339f39d828c7ab51ccb6966d7193e5c2851"
+    },
+    {
+      "case": "witness-NoRotationCrashRecovery",
+      "configSha256": "1945693c5dac66536271a30653b7e94a3d8be25b1fbf2a85031cf98735281022",
+      "distinctStates": 3045,
+      "logSha256": "c1646203d4e2275c5f463eac72a61930f36a70463254416996c4659bbf2d5718"
+    },
+    {
+      "case": "witness-NoOversizedRotation",
+      "configSha256": "45d916916324a39f5a1121e30ade0a7ed91aa7ee7d978a5703aae3d0cc31f92b",
+      "distinctStates": 377,
+      "logSha256": "143798dcb06099b2ef993fd32b27db82a91d6ef34800b4e677d65ab48fcd21c4"
+    },
+    {
+      "case": "witness-NoSameKindEnrollment",
+      "configSha256": "fb47a16d9026e087ff0a89165ca132214ed0273f7ee4a7cc5c4f892d8f3826ed",
+      "distinctStates": 91,
+      "logSha256": "533c9dfafbc3f51375f3bd03387116a9a1dd9e1ab2ec1c771cfc2c343021565b"
+    },
+    {
+      "case": "witness-NoRevokedAuthentication",
+      "configSha256": "20b166eaf4f3bc784d7c14c1dbf314bf078a7661d00c94a35ac18da3d4349517",
+      "distinctStates": 4411,
+      "logSha256": "781ae00d9f2857a1984e417fcf5badc5fd7bcc8881ab4bf2b38f5f0b59ec633e"
+    },
+    {
+      "case": "witness-NoStableReconnect",
+      "configSha256": "cdc03d91ec2598a9e316d519425a41f0d08ab339a1b14f6e55f49156c6648f3d",
+      "distinctStates": 4411,
+      "logSha256": "52c64d54fe98035b23ba718523248db4545cf5bb9c6fe0afab34efac2e8df1fb"
+    }
+  ],
+  "profiles": {
+    "deadletter": 7,
+    "document": 7,
+    "identity": 5,
+    "inbox": 8,
+    "rotation": 12,
+    "status": 4,
+    "storage": 10,
+    "writer": 6
+  },
+  "registrySha256": "988b77892ff9899daba2789ef258a863b9b9f3619257343674d8e76b7b739301",
+  "runtimeReplay": "not performed by this generator",
+  "schema": "cooperators.fault-corpus/v1",
+  "sourceSha256": "8dfb916fe2c2f69516ecaf11da3e31596167818fdcc94859afb7e676ea6fc19c",
+  "traces": [
+    {
+      "file": "traces/NoWriterRejection.itf.json",
+      "scenario": "writer",
+      "sha256": "e11681af342efebd78fcfec66f37945e70c56b5cbf8999c156f50ee40edd3e3e"
+    },
+    {
+      "file": "traces/NoRejectedRepair.itf.json",
+      "scenario": "writer",
+      "sha256": "66e902754e0147b598fb07657ecb170a0f322f7f5b7e35096393a1770396bd67"
+    },
+    {
+      "file": "traces/NoWriterHandoff.itf.json",
+      "scenario": "writer",
+      "sha256": "21fc66407d511261f32957d6859fff92918a83e8454f2898b1f009270844eb30"
+    },
+    {
+      "file": "traces/NoUnownedWrite.itf.json",
+      "scenario": "writer",
+      "sha256": "1b7c756d4780e5d407b6b372032f34fa58bb4fca20db974c492084dfbc7046c1"
+    },
+    {
+      "file": "traces/NoStorageRecovery.itf.json",
+      "scenario": "storage",
+      "sha256": "b79b0ae030f8ae8705cad92e09ee11c4c4ea0e30f5dc39506e0e6bf448494e2e"
+    },
+    {
+      "file": "traces/NoPartialRecovery.itf.json",
+      "scenario": "storage",
+      "sha256": "2ee6f904a59e1d684f253d9301f89b3e463e4e6ee25d3c2f9c921b4e5c4d4465"
+    },
+    {
+      "file": "traces/NoAcknowledgedRecovery.itf.json",
+      "scenario": "storage",
+      "sha256": "8a679f80b650119f240151ac829cf8510f9f4deff95fa0c3ffa3034ae1493b79"
+    },
+    {
+      "file": "traces/NoInboxCapacityRecovery.itf.json",
+      "scenario": "inbox",
+      "sha256": "d2b4c6cd197d732b49e5592bfd45f81027d7b43389698bf1cf387f5a494c13cf"
+    },
+    {
+      "file": "traces/NoProjectionRecovery.itf.json",
+      "scenario": "deadletter",
+      "sha256": "6e2ef29ea3ab441df2b44c694d014125e30ccf5ce13be5f4c1abcefe586056c2"
+    },
+    {
+      "file": "traces/NoProjectionCrashRetry.itf.json",
+      "scenario": "deadletter",
+      "sha256": "1775b721f912760ce6ce1de23e89a0d8b6a53181a7efb9b0609a88310559962b"
+    },
+    {
+      "file": "traces/NoDocumentRetry.itf.json",
+      "scenario": "document",
+      "sha256": "2997e4f723e5997352da3be9fa469bd3743b90063433f77268ed2b91131977a6"
+    },
+    {
+      "file": "traces/NoDocumentCrashRetry.itf.json",
+      "scenario": "document",
+      "sha256": "4cedd4af03e42077ba72dfda70ab2cf919721f19e4dd392fed06581b67e764f8"
+    },
+    {
+      "file": "traces/NoLargeStatus.itf.json",
+      "scenario": "status",
+      "sha256": "e8321571f33df2f7f547d022185c741e158671c9a6a4180116a9fe5d606b6c07"
+    },
+    {
+      "file": "traces/NoRotatedCursor.itf.json",
+      "scenario": "rotation",
+      "sha256": "257ad60c68dbb8fd541b1cbdef5c9ccfc148e51fda86ce9246a4b51c3834f533"
+    },
+    {
+      "file": "traces/NoRotationCrashRecovery.itf.json",
+      "scenario": "rotation",
+      "sha256": "057b1f229500e3a10ab0c4d965e30bf9f04494f56d192dccf47726e40567521f"
+    },
+    {
+      "file": "traces/NoOversizedRotation.itf.json",
+      "scenario": "rotation",
+      "sha256": "a84a153f40d9b07c3618da5c56e3c440496c8f34cd97fdf59095cd59c8577cf6"
+    },
+    {
+      "file": "traces/NoSameKindEnrollment.itf.json",
+      "scenario": "identity",
+      "sha256": "af60e92ce93ec6283ecb9027665fa89d7ae91af18c5d4567b0e2a71ff4cf98b7"
+    },
+    {
+      "file": "traces/NoRevokedAuthentication.itf.json",
+      "scenario": "identity",
+      "sha256": "dd89390652080a3f95f4a4b242e09d375546a1b7deeb0f64c70419c471aef001"
+    },
+    {
+      "file": "traces/NoStableReconnect.itf.json",
+      "scenario": "identity",
+      "sha256": "8a056d27c9341f974380362596d36270db04da06993de52b692dd7f32d2f811f"
+    }
+  ]
+}

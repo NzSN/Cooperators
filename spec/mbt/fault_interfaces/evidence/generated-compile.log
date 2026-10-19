@@ -1,0 +1,151 @@
+    Checking coop-fault-interface-compile v0.0.0 (/tmp/coop-fault-interface-compile)
+warning: unused variable: `initial`
+   --> /home/nzsn/Repos/Cooperators/spec/mbt/fault_interfaces/deadletter/generated/MBFaultDeadLetterMirror.generated.rs:223:17
+    |
+223 | ...   let initial = Value::Record(params.iter().filter(|(k,_)| !k.starts_with('#') && *k != "action_taken" && *k != "parameters").m...
+    |           ^^^^^^^ help: if this is intentional, prefix it with an underscore: `_initial`
+    |
+    = note: `#[warn(unused_variables)]` (part of `#[warn(unused)]`) on by default
+
+warning: unused variable: `payload`
+   --> /home/nzsn/Repos/Cooperators/spec/mbt/fault_interfaces/deadletter/generated/MBFaultDeadLetterMirror.generated.rs:224:17
+    |
+224 |             let payload = Value::Record(params.clone());
+    |                 ^^^^^^^ help: if this is intentional, prefix it with an underscore: `_payload`
+
+warning: unused variable: `initial`
+   --> /home/nzsn/Repos/Cooperators/spec/mbt/fault_interfaces/document/generated/MBFaultDocumentMirror.generated.rs:223:17
+    |
+223 | ...   let initial = Value::Record(params.iter().filter(|(k,_)| !k.starts_with('#') && *k != "action_taken" && *k != "parameters").m...
+    |           ^^^^^^^ help: if this is intentional, prefix it with an underscore: `_initial`
+
+warning: unused variable: `payload`
+   --> /home/nzsn/Repos/Cooperators/spec/mbt/fault_interfaces/document/generated/MBFaultDocumentMirror.generated.rs:224:17
+    |
+224 |             let payload = Value::Record(params.clone());
+    |                 ^^^^^^^ help: if this is intentional, prefix it with an underscore: `_payload`
+
+warning: unused variable: `initial`
+   --> /home/nzsn/Repos/Cooperators/spec/mbt/fault_interfaces/identity/generated/MBFaultIdentityMirror.generated.rs:260:17
+    |
+260 | ...   let initial = Value::Record(params.iter().filter(|(k,_)| !k.starts_with('#') && *k != "action_taken" && *k != "parameters").m...
+    |           ^^^^^^^ help: if this is intentional, prefix it with an underscore: `_initial`
+
+warning: unused variable: `initial`
+   --> /home/nzsn/Repos/Cooperators/spec/mbt/fault_interfaces/inbox/generated/MBFaultInboxMirror.generated.rs:232:17
+    |
+232 | ...   let initial = Value::Record(params.iter().filter(|(k,_)| !k.starts_with('#') && *k != "action_taken" && *k != "parameters").m...
+    |           ^^^^^^^ help: if this is intentional, prefix it with an underscore: `_initial`
+
+warning: unused variable: `initial`
+   --> /home/nzsn/Repos/Cooperators/spec/mbt/fault_interfaces/rotation/generated/MBFaultRotationMirror.generated.rs:284:17
+    |
+284 | ...   let initial = Value::Record(params.iter().filter(|(k,_)| !k.starts_with('#') && *k != "action_taken" && *k != "parameters").m...
+    |           ^^^^^^^ help: if this is intentional, prefix it with an underscore: `_initial`
+
+warning: unused variable: `initial`
+   --> /home/nzsn/Repos/Cooperators/spec/mbt/fault_interfaces/status/generated/MBFaultStatusMirror.generated.rs:243:17
+    |
+243 | ...   let initial = Value::Record(params.iter().filter(|(k,_)| !k.starts_with('#') && *k != "action_taken" && *k != "parameters").m...
+    |           ^^^^^^^ help: if this is intentional, prefix it with an underscore: `_initial`
+
+warning: unused variable: `initial`
+   --> /home/nzsn/Repos/Cooperators/spec/mbt/fault_interfaces/storage/generated/MBFaultStorageMirror.generated.rs:274:17
+    |
+274 | ...   let initial = Value::Record(params.iter().filter(|(k,_)| !k.starts_with('#') && *k != "action_taken" && *k != "parameters").m...
+    |           ^^^^^^^ help: if this is intentional, prefix it with an underscore: `_initial`
+
+warning: unused variable: `initial`
+   --> /home/nzsn/Repos/Cooperators/spec/mbt/fault_interfaces/writer/generated/MBFaultWriterMirror.generated.rs:240:17
+    |
+240 | ...   let initial = Value::Record(params.iter().filter(|(k,_)| !k.starts_with('#') && *k != "action_taken" && *k != "parameters").m...
+    |           ^^^^^^^ help: if this is intentional, prefix it with an underscore: `_initial`
+
+warning: enum `Segment` is never used
+  --> /home/nzsn/Repos/Cooperators/spec/mbt/fault_interfaces/deadletter/generated/MBFaultDeadLetterMirror.generated.rs:91:6
+   |
+91 | enum Segment { Field(&'static str), Index(usize), Variant(&'static str), MapStr(&'static str), MapInt(&'static str) }
+   |      ^^^^^^^
+   |
+   = note: `#[warn(dead_code)]` (part of `#[warn(unused)]`) on by default
+
+warning: function `read_path` is never used
+  --> /home/nzsn/Repos/Cooperators/spec/mbt/fault_interfaces/deadletter/generated/MBFaultDeadLetterMirror.generated.rs:92:4
+   |
+92 | fn read_path<'a>(root: &'a Value, path: &[Segment]) -> Result<&'a Value, BindingError> {
+   |    ^^^^^^^^^
+
+warning: function `map_string_key` is never used
+   --> /home/nzsn/Repos/Cooperators/spec/mbt/fault_interfaces/deadletter/generated/MBFaultDeadLetterMirror.generated.rs:125:4
+    |
+125 | fn map_string_key<'a>(items: &'a [(Value, Value)], wanted: &str) -> Result<&'a Value, BindingError> {
+    |    ^^^^^^^^^^^^^^
+
+warning: function `map_integer_key` is never used
+   --> /home/nzsn/Repos/Cooperators/spec/mbt/fault_interfaces/deadletter/generated/MBFaultDeadLetterMirror.generated.rs:135:4
+    |
+135 | fn map_integer_key<'a>(items: &'a [(Value, Value)], wanted: &str) -> Result<&'a Value, BindingError> {
+    |    ^^^^^^^^^^^^^^^
+
+warning: enum `Segment` is never used
+  --> /home/nzsn/Repos/Cooperators/spec/mbt/fault_interfaces/document/generated/MBFaultDocumentMirror.generated.rs:91:6
+   |
+91 | enum Segment { Field(&'static str), Index(usize), Variant(&'static str), MapStr(&'static str), MapInt(&'static str) }
+   |      ^^^^^^^
+
+warning: function `read_path` is never used
+  --> /home/nzsn/Repos/Cooperators/spec/mbt/fault_interfaces/document/generated/MBFaultDocumentMirror.generated.rs:92:4
+   |
+92 | fn read_path<'a>(root: &'a Value, path: &[Segment]) -> Result<&'a Value, BindingError> {
+   |    ^^^^^^^^^
+
+warning: function `map_string_key` is never used
+   --> /home/nzsn/Repos/Cooperators/spec/mbt/fault_interfaces/document/generated/MBFaultDocumentMirror.generated.rs:125:4
+    |
+125 | fn map_string_key<'a>(items: &'a [(Value, Value)], wanted: &str) -> Result<&'a Value, BindingError> {
+    |    ^^^^^^^^^^^^^^
+
+warning: function `map_integer_key` is never used
+   --> /home/nzsn/Repos/Cooperators/spec/mbt/fault_interfaces/document/generated/MBFaultDocumentMirror.generated.rs:135:4
+    |
+135 | fn map_integer_key<'a>(items: &'a [(Value, Value)], wanted: &str) -> Result<&'a Value, BindingError> {
+    |    ^^^^^^^^^^^^^^^
+
+warning: variants `Index`, `Variant`, `MapStr`, and `MapInt` are never constructed
+  --> /home/nzsn/Repos/Cooperators/spec/mbt/fault_interfaces/identity/generated/MBFaultIdentityMirror.generated.rs:91:37
+   |
+91 | enum Segment { Field(&'static str), Index(usize), Variant(&'static str), MapStr(&'static str), MapInt(&'static str) }
+   |      ------- variants in this enum  ^^^^^         ^^^^^^^                ^^^^^^                ^^^^^^
+
+warning: variants `Index`, `Variant`, `MapStr`, and `MapInt` are never constructed
+  --> /home/nzsn/Repos/Cooperators/spec/mbt/fault_interfaces/inbox/generated/MBFaultInboxMirror.generated.rs:91:37
+   |
+91 | enum Segment { Field(&'static str), Index(usize), Variant(&'static str), MapStr(&'static str), MapInt(&'static str) }
+   |      ------- variants in this enum  ^^^^^         ^^^^^^^                ^^^^^^                ^^^^^^
+
+warning: variants `Index`, `Variant`, `MapStr`, and `MapInt` are never constructed
+  --> /home/nzsn/Repos/Cooperators/spec/mbt/fault_interfaces/rotation/generated/MBFaultRotationMirror.generated.rs:91:37
+   |
+91 | enum Segment { Field(&'static str), Index(usize), Variant(&'static str), MapStr(&'static str), MapInt(&'static str) }
+   |      ------- variants in this enum  ^^^^^         ^^^^^^^                ^^^^^^                ^^^^^^
+
+warning: variants `Index`, `Variant`, `MapStr`, and `MapInt` are never constructed
+  --> /home/nzsn/Repos/Cooperators/spec/mbt/fault_interfaces/status/generated/MBFaultStatusMirror.generated.rs:91:37
+   |
+91 | enum Segment { Field(&'static str), Index(usize), Variant(&'static str), MapStr(&'static str), MapInt(&'static str) }
+   |      ------- variants in this enum  ^^^^^         ^^^^^^^                ^^^^^^                ^^^^^^
+
+warning: variants `Index`, `Variant`, `MapStr`, and `MapInt` are never constructed
+  --> /home/nzsn/Repos/Cooperators/spec/mbt/fault_interfaces/storage/generated/MBFaultStorageMirror.generated.rs:91:37
+   |
+91 | enum Segment { Field(&'static str), Index(usize), Variant(&'static str), MapStr(&'static str), MapInt(&'static str) }
+   |      ------- variants in this enum  ^^^^^         ^^^^^^^                ^^^^^^                ^^^^^^
+
+warning: variants `Index`, `Variant`, `MapStr`, and `MapInt` are never constructed
+  --> /home/nzsn/Repos/Cooperators/spec/mbt/fault_interfaces/writer/generated/MBFaultWriterMirror.generated.rs:91:37
+   |
+91 | enum Segment { Field(&'static str), Index(usize), Variant(&'static str), MapStr(&'static str), MapInt(&'static str) }
+   |      ------- variants in this enum  ^^^^^         ^^^^^^^                ^^^^^^                ^^^^^^
+
+warning: `coop-fault-interface-compile` (lib) generated 24 warnings (run `cargo fix --lib -p coop-fault-interface-compile` to apply 10 suggestions)
+    Finished `dev` profile [unoptimized + debuginfo] target(s) in 0.36s

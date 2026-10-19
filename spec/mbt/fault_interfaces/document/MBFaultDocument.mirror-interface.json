@@ -1,0 +1,96 @@
+{
+  "actions": [
+    {
+      "id": "AbortPublish",
+      "inputs": [],
+      "wireAction": "abort-publish",
+      "wireAliases": []
+    },
+    {
+      "id": "BeginPublish",
+      "inputs": [],
+      "wireAction": "begin-publish",
+      "wireAliases": []
+    },
+    {
+      "id": "CommitPublish",
+      "inputs": [],
+      "wireAction": "commit-publish",
+      "wireAliases": []
+    },
+    {
+      "id": "CrashDoc",
+      "inputs": [],
+      "wireAction": "crash-doc",
+      "wireAliases": []
+    },
+    {
+      "id": "ReadDoc",
+      "inputs": [],
+      "wireAction": "read-doc",
+      "wireAliases": []
+    },
+    {
+      "id": "RecoverDoc",
+      "inputs": [],
+      "wireAction": "recover-doc",
+      "wireAliases": []
+    }
+  ],
+  "initializers": [
+    {
+      "id": "Initialize",
+      "inputs": [],
+      "wireAction": "init",
+      "wireAliases": []
+    }
+  ],
+  "interfaceVersion": "1.0.0",
+  "model": {
+    "module": "MBFaultDocument",
+    "source": "spec/MBFaultDocument.tla"
+  },
+  "observations": [
+    {
+      "expectedType": {
+        "fields": [
+          {
+            "type": {
+              "kind": "bool"
+            },
+            "wireName": "file"
+          },
+          {
+            "type": {
+              "kind": "bool"
+            },
+            "wireName": "up"
+          },
+          {
+            "type": {
+              "kind": "int"
+            },
+            "wireName": "version"
+          }
+        ],
+        "kind": "record"
+      },
+      "id": "Observation",
+      "provenance": "implementation",
+      "wireName": "observation"
+    },
+    {
+      "expectedType": {
+        "kind": "str"
+      },
+      "id": "Result",
+      "provenance": "implementation",
+      "wireName": "result"
+    }
+  ],
+  "schema": "mirrors.model-interface/v1",
+  "wire": {
+    "actionVariable": "action_taken",
+    "parameterVariable": "parameters"
+  }
+}

@@ -1,0 +1,270 @@
+{
+  "compiler": {
+    "binarySha256": "143fbe36a1143771d8ee15b76eb0ae6e661f70a7d4c04e58eba1af67ade05c35",
+    "target": "mirrorrust-v2"
+  },
+  "members": [
+    {
+      "profile": "storage",
+      "projected": "spec/mbt/fault_interfaces/storage/traces/NoAcknowledgedRecovery.itf.json",
+      "projectedSha256": "62b4a06692dd5543d2a14e32c728ce6f8262fba71b3c1550cc666089ce7507cd",
+      "source": "spec/mbt/faults/traces/NoAcknowledgedRecovery.itf.json",
+      "sourceSha256": "8a679f80b650119f240151ac829cf8510f9f4deff95fa0c3ffa3034ae1493b79"
+    },
+    {
+      "profile": "document",
+      "projected": "spec/mbt/fault_interfaces/document/traces/NoDocumentCrashRetry.itf.json",
+      "projectedSha256": "83f7f22d94969215f2b43a7072ed03d9494a7caaa48759472e091d9b969fcc7f",
+      "source": "spec/mbt/faults/traces/NoDocumentCrashRetry.itf.json",
+      "sourceSha256": "4cedd4af03e42077ba72dfda70ab2cf919721f19e4dd392fed06581b67e764f8"
+    },
+    {
+      "profile": "document",
+      "projected": "spec/mbt/fault_interfaces/document/traces/NoDocumentRetry.itf.json",
+      "projectedSha256": "9bf7a677d5cc0c518f3e44bb1ec404af02f87efaa98fdeb9f676a5786687474c",
+      "source": "spec/mbt/faults/traces/NoDocumentRetry.itf.json",
+      "sourceSha256": "2997e4f723e5997352da3be9fa469bd3743b90063433f77268ed2b91131977a6"
+    },
+    {
+      "identityRenaming": {
+        "ids": {
+          "id1": "id2",
+          "id3": "id1"
+        },
+        "tokens": {
+          "token2": "token2",
+          "token3": "token1"
+        }
+      },
+      "profile": "identity",
+      "projected": "spec/mbt/fault_interfaces/identity/traces/NoEnrollmentRetry.itf.json",
+      "projectedSha256": "a14d88be2557d20247592507763a5dea610888d667a90b21275c462a8dc7362e",
+      "source": "spec/mbt/faults/traces/NoEnrollmentRetry.itf.json",
+      "sourceSha256": "4c398538525c93d42671dd821b984e21e44f6209aaba5b242cde447a805b06b6"
+    },
+    {
+      "profile": "inbox",
+      "projected": "spec/mbt/fault_interfaces/inbox/traces/NoInboxCapacityRecovery.itf.json",
+      "projectedSha256": "89440e4ab55853de81e6b64c5588c820a2c7a86b86d909b8e0ba82d559bf7590",
+      "source": "spec/mbt/faults/traces/NoInboxCapacityRecovery.itf.json",
+      "sourceSha256": "d2b4c6cd197d732b49e5592bfd45f81027d7b43389698bf1cf387f5a494c13cf"
+    },
+    {
+      "profile": "status",
+      "projected": "spec/mbt/fault_interfaces/status/traces/NoLargeStatus.itf.json",
+      "projectedSha256": "76af4ae3f546ec038f80f1aaf0643b2cec1a29e0578d0d32d8723c6a5c1f81fc",
+      "source": "spec/mbt/faults/traces/NoLargeStatus.itf.json",
+      "sourceSha256": "e8321571f33df2f7f547d022185c741e158671c9a6a4180116a9fe5d606b6c07"
+    },
+    {
+      "profile": "rotation",
+      "projected": "spec/mbt/fault_interfaces/rotation/traces/NoOversizedRotation.itf.json",
+      "projectedSha256": "db92b37a389f1b1c14bdb76555c4addc6e6c14435379ae83e54c6e3d5ea9cd85",
+      "source": "spec/mbt/faults/traces/NoOversizedRotation.itf.json",
+      "sourceSha256": "0ddc0b8e43262f32ba95d994c210402a74c66a3338b1e798440763878bc2c27d"
+    },
+    {
+      "profile": "storage",
+      "projected": "spec/mbt/fault_interfaces/storage/traces/NoPartialRecovery.itf.json",
+      "projectedSha256": "47371c37937c87c3fd81ce1c9a00faf08fa76916c138c468e6b965b8e2173ae0",
+      "source": "spec/mbt/faults/traces/NoPartialRecovery.itf.json",
+      "sourceSha256": "b2e4c1410e4330f52c748a6503f281c59fa30d54c61c54ebd0e50d48c765b526"
+    },
+    {
+      "profile": "deadletter",
+      "projected": "spec/mbt/fault_interfaces/deadletter/traces/NoProjectionCrashRetry.itf.json",
+      "projectedSha256": "b184743b9ac7a6f9f88b7472d0b6a1048794123d435280a369390a425b7323b3",
+      "source": "spec/mbt/faults/traces/NoProjectionCrashRetry.itf.json",
+      "sourceSha256": "1775b721f912760ce6ce1de23e89a0d8b6a53181a7efb9b0609a88310559962b"
+    },
+    {
+      "profile": "deadletter",
+      "projected": "spec/mbt/fault_interfaces/deadletter/traces/NoProjectionRecovery.itf.json",
+      "projectedSha256": "f7c1dbc0e7a130bdf4ec9f3fd641ebc546e3e52265ace51d8371913d87c2b3c0",
+      "source": "spec/mbt/faults/traces/NoProjectionRecovery.itf.json",
+      "sourceSha256": "4b2cf367ebcb3e4436276dce8bee46d41ae0c247a049dfa64cde7e16e5422cbc"
+    },
+    {
+      "profile": "writer",
+      "projected": "spec/mbt/fault_interfaces/writer/traces/NoRejectedRepair.itf.json",
+      "projectedSha256": "c8d53cc4001d9d2130ac72768e31988e6555bf3c944e891d2e8fe1d19e119069",
+      "source": "spec/mbt/faults/traces/NoRejectedRepair.itf.json",
+      "sourceSha256": "33992dd926bebeec93b91a31886b97233c2e31f922b34d1cc68bbdb864904f0a"
+    },
+    {
+      "identityRenaming": {
+        "ids": {
+          "id1": "id2",
+          "id3": "id1"
+        },
+        "tokens": {
+          "token2": "token1",
+          "token3": "token2"
+        }
+      },
+      "profile": "identity",
+      "projected": "spec/mbt/fault_interfaces/identity/traces/NoRetiredAuthentication.itf.json",
+      "projectedSha256": "7e20db03ec8c81b0363f82d436c27b600f1adf2c27dbc180df07d72f5cef9cd6",
+      "source": "spec/mbt/faults/traces/NoRetiredAuthentication.itf.json",
+      "sourceSha256": "0ca3901961ec2bf37428cda24e018b1dd3824c40733ea3d23f5ab8ab5283ed63"
+    },
+    {
+      "identityRenaming": {
+        "ids": {
+          "id2": "id1"
+        },
+        "tokens": {
+          "token2": "token1"
+        }
+      },
+      "profile": "identity",
+      "projected": "spec/mbt/fault_interfaces/identity/traces/NoRetiredEnrollmentRetry.itf.json",
+      "projectedSha256": "4f2af94d96216576fc25b0c26b4f82d10a9893f16d1dd60c4ceea50449e7f9d6",
+      "source": "spec/mbt/faults/traces/NoRetiredEnrollmentRetry.itf.json",
+      "sourceSha256": "253f779fd15d65ed83f4ece6e79a7a76766ea9a9889bca71b0176ba8bb832f7d"
+    },
+    {
+      "identityRenaming": {
+        "ids": {
+          "id1": "id2",
+          "id2": "id1"
+        },
+        "tokens": {
+          "token1": "token1",
+          "token2": "token2"
+        }
+      },
+      "profile": "identity",
+      "projected": "spec/mbt/fault_interfaces/identity/traces/NoRetiredThenFresh.itf.json",
+      "projectedSha256": "d31da87286a7dcb2157ccbd7fa27c4bd568ea8b908b6f669c4e23b6b5aacde17",
+      "source": "spec/mbt/faults/traces/NoRetiredThenFresh.itf.json",
+      "sourceSha256": "bd541d750405119ed7f3957a2de65074b78c53656045dba8475d09f1c47d84ca"
+    },
+    {
+      "identityRenaming": {
+        "ids": {
+          "id2": "id2",
+          "id3": "id1"
+        },
+        "tokens": {
+          "token1": "token1",
+          "token2": "token2",
+          "token3": "token3"
+        }
+      },
+      "profile": "identity",
+      "projected": "spec/mbt/fault_interfaces/identity/traces/NoRevokedAuthentication.itf.json",
+      "projectedSha256": "99709992be856325a06984a8b56aedbc2e685cd9ef9e6c0afdfb232c1bdbb15e",
+      "source": "spec/mbt/faults/traces/NoRevokedAuthentication.itf.json",
+      "sourceSha256": "292cf7c47e16b7c3e071c05c822f6286710a79f2dc19f69da8e973b6026ef6e0"
+    },
+    {
+      "profile": "rotation",
+      "projected": "spec/mbt/fault_interfaces/rotation/traces/NoRotatedCursor.itf.json",
+      "projectedSha256": "9ebc405d18659914412c190d4bde5cbc90f0a6aa46e431d996003bcf23a3e7e5",
+      "source": "spec/mbt/faults/traces/NoRotatedCursor.itf.json",
+      "sourceSha256": "1ba971c91214a5cb24ac681488eb6b86ba4ee134497ea89117c6307e0fc40de2"
+    },
+    {
+      "profile": "rotation",
+      "projected": "spec/mbt/fault_interfaces/rotation/traces/NoRotationCrashRecovery.itf.json",
+      "projectedSha256": "17169f5758ffc2af111073f274da02c8d6df1309931193b532a7c86b14857967",
+      "source": "spec/mbt/faults/traces/NoRotationCrashRecovery.itf.json",
+      "sourceSha256": "057b1f229500e3a10ab0c4d965e30bf9f04494f56d192dccf47726e40567521f"
+    },
+    {
+      "identityRenaming": {
+        "ids": {
+          "id1": "id1",
+          "id2": "id2"
+        },
+        "tokens": {
+          "token1": "token1",
+          "token2": "token2"
+        }
+      },
+      "profile": "identity",
+      "projected": "spec/mbt/fault_interfaces/identity/traces/NoSameKindEnrollment.itf.json",
+      "projectedSha256": "09d4acf50a023caee9b055964b7f28ce8afc816eda406e3c8530ac2c50236556",
+      "source": "spec/mbt/faults/traces/NoSameKindEnrollment.itf.json",
+      "sourceSha256": "cd48e665da0f59a01d2c11ffeadb31cb112062736a3ddcd512b98ab7b28027f1"
+    },
+    {
+      "identityRenaming": {
+        "ids": {
+          "id2": "id1",
+          "id3": "id2"
+        },
+        "tokens": {
+          "token2": "token1",
+          "token3": "token2"
+        }
+      },
+      "profile": "identity",
+      "projected": "spec/mbt/fault_interfaces/identity/traces/NoStableReconnect.itf.json",
+      "projectedSha256": "9aadaa1b170934725fb7c33f02af769cf6b99e933e46f7ed155178e28df78d48",
+      "source": "spec/mbt/faults/traces/NoStableReconnect.itf.json",
+      "sourceSha256": "b38da649725a83680388b311fb9b26ebfa93c82ade5aa961d0915f39d36214f5"
+    },
+    {
+      "identityRenaming": {
+        "ids": {
+          "id1": "id1",
+          "id2": "id2"
+        },
+        "tokens": {
+          "token1": "token2",
+          "token2": "token1",
+          "token3": "token3"
+        }
+      },
+      "profile": "identity",
+      "projected": "spec/mbt/fault_interfaces/identity/traces/NoStaleEnrollmentRetry.itf.json",
+      "projectedSha256": "af589adbf9f5c1a4b5377b775b70f82f9e20411bdd00337207814e2448face2d",
+      "source": "spec/mbt/faults/traces/NoStaleEnrollmentRetry.itf.json",
+      "sourceSha256": "65c16aff174cf05fa359aea2fa404f1923ac524a29be6178173c743ed4923c97"
+    },
+    {
+      "profile": "storage",
+      "projected": "spec/mbt/fault_interfaces/storage/traces/NoStorageRecovery.itf.json",
+      "projectedSha256": "f9a5588ffa22d370dc8c49be4402a6cb42f0e02ffe5facf471dfcad41f176918",
+      "source": "spec/mbt/faults/traces/NoStorageRecovery.itf.json",
+      "sourceSha256": "e93175eec98a3dc4a4bc8eb2b9cca34bd2984c627b310dcec535f0a11703f403"
+    },
+    {
+      "profile": "writer",
+      "projected": "spec/mbt/fault_interfaces/writer/traces/NoUnownedWrite.itf.json",
+      "projectedSha256": "21b0f8a6024ceb81462addf9b31c9afd91b0746f9887181c0ff9dcd50fc263c6",
+      "source": "spec/mbt/faults/traces/NoUnownedWrite.itf.json",
+      "sourceSha256": "1b7c756d4780e5d407b6b372032f34fa58bb4fca20db974c492084dfbc7046c1"
+    },
+    {
+      "profile": "writer",
+      "projected": "spec/mbt/fault_interfaces/writer/traces/NoWriterHandoff.itf.json",
+      "projectedSha256": "9bb0a04c9e07cb9ea6acb5cdb48efa8024af0318b27c7dfbf70a6a16bf767b09",
+      "source": "spec/mbt/faults/traces/NoWriterHandoff.itf.json",
+      "sourceSha256": "332b6a1383dbee9416405fa20515b1ce77ffc461843b59d943de7b89ac1e5c7a"
+    },
+    {
+      "profile": "writer",
+      "projected": "spec/mbt/fault_interfaces/writer/traces/NoWriterRejection.itf.json",
+      "projectedSha256": "77876f10c14b022f3930314e0c7eb7360a95aadc43202706521702370fe4f27f",
+      "source": "spec/mbt/faults/traces/NoWriterRejection.itf.json",
+      "sourceSha256": "434abd1ff3baa89a1a45a21b97756cc0cdc0e310ee19edbee030d2f85c0655ee"
+    }
+  ],
+  "projection": {
+    "identity": "Bijectively rename opaque IDs and tokens by first allocation occurrence; preserve equality, sentinels, launch keys and all other fields. The SUT independently names actual replies; no expected values or mapping are passed to it.",
+    "otherProfiles": "Preserve observation/result/inputs exactly.",
+    "storage": "Remove phase and recoveryRequired; retain actual records and factual successful receipts."
+  },
+  "proofBoundary": "Declaration-only interface views; canonical MBFaults and its fixed-input checks remain the transition oracle. Compiler check proves structural binding, not semantic refinement.",
+  "schema": "cooperators.generated-fault-interface-bridge/v1",
+  "sources": {
+    "spec/AgentInstances.tla": "988b77892ff9899daba2789ef258a863b9b9f3619257343674d8e76b7b739301",
+    "spec/MBFaults.tla": "117e081f6f540f628862c7c77dbfe1f41705a732abeee91c68a4721096c3222a",
+    "spec/mbt/check_fault_detection.py": "75e746cf6c0407afb0990c5396261b7e4f84d657dcd751cb6f57acf1267727d4",
+    "spec/mbt/faults/manifest.json": "59d21e1ca2c090e443f7c8077167ad20f166a3360d94c626706c3aef2c6f2ff9",
+    "spec/mbt/generate_fault_interfaces.py": "275693c84229947a7aece7c11c598e985e1364cfd020a5aaebc71717d1a85d5e"
+  }
+}

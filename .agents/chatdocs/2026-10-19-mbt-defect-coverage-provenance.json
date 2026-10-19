@@ -1,0 +1,75 @@
+{
+  "report_date": "2026-10-19",
+  "archived_at_utc": "2026-10-19T06:14:55.287560+00:00",
+  "project": "Cooperators",
+  "head": "ccca77295277b10dad5234bf8ae3a916ad9a0a1a",
+  "runtime_tests_rerun_for_report": false,
+  "canonical_sources_unchanged_by_archive": true,
+  "production_src_diff_at_archive": [],
+  "source_hashes": [
+    {
+      "path": "spec/mbt/README.md",
+      "sha256": "e942179aa04b07315ce37dda492b753952a934f4963109aadc1401be88262226"
+    },
+    {
+      "path": "spec/mbt/src/main.rs",
+      "sha256": "ea41ea5d0ef73527f63948ba069e04367dfcf77c7bf8fe18455604164634bac7"
+    },
+    {
+      "path": "spec/mbt/src/writers.rs",
+      "sha256": "dec514a583ca3d10c01ad7052dadd171f8576e0184913ff014078b8ee7164d83"
+    },
+    {
+      "path": "spec/MBWriters.tla",
+      "sha256": "e55dd254f424ea614b0bf6e70ad34d05e5350c5fe665ad2fd0f7cf97890991be"
+    },
+    {
+      "path": "spec/CooperatorsHardening.tla",
+      "sha256": "0ef290e37cacbd43d0c13948b4e4345185f03d20cbfa27852e9f299de7b8087b"
+    },
+    {
+      "path": "spec/CooperatorsInstances.tla",
+      "sha256": "137eaa95815b8db38acc00560b65fa55bcc9f3f419c15568a9d6a7ca6ff7fee1"
+    },
+    {
+      "path": "spec/README.md",
+      "sha256": "6938257ed47c539cd71cd856590894799436091e385060fc5447d516352bf1d2"
+    },
+    {
+      "path": "docs/design/0001-cooperatorsd-broker.md",
+      "sha256": "99a3ba70d1dac8ffbd2c8affa7866cdc077a31ac8e286b74a610ba43c9f010a8"
+    }
+  ],
+  "recorded_mbt": {
+    "total_traces": 39,
+    "passed": 36,
+    "failed": 3,
+    "failed_traces": [
+      "NoCompeteW1",
+      "NoCompeteW2",
+      "NoRejectedRecovery"
+    ],
+    "original_log": "/tmp/cooperators-mbt-retry/multi-writer-replay.log",
+    "archived_log": "2026-10-19-mbt-defect-coverage-evidence.log",
+    "sha256": "736486e3ac8ed5b92bc2680f3b8607535d3b91875b1dca991d794ef6012f0ddb",
+    "scope": "Isolated unchanged core build, unused HTTP module stubbed; writer subprocesses use production startup/recovery with HTTP disabled and real UDS. Full pinned binary and HTTP transport are not qualified.",
+    "detailed_failed_fixture_roots": "Original /tmp paths in the log are historical references; fixture directories are not copied into this archive."
+  },
+  "recorded_composed_tla": {
+    "passed_checks": 22,
+    "total_checks": 22,
+    "correct_policy_profiles": 4,
+    "expected_fault_counterexamples": 12,
+    "reachability_witnesses": 6,
+    "max_transitions": 6,
+    "launches": 2,
+    "combined_distinct_states": 51871,
+    "qualification_source": "/tmp/coop-hardening-x0w9itir/qualification.json",
+    "replayed_against_implementation": false
+  },
+  "presentation": {
+    "format": "HTML only",
+    "external_resources": false,
+    "visual_inspection": false
+  }
+}

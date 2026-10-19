@@ -1,0 +1,43 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Cooperators — Chat document archive</title>
+<style>
+*{box-sizing:border-box}body{margin:0;background:#f5f3ee;color:#202b31;font:17px/1.65 system-ui,-apple-system,"Segoe UI",sans-serif}main{max-width:900px;margin:auto;padding:54px 24px}h1{font:700 2.7rem/1.2 Georgia,serif;margin:8px 0 18px}h2{font-size:1.25rem;margin:8px 0}a{color:#075c59;text-underline-offset:3px}a:focus-visible{outline:3px solid #075c59;outline-offset:4px}.eyebrow{font-size:.8rem;letter-spacing:.12em;text-transform:uppercase;color:#53656b}.entry{padding:24px;background:#fffefa;border:1px solid #d7dedb;border-radius:8px;margin:30px 0}.meta{font-size:.85rem;color:#53656b}p{margin:8px 0 16px}footer{font-size:.86rem;color:#53656b}code{font-size:.9em}
+</style>
+</head>
+<body><main>
+<div class="eyebrow">Project archive</div>
+<h1>Cooperators chat documents</h1>
+<p>Reports and explanations from project discussions. Canonical designs, specifications, and implementation evidence remain in their repository locations.</p>
+<article class="entry">
+<div class="meta">2026-10-19 · Proposed execution plan · HTML</div>
+<h2><a href="2026-10-19-generated-adapter-fault-mbt-plan.html">Generated-adapter MBT for implementation defects</a></h2>
+<p>Six execution gates, a storage pilot, and a detection matrix for the seven reviewed defect classes plus per-launch identity. Follows the compiler-generated Rust adapter pipeline.</p>
+<a href="../../docs/design/0002-generated-adapter-fault-mbt-plan.md">Canonical plan</a> · <a href="2026-10-19-generated-adapter-fault-mbt-plan-provenance.json">Provenance</a>
+</article>
+<article class="entry">
+<div class="meta">2026-10-19 · Architecture correction · HTML</div>
+<h2><a href="2026-10-19-generated-ports-and-fault-injection.html">Generated ports and fault injection</a></h2>
+<p>Corrects the earlier explanation: the compiler generates port traits/bindings; Rust implements real operations and fault hooks. New fault coverage should follow the established compiler pipeline.</p>
+<a href="2026-10-19-generated-ports-and-fault-injection-provenance.json">Source identities</a>
+</article>
+<article class="entry">
+<div class="meta">2026-10-19 · Earlier explanation · Architecture corrected in the newer report</div>
+<h2><a href="2026-10-19-fault-port-and-implementation-fixes.html">Fault-injection port and implementation fixes</a></h2>
+<p>How the missing Rust test interface makes failures reproducible, what production code must change, and how the two pieces establish a verified fix.</p>
+<p class="meta">Includes the generated storage-recovery scenario. No runtime tests or model checks were rerun for this explanation.</p>
+<a href="2026-10-19-fault-port-and-implementation-fixes-provenance.json">Source identities</a> · <a href="2026-10-19-fault-port-storage-recovery.itf.json">Generated example trace</a>
+</article>
+<article class="entry">
+<div class="meta">2026-10-19 · MBT coverage assessment · HTML</div>
+<h2><a href="2026-10-19-mbt-defect-coverage.html">What can current MBT reveal?</a></h2>
+<p>Observed writer/startup failures, remaining defect-coverage gaps, the protocol observation boundary, and the distinction between implementation replay and TLA+ checks.</p>
+<p class="meta">Recorded result: 39 traces, 3 failures. No runtime tests were rerun to create this report.</p>
+<a href="2026-10-19-mbt-defect-coverage-evidence.log">Preserved replay log</a> · <a href="2026-10-19-mbt-defect-coverage-provenance.json">Source identities</a>
+</article>
+<footer>Maintained in <code>.agents/chatdocs/</code>. <a href="../../spec/mbt/README.md">Canonical MBT documentation</a></footer>
+</main></body>
+</html>

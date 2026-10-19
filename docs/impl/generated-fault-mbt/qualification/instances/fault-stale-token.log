@@ -1,0 +1,128 @@
+TLC2 Version 2.19 of 08 August 2024 (rev: 5a47802)
+Running depth-first search Model-Checking with fp 39 and seed -8627504475820582278 with 1 worker on 12 cores with 2660MB heap and 64MB offheap memory [pid: 376340] (Linux 6.18.54.1-microsoft-standard-WSL2 amd64, Ubuntu 25.0.4.1 x86_64).
+Parsing file /home/nzsn/Repos/Cooperators/docs/impl/generated-fault-mbt/qualification/instances/AgentInstances.tla
+Parsing file /tmp/Integers.tla
+Parsing file /tmp/Sequences.tla
+Parsing file /tmp/FiniteSets.tla
+Parsing file /tmp/Naturals.tla
+Semantic processing of module Naturals
+Semantic processing of module Integers
+Semantic processing of module Sequences
+Semantic processing of module FiniteSets
+Semantic processing of module AgentInstances
+Starting... (2026-10-19 17:56:46)
+Finished computing initial states: 1 states generated, with 1 of them distinct.
+Starting level 2: 1 states generated, 1 distinct states found.
+Starting level 3: 25 states generated, 13 distinct states found.
+Error: Invariant RevokedCredentialsRejected is violated.
+Error: The behavior up to this point is:
+State 1:
+/\ steps = 0
+/\ st = [ messages |-> <<>>,
+  enrolled |-> {},
+  active |-> {},
+  connected |-> {},
+  kind |-> [launchA |-> "codex", launchB |-> "codex"],
+  label |-> [launchA |-> "codex", launchB |-> "codex"],
+  id |-> [launchA |-> "-id", launchB |-> "-id"],
+  firstId |-> [launchA |-> "-id", launchB |-> "-id"],
+  reply |-> [launchA |-> "-id", launchB |-> "-id"],
+  currentToken |-> [launchA |-> "-token", launchB |-> "-token"],
+  usedIds |-> {},
+  issuedOwner |-> [id1 |-> "-instance", id2 |-> "-instance"],
+  usedTokens |-> {},
+  tokenOwner |-> [token1 |-> "-id", token2 |-> "-id", token3 |-> "-id"],
+  tokenInstance |->
+      [token1 |-> "-instance", token2 |-> "-instance", token3 |-> "-instance"],
+  validTokens |-> {},
+  revoked |-> {},
+  inbox |-> [id1 |-> <<>>, id2 |-> <<>>],
+  requests |-> [id1 |-> ("same-key" :> "-id"), id2 |-> ("same-key" :> "-id")],
+  ack |-> [id1 |-> 0, id2 |-> 0],
+  authorizedAck |-> [id1 |-> 0, id2 |-> 0],
+  heartbeats |-> [id1 |-> 0, id2 |-> 0],
+  authorizedHeartbeats |-> [id1 |-> 0, id2 |-> 0],
+  heartbeatDone |-> {},
+  leaseHolder |-> "-id",
+  fence |-> 0,
+  lastLease |->
+      [ caller |-> "-id",
+        holder |-> "-id",
+        supplied |-> 0,
+        current |-> 0,
+        granted |-> FALSE ] ]
+
+State 2:
+/\ steps = 0
+/\ st = [ messages |-> <<>>,
+  enrolled |-> {"launchA"},
+  active |-> {"launchA"},
+  connected |-> {"launchA"},
+  kind |-> [launchA |-> "codex", launchB |-> "codex"],
+  label |-> [launchA |-> "codex", launchB |-> "codex"],
+  id |-> [launchA |-> "id1", launchB |-> "-id"],
+  firstId |-> [launchA |-> "id1", launchB |-> "-id"],
+  reply |-> [launchA |-> "id1", launchB |-> "-id"],
+  currentToken |-> [launchA |-> "token3", launchB |-> "-token"],
+  usedIds |-> {"id1"},
+  issuedOwner |-> [id1 |-> "launchA", id2 |-> "-instance"],
+  usedTokens |-> {"token3"},
+  tokenOwner |-> [token1 |-> "-id", token2 |-> "-id", token3 |-> "id1"],
+  tokenInstance |->
+      [token1 |-> "-instance", token2 |-> "-instance", token3 |-> "launchA"],
+  validTokens |-> {"token3"},
+  revoked |-> {},
+  inbox |-> [id1 |-> <<>>, id2 |-> <<>>],
+  requests |-> [id1 |-> ("same-key" :> "-id"), id2 |-> ("same-key" :> "-id")],
+  ack |-> [id1 |-> 0, id2 |-> 0],
+  authorizedAck |-> [id1 |-> 0, id2 |-> 0],
+  heartbeats |-> [id1 |-> 0, id2 |-> 0],
+  authorizedHeartbeats |-> [id1 |-> 0, id2 |-> 0],
+  heartbeatDone |-> {},
+  leaseHolder |-> "-id",
+  fence |-> 0,
+  lastLease |->
+      [ caller |-> "-id",
+        holder |-> "-id",
+        supplied |-> 0,
+        current |-> 0,
+        granted |-> FALSE ] ]
+
+State 3:
+/\ steps = 0
+/\ st = [ messages |-> <<>>,
+  enrolled |-> {"launchA"},
+  active |-> {"launchA"},
+  connected |-> {"launchA"},
+  kind |-> [launchA |-> "codex", launchB |-> "codex"],
+  label |-> [launchA |-> "codex", launchB |-> "codex"],
+  id |-> [launchA |-> "id1", launchB |-> "-id"],
+  firstId |-> [launchA |-> "id1", launchB |-> "-id"],
+  reply |-> [launchA |-> "id1", launchB |-> "-id"],
+  currentToken |-> [launchA |-> "token1", launchB |-> "-token"],
+  usedIds |-> {"id1"},
+  issuedOwner |-> [id1 |-> "launchA", id2 |-> "-instance"],
+  usedTokens |-> {"token1", "token3"},
+  tokenOwner |-> [token1 |-> "id1", token2 |-> "-id", token3 |-> "id1"],
+  tokenInstance |->
+      [token1 |-> "launchA", token2 |-> "-instance", token3 |-> "launchA"],
+  validTokens |-> {"token1", "token3"},
+  revoked |-> {"token3"},
+  inbox |-> [id1 |-> <<>>, id2 |-> <<>>],
+  requests |-> [id1 |-> ("same-key" :> "-id"), id2 |-> ("same-key" :> "-id")],
+  ack |-> [id1 |-> 0, id2 |-> 0],
+  authorizedAck |-> [id1 |-> 0, id2 |-> 0],
+  heartbeats |-> [id1 |-> 0, id2 |-> 0],
+  authorizedHeartbeats |-> [id1 |-> 0, id2 |-> 0],
+  heartbeatDone |-> {},
+  leaseHolder |-> "-id",
+  fence |-> 0,
+  lastLease |->
+      [ caller |-> "-id",
+        holder |-> "-id",
+        supplied |-> 0,
+        current |-> 0,
+        granted |-> FALSE ] ]
+
+217 states generated, 49 distinct states found.
+Finished in 01s at (2026-10-19 17:56:46)

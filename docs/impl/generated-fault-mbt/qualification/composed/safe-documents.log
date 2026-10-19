@@ -1,0 +1,36 @@
+TLC2 Version 2.19 of 08 August 2024 (rev: 5a47802)
+Running depth-first search Model-Checking with fp 37 and seed 8982283165452763436 with 1 worker on 12 cores with 2660MB heap and 64MB offheap memory [pid: 381688] (Linux 6.18.54.1-microsoft-standard-WSL2 amd64, Ubuntu 25.0.4.1 x86_64).
+Parsing file /home/nzsn/Repos/Cooperators/docs/impl/generated-fault-mbt/qualification/composed/CooperatorsInstances.tla
+Parsing file /tmp/Integers.tla
+Parsing file /tmp/Sequences.tla
+Parsing file /tmp/FiniteSets.tla
+Parsing file /tmp/TLC.tla
+Parsing file /tmp/Naturals.tla
+Parsing file /home/nzsn/Repos/Cooperators/docs/impl/generated-fault-mbt/qualification/composed/AgentInstances.tla
+Parsing file /home/nzsn/Repos/Cooperators/docs/impl/generated-fault-mbt/qualification/composed/Cooperators.tla
+Semantic processing of module Naturals
+Semantic processing of module Integers
+Semantic processing of module Sequences
+Semantic processing of module FiniteSets
+Semantic processing of module TLC
+Semantic processing of module AgentInstances
+Semantic processing of module Cooperators
+Semantic processing of module CooperatorsInstances
+Starting... (2026-10-19 17:58:44)
+Finished computing initial states: 1 states generated, with 1 of them distinct.
+Starting level 2: 1 states generated, 1 distinct states found.
+Starting level 3: 35 states generated, 6 distinct states found.
+Starting level 4: 234 states generated, 24 distinct states found.
+Starting level 5: 975 states generated, 100 distinct states found.
+Starting level 6: 3987 states generated, 353 distinct states found.
+Starting level 7: 15232 states generated, 1134 distinct states found.
+Progress: 41893 states generated, 3384 distinct states found.
+Starting level 8: 55348 states generated, 3538 distinct states found.
+Progress: 89904 states generated, 3538 distinct states found.
+Model checking completed. No error has been found.
+  Estimates of the probability that TLC did not check all reachable states
+  because two distinct states had the same fingerprint:
+  calculated (optimistic):  val = 1.8E-11
+  based on the actual fingerprints:  val = 7.7E-4
+95464 states generated, 3538 distinct states found.
+Finished in 12s at (2026-10-19 17:58:55)

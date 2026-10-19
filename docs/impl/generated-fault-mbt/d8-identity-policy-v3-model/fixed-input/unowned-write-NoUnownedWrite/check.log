@@ -1,0 +1,93 @@
+Picked up JAVA_TOOL_OPTIONS: "-Djava.io.tmpdir=/tmp/coop-fault-detection-2dmglnx0/unowned-write-NoUnownedWrite/jvm-tmp"
+TLC2 Version 2.19 of 08 August 2024 (rev: 5a47802)
+Running depth-first search Model-Checking with fp 94 and seed 3910789608274360359 with 1 worker on 12 cores with 2660MB heap and 64MB offheap memory [pid: 743] (Linux 6.18.54.1-microsoft-standard-WSL2 amd64, Ubuntu 25.0.4.1 x86_64).
+Parsing file /tmp/coop-fault-detection-2dmglnx0/unowned-write-NoUnownedWrite/TraceProbe.tla
+Parsing file /tmp/coop-fault-detection-2dmglnx0/unowned-write-NoUnownedWrite/MBFaults.tla
+Parsing file /tmp/coop-fault-detection-2dmglnx0/unowned-write-NoUnownedWrite/jvm-tmp/TLC.tla
+Parsing file /tmp/coop-fault-detection-2dmglnx0/unowned-write-NoUnownedWrite/jvm-tmp/Integers.tla
+Parsing file /tmp/coop-fault-detection-2dmglnx0/unowned-write-NoUnownedWrite/jvm-tmp/Sequences.tla
+Parsing file /tmp/coop-fault-detection-2dmglnx0/unowned-write-NoUnownedWrite/jvm-tmp/FiniteSets.tla
+Parsing file /tmp/coop-fault-detection-2dmglnx0/unowned-write-NoUnownedWrite/jvm-tmp/Naturals.tla
+Parsing file /tmp/coop-fault-detection-2dmglnx0/unowned-write-NoUnownedWrite/AgentInstances.tla
+Semantic processing of module Naturals
+Semantic processing of module Integers
+Semantic processing of module Sequences
+Semantic processing of module FiniteSets
+Semantic processing of module AgentInstances
+Semantic processing of module MBFaults
+Semantic processing of module TLC
+Semantic processing of module TraceProbe
+Starting... (2026-10-19 18:04:11)
+Finished computing initial states: 1 states generated, with 1 of them distinct.
+Starting level 2: 1 states generated, 1 distinct states found.
+Starting level 3: 2 states generated, 2 distinct states found.
+Error: Invariant TraceConforms is violated.
+Error: The behavior up to this point is:
+State 1:
+/\ enrollmentHistory = [ rejected |-> {},
+  firstToken |-> [launch1 |-> "-token", launch2 |-> "-token"],
+  retried |-> {},
+  retired |-> {},
+  freshAfterRetire |-> FALSE,
+  safe |-> TRUE ]
+/\ s = [ owners |-> {},
+  records |-> <<>>,
+  rejected |-> {},
+  torn |-> FALSE,
+  tears |-> 0,
+  writeOwned |-> TRUE,
+  replayOwned |-> TRUE,
+  rejectedReadOnly |-> TRUE,
+  stopped |-> "-" ]
+/\ action_taken = "init"
+/\ parameters = [actor |-> "-", mode |-> "-", scenario |-> "writer", value |-> 0]
+/\ result = "none"
+/\ steps = 0
+/\ observation = [owners |-> {}, records |-> <<>>, rejected |-> {}, torn |-> FALSE]
+
+State 2:
+/\ enrollmentHistory = [ rejected |-> {},
+  firstToken |-> [launch1 |-> "-token", launch2 |-> "-token"],
+  retried |-> {},
+  retired |-> {},
+  freshAfterRetire |-> FALSE,
+  safe |-> TRUE ]
+/\ s = [ owners |-> {"p2"},
+  records |-> <<>>,
+  rejected |-> {},
+  torn |-> FALSE,
+  tears |-> 0,
+  writeOwned |-> TRUE,
+  replayOwned |-> TRUE,
+  rejectedReadOnly |-> TRUE,
+  stopped |-> "-" ]
+/\ action_taken = "start"
+/\ parameters = [actor |-> "p2", mode |-> "different", scenario |-> "writer", value |-> 0]
+/\ result = "ok"
+/\ steps = 1
+/\ observation = [owners |-> {"p2"}, records |-> <<>>, rejected |-> {}, torn |-> FALSE]
+
+State 3:
+/\ enrollmentHistory = [ rejected |-> {},
+  firstToken |-> [launch1 |-> "-token", launch2 |-> "-token"],
+  retried |-> {},
+  retired |-> {},
+  freshAfterRetire |-> FALSE,
+  safe |-> TRUE ]
+/\ s = [ owners |-> {"p2"},
+  records |-> <<1>>,
+  rejected |-> {},
+  torn |-> FALSE,
+  tears |-> 0,
+  writeOwned |-> FALSE,
+  replayOwned |-> TRUE,
+  rejectedReadOnly |-> TRUE,
+  stopped |-> "-" ]
+/\ action_taken = "writer-append"
+/\ parameters = [actor |-> "p1", mode |-> "-", scenario |-> "writer", value |-> 0]
+/\ result = "ok"
+/\ steps = 2
+/\ observation = [owners |-> {"p2"}, records |-> <<1>>, rejected |-> {}, torn |-> FALSE]
+
+4 states generated, 3 distinct states found.
+Finished in 05s at (2026-10-19 18:04:11)

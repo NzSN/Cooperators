@@ -1,0 +1,16 @@
+{
+  "profiles": [
+    "writer",
+    "storage",
+    "inbox",
+    "deadletter",
+    "document",
+    "status",
+    "rotation",
+    "identity"
+  ],
+  "workers": 4,
+  "jvmTmpdirs": "isolated per check",
+  "sourceSha256": "117e081f6f540f628862c7c77dbfe1f41705a732abeee91c68a4721096c3222a",
+  "result": "all per-profile checker subprocesses completed successfully"
+}

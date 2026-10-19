@@ -1,0 +1,12 @@
+scaffolded reviewable proposal /tmp/coop-fault-interface-ay9gjifm/MBFaultStorage.mirror-interface.scaffold.json 792436bf2f4ba6548c211c4225c3b49d9ac7ca7978531fc2132e762b3a47ce63
+model-interface check clean
+{"actions":[{"count":9,"id":"AppendBytes"},{"count":3,"id":"Initialize"},{"count":3,"id":"InspectStorage"},{"count":3,"id":"RecoverStorage"},{"count":1,"id":"SyncFail"},{"count":4,"id":"SyncOk"}],"schema":"mirrors.model-interface-coverage/v1","semanticDigest":"396ddbafc8cb224ae03c7b5cd4b82f26b8bb47151ec1975a93a661935a548ab7","states":23,"traces":3,"unseenActions":[]}
+Generated fault interface bridge and selected compiler checks clean
+storage fixture: /home/nzsn/Repos/Cooperators/docs/impl/generated-fault-mbt/d2-generated-storage-controls/corrupt-observation/fixtures/storage-wUIMk6
+FAIL fault-storage /home/nzsn/Repos/Cooperators/spec/mbt/fault_interfaces/storage/traces/NoAcknowledgedRecovery.itf.json: step mismatch on action "append-bytes": expected {"observation":{"receipts":[],"records":[{"id":1,"seq":1}]},"result":"pending"}, got {"observation":{"receipts":[],"records":[{"id":1,"seq":2}]},"result":"pending"}
+storage fixture: /home/nzsn/Repos/Cooperators/docs/impl/generated-fault-mbt/d2-generated-storage-controls/corrupt-observation/fixtures/storage-WYYefo
+FAIL fault-storage /home/nzsn/Repos/Cooperators/spec/mbt/fault_interfaces/storage/traces/NoPartialRecovery.itf.json: step mismatch on action "append-bytes": expected {"observation":{"receipts":[],"records":[{"id":1,"seq":0}]},"result":"io-error"}, got {"observation":{"receipts":[],"records":[{"id":1,"seq":1}]},"result":"io-error"}
+storage fixture: /home/nzsn/Repos/Cooperators/docs/impl/generated-fault-mbt/d2-generated-storage-controls/corrupt-observation/fixtures/storage-nsR3uE
+FAIL fault-storage /home/nzsn/Repos/Cooperators/spec/mbt/fault_interfaces/storage/traces/NoStorageRecovery.itf.json: step mismatch on action "append-bytes": expected {"observation":{"receipts":[],"records":[{"id":1,"seq":1}]},"result":"pending"}, got {"observation":{"receipts":[],"records":[{"id":1,"seq":2}]},"result":"pending"}
+fault MBT: 3 traces, 3 failures
+fault MBT gate failed: 3 fault traces failed

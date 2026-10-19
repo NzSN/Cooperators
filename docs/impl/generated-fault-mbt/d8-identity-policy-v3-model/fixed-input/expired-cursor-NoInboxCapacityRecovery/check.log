@@ -1,0 +1,150 @@
+Picked up JAVA_TOOL_OPTIONS: "-Djava.io.tmpdir=/tmp/coop-fault-detection-2dmglnx0/expired-cursor-NoInboxCapacityRecovery/jvm-tmp"
+TLC2 Version 2.19 of 08 August 2024 (rev: 5a47802)
+Running depth-first search Model-Checking with fp 13 and seed 6301436920125474094 with 1 worker on 12 cores with 2660MB heap and 64MB offheap memory [pid: 853] (Linux 6.18.54.1-microsoft-standard-WSL2 amd64, Ubuntu 25.0.4.1 x86_64).
+Parsing file /tmp/coop-fault-detection-2dmglnx0/expired-cursor-NoInboxCapacityRecovery/TraceProbe.tla
+Parsing file /tmp/coop-fault-detection-2dmglnx0/expired-cursor-NoInboxCapacityRecovery/MBFaults.tla
+Parsing file /tmp/coop-fault-detection-2dmglnx0/expired-cursor-NoInboxCapacityRecovery/jvm-tmp/TLC.tla
+Parsing file /tmp/coop-fault-detection-2dmglnx0/expired-cursor-NoInboxCapacityRecovery/jvm-tmp/Integers.tla
+Parsing file /tmp/coop-fault-detection-2dmglnx0/expired-cursor-NoInboxCapacityRecovery/jvm-tmp/Sequences.tla
+Parsing file /tmp/coop-fault-detection-2dmglnx0/expired-cursor-NoInboxCapacityRecovery/jvm-tmp/FiniteSets.tla
+Parsing file /tmp/coop-fault-detection-2dmglnx0/expired-cursor-NoInboxCapacityRecovery/jvm-tmp/Naturals.tla
+Parsing file /tmp/coop-fault-detection-2dmglnx0/expired-cursor-NoInboxCapacityRecovery/AgentInstances.tla
+Semantic processing of module Naturals
+Semantic processing of module Integers
+Semantic processing of module Sequences
+Semantic processing of module FiniteSets
+Semantic processing of module AgentInstances
+Semantic processing of module MBFaults
+Semantic processing of module TLC
+Semantic processing of module TraceProbe
+Starting... (2026-10-19 18:04:17)
+Finished computing initial states: 1 states generated, with 1 of them distinct.
+Starting level 2: 1 states generated, 1 distinct states found.
+Starting level 3: 2 states generated, 2 distinct states found.
+Starting level 4: 4 states generated, 3 distinct states found.
+Starting level 5: 7 states generated, 4 distinct states found.
+Starting level 6: 11 states generated, 5 distinct states found.
+Error: Invariant TraceConforms is violated.
+Error: The behavior up to this point is:
+State 1:
+/\ enrollmentHistory = [ rejected |-> {},
+  firstToken |-> [launch1 |-> "-token", launch2 |-> "-token"],
+  retried |-> {},
+  retired |-> {},
+  freshAfterRetire |-> FALSE,
+  safe |-> TRUE ]
+/\ s = [ ack |-> 0,
+  cursor |-> 0,
+  sent |-> 0,
+  delivered |-> <<>>,
+  expired |-> {},
+  waited |-> FALSE,
+  blocked |-> FALSE ]
+/\ action_taken = "init"
+/\ parameters = [actor |-> "-", mode |-> "-", scenario |-> "inbox", value |-> 0]
+/\ result = "none"
+/\ steps = 0
+/\ observation = [ack |-> 0, cursor |-> 0, head |-> 0, messages |-> <<>>, pending |-> 0]
+
+State 2:
+/\ enrollmentHistory = [ rejected |-> {},
+  firstToken |-> [launch1 |-> "-token", launch2 |-> "-token"],
+  retried |-> {},
+  retired |-> {},
+  freshAfterRetire |-> FALSE,
+  safe |-> TRUE ]
+/\ s = [ ack |-> 0,
+  cursor |-> 0,
+  sent |-> 1,
+  delivered |-> <<>>,
+  expired |-> {},
+  waited |-> FALSE,
+  blocked |-> FALSE ]
+/\ action_taken = "inbox-send"
+/\ parameters = [actor |-> "-", mode |-> "expiring", scenario |-> "inbox", value |-> 0]
+/\ result = "ok"
+/\ steps = 1
+/\ observation = [ack |-> 0, cursor |-> 0, head |-> 1, messages |-> <<>>, pending |-> 1]
+
+State 3:
+/\ enrollmentHistory = [ rejected |-> {},
+  firstToken |-> [launch1 |-> "-token", launch2 |-> "-token"],
+  retried |-> {},
+  retired |-> {},
+  freshAfterRetire |-> FALSE,
+  safe |-> TRUE ]
+/\ s = [ ack |-> 0,
+  cursor |-> 0,
+  sent |-> 2,
+  delivered |-> <<>>,
+  expired |-> {},
+  waited |-> FALSE,
+  blocked |-> FALSE ]
+/\ action_taken = "inbox-send"
+/\ parameters = [actor |-> "-", mode |-> "expiring", scenario |-> "inbox", value |-> 0]
+/\ result = "ok"
+/\ steps = 2
+/\ observation = [ack |-> 0, cursor |-> 0, head |-> 2, messages |-> <<>>, pending |-> 2]
+
+State 4:
+/\ enrollmentHistory = [ rejected |-> {},
+  firstToken |-> [launch1 |-> "-token", launch2 |-> "-token"],
+  retried |-> {},
+  retired |-> {},
+  freshAfterRetire |-> FALSE,
+  safe |-> TRUE ]
+/\ s = [ ack |-> 0,
+  cursor |-> 0,
+  sent |-> 2,
+  delivered |-> <<>>,
+  expired |-> 1..2,
+  waited |-> FALSE,
+  blocked |-> FALSE ]
+/\ action_taken = "expire-inbox"
+/\ parameters = [actor |-> "-", mode |-> "controlled-clock", scenario |-> "inbox", value |-> 0]
+/\ result = "ok"
+/\ steps = 3
+/\ observation = [ack |-> 0, cursor |-> 0, head |-> 2, messages |-> <<>>, pending |-> 2]
+
+State 5:
+/\ enrollmentHistory = [ rejected |-> {},
+  firstToken |-> [launch1 |-> "-token", launch2 |-> "-token"],
+  retried |-> {},
+  retired |-> {},
+  freshAfterRetire |-> FALSE,
+  safe |-> TRUE ]
+/\ s = [ ack |-> 0,
+  cursor |-> 0,
+  sent |-> 2,
+  delivered |-> <<>>,
+  expired |-> 1..2,
+  waited |-> FALSE,
+  blocked |-> TRUE ]
+/\ action_taken = "inbox-send"
+/\ parameters = [actor |-> "-", mode |-> "expiring", scenario |-> "inbox", value |-> 0]
+/\ result = "full"
+/\ steps = 4
+/\ observation = [ack |-> 0, cursor |-> 0, head |-> 2, messages |-> <<>>, pending |-> 2]
+
+State 6:
+/\ enrollmentHistory = [ rejected |-> {},
+  firstToken |-> [launch1 |-> "-token", launch2 |-> "-token"],
+  retried |-> {},
+  retired |-> {},
+  freshAfterRetire |-> FALSE,
+  safe |-> TRUE ]
+/\ s = [ ack |-> 0,
+  cursor |-> 0,
+  sent |-> 2,
+  delivered |-> <<>>,
+  expired |-> 1..2,
+  waited |-> TRUE,
+  blocked |-> TRUE ]
+/\ action_taken = "inbox-wait"
+/\ parameters = [actor |-> "-", mode |-> "batch-one", scenario |-> "inbox", value |-> 0]
+/\ result = "ok"
+/\ steps = 5
+/\ observation = [ack |-> 0, cursor |-> 0, head |-> 2, messages |-> <<>>, pending |-> 2]
+
+16 states generated, 6 distinct states found.
+Finished in 05s at (2026-10-19 18:04:18)

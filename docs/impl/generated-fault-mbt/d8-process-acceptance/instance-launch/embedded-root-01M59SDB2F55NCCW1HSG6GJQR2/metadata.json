@@ -1,0 +1,12 @@
+{
+  "competitor_exit": 1,
+  "competitor_stderr": "coop mcp-stdio: initialize bus root: I/O error: bus root /tmp/coop-test-embedded-instance-owner-373942-1792403745754998513-0/root already owned or unavailable: operation would block\n",
+  "owner": {
+    "agent_id": "01M59SDB1H4VPSP3096JC4D11J",
+    "capabilities": [],
+    "display_name": "codex",
+    "kind": "codex",
+    "name": "instance-01M59SDB1H4VPSP3096JC4D11J",
+    "retired": false
+  }
+}

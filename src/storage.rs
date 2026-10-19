@@ -40,9 +40,22 @@
 //! distinguished from a legitimate tail until another record is appended
 //! (whose `prev_hash` will then mismatch). Anchor the head digest externally
 //! if tamper evidence for the tail itself is required.
+//!
+//! # Segmentation and failed appends
+//!
+//! [`LogFile::open_rotating`] bounds active segments while preserving one global
+//! sequence and hash chain. Sealed segments live in
+//! `.segments/<original filename>/`; their names anchor their sequence range
+//! and final digest. Sealed corruption is fatal. Only the original active file
+//! can undergo torn-tail repair. A crash after sealing and before creating the
+//! next active file is recovered by reopening the stream.
+//!
+//! Any append I/O error quarantines that handle, since complete or partial bytes
+//! may already exist. Further appends return [`LogError::RecoveryRequired`]
+//! without touching records or disk. Actual reopen/replay reconciles those bytes.
 
 use std::fs::{self, File, OpenOptions};
-use std::io::{self, Read, Seek, SeekFrom, Write};
+use std::io::{self, Seek, SeekFrom, Write};
 use std::marker::PhantomData;
 use std::path::{Path, PathBuf};
 
@@ -54,6 +67,9 @@ use sha2::{Digest, Sha256};
 /// `prev_hash` of the first record in a log: `sha256:` followed by 64 zeros.
 pub const GENESIS_HASH: &str =
     "sha256:0000000000000000000000000000000000000000000000000000000000000000";
+
+/// Default active segment limit for channels, queues, and document histories.
+pub const DEFAULT_ROTATION_BYTES: u64 = 256 * 1024 * 1024;
 
 /// A record that can participate in a JSONL hash chain.
 pub trait ChainRecord: Serialize + DeserializeOwned {
@@ -113,6 +129,9 @@ pub enum LogError {
     Serialize(serde_json::Error),
     /// Record is not a JSON object and therefore cannot carry chain fields.
     InvalidRecord(String),
+    /// An earlier I/O failure made this handle's durable position uncertain.
+    /// Drop it and open/replay the log before attempting another append.
+    RecoveryRequired,
 }
 
 impl std::fmt::Display for LogError {
@@ -124,6 +143,9 @@ impl std::fmt::Display for LogError {
             }
             Self::Serialize(error) => write!(formatter, "record serialization failed: {error}"),
             Self::InvalidRecord(reason) => write!(formatter, "invalid log record: {reason}"),
+            Self::RecoveryRequired => {
+                write!(formatter, "log recovery required before another append")
+            }
         }
     }
 }
@@ -133,7 +155,7 @@ impl std::error::Error for LogError {
         match self {
             Self::Io(error) => Some(error),
             Self::Serialize(error) => Some(error),
-            Self::Corrupt { .. } | Self::InvalidRecord(_) => None,
+            Self::Corrupt { .. } | Self::InvalidRecord(_) | Self::RecoveryRequired => None,
         }
     }
 }
@@ -153,6 +175,9 @@ pub struct LogFile<T> {
     last_hash: String,
     needs_newline: bool,
     record_count: u64,
+    recovery_required: bool,
+    rotation_bytes: Option<u64>,
+    active_start_seq: u64,
     marker: PhantomData<fn() -> T>,
 }
 
@@ -162,13 +187,42 @@ impl<T: ChainRecord> LogFile<T> {
     /// The returned [`ReplayReport`] contains the recovered records and repair
     /// diagnostics. Torn tails are truncated before this function returns.
     pub fn open(path: impl Into<PathBuf>) -> Result<(Self, ReplayReport<T>), LogError> {
-        let path = path.into();
+        Self::open_internal(path.into(), None)
+    }
+
+    /// Opens a segmented stream. Sequence numbers and hashes span every segment.
+    /// A record larger than the threshold occupies a segment alone.
+    pub fn open_rotating(
+        path: impl Into<PathBuf>,
+        threshold: u64,
+    ) -> Result<(Self, ReplayReport<T>), LogError> {
+        if threshold == 0 {
+            return Err(io::Error::new(
+                io::ErrorKind::InvalidInput,
+                "rotation threshold must be positive",
+            )
+            .into());
+        }
+        Self::open_internal(path.into(), Some(threshold))
+    }
+
+    /// Validates and reads the whole stream without creating or repairing files.
+    /// Torn-tail diagnostics and offsets refer only to the active segment.
+    pub fn read_segments(path: impl AsRef<Path>) -> Result<ReplayReport<T>, LogError> {
+        read_stream(path.as_ref(), false).map(|(report, _)| report)
+    }
+
+    fn open_internal(
+        path: PathBuf,
+        rotation_bytes: Option<u64>,
+    ) -> Result<(Self, ReplayReport<T>), LogError> {
         if let Some(parent) = path.parent() {
             if !parent.as_os_str().is_empty() {
                 fs::create_dir_all(parent)?;
             }
         }
 
+        let (report, active_start_seq) = read_stream::<T>(&path, true)?;
         let existed = path.exists();
         let mut file = OpenOptions::new()
             .read(true)
@@ -180,14 +234,15 @@ impl<T: ChainRecord> LogFile<T> {
             sync_parent_directory(&path)?;
         }
 
-        let mut bytes = Vec::new();
-        file.read_to_end(&mut bytes)?;
-        let report = replay_bytes::<T>(&bytes)?;
-
         if report.truncated_bytes > 0 {
             file.set_len(report.last_valid_offset)?;
-            file.sync_all()?;
         }
+        // A full record from a failed sync may still exist only in the OS
+        // cache. Replayed records can immediately satisfy a dedupe request,
+        // so recovery must sync them before exposing the rebuilt indexes.
+        #[cfg(feature = "mbt-injection")]
+        crate::faults::reach(&path, crate::faults::FaultPoint::BeforeRecoverySync)?;
+        file.sync_all()?;
         file.seek(SeekFrom::End(0))?;
 
         let log = Self {
@@ -197,6 +252,9 @@ impl<T: ChainRecord> LogFile<T> {
             last_hash: report.last_hash.clone(),
             needs_newline: report.trailing_newline_missing,
             record_count: report.records.len() as u64,
+            recovery_required: false,
+            rotation_bytes,
+            active_start_seq,
             marker: PhantomData,
         };
         Ok((log, report))
@@ -227,13 +285,33 @@ impl<T: ChainRecord> LogFile<T> {
         self.record_count
     }
 
+    /// True after an uncertain I/O failure; only reopening clears this state.
+    pub fn requires_recovery(&self) -> bool {
+        self.recovery_required
+    }
+
     /// Assigns `seq`/`prev_hash`, appends one line, and fsyncs before
     /// returning. An `Ok` receipt means the record is durable.
     pub fn append(&mut self, record: &mut T) -> Result<AppendReceipt, LogError> {
+        if self.recovery_required {
+            return Err(LogError::RecoveryRequired);
+        }
+        let result = self.append_inner(record);
+        if matches!(&result, Err(LogError::Io(_))) {
+            self.recovery_required = true;
+        }
+        result
+    }
+
+    fn append_inner(&mut self, record: &mut T) -> Result<AppendReceipt, LogError> {
         record.set_seq(self.next_seq);
         record.set_prev_hash(self.last_hash.clone());
         let hash = hash_record(record)?;
         let serialized = serde_json::to_vec(record).map_err(LogError::Serialize)?;
+
+        #[cfg(feature = "mbt-injection")]
+        crate::faults::reach(&self.path, crate::faults::FaultPoint::BeforeRotation)?;
+        self.rotate_if_needed(serialized.len() as u64 + 1)?;
 
         let mut line = Vec::with_capacity(serialized.len() + 2);
         if self.needs_newline {
@@ -242,8 +320,45 @@ impl<T: ChainRecord> LogFile<T> {
         line.extend_from_slice(&serialized);
         line.push(b'\n');
 
+        #[cfg(feature = "mbt-injection")]
+        crate::faults::reach(&self.path, crate::faults::FaultPoint::BeforeRecordWrite)?;
         self.file.seek(SeekFrom::End(0))?;
+        #[cfg(feature = "mbt-injection")]
+        let injection = crate::faults::take_append(&self.path);
+        #[cfg(feature = "mbt-injection")]
+        if let Some(injection) = &injection {
+            if let crate::faults::AppendFault::PartialWrite { bytes } = injection.fault() {
+                let written = bytes.min(line.len() - 1);
+                if let Err(error) = self.file.write_all(&line[..written]) {
+                    injection.io_failed(self.next_seq, line.len());
+                    return Err(error.into());
+                }
+                injection.partial_written(self.next_seq, line.len(), written);
+                return Err(crate::faults::injected_error().into());
+            }
+        }
+        #[cfg(feature = "mbt-injection")]
+        if let Err(error) = self.file.write_all(&line) {
+            if let Some(injection) = &injection {
+                injection.io_failed(self.next_seq, line.len());
+            }
+            return Err(error.into());
+        }
+        #[cfg(not(feature = "mbt-injection"))]
         self.file.write_all(&line)?;
+        #[cfg(feature = "mbt-injection")]
+        if let Some(injection) = &injection {
+            injection.before_sync(self.next_seq, line.len())?;
+        }
+        #[cfg(feature = "mbt-injection")]
+        {
+            let synced = self.file.sync_all();
+            if let Some(injection) = &injection {
+                injection.synced(self.next_seq, line.len(), synced.is_ok());
+            }
+            synced?;
+        }
+        #[cfg(not(feature = "mbt-injection"))]
         self.file.sync_all()?;
 
         let seq = self.next_seq;
@@ -258,6 +373,170 @@ impl<T: ChainRecord> LogFile<T> {
             bytes_written: line.len() as u64,
         })
     }
+
+    fn rotate_if_needed(&mut self, record_bytes: u64) -> Result<(), LogError> {
+        let Some(threshold) = self.rotation_bytes else {
+            return Ok(());
+        };
+        let current_bytes = self.file.metadata()?.len();
+        if self.next_seq == self.active_start_seq
+            || current_bytes
+                .saturating_add(record_bytes)
+                .saturating_add(u64::from(self.needs_newline))
+                <= threshold
+        {
+            return Ok(());
+        }
+        if self.needs_newline {
+            self.file.seek(SeekFrom::End(0))?;
+            self.file.write_all(b"\n")?;
+            self.needs_newline = false;
+        }
+        self.file.sync_all()?;
+        let directory = segment_directory(&self.path)?;
+        fs::create_dir_all(&directory)?;
+        File::open(&directory)?.sync_all()?;
+        sync_parent_directory(&directory)?;
+        if let Some(parent) = directory.parent() {
+            sync_parent_directory(parent)?;
+        }
+        let anchor = self
+            .last_hash
+            .strip_prefix("sha256:")
+            .expect("chain hash prefix");
+        let sealed = directory.join(format!(
+            "{:020}-{:020}-{anchor}.jsonl",
+            self.active_start_seq,
+            self.seq_head()
+        ));
+        if sealed.exists() {
+            return Err(io::Error::new(
+                io::ErrorKind::AlreadyExists,
+                "sealed segment already exists; recovery required",
+            )
+            .into());
+        }
+        fs::rename(&self.path, &sealed)?;
+        // Persist the destination name before persisting removal of the old
+        // name. Both directory updates must precede creation of the new active.
+        File::open(&directory)?.sync_all()?;
+        sync_parent_directory(&self.path)?;
+        #[cfg(feature = "mbt-injection")]
+        crate::faults::reach(&self.path, crate::faults::FaultPoint::AfterSegmentSeal)?;
+        self.file = OpenOptions::new()
+            .read(true)
+            .write(true)
+            .create_new(true)
+            .open(&self.path)?;
+        sync_parent_directory(&self.path)?;
+        self.active_start_seq = self.next_seq;
+        #[cfg(feature = "mbt-injection")]
+        crate::faults::reach(&self.path, crate::faults::FaultPoint::AfterSegmentCreate)?;
+        Ok(())
+    }
+}
+
+fn segment_directory(path: &Path) -> io::Result<PathBuf> {
+    let filename = path
+        .file_name()
+        .ok_or_else(|| io::Error::new(io::ErrorKind::InvalidInput, "log path needs a filename"))?;
+    Ok(path
+        .parent()
+        .unwrap_or_else(|| Path::new("."))
+        .join(".segments")
+        .join(filename))
+}
+
+/// Actual segment paths in stream order; the original active path comes last.
+/// Seals live below `.segments/<entire filename>/`, keeping dotted names distinct.
+pub fn segment_paths(path: impl AsRef<Path>) -> io::Result<Vec<PathBuf>> {
+    let path = path.as_ref();
+    let directory = segment_directory(path)?;
+    let mut segments = Vec::new();
+    match fs::read_dir(&directory) {
+        Ok(entries) => {
+            for entry in entries {
+                let entry = entry?;
+                if !entry.file_type()?.is_file() {
+                    return Err(io::Error::new(
+                        io::ErrorKind::InvalidData,
+                        "unexpected entry in sealed segment directory",
+                    ));
+                }
+                segments.push(entry.path());
+            }
+        }
+        Err(error) if error.kind() == io::ErrorKind::NotFound => {}
+        Err(error) => return Err(error),
+    }
+    segments.sort();
+    if path.exists() {
+        segments.push(path.to_path_buf());
+    }
+    Ok(segments)
+}
+
+fn read_stream<T: ChainRecord>(
+    path: &Path,
+    allow_missing: bool,
+) -> Result<(ReplayReport<T>, u64), LogError> {
+    let paths = segment_paths(path)?;
+    if paths.is_empty() && !allow_missing {
+        return Err(io::Error::new(io::ErrorKind::NotFound, "log stream does not exist").into());
+    }
+    let mut records = Vec::new();
+    let mut seq = 0;
+    let mut hash = GENESIS_HASH.to_string();
+    let mut active_start = 1;
+    let mut truncated = 0;
+    let mut offset = 0;
+    let mut missing_newline = false;
+    for segment in paths {
+        let active = segment == path;
+        let bytes = fs::read(&segment)?;
+        let report = replay_bytes_from::<T>(&bytes, seq + 1, &hash)?;
+        if !active {
+            let name = segment
+                .file_name()
+                .and_then(|name| name.to_str())
+                .unwrap_or("");
+            let expected = format!(
+                "{:020}-{:020}-{}.jsonl",
+                seq + 1,
+                report.seq_head,
+                report.last_hash.strip_prefix("sha256:").unwrap_or("")
+            );
+            if report.records.is_empty()
+                || report.was_truncated()
+                || report.trailing_newline_missing
+                || name != expected
+            {
+                return Err(LogError::Corrupt {
+                    line: records.len() + 1,
+                    reason: format!("sealed segment integrity failure: {}", segment.display()),
+                });
+            }
+            active_start = report.seq_head + 1;
+        } else {
+            truncated = report.truncated_bytes;
+            offset = report.last_valid_offset;
+            missing_newline = report.trailing_newline_missing;
+        }
+        seq = report.seq_head;
+        hash = report.last_hash;
+        records.extend(report.records);
+    }
+    Ok((
+        ReplayReport {
+            records,
+            seq_head: seq,
+            last_hash: hash,
+            truncated_bytes: truncated,
+            last_valid_offset: offset,
+            trailing_newline_missing: missing_newline,
+        },
+        active_start,
+    ))
 }
 
 /// Serializes a record canonically after removing its `prev_hash` member and
@@ -346,10 +625,14 @@ fn hash_json_without_prev_hash(value: &Value) -> Option<String> {
     ))
 }
 
-fn replay_bytes<T: ChainRecord>(bytes: &[u8]) -> Result<ReplayReport<T>, LogError> {
+fn replay_bytes_from<T: ChainRecord>(
+    bytes: &[u8],
+    start_seq: u64,
+    previous_hash: &str,
+) -> Result<ReplayReport<T>, LogError> {
     let mut records = Vec::new();
-    let mut expected_prev = GENESIS_HASH.to_string();
-    let mut expected_seq = 1u64;
+    let mut expected_prev = previous_hash.to_string();
+    let mut expected_seq = start_seq;
     let mut last_valid_offset = 0usize;
     let mut truncated_bytes = 0u64;
     let mut trailing_newline_missing = false;

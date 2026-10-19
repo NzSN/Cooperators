@@ -1,0 +1,901 @@
+{
+  "currentLedger": "qualification/results.json hashes published files beneath qualification, excluding itself and excluded local scratch files. publication.json is outside that subtree to avoid recursive hashes.",
+  "excludedLocalFiles": [
+    {
+      "bytes": 133273592,
+      "path": "docs/impl/generated-fault-mbt/d2-storage-baseline/cooperators-mbt-baseline",
+      "reason": "Local diagnostic executable exceeds GitHub 100 MiB file limit.",
+      "sha256": "8356138994a485b8a5858701f370bf87077647f0579a137d9a7aad4e60ca9fa2"
+    },
+    {
+      "bytes": 16997,
+      "path": "spec/__pycache__/check_hardening.cpython-312.pyc",
+      "reason": "Python bytecode cache.",
+      "sha256": "b7ed147478037cf414b4d71fa97719b5276a1b563d8c9de946ce476d95f38e77"
+    },
+    {
+      "bytes": 10084,
+      "path": "spec/mbt/__pycache__/check_fault_detection.cpython-312.pyc",
+      "reason": "Python bytecode cache.",
+      "sha256": "c0b34b45eceab832713cf0746f3a42c3282d53351e0198d23423785c1c43024a"
+    },
+    {
+      "bytes": 9100,
+      "path": "spec/mbt/__pycache__/fault_traces.cpython-312.pyc",
+      "reason": "Python bytecode cache.",
+      "sha256": "336e681037f7bd4fd554d847667953f19ec9012c478f644277c43634956964d8"
+    },
+    {
+      "bytes": 15782,
+      "path": "spec/mbt/__pycache__/generate_fault_interfaces.cpython-312.pyc",
+      "reason": "Python bytecode cache.",
+      "sha256": "2607e545fd7d353b224d7e228dfe22c496d382df51b01c5066605b69ff92158b"
+    },
+    {
+      "bytes": 9013,
+      "path": "spec/mbt/__pycache__/generate_faults.cpython-312.pyc",
+      "reason": "Python bytecode cache.",
+      "sha256": "924cb68070a62de95ee66a7bdc0f19dd61a8bd17c6160fa2841d06430b1a7402"
+    },
+    {
+      "bytes": 26472,
+      "path": "spec/mbt/__pycache__/replay_faults.cpython-312.pyc",
+      "reason": "Python bytecode cache.",
+      "sha256": "7c076defb1925021607b30d11682117b9f73af10ae82da0fd21fbe4e8d7be1cb"
+    },
+    {
+      "bytes": 23461,
+      "path": "spec/mbt/__pycache__/test_fault_tools.cpython-312.pyc",
+      "reason": "Python bytecode cache.",
+      "sha256": "32b3e720cea115094b78f93825d06c97cbf871fd18c91d280064b04fc99f8d71"
+    },
+    {
+      "bytes": 11999,
+      "path": "spec/mbt/fault_interfaces/__pycache__/test_bridge.cpython-312.pyc",
+      "reason": "Python bytecode cache.",
+      "sha256": "3e1c9e690469118d10e8566e4a242b913de8d17ecb9cb692e613a63db90ddcd6"
+    },
+    {
+      "bytes": 0,
+      "path": "docs/impl/generated-fault-mbt/qualification/hardening/fault-deadletter-liveness-states/26-10-19-17-57-05/CooperatorsHardening-0.st",
+      "reason": "TLC scratch state; corresponding model/configuration/log evidence retained.",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "bytes": 0,
+      "path": "docs/impl/generated-fault-mbt/qualification/hardening/fault-deadletter-liveness-states/26-10-19-17-57-05/CooperatorsHardening.st",
+      "reason": "TLC scratch state; corresponding model/configuration/log evidence retained.",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "bytes": 0,
+      "path": "docs/impl/generated-fault-mbt/qualification/hardening/fault-deadletter-liveness-states/26-10-19-17-57-05/CooperatorsHardening_0.fp",
+      "reason": "TLC scratch state; corresponding model/configuration/log evidence retained.",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "bytes": 0,
+      "path": "docs/impl/generated-fault-mbt/qualification/hardening/fault-deadletter-liveness-states/26-10-19-17-57-05/CooperatorsHardening_1.fp",
+      "reason": "TLC scratch state; corresponding model/configuration/log evidence retained.",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "bytes": 1140,
+      "path": "docs/impl/generated-fault-mbt/qualification/hardening/fault-deadletter-liveness-states/26-10-19-17-57-05/nodes_0",
+      "reason": "TLC scratch state; corresponding model/configuration/log evidence retained.",
+      "sha256": "3ae335a3ec6fb00a45f80f6867138ed96af168c623adde5a64adc565d562cda0"
+    },
+    {
+      "bytes": 432,
+      "path": "docs/impl/generated-fault-mbt/qualification/hardening/fault-deadletter-liveness-states/26-10-19-17-57-05/ptrs_0",
+      "reason": "TLC scratch state; corresponding model/configuration/log evidence retained.",
+      "sha256": "c4fee88e979060fb20dbfd1701d1e79a8f6e89ebeb58ca25ffdffa7af4284ea2"
+    },
+    {
+      "bytes": 0,
+      "path": "docs/impl/generated-fault-mbt/qualification/hardening/fault-inbox-liveness-states/26-10-19-17-56-52/CooperatorsHardening-0.st",
+      "reason": "TLC scratch state; corresponding model/configuration/log evidence retained.",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "bytes": 0,
+      "path": "docs/impl/generated-fault-mbt/qualification/hardening/fault-inbox-liveness-states/26-10-19-17-56-52/CooperatorsHardening.st",
+      "reason": "TLC scratch state; corresponding model/configuration/log evidence retained.",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "bytes": 0,
+      "path": "docs/impl/generated-fault-mbt/qualification/hardening/fault-inbox-liveness-states/26-10-19-17-56-52/CooperatorsHardening_0.fp",
+      "reason": "TLC scratch state; corresponding model/configuration/log evidence retained.",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "bytes": 0,
+      "path": "docs/impl/generated-fault-mbt/qualification/hardening/fault-inbox-liveness-states/26-10-19-17-56-52/CooperatorsHardening_1.fp",
+      "reason": "TLC scratch state; corresponding model/configuration/log evidence retained.",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "bytes": 7980,
+      "path": "docs/impl/generated-fault-mbt/qualification/hardening/fault-inbox-liveness-states/26-10-19-17-56-52/nodes_0",
+      "reason": "TLC scratch state; corresponding model/configuration/log evidence retained.",
+      "sha256": "64dde0b75d7b91faff3a3ea23319daea12cbb0935122b674166e941ebf869393"
+    },
+    {
+      "bytes": 2560,
+      "path": "docs/impl/generated-fault-mbt/qualification/hardening/fault-inbox-liveness-states/26-10-19-17-56-52/ptrs_0",
+      "reason": "TLC scratch state; corresponding model/configuration/log evidence retained.",
+      "sha256": "ac0ac2e047ed84580d3758c6c4f8b822604a6c75acb2c8706516c28b9ee1f64a"
+    }
+  ],
+  "historicalManifests": "Historical manifests retain capture hashes. For redacted paths use this mapping to verify published bytes; excluded files are retained locally.",
+  "originalLedger": {
+    "path": "docs/impl/generated-fault-mbt/qualification/results-before-publication.json",
+    "sha256": "5ced62cd05a8259ebdddb1abd3a3f8d13a9c03ffe1ec07e54f8834811830e529"
+  },
+  "redactions": [
+    {
+      "originalSha256": "363be7cab8eecbd58f285dfdcff5111e5fe2341ba860fdf62ce5c6a990bac1a0",
+      "path": "docs/impl/generated-fault-mbt/d3-d6-runtime-baseline/raw/deadletter/NoProjectionCrashRetry.itf/step-00/root/fixture/config.json",
+      "publishedSha256": "21af93220d7a79a4e8ed8f57a61ac4dbfc865c4ca4b3b41e5266023d52f17cbd",
+      "transformation": "Only token value replaced by its SHA-256 redaction marker; other JSON fields preserved."
+    },
+    {
+      "originalSha256": "363be7cab8eecbd58f285dfdcff5111e5fe2341ba860fdf62ce5c6a990bac1a0",
+      "path": "docs/impl/generated-fault-mbt/d3-d6-runtime-baseline/raw/deadletter/NoProjectionCrashRetry.itf/step-01/root/fixture/config.json",
+      "publishedSha256": "21af93220d7a79a4e8ed8f57a61ac4dbfc865c4ca4b3b41e5266023d52f17cbd",
+      "transformation": "Only token value replaced by its SHA-256 redaction marker; other JSON fields preserved."
+    },
+    {
+      "originalSha256": "363be7cab8eecbd58f285dfdcff5111e5fe2341ba860fdf62ce5c6a990bac1a0",
+      "path": "docs/impl/generated-fault-mbt/d3-d6-runtime-baseline/raw/deadletter/NoProjectionCrashRetry.itf/step-02/root/fixture/config.json",
+      "publishedSha256": "21af93220d7a79a4e8ed8f57a61ac4dbfc865c4ca4b3b41e5266023d52f17cbd",
+      "transformation": "Only token value replaced by its SHA-256 redaction marker; other JSON fields preserved."
+    },
+    {
+      "originalSha256": "363be7cab8eecbd58f285dfdcff5111e5fe2341ba860fdf62ce5c6a990bac1a0",
+      "path": "docs/impl/generated-fault-mbt/d3-d6-runtime-baseline/raw/deadletter/NoProjectionCrashRetry.itf/step-03/root/fixture/config.json",
+      "publishedSha256": "21af93220d7a79a4e8ed8f57a61ac4dbfc865c4ca4b3b41e5266023d52f17cbd",
+      "transformation": "Only token value replaced by its SHA-256 redaction marker; other JSON fields preserved."
+    },
+    {
+      "originalSha256": "363be7cab8eecbd58f285dfdcff5111e5fe2341ba860fdf62ce5c6a990bac1a0",
+      "path": "docs/impl/generated-fault-mbt/d3-d6-runtime-baseline/raw/deadletter/NoProjectionCrashRetry.itf/step-04/root/fixture/config.json",
+      "publishedSha256": "21af93220d7a79a4e8ed8f57a61ac4dbfc865c4ca4b3b41e5266023d52f17cbd",
+      "transformation": "Only token value replaced by its SHA-256 redaction marker; other JSON fields preserved."
+    },
+    {
+      "originalSha256": "363be7cab8eecbd58f285dfdcff5111e5fe2341ba860fdf62ce5c6a990bac1a0",
+      "path": "docs/impl/generated-fault-mbt/d3-d6-runtime-baseline/raw/deadletter/NoProjectionCrashRetry.itf/step-05/root/fixture/config.json",
+      "publishedSha256": "21af93220d7a79a4e8ed8f57a61ac4dbfc865c4ca4b3b41e5266023d52f17cbd",
+      "transformation": "Only token value replaced by its SHA-256 redaction marker; other JSON fields preserved."
+    },
+    {
+      "originalSha256": "d072a4d0dd7024dbfba34325eec756f3779c23871b515c148f101b1c9c14ff1c",
+      "path": "docs/impl/generated-fault-mbt/d3-d6-runtime-baseline/raw/deadletter/NoProjectionRecovery.itf/step-00/root/fixture/config.json",
+      "publishedSha256": "65e45c6d31d42943fd5697b50215f613c1106e3ba11ba772e4ff234e3e149b9a",
+      "transformation": "Only token value replaced by its SHA-256 redaction marker; other JSON fields preserved."
+    },
+    {
+      "originalSha256": "d072a4d0dd7024dbfba34325eec756f3779c23871b515c148f101b1c9c14ff1c",
+      "path": "docs/impl/generated-fault-mbt/d3-d6-runtime-baseline/raw/deadletter/NoProjectionRecovery.itf/step-01/root/fixture/config.json",
+      "publishedSha256": "65e45c6d31d42943fd5697b50215f613c1106e3ba11ba772e4ff234e3e149b9a",
+      "transformation": "Only token value replaced by its SHA-256 redaction marker; other JSON fields preserved."
+    },
+    {
+      "originalSha256": "d072a4d0dd7024dbfba34325eec756f3779c23871b515c148f101b1c9c14ff1c",
+      "path": "docs/impl/generated-fault-mbt/d3-d6-runtime-baseline/raw/deadletter/NoProjectionRecovery.itf/step-02/root/fixture/config.json",
+      "publishedSha256": "65e45c6d31d42943fd5697b50215f613c1106e3ba11ba772e4ff234e3e149b9a",
+      "transformation": "Only token value replaced by its SHA-256 redaction marker; other JSON fields preserved."
+    },
+    {
+      "originalSha256": "d072a4d0dd7024dbfba34325eec756f3779c23871b515c148f101b1c9c14ff1c",
+      "path": "docs/impl/generated-fault-mbt/d3-d6-runtime-baseline/raw/deadletter/NoProjectionRecovery.itf/step-03/root/fixture/config.json",
+      "publishedSha256": "65e45c6d31d42943fd5697b50215f613c1106e3ba11ba772e4ff234e3e149b9a",
+      "transformation": "Only token value replaced by its SHA-256 redaction marker; other JSON fields preserved."
+    },
+    {
+      "originalSha256": "d072a4d0dd7024dbfba34325eec756f3779c23871b515c148f101b1c9c14ff1c",
+      "path": "docs/impl/generated-fault-mbt/d3-d6-runtime-baseline/raw/deadletter/NoProjectionRecovery.itf/step-04/root/fixture/config.json",
+      "publishedSha256": "65e45c6d31d42943fd5697b50215f613c1106e3ba11ba772e4ff234e3e149b9a",
+      "transformation": "Only token value replaced by its SHA-256 redaction marker; other JSON fields preserved."
+    },
+    {
+      "originalSha256": "d072a4d0dd7024dbfba34325eec756f3779c23871b515c148f101b1c9c14ff1c",
+      "path": "docs/impl/generated-fault-mbt/d3-d6-runtime-baseline/raw/deadletter/NoProjectionRecovery.itf/step-05/root/fixture/config.json",
+      "publishedSha256": "65e45c6d31d42943fd5697b50215f613c1106e3ba11ba772e4ff234e3e149b9a",
+      "transformation": "Only token value replaced by its SHA-256 redaction marker; other JSON fields preserved."
+    },
+    {
+      "originalSha256": "a2145c8e7b9e79d9ed6e1d8321af4fc1f3149b5a64a04af20c13756ece328af6",
+      "path": "docs/impl/generated-fault-mbt/d3-d6-runtime-baseline/raw/document/NoDocumentCrashRetry.itf/step-00/root/fixture/config.json",
+      "publishedSha256": "c80c9dbadbcaa1f33259df049a8a7af8e43f7b3c5e8659962e0ea65d33697acc",
+      "transformation": "Only token value replaced by its SHA-256 redaction marker; other JSON fields preserved."
+    },
+    {
+      "originalSha256": "a2145c8e7b9e79d9ed6e1d8321af4fc1f3149b5a64a04af20c13756ece328af6",
+      "path": "docs/impl/generated-fault-mbt/d3-d6-runtime-baseline/raw/document/NoDocumentCrashRetry.itf/step-01/root/fixture/config.json",
+      "publishedSha256": "c80c9dbadbcaa1f33259df049a8a7af8e43f7b3c5e8659962e0ea65d33697acc",
+      "transformation": "Only token value replaced by its SHA-256 redaction marker; other JSON fields preserved."
+    },
+    {
+      "originalSha256": "a2145c8e7b9e79d9ed6e1d8321af4fc1f3149b5a64a04af20c13756ece328af6",
+      "path": "docs/impl/generated-fault-mbt/d3-d6-runtime-baseline/raw/document/NoDocumentCrashRetry.itf/step-02/root/fixture/config.json",
+      "publishedSha256": "c80c9dbadbcaa1f33259df049a8a7af8e43f7b3c5e8659962e0ea65d33697acc",
+      "transformation": "Only token value replaced by its SHA-256 redaction marker; other JSON fields preserved."
+    },
+    {
+      "originalSha256": "a2145c8e7b9e79d9ed6e1d8321af4fc1f3149b5a64a04af20c13756ece328af6",
+      "path": "docs/impl/generated-fault-mbt/d3-d6-runtime-baseline/raw/document/NoDocumentCrashRetry.itf/step-03/root/fixture/config.json",
+      "publishedSha256": "c80c9dbadbcaa1f33259df049a8a7af8e43f7b3c5e8659962e0ea65d33697acc",
+      "transformation": "Only token value replaced by its SHA-256 redaction marker; other JSON fields preserved."
+    },
+    {
+      "originalSha256": "a2145c8e7b9e79d9ed6e1d8321af4fc1f3149b5a64a04af20c13756ece328af6",
+      "path": "docs/impl/generated-fault-mbt/d3-d6-runtime-baseline/raw/document/NoDocumentCrashRetry.itf/step-04/root/fixture/config.json",
+      "publishedSha256": "c80c9dbadbcaa1f33259df049a8a7af8e43f7b3c5e8659962e0ea65d33697acc",
+      "transformation": "Only token value replaced by its SHA-256 redaction marker; other JSON fields preserved."
+    },
+    {
+      "originalSha256": "b8a583fd3b2efb0b126c77c985fddc6c2b1be6fd0d46ccca7bdcebf81a55fcf5",
+      "path": "docs/impl/generated-fault-mbt/d3-d6-runtime-baseline/raw/document/NoDocumentRetry.itf/step-00/root/fixture/config.json",
+      "publishedSha256": "eabeda6ca36c628937b2192fa48f0e284384c9a509b4a8130e52dac3168c3295",
+      "transformation": "Only token value replaced by its SHA-256 redaction marker; other JSON fields preserved."
+    },
+    {
+      "originalSha256": "b8a583fd3b2efb0b126c77c985fddc6c2b1be6fd0d46ccca7bdcebf81a55fcf5",
+      "path": "docs/impl/generated-fault-mbt/d3-d6-runtime-baseline/raw/document/NoDocumentRetry.itf/step-01/root/fixture/config.json",
+      "publishedSha256": "eabeda6ca36c628937b2192fa48f0e284384c9a509b4a8130e52dac3168c3295",
+      "transformation": "Only token value replaced by its SHA-256 redaction marker; other JSON fields preserved."
+    },
+    {
+      "originalSha256": "b8a583fd3b2efb0b126c77c985fddc6c2b1be6fd0d46ccca7bdcebf81a55fcf5",
+      "path": "docs/impl/generated-fault-mbt/d3-d6-runtime-baseline/raw/document/NoDocumentRetry.itf/step-02/root/fixture/config.json",
+      "publishedSha256": "eabeda6ca36c628937b2192fa48f0e284384c9a509b4a8130e52dac3168c3295",
+      "transformation": "Only token value replaced by its SHA-256 redaction marker; other JSON fields preserved."
+    },
+    {
+      "originalSha256": "b8a583fd3b2efb0b126c77c985fddc6c2b1be6fd0d46ccca7bdcebf81a55fcf5",
+      "path": "docs/impl/generated-fault-mbt/d3-d6-runtime-baseline/raw/document/NoDocumentRetry.itf/step-03/root/fixture/config.json",
+      "publishedSha256": "eabeda6ca36c628937b2192fa48f0e284384c9a509b4a8130e52dac3168c3295",
+      "transformation": "Only token value replaced by its SHA-256 redaction marker; other JSON fields preserved."
+    },
+    {
+      "originalSha256": "5df9f333bdbd66a6b2c7b9b25ce4a151d2e401bd81659af09ed3f88ad3297d60",
+      "path": "docs/impl/generated-fault-mbt/d3-d6-runtime-baseline/raw/inbox/NoInboxCapacityRecovery.itf/step-00/root/fixture/config.json",
+      "publishedSha256": "db69515e2b8307b6f3ac40e94aa737fd1023cc5947fc23efd2ce870c030300ec",
+      "transformation": "Only token value replaced by its SHA-256 redaction marker; other JSON fields preserved."
+    },
+    {
+      "originalSha256": "5df9f333bdbd66a6b2c7b9b25ce4a151d2e401bd81659af09ed3f88ad3297d60",
+      "path": "docs/impl/generated-fault-mbt/d3-d6-runtime-baseline/raw/inbox/NoInboxCapacityRecovery.itf/step-01/root/fixture/config.json",
+      "publishedSha256": "db69515e2b8307b6f3ac40e94aa737fd1023cc5947fc23efd2ce870c030300ec",
+      "transformation": "Only token value replaced by its SHA-256 redaction marker; other JSON fields preserved."
+    },
+    {
+      "originalSha256": "5df9f333bdbd66a6b2c7b9b25ce4a151d2e401bd81659af09ed3f88ad3297d60",
+      "path": "docs/impl/generated-fault-mbt/d3-d6-runtime-baseline/raw/inbox/NoInboxCapacityRecovery.itf/step-02/root/fixture/config.json",
+      "publishedSha256": "db69515e2b8307b6f3ac40e94aa737fd1023cc5947fc23efd2ce870c030300ec",
+      "transformation": "Only token value replaced by its SHA-256 redaction marker; other JSON fields preserved."
+    },
+    {
+      "originalSha256": "5df9f333bdbd66a6b2c7b9b25ce4a151d2e401bd81659af09ed3f88ad3297d60",
+      "path": "docs/impl/generated-fault-mbt/d3-d6-runtime-baseline/raw/inbox/NoInboxCapacityRecovery.itf/step-03/root/fixture/config.json",
+      "publishedSha256": "db69515e2b8307b6f3ac40e94aa737fd1023cc5947fc23efd2ce870c030300ec",
+      "transformation": "Only token value replaced by its SHA-256 redaction marker; other JSON fields preserved."
+    },
+    {
+      "originalSha256": "5df9f333bdbd66a6b2c7b9b25ce4a151d2e401bd81659af09ed3f88ad3297d60",
+      "path": "docs/impl/generated-fault-mbt/d3-d6-runtime-baseline/raw/inbox/NoInboxCapacityRecovery.itf/step-04/root/fixture/config.json",
+      "publishedSha256": "db69515e2b8307b6f3ac40e94aa737fd1023cc5947fc23efd2ce870c030300ec",
+      "transformation": "Only token value replaced by its SHA-256 redaction marker; other JSON fields preserved."
+    },
+    {
+      "originalSha256": "5df9f333bdbd66a6b2c7b9b25ce4a151d2e401bd81659af09ed3f88ad3297d60",
+      "path": "docs/impl/generated-fault-mbt/d3-d6-runtime-baseline/raw/inbox/NoInboxCapacityRecovery.itf/step-05/root/fixture/config.json",
+      "publishedSha256": "db69515e2b8307b6f3ac40e94aa737fd1023cc5947fc23efd2ce870c030300ec",
+      "transformation": "Only token value replaced by its SHA-256 redaction marker; other JSON fields preserved."
+    },
+    {
+      "originalSha256": "6958f52a2db10c677258b6e159c0df308c85968e79e9a83838377d491c24e7a9",
+      "path": "docs/impl/generated-fault-mbt/d3-d6-runtime-fixed/raw/deadletter/NoProjectionCrashRetry.itf/step-00/root/fixture/config.json",
+      "publishedSha256": "06cd1116c8386c75f8e599b8b4b4f1ffbfa91554d220e12f76ef2b66a20f9a3a",
+      "transformation": "Only token value replaced by its SHA-256 redaction marker; other JSON fields preserved."
+    },
+    {
+      "originalSha256": "6958f52a2db10c677258b6e159c0df308c85968e79e9a83838377d491c24e7a9",
+      "path": "docs/impl/generated-fault-mbt/d3-d6-runtime-fixed/raw/deadletter/NoProjectionCrashRetry.itf/step-01/root/fixture/config.json",
+      "publishedSha256": "06cd1116c8386c75f8e599b8b4b4f1ffbfa91554d220e12f76ef2b66a20f9a3a",
+      "transformation": "Only token value replaced by its SHA-256 redaction marker; other JSON fields preserved."
+    },
+    {
+      "originalSha256": "6958f52a2db10c677258b6e159c0df308c85968e79e9a83838377d491c24e7a9",
+      "path": "docs/impl/generated-fault-mbt/d3-d6-runtime-fixed/raw/deadletter/NoProjectionCrashRetry.itf/step-02/root/fixture/config.json",
+      "publishedSha256": "06cd1116c8386c75f8e599b8b4b4f1ffbfa91554d220e12f76ef2b66a20f9a3a",
+      "transformation": "Only token value replaced by its SHA-256 redaction marker; other JSON fields preserved."
+    },
+    {
+      "originalSha256": "6958f52a2db10c677258b6e159c0df308c85968e79e9a83838377d491c24e7a9",
+      "path": "docs/impl/generated-fault-mbt/d3-d6-runtime-fixed/raw/deadletter/NoProjectionCrashRetry.itf/step-03/root/fixture/config.json",
+      "publishedSha256": "06cd1116c8386c75f8e599b8b4b4f1ffbfa91554d220e12f76ef2b66a20f9a3a",
+      "transformation": "Only token value replaced by its SHA-256 redaction marker; other JSON fields preserved."
+    },
+    {
+      "originalSha256": "6958f52a2db10c677258b6e159c0df308c85968e79e9a83838377d491c24e7a9",
+      "path": "docs/impl/generated-fault-mbt/d3-d6-runtime-fixed/raw/deadletter/NoProjectionCrashRetry.itf/step-04/root/fixture/config.json",
+      "publishedSha256": "06cd1116c8386c75f8e599b8b4b4f1ffbfa91554d220e12f76ef2b66a20f9a3a",
+      "transformation": "Only token value replaced by its SHA-256 redaction marker; other JSON fields preserved."
+    },
+    {
+      "originalSha256": "6958f52a2db10c677258b6e159c0df308c85968e79e9a83838377d491c24e7a9",
+      "path": "docs/impl/generated-fault-mbt/d3-d6-runtime-fixed/raw/deadletter/NoProjectionCrashRetry.itf/step-05/root/fixture/config.json",
+      "publishedSha256": "06cd1116c8386c75f8e599b8b4b4f1ffbfa91554d220e12f76ef2b66a20f9a3a",
+      "transformation": "Only token value replaced by its SHA-256 redaction marker; other JSON fields preserved."
+    },
+    {
+      "originalSha256": "b22e7d5aeb1e96cf72f19a3db554c34eb353a197b134f703ea56424ac5e77778",
+      "path": "docs/impl/generated-fault-mbt/d3-d6-runtime-fixed/raw/deadletter/NoProjectionRecovery.itf/step-00/root/fixture/config.json",
+      "publishedSha256": "0c5fdf5e030dee77a24fa5f209a88ff22c4649e79d3d5ed3adae24883b07312e",
+      "transformation": "Only token value replaced by its SHA-256 redaction marker; other JSON fields preserved."
+    },
+    {
+      "originalSha256": "b22e7d5aeb1e96cf72f19a3db554c34eb353a197b134f703ea56424ac5e77778",
+      "path": "docs/impl/generated-fault-mbt/d3-d6-runtime-fixed/raw/deadletter/NoProjectionRecovery.itf/step-01/root/fixture/config.json",
+      "publishedSha256": "0c5fdf5e030dee77a24fa5f209a88ff22c4649e79d3d5ed3adae24883b07312e",
+      "transformation": "Only token value replaced by its SHA-256 redaction marker; other JSON fields preserved."
+    },
+    {
+      "originalSha256": "b22e7d5aeb1e96cf72f19a3db554c34eb353a197b134f703ea56424ac5e77778",
+      "path": "docs/impl/generated-fault-mbt/d3-d6-runtime-fixed/raw/deadletter/NoProjectionRecovery.itf/step-02/root/fixture/config.json",
+      "publishedSha256": "0c5fdf5e030dee77a24fa5f209a88ff22c4649e79d3d5ed3adae24883b07312e",
+      "transformation": "Only token value replaced by its SHA-256 redaction marker; other JSON fields preserved."
+    },
+    {
+      "originalSha256": "b22e7d5aeb1e96cf72f19a3db554c34eb353a197b134f703ea56424ac5e77778",
+      "path": "docs/impl/generated-fault-mbt/d3-d6-runtime-fixed/raw/deadletter/NoProjectionRecovery.itf/step-03/root/fixture/config.json",
+      "publishedSha256": "0c5fdf5e030dee77a24fa5f209a88ff22c4649e79d3d5ed3adae24883b07312e",
+      "transformation": "Only token value replaced by its SHA-256 redaction marker; other JSON fields preserved."
+    },
+    {
+      "originalSha256": "b22e7d5aeb1e96cf72f19a3db554c34eb353a197b134f703ea56424ac5e77778",
+      "path": "docs/impl/generated-fault-mbt/d3-d6-runtime-fixed/raw/deadletter/NoProjectionRecovery.itf/step-04/root/fixture/config.json",
+      "publishedSha256": "0c5fdf5e030dee77a24fa5f209a88ff22c4649e79d3d5ed3adae24883b07312e",
+      "transformation": "Only token value replaced by its SHA-256 redaction marker; other JSON fields preserved."
+    },
+    {
+      "originalSha256": "b22e7d5aeb1e96cf72f19a3db554c34eb353a197b134f703ea56424ac5e77778",
+      "path": "docs/impl/generated-fault-mbt/d3-d6-runtime-fixed/raw/deadletter/NoProjectionRecovery.itf/step-05/root/fixture/config.json",
+      "publishedSha256": "0c5fdf5e030dee77a24fa5f209a88ff22c4649e79d3d5ed3adae24883b07312e",
+      "transformation": "Only token value replaced by its SHA-256 redaction marker; other JSON fields preserved."
+    },
+    {
+      "originalSha256": "b22e7d5aeb1e96cf72f19a3db554c34eb353a197b134f703ea56424ac5e77778",
+      "path": "docs/impl/generated-fault-mbt/d3-d6-runtime-fixed/raw/deadletter/NoProjectionRecovery.itf/step-06/root/fixture/config.json",
+      "publishedSha256": "0c5fdf5e030dee77a24fa5f209a88ff22c4649e79d3d5ed3adae24883b07312e",
+      "transformation": "Only token value replaced by its SHA-256 redaction marker; other JSON fields preserved."
+    },
+    {
+      "originalSha256": "9e38311404a6d65cf02fa883b4b5dffa89d8e43211e9f7caba4ebe727885cb6b",
+      "path": "docs/impl/generated-fault-mbt/d3-d6-runtime-fixed/raw/document/NoDocumentCrashRetry.itf/step-00/root/fixture/config.json",
+      "publishedSha256": "fea599960f81b07457bff0bb0d57c929c741cc363bbc4cc26404eb226402e435",
+      "transformation": "Only token value replaced by its SHA-256 redaction marker; other JSON fields preserved."
+    },
+    {
+      "originalSha256": "9e38311404a6d65cf02fa883b4b5dffa89d8e43211e9f7caba4ebe727885cb6b",
+      "path": "docs/impl/generated-fault-mbt/d3-d6-runtime-fixed/raw/document/NoDocumentCrashRetry.itf/step-01/root/fixture/config.json",
+      "publishedSha256": "fea599960f81b07457bff0bb0d57c929c741cc363bbc4cc26404eb226402e435",
+      "transformation": "Only token value replaced by its SHA-256 redaction marker; other JSON fields preserved."
+    },
+    {
+      "originalSha256": "9e38311404a6d65cf02fa883b4b5dffa89d8e43211e9f7caba4ebe727885cb6b",
+      "path": "docs/impl/generated-fault-mbt/d3-d6-runtime-fixed/raw/document/NoDocumentCrashRetry.itf/step-02/root/fixture/config.json",
+      "publishedSha256": "fea599960f81b07457bff0bb0d57c929c741cc363bbc4cc26404eb226402e435",
+      "transformation": "Only token value replaced by its SHA-256 redaction marker; other JSON fields preserved."
+    },
+    {
+      "originalSha256": "9e38311404a6d65cf02fa883b4b5dffa89d8e43211e9f7caba4ebe727885cb6b",
+      "path": "docs/impl/generated-fault-mbt/d3-d6-runtime-fixed/raw/document/NoDocumentCrashRetry.itf/step-03/root/fixture/config.json",
+      "publishedSha256": "fea599960f81b07457bff0bb0d57c929c741cc363bbc4cc26404eb226402e435",
+      "transformation": "Only token value replaced by its SHA-256 redaction marker; other JSON fields preserved."
+    },
+    {
+      "originalSha256": "9e38311404a6d65cf02fa883b4b5dffa89d8e43211e9f7caba4ebe727885cb6b",
+      "path": "docs/impl/generated-fault-mbt/d3-d6-runtime-fixed/raw/document/NoDocumentCrashRetry.itf/step-04/root/fixture/config.json",
+      "publishedSha256": "fea599960f81b07457bff0bb0d57c929c741cc363bbc4cc26404eb226402e435",
+      "transformation": "Only token value replaced by its SHA-256 redaction marker; other JSON fields preserved."
+    },
+    {
+      "originalSha256": "9e38311404a6d65cf02fa883b4b5dffa89d8e43211e9f7caba4ebe727885cb6b",
+      "path": "docs/impl/generated-fault-mbt/d3-d6-runtime-fixed/raw/document/NoDocumentCrashRetry.itf/step-05/root/fixture/config.json",
+      "publishedSha256": "fea599960f81b07457bff0bb0d57c929c741cc363bbc4cc26404eb226402e435",
+      "transformation": "Only token value replaced by its SHA-256 redaction marker; other JSON fields preserved."
+    },
+    {
+      "originalSha256": "9e38311404a6d65cf02fa883b4b5dffa89d8e43211e9f7caba4ebe727885cb6b",
+      "path": "docs/impl/generated-fault-mbt/d3-d6-runtime-fixed/raw/document/NoDocumentCrashRetry.itf/step-06/root/fixture/config.json",
+      "publishedSha256": "fea599960f81b07457bff0bb0d57c929c741cc363bbc4cc26404eb226402e435",
+      "transformation": "Only token value replaced by its SHA-256 redaction marker; other JSON fields preserved."
+    },
+    {
+      "originalSha256": "e87b8327b45f5d9cf0886a90ea5bb7dff7460ff523cb2e2eb43b7ba6325fc161",
+      "path": "docs/impl/generated-fault-mbt/d3-d6-runtime-fixed/raw/document/NoDocumentRetry.itf/step-00/root/fixture/config.json",
+      "publishedSha256": "5e9931bf86a26ca31165ab8b765c71979c4e7370d553cfe65229c60be28912c6",
+      "transformation": "Only token value replaced by its SHA-256 redaction marker; other JSON fields preserved."
+    },
+    {
+      "originalSha256": "e87b8327b45f5d9cf0886a90ea5bb7dff7460ff523cb2e2eb43b7ba6325fc161",
+      "path": "docs/impl/generated-fault-mbt/d3-d6-runtime-fixed/raw/document/NoDocumentRetry.itf/step-01/root/fixture/config.json",
+      "publishedSha256": "5e9931bf86a26ca31165ab8b765c71979c4e7370d553cfe65229c60be28912c6",
+      "transformation": "Only token value replaced by its SHA-256 redaction marker; other JSON fields preserved."
+    },
+    {
+      "originalSha256": "e87b8327b45f5d9cf0886a90ea5bb7dff7460ff523cb2e2eb43b7ba6325fc161",
+      "path": "docs/impl/generated-fault-mbt/d3-d6-runtime-fixed/raw/document/NoDocumentRetry.itf/step-02/root/fixture/config.json",
+      "publishedSha256": "5e9931bf86a26ca31165ab8b765c71979c4e7370d553cfe65229c60be28912c6",
+      "transformation": "Only token value replaced by its SHA-256 redaction marker; other JSON fields preserved."
+    },
+    {
+      "originalSha256": "e87b8327b45f5d9cf0886a90ea5bb7dff7460ff523cb2e2eb43b7ba6325fc161",
+      "path": "docs/impl/generated-fault-mbt/d3-d6-runtime-fixed/raw/document/NoDocumentRetry.itf/step-03/root/fixture/config.json",
+      "publishedSha256": "5e9931bf86a26ca31165ab8b765c71979c4e7370d553cfe65229c60be28912c6",
+      "transformation": "Only token value replaced by its SHA-256 redaction marker; other JSON fields preserved."
+    },
+    {
+      "originalSha256": "e87b8327b45f5d9cf0886a90ea5bb7dff7460ff523cb2e2eb43b7ba6325fc161",
+      "path": "docs/impl/generated-fault-mbt/d3-d6-runtime-fixed/raw/document/NoDocumentRetry.itf/step-04/root/fixture/config.json",
+      "publishedSha256": "5e9931bf86a26ca31165ab8b765c71979c4e7370d553cfe65229c60be28912c6",
+      "transformation": "Only token value replaced by its SHA-256 redaction marker; other JSON fields preserved."
+    },
+    {
+      "originalSha256": "e87b8327b45f5d9cf0886a90ea5bb7dff7460ff523cb2e2eb43b7ba6325fc161",
+      "path": "docs/impl/generated-fault-mbt/d3-d6-runtime-fixed/raw/document/NoDocumentRetry.itf/step-05/root/fixture/config.json",
+      "publishedSha256": "5e9931bf86a26ca31165ab8b765c71979c4e7370d553cfe65229c60be28912c6",
+      "transformation": "Only token value replaced by its SHA-256 redaction marker; other JSON fields preserved."
+    },
+    {
+      "originalSha256": "b0f1cf41193a8c2f95e0390b31741ee2e80e1db75ffa286a96d1990dcbfc145b",
+      "path": "docs/impl/generated-fault-mbt/d3-d6-runtime-fixed/raw/inbox/NoInboxCapacityRecovery.itf/step-00/root/fixture/config.json",
+      "publishedSha256": "27e9a24856d0a909f806dc455aa3964b1ccdb04bab7dfbaa74cd5e379db44d5f",
+      "transformation": "Only token value replaced by its SHA-256 redaction marker; other JSON fields preserved."
+    },
+    {
+      "originalSha256": "b0f1cf41193a8c2f95e0390b31741ee2e80e1db75ffa286a96d1990dcbfc145b",
+      "path": "docs/impl/generated-fault-mbt/d3-d6-runtime-fixed/raw/inbox/NoInboxCapacityRecovery.itf/step-01/root/fixture/config.json",
+      "publishedSha256": "27e9a24856d0a909f806dc455aa3964b1ccdb04bab7dfbaa74cd5e379db44d5f",
+      "transformation": "Only token value replaced by its SHA-256 redaction marker; other JSON fields preserved."
+    },
+    {
+      "originalSha256": "b0f1cf41193a8c2f95e0390b31741ee2e80e1db75ffa286a96d1990dcbfc145b",
+      "path": "docs/impl/generated-fault-mbt/d3-d6-runtime-fixed/raw/inbox/NoInboxCapacityRecovery.itf/step-02/root/fixture/config.json",
+      "publishedSha256": "27e9a24856d0a909f806dc455aa3964b1ccdb04bab7dfbaa74cd5e379db44d5f",
+      "transformation": "Only token value replaced by its SHA-256 redaction marker; other JSON fields preserved."
+    },
+    {
+      "originalSha256": "b0f1cf41193a8c2f95e0390b31741ee2e80e1db75ffa286a96d1990dcbfc145b",
+      "path": "docs/impl/generated-fault-mbt/d3-d6-runtime-fixed/raw/inbox/NoInboxCapacityRecovery.itf/step-03/root/fixture/config.json",
+      "publishedSha256": "27e9a24856d0a909f806dc455aa3964b1ccdb04bab7dfbaa74cd5e379db44d5f",
+      "transformation": "Only token value replaced by its SHA-256 redaction marker; other JSON fields preserved."
+    },
+    {
+      "originalSha256": "b0f1cf41193a8c2f95e0390b31741ee2e80e1db75ffa286a96d1990dcbfc145b",
+      "path": "docs/impl/generated-fault-mbt/d3-d6-runtime-fixed/raw/inbox/NoInboxCapacityRecovery.itf/step-04/root/fixture/config.json",
+      "publishedSha256": "27e9a24856d0a909f806dc455aa3964b1ccdb04bab7dfbaa74cd5e379db44d5f",
+      "transformation": "Only token value replaced by its SHA-256 redaction marker; other JSON fields preserved."
+    },
+    {
+      "originalSha256": "b0f1cf41193a8c2f95e0390b31741ee2e80e1db75ffa286a96d1990dcbfc145b",
+      "path": "docs/impl/generated-fault-mbt/d3-d6-runtime-fixed/raw/inbox/NoInboxCapacityRecovery.itf/step-05/root/fixture/config.json",
+      "publishedSha256": "27e9a24856d0a909f806dc455aa3964b1ccdb04bab7dfbaa74cd5e379db44d5f",
+      "transformation": "Only token value replaced by its SHA-256 redaction marker; other JSON fields preserved."
+    },
+    {
+      "originalSha256": "b0f1cf41193a8c2f95e0390b31741ee2e80e1db75ffa286a96d1990dcbfc145b",
+      "path": "docs/impl/generated-fault-mbt/d3-d6-runtime-fixed/raw/inbox/NoInboxCapacityRecovery.itf/step-06/root/fixture/config.json",
+      "publishedSha256": "27e9a24856d0a909f806dc455aa3964b1ccdb04bab7dfbaa74cd5e379db44d5f",
+      "transformation": "Only token value replaced by its SHA-256 redaction marker; other JSON fields preserved."
+    },
+    {
+      "originalSha256": "b0f1cf41193a8c2f95e0390b31741ee2e80e1db75ffa286a96d1990dcbfc145b",
+      "path": "docs/impl/generated-fault-mbt/d3-d6-runtime-fixed/raw/inbox/NoInboxCapacityRecovery.itf/step-07/root/fixture/config.json",
+      "publishedSha256": "27e9a24856d0a909f806dc455aa3964b1ccdb04bab7dfbaa74cd5e379db44d5f",
+      "transformation": "Only token value replaced by its SHA-256 redaction marker; other JSON fields preserved."
+    },
+    {
+      "originalSha256": "d28116863b856652f4fb8755e3c9223a6c109a7a6760d9a0a66fd81d2bd6072d",
+      "path": "docs/impl/generated-fault-mbt/qualification/deadletter-adapter-recovery/raw/deadletter/NoProjectionCrashRetry.itf/step-00/root/fixture/config.json",
+      "publishedSha256": "cc7db54c00bdec03785645f4eec5b0b081cfbca59360590592e1d5508be4575f",
+      "transformation": "Only token value replaced by its SHA-256 redaction marker; other JSON fields preserved."
+    },
+    {
+      "originalSha256": "d28116863b856652f4fb8755e3c9223a6c109a7a6760d9a0a66fd81d2bd6072d",
+      "path": "docs/impl/generated-fault-mbt/qualification/deadletter-adapter-recovery/raw/deadletter/NoProjectionCrashRetry.itf/step-01/root/fixture/config.json",
+      "publishedSha256": "cc7db54c00bdec03785645f4eec5b0b081cfbca59360590592e1d5508be4575f",
+      "transformation": "Only token value replaced by its SHA-256 redaction marker; other JSON fields preserved."
+    },
+    {
+      "originalSha256": "d28116863b856652f4fb8755e3c9223a6c109a7a6760d9a0a66fd81d2bd6072d",
+      "path": "docs/impl/generated-fault-mbt/qualification/deadletter-adapter-recovery/raw/deadletter/NoProjectionCrashRetry.itf/step-02/root/fixture/config.json",
+      "publishedSha256": "cc7db54c00bdec03785645f4eec5b0b081cfbca59360590592e1d5508be4575f",
+      "transformation": "Only token value replaced by its SHA-256 redaction marker; other JSON fields preserved."
+    },
+    {
+      "originalSha256": "d28116863b856652f4fb8755e3c9223a6c109a7a6760d9a0a66fd81d2bd6072d",
+      "path": "docs/impl/generated-fault-mbt/qualification/deadletter-adapter-recovery/raw/deadletter/NoProjectionCrashRetry.itf/step-03/root/fixture/config.json",
+      "publishedSha256": "cc7db54c00bdec03785645f4eec5b0b081cfbca59360590592e1d5508be4575f",
+      "transformation": "Only token value replaced by its SHA-256 redaction marker; other JSON fields preserved."
+    },
+    {
+      "originalSha256": "d28116863b856652f4fb8755e3c9223a6c109a7a6760d9a0a66fd81d2bd6072d",
+      "path": "docs/impl/generated-fault-mbt/qualification/deadletter-adapter-recovery/raw/deadletter/NoProjectionCrashRetry.itf/step-04/root/fixture/config.json",
+      "publishedSha256": "cc7db54c00bdec03785645f4eec5b0b081cfbca59360590592e1d5508be4575f",
+      "transformation": "Only token value replaced by its SHA-256 redaction marker; other JSON fields preserved."
+    },
+    {
+      "originalSha256": "d28116863b856652f4fb8755e3c9223a6c109a7a6760d9a0a66fd81d2bd6072d",
+      "path": "docs/impl/generated-fault-mbt/qualification/deadletter-adapter-recovery/raw/deadletter/NoProjectionCrashRetry.itf/step-05/root/fixture/config.json",
+      "publishedSha256": "cc7db54c00bdec03785645f4eec5b0b081cfbca59360590592e1d5508be4575f",
+      "transformation": "Only token value replaced by its SHA-256 redaction marker; other JSON fields preserved."
+    },
+    {
+      "originalSha256": "7ee1e4647c20138a1362f66f8edc137c8e6ff545bc23b4b1ffa85fd515950735",
+      "path": "docs/impl/generated-fault-mbt/qualification/deadletter-adapter-recovery/raw/deadletter/NoProjectionRecovery.itf/step-00/root/fixture/config.json",
+      "publishedSha256": "5750bbc6893d29a4653af5841e2c96d991382d3bd8dff8a5e5005f2edbae7fe3",
+      "transformation": "Only token value replaced by its SHA-256 redaction marker; other JSON fields preserved."
+    },
+    {
+      "originalSha256": "7ee1e4647c20138a1362f66f8edc137c8e6ff545bc23b4b1ffa85fd515950735",
+      "path": "docs/impl/generated-fault-mbt/qualification/deadletter-adapter-recovery/raw/deadletter/NoProjectionRecovery.itf/step-01/root/fixture/config.json",
+      "publishedSha256": "5750bbc6893d29a4653af5841e2c96d991382d3bd8dff8a5e5005f2edbae7fe3",
+      "transformation": "Only token value replaced by its SHA-256 redaction marker; other JSON fields preserved."
+    },
+    {
+      "originalSha256": "7ee1e4647c20138a1362f66f8edc137c8e6ff545bc23b4b1ffa85fd515950735",
+      "path": "docs/impl/generated-fault-mbt/qualification/deadletter-adapter-recovery/raw/deadletter/NoProjectionRecovery.itf/step-02/root/fixture/config.json",
+      "publishedSha256": "5750bbc6893d29a4653af5841e2c96d991382d3bd8dff8a5e5005f2edbae7fe3",
+      "transformation": "Only token value replaced by its SHA-256 redaction marker; other JSON fields preserved."
+    },
+    {
+      "originalSha256": "7ee1e4647c20138a1362f66f8edc137c8e6ff545bc23b4b1ffa85fd515950735",
+      "path": "docs/impl/generated-fault-mbt/qualification/deadletter-adapter-recovery/raw/deadletter/NoProjectionRecovery.itf/step-03/root/fixture/config.json",
+      "publishedSha256": "5750bbc6893d29a4653af5841e2c96d991382d3bd8dff8a5e5005f2edbae7fe3",
+      "transformation": "Only token value replaced by its SHA-256 redaction marker; other JSON fields preserved."
+    },
+    {
+      "originalSha256": "7ee1e4647c20138a1362f66f8edc137c8e6ff545bc23b4b1ffa85fd515950735",
+      "path": "docs/impl/generated-fault-mbt/qualification/deadletter-adapter-recovery/raw/deadletter/NoProjectionRecovery.itf/step-04/root/fixture/config.json",
+      "publishedSha256": "5750bbc6893d29a4653af5841e2c96d991382d3bd8dff8a5e5005f2edbae7fe3",
+      "transformation": "Only token value replaced by its SHA-256 redaction marker; other JSON fields preserved."
+    },
+    {
+      "originalSha256": "7ee1e4647c20138a1362f66f8edc137c8e6ff545bc23b4b1ffa85fd515950735",
+      "path": "docs/impl/generated-fault-mbt/qualification/deadletter-adapter-recovery/raw/deadletter/NoProjectionRecovery.itf/step-05/root/fixture/config.json",
+      "publishedSha256": "5750bbc6893d29a4653af5841e2c96d991382d3bd8dff8a5e5005f2edbae7fe3",
+      "transformation": "Only token value replaced by its SHA-256 redaction marker; other JSON fields preserved."
+    },
+    {
+      "originalSha256": "7ee1e4647c20138a1362f66f8edc137c8e6ff545bc23b4b1ffa85fd515950735",
+      "path": "docs/impl/generated-fault-mbt/qualification/deadletter-adapter-recovery/raw/deadletter/NoProjectionRecovery.itf/step-06/root/fixture/config.json",
+      "publishedSha256": "5750bbc6893d29a4653af5841e2c96d991382d3bd8dff8a5e5005f2edbae7fe3",
+      "transformation": "Only token value replaced by its SHA-256 redaction marker; other JSON fields preserved."
+    },
+    {
+      "originalSha256": "70f0823b9102bcd2b154329e5251f213b2e9eb81080136b9a520cdf4e0ea40db",
+      "path": "docs/impl/generated-fault-mbt/qualification/raw/deadletter/NoProjectionCrashRetry.itf/step-00/root/fixture/config.json",
+      "publishedSha256": "6cfc9b736c5810e2937f229e773e75d01af3ed9e8a9b65853957b0dee1345578",
+      "transformation": "Only token value replaced by its SHA-256 redaction marker; other JSON fields preserved."
+    },
+    {
+      "originalSha256": "70f0823b9102bcd2b154329e5251f213b2e9eb81080136b9a520cdf4e0ea40db",
+      "path": "docs/impl/generated-fault-mbt/qualification/raw/deadletter/NoProjectionCrashRetry.itf/step-01/root/fixture/config.json",
+      "publishedSha256": "6cfc9b736c5810e2937f229e773e75d01af3ed9e8a9b65853957b0dee1345578",
+      "transformation": "Only token value replaced by its SHA-256 redaction marker; other JSON fields preserved."
+    },
+    {
+      "originalSha256": "70f0823b9102bcd2b154329e5251f213b2e9eb81080136b9a520cdf4e0ea40db",
+      "path": "docs/impl/generated-fault-mbt/qualification/raw/deadletter/NoProjectionCrashRetry.itf/step-02/root/fixture/config.json",
+      "publishedSha256": "6cfc9b736c5810e2937f229e773e75d01af3ed9e8a9b65853957b0dee1345578",
+      "transformation": "Only token value replaced by its SHA-256 redaction marker; other JSON fields preserved."
+    },
+    {
+      "originalSha256": "70f0823b9102bcd2b154329e5251f213b2e9eb81080136b9a520cdf4e0ea40db",
+      "path": "docs/impl/generated-fault-mbt/qualification/raw/deadletter/NoProjectionCrashRetry.itf/step-03/root/fixture/config.json",
+      "publishedSha256": "6cfc9b736c5810e2937f229e773e75d01af3ed9e8a9b65853957b0dee1345578",
+      "transformation": "Only token value replaced by its SHA-256 redaction marker; other JSON fields preserved."
+    },
+    {
+      "originalSha256": "70f0823b9102bcd2b154329e5251f213b2e9eb81080136b9a520cdf4e0ea40db",
+      "path": "docs/impl/generated-fault-mbt/qualification/raw/deadletter/NoProjectionCrashRetry.itf/step-04/root/fixture/config.json",
+      "publishedSha256": "6cfc9b736c5810e2937f229e773e75d01af3ed9e8a9b65853957b0dee1345578",
+      "transformation": "Only token value replaced by its SHA-256 redaction marker; other JSON fields preserved."
+    },
+    {
+      "originalSha256": "70f0823b9102bcd2b154329e5251f213b2e9eb81080136b9a520cdf4e0ea40db",
+      "path": "docs/impl/generated-fault-mbt/qualification/raw/deadletter/NoProjectionCrashRetry.itf/step-05/root/fixture/config.json",
+      "publishedSha256": "6cfc9b736c5810e2937f229e773e75d01af3ed9e8a9b65853957b0dee1345578",
+      "transformation": "Only token value replaced by its SHA-256 redaction marker; other JSON fields preserved."
+    },
+    {
+      "originalSha256": "8e5baf476f7b7f33f992371ef647111ae543b902a606344a5f9e2be594c6cb03",
+      "path": "docs/impl/generated-fault-mbt/qualification/raw/deadletter/NoProjectionRecovery.itf/step-00/root/fixture/config.json",
+      "publishedSha256": "a8fc48a7585739cf425c356ff88411aa332560f6df8b4cf1597797d89444eb09",
+      "transformation": "Only token value replaced by its SHA-256 redaction marker; other JSON fields preserved."
+    },
+    {
+      "originalSha256": "8e5baf476f7b7f33f992371ef647111ae543b902a606344a5f9e2be594c6cb03",
+      "path": "docs/impl/generated-fault-mbt/qualification/raw/deadletter/NoProjectionRecovery.itf/step-01/root/fixture/config.json",
+      "publishedSha256": "a8fc48a7585739cf425c356ff88411aa332560f6df8b4cf1597797d89444eb09",
+      "transformation": "Only token value replaced by its SHA-256 redaction marker; other JSON fields preserved."
+    },
+    {
+      "originalSha256": "8e5baf476f7b7f33f992371ef647111ae543b902a606344a5f9e2be594c6cb03",
+      "path": "docs/impl/generated-fault-mbt/qualification/raw/deadletter/NoProjectionRecovery.itf/step-02/root/fixture/config.json",
+      "publishedSha256": "a8fc48a7585739cf425c356ff88411aa332560f6df8b4cf1597797d89444eb09",
+      "transformation": "Only token value replaced by its SHA-256 redaction marker; other JSON fields preserved."
+    },
+    {
+      "originalSha256": "8e5baf476f7b7f33f992371ef647111ae543b902a606344a5f9e2be594c6cb03",
+      "path": "docs/impl/generated-fault-mbt/qualification/raw/deadletter/NoProjectionRecovery.itf/step-03/root/fixture/config.json",
+      "publishedSha256": "a8fc48a7585739cf425c356ff88411aa332560f6df8b4cf1597797d89444eb09",
+      "transformation": "Only token value replaced by its SHA-256 redaction marker; other JSON fields preserved."
+    },
+    {
+      "originalSha256": "e4417c45fb256520e4cfc662a111d7d215bc0db35589e29edd4bd0613d291291",
+      "path": "docs/impl/generated-fault-mbt/qualification/raw/inbox/NoInboxCapacityRecovery.itf/step-00/root/fixture/config.json",
+      "publishedSha256": "909712c1c1fa565d4346f497b4c45d3614edde7bed6790904214769c5033733a",
+      "transformation": "Only token value replaced by its SHA-256 redaction marker; other JSON fields preserved."
+    },
+    {
+      "originalSha256": "e4417c45fb256520e4cfc662a111d7d215bc0db35589e29edd4bd0613d291291",
+      "path": "docs/impl/generated-fault-mbt/qualification/raw/inbox/NoInboxCapacityRecovery.itf/step-01/root/fixture/config.json",
+      "publishedSha256": "909712c1c1fa565d4346f497b4c45d3614edde7bed6790904214769c5033733a",
+      "transformation": "Only token value replaced by its SHA-256 redaction marker; other JSON fields preserved."
+    },
+    {
+      "originalSha256": "e4417c45fb256520e4cfc662a111d7d215bc0db35589e29edd4bd0613d291291",
+      "path": "docs/impl/generated-fault-mbt/qualification/raw/inbox/NoInboxCapacityRecovery.itf/step-02/root/fixture/config.json",
+      "publishedSha256": "909712c1c1fa565d4346f497b4c45d3614edde7bed6790904214769c5033733a",
+      "transformation": "Only token value replaced by its SHA-256 redaction marker; other JSON fields preserved."
+    },
+    {
+      "originalSha256": "e4417c45fb256520e4cfc662a111d7d215bc0db35589e29edd4bd0613d291291",
+      "path": "docs/impl/generated-fault-mbt/qualification/raw/inbox/NoInboxCapacityRecovery.itf/step-03/root/fixture/config.json",
+      "publishedSha256": "909712c1c1fa565d4346f497b4c45d3614edde7bed6790904214769c5033733a",
+      "transformation": "Only token value replaced by its SHA-256 redaction marker; other JSON fields preserved."
+    },
+    {
+      "originalSha256": "e4417c45fb256520e4cfc662a111d7d215bc0db35589e29edd4bd0613d291291",
+      "path": "docs/impl/generated-fault-mbt/qualification/raw/inbox/NoInboxCapacityRecovery.itf/step-04/root/fixture/config.json",
+      "publishedSha256": "909712c1c1fa565d4346f497b4c45d3614edde7bed6790904214769c5033733a",
+      "transformation": "Only token value replaced by its SHA-256 redaction marker; other JSON fields preserved."
+    },
+    {
+      "originalSha256": "e4417c45fb256520e4cfc662a111d7d215bc0db35589e29edd4bd0613d291291",
+      "path": "docs/impl/generated-fault-mbt/qualification/raw/inbox/NoInboxCapacityRecovery.itf/step-05/root/fixture/config.json",
+      "publishedSha256": "909712c1c1fa565d4346f497b4c45d3614edde7bed6790904214769c5033733a",
+      "transformation": "Only token value replaced by its SHA-256 redaction marker; other JSON fields preserved."
+    },
+    {
+      "originalSha256": "e4417c45fb256520e4cfc662a111d7d215bc0db35589e29edd4bd0613d291291",
+      "path": "docs/impl/generated-fault-mbt/qualification/raw/inbox/NoInboxCapacityRecovery.itf/step-06/root/fixture/config.json",
+      "publishedSha256": "909712c1c1fa565d4346f497b4c45d3614edde7bed6790904214769c5033733a",
+      "transformation": "Only token value replaced by its SHA-256 redaction marker; other JSON fields preserved."
+    },
+    {
+      "originalSha256": "e4417c45fb256520e4cfc662a111d7d215bc0db35589e29edd4bd0613d291291",
+      "path": "docs/impl/generated-fault-mbt/qualification/raw/inbox/NoInboxCapacityRecovery.itf/step-07/root/fixture/config.json",
+      "publishedSha256": "909712c1c1fa565d4346f497b4c45d3614edde7bed6790904214769c5033733a",
+      "transformation": "Only token value replaced by its SHA-256 redaction marker; other JSON fields preserved."
+    },
+    {
+      "originalSha256": "fa85d6eb74bc76c57801e3188d670c0cabe60e474ec6f0ef182b007b7c88a527",
+      "path": "docs/impl/generated-fault-mbt/qualification/raw-final/deadletter/NoProjectionCrashRetry.itf/step-00/root/fixture/config.json",
+      "publishedSha256": "3f2488240209df6c2f1547fdb60fe46a524776f79939ec39c1914a4bc9d134e6",
+      "transformation": "Only token value replaced by its SHA-256 redaction marker; other JSON fields preserved."
+    },
+    {
+      "originalSha256": "fa85d6eb74bc76c57801e3188d670c0cabe60e474ec6f0ef182b007b7c88a527",
+      "path": "docs/impl/generated-fault-mbt/qualification/raw-final/deadletter/NoProjectionCrashRetry.itf/step-01/root/fixture/config.json",
+      "publishedSha256": "3f2488240209df6c2f1547fdb60fe46a524776f79939ec39c1914a4bc9d134e6",
+      "transformation": "Only token value replaced by its SHA-256 redaction marker; other JSON fields preserved."
+    },
+    {
+      "originalSha256": "fa85d6eb74bc76c57801e3188d670c0cabe60e474ec6f0ef182b007b7c88a527",
+      "path": "docs/impl/generated-fault-mbt/qualification/raw-final/deadletter/NoProjectionCrashRetry.itf/step-02/root/fixture/config.json",
+      "publishedSha256": "3f2488240209df6c2f1547fdb60fe46a524776f79939ec39c1914a4bc9d134e6",
+      "transformation": "Only token value replaced by its SHA-256 redaction marker; other JSON fields preserved."
+    },
+    {
+      "originalSha256": "fa85d6eb74bc76c57801e3188d670c0cabe60e474ec6f0ef182b007b7c88a527",
+      "path": "docs/impl/generated-fault-mbt/qualification/raw-final/deadletter/NoProjectionCrashRetry.itf/step-03/root/fixture/config.json",
+      "publishedSha256": "3f2488240209df6c2f1547fdb60fe46a524776f79939ec39c1914a4bc9d134e6",
+      "transformation": "Only token value replaced by its SHA-256 redaction marker; other JSON fields preserved."
+    },
+    {
+      "originalSha256": "fa85d6eb74bc76c57801e3188d670c0cabe60e474ec6f0ef182b007b7c88a527",
+      "path": "docs/impl/generated-fault-mbt/qualification/raw-final/deadletter/NoProjectionCrashRetry.itf/step-04/root/fixture/config.json",
+      "publishedSha256": "3f2488240209df6c2f1547fdb60fe46a524776f79939ec39c1914a4bc9d134e6",
+      "transformation": "Only token value replaced by its SHA-256 redaction marker; other JSON fields preserved."
+    },
+    {
+      "originalSha256": "fa85d6eb74bc76c57801e3188d670c0cabe60e474ec6f0ef182b007b7c88a527",
+      "path": "docs/impl/generated-fault-mbt/qualification/raw-final/deadletter/NoProjectionCrashRetry.itf/step-05/root/fixture/config.json",
+      "publishedSha256": "3f2488240209df6c2f1547fdb60fe46a524776f79939ec39c1914a4bc9d134e6",
+      "transformation": "Only token value replaced by its SHA-256 redaction marker; other JSON fields preserved."
+    },
+    {
+      "originalSha256": "727b9a2163809d24103ca43a3ee0b7e288270abc0852255b388ad9c6c6378a85",
+      "path": "docs/impl/generated-fault-mbt/qualification/raw-final/deadletter/NoProjectionRecovery.itf/step-00/root/fixture/config.json",
+      "publishedSha256": "fdb6dbe87723d772754d8a0163dced522b88608b5f75bc7c8e89d1da61bccd86",
+      "transformation": "Only token value replaced by its SHA-256 redaction marker; other JSON fields preserved."
+    },
+    {
+      "originalSha256": "727b9a2163809d24103ca43a3ee0b7e288270abc0852255b388ad9c6c6378a85",
+      "path": "docs/impl/generated-fault-mbt/qualification/raw-final/deadletter/NoProjectionRecovery.itf/step-01/root/fixture/config.json",
+      "publishedSha256": "fdb6dbe87723d772754d8a0163dced522b88608b5f75bc7c8e89d1da61bccd86",
+      "transformation": "Only token value replaced by its SHA-256 redaction marker; other JSON fields preserved."
+    },
+    {
+      "originalSha256": "727b9a2163809d24103ca43a3ee0b7e288270abc0852255b388ad9c6c6378a85",
+      "path": "docs/impl/generated-fault-mbt/qualification/raw-final/deadletter/NoProjectionRecovery.itf/step-02/root/fixture/config.json",
+      "publishedSha256": "fdb6dbe87723d772754d8a0163dced522b88608b5f75bc7c8e89d1da61bccd86",
+      "transformation": "Only token value replaced by its SHA-256 redaction marker; other JSON fields preserved."
+    },
+    {
+      "originalSha256": "727b9a2163809d24103ca43a3ee0b7e288270abc0852255b388ad9c6c6378a85",
+      "path": "docs/impl/generated-fault-mbt/qualification/raw-final/deadletter/NoProjectionRecovery.itf/step-03/root/fixture/config.json",
+      "publishedSha256": "fdb6dbe87723d772754d8a0163dced522b88608b5f75bc7c8e89d1da61bccd86",
+      "transformation": "Only token value replaced by its SHA-256 redaction marker; other JSON fields preserved."
+    },
+    {
+      "originalSha256": "727b9a2163809d24103ca43a3ee0b7e288270abc0852255b388ad9c6c6378a85",
+      "path": "docs/impl/generated-fault-mbt/qualification/raw-final/deadletter/NoProjectionRecovery.itf/step-04/root/fixture/config.json",
+      "publishedSha256": "fdb6dbe87723d772754d8a0163dced522b88608b5f75bc7c8e89d1da61bccd86",
+      "transformation": "Only token value replaced by its SHA-256 redaction marker; other JSON fields preserved."
+    },
+    {
+      "originalSha256": "727b9a2163809d24103ca43a3ee0b7e288270abc0852255b388ad9c6c6378a85",
+      "path": "docs/impl/generated-fault-mbt/qualification/raw-final/deadletter/NoProjectionRecovery.itf/step-05/root/fixture/config.json",
+      "publishedSha256": "fdb6dbe87723d772754d8a0163dced522b88608b5f75bc7c8e89d1da61bccd86",
+      "transformation": "Only token value replaced by its SHA-256 redaction marker; other JSON fields preserved."
+    },
+    {
+      "originalSha256": "727b9a2163809d24103ca43a3ee0b7e288270abc0852255b388ad9c6c6378a85",
+      "path": "docs/impl/generated-fault-mbt/qualification/raw-final/deadletter/NoProjectionRecovery.itf/step-06/root/fixture/config.json",
+      "publishedSha256": "fdb6dbe87723d772754d8a0163dced522b88608b5f75bc7c8e89d1da61bccd86",
+      "transformation": "Only token value replaced by its SHA-256 redaction marker; other JSON fields preserved."
+    },
+    {
+      "originalSha256": "b0dc3e860ebcf1a97b536ef76a4109816eadb6eb5cc997a9c467f115aa344faf",
+      "path": "docs/impl/generated-fault-mbt/qualification/raw-final/document/NoDocumentCrashRetry.itf/step-00/root/fixture/config.json",
+      "publishedSha256": "86437582a9359ffacdb95c273d4e31f310658ef4a075f247a5b60243c9feb042",
+      "transformation": "Only token value replaced by its SHA-256 redaction marker; other JSON fields preserved."
+    },
+    {
+      "originalSha256": "b0dc3e860ebcf1a97b536ef76a4109816eadb6eb5cc997a9c467f115aa344faf",
+      "path": "docs/impl/generated-fault-mbt/qualification/raw-final/document/NoDocumentCrashRetry.itf/step-01/root/fixture/config.json",
+      "publishedSha256": "86437582a9359ffacdb95c273d4e31f310658ef4a075f247a5b60243c9feb042",
+      "transformation": "Only token value replaced by its SHA-256 redaction marker; other JSON fields preserved."
+    },
+    {
+      "originalSha256": "b0dc3e860ebcf1a97b536ef76a4109816eadb6eb5cc997a9c467f115aa344faf",
+      "path": "docs/impl/generated-fault-mbt/qualification/raw-final/document/NoDocumentCrashRetry.itf/step-02/root/fixture/config.json",
+      "publishedSha256": "86437582a9359ffacdb95c273d4e31f310658ef4a075f247a5b60243c9feb042",
+      "transformation": "Only token value replaced by its SHA-256 redaction marker; other JSON fields preserved."
+    },
+    {
+      "originalSha256": "b0dc3e860ebcf1a97b536ef76a4109816eadb6eb5cc997a9c467f115aa344faf",
+      "path": "docs/impl/generated-fault-mbt/qualification/raw-final/document/NoDocumentCrashRetry.itf/step-03/root/fixture/config.json",
+      "publishedSha256": "86437582a9359ffacdb95c273d4e31f310658ef4a075f247a5b60243c9feb042",
+      "transformation": "Only token value replaced by its SHA-256 redaction marker; other JSON fields preserved."
+    },
+    {
+      "originalSha256": "b0dc3e860ebcf1a97b536ef76a4109816eadb6eb5cc997a9c467f115aa344faf",
+      "path": "docs/impl/generated-fault-mbt/qualification/raw-final/document/NoDocumentCrashRetry.itf/step-04/root/fixture/config.json",
+      "publishedSha256": "86437582a9359ffacdb95c273d4e31f310658ef4a075f247a5b60243c9feb042",
+      "transformation": "Only token value replaced by its SHA-256 redaction marker; other JSON fields preserved."
+    },
+    {
+      "originalSha256": "b0dc3e860ebcf1a97b536ef76a4109816eadb6eb5cc997a9c467f115aa344faf",
+      "path": "docs/impl/generated-fault-mbt/qualification/raw-final/document/NoDocumentCrashRetry.itf/step-05/root/fixture/config.json",
+      "publishedSha256": "86437582a9359ffacdb95c273d4e31f310658ef4a075f247a5b60243c9feb042",
+      "transformation": "Only token value replaced by its SHA-256 redaction marker; other JSON fields preserved."
+    },
+    {
+      "originalSha256": "b0dc3e860ebcf1a97b536ef76a4109816eadb6eb5cc997a9c467f115aa344faf",
+      "path": "docs/impl/generated-fault-mbt/qualification/raw-final/document/NoDocumentCrashRetry.itf/step-06/root/fixture/config.json",
+      "publishedSha256": "86437582a9359ffacdb95c273d4e31f310658ef4a075f247a5b60243c9feb042",
+      "transformation": "Only token value replaced by its SHA-256 redaction marker; other JSON fields preserved."
+    },
+    {
+      "originalSha256": "5084d5ca235f001951a2d8bc54942fdf5a6c5da8f851b7d825082122e3003a57",
+      "path": "docs/impl/generated-fault-mbt/qualification/raw-final/document/NoDocumentRetry.itf/step-00/root/fixture/config.json",
+      "publishedSha256": "703f08324bad6c03cbdeab0ad4347291be171a369ddb0b04c9fe231e4e1c4229",
+      "transformation": "Only token value replaced by its SHA-256 redaction marker; other JSON fields preserved."
+    },
+    {
+      "originalSha256": "5084d5ca235f001951a2d8bc54942fdf5a6c5da8f851b7d825082122e3003a57",
+      "path": "docs/impl/generated-fault-mbt/qualification/raw-final/document/NoDocumentRetry.itf/step-01/root/fixture/config.json",
+      "publishedSha256": "703f08324bad6c03cbdeab0ad4347291be171a369ddb0b04c9fe231e4e1c4229",
+      "transformation": "Only token value replaced by its SHA-256 redaction marker; other JSON fields preserved."
+    },
+    {
+      "originalSha256": "5084d5ca235f001951a2d8bc54942fdf5a6c5da8f851b7d825082122e3003a57",
+      "path": "docs/impl/generated-fault-mbt/qualification/raw-final/document/NoDocumentRetry.itf/step-02/root/fixture/config.json",
+      "publishedSha256": "703f08324bad6c03cbdeab0ad4347291be171a369ddb0b04c9fe231e4e1c4229",
+      "transformation": "Only token value replaced by its SHA-256 redaction marker; other JSON fields preserved."
+    },
+    {
+      "originalSha256": "5084d5ca235f001951a2d8bc54942fdf5a6c5da8f851b7d825082122e3003a57",
+      "path": "docs/impl/generated-fault-mbt/qualification/raw-final/document/NoDocumentRetry.itf/step-03/root/fixture/config.json",
+      "publishedSha256": "703f08324bad6c03cbdeab0ad4347291be171a369ddb0b04c9fe231e4e1c4229",
+      "transformation": "Only token value replaced by its SHA-256 redaction marker; other JSON fields preserved."
+    },
+    {
+      "originalSha256": "5084d5ca235f001951a2d8bc54942fdf5a6c5da8f851b7d825082122e3003a57",
+      "path": "docs/impl/generated-fault-mbt/qualification/raw-final/document/NoDocumentRetry.itf/step-04/root/fixture/config.json",
+      "publishedSha256": "703f08324bad6c03cbdeab0ad4347291be171a369ddb0b04c9fe231e4e1c4229",
+      "transformation": "Only token value replaced by its SHA-256 redaction marker; other JSON fields preserved."
+    },
+    {
+      "originalSha256": "5084d5ca235f001951a2d8bc54942fdf5a6c5da8f851b7d825082122e3003a57",
+      "path": "docs/impl/generated-fault-mbt/qualification/raw-final/document/NoDocumentRetry.itf/step-05/root/fixture/config.json",
+      "publishedSha256": "703f08324bad6c03cbdeab0ad4347291be171a369ddb0b04c9fe231e4e1c4229",
+      "transformation": "Only token value replaced by its SHA-256 redaction marker; other JSON fields preserved."
+    },
+    {
+      "originalSha256": "4fa3761b2dbf50c4000e428723365e24471eea839890e60586f3843492819c42",
+      "path": "docs/impl/generated-fault-mbt/qualification/raw-final/inbox/NoInboxCapacityRecovery.itf/step-00/root/fixture/config.json",
+      "publishedSha256": "4cd493430afbd8e15e4f2556e4ffe63aa4401540f7f9b2eff0af4d82bafc153d",
+      "transformation": "Only token value replaced by its SHA-256 redaction marker; other JSON fields preserved."
+    },
+    {
+      "originalSha256": "4fa3761b2dbf50c4000e428723365e24471eea839890e60586f3843492819c42",
+      "path": "docs/impl/generated-fault-mbt/qualification/raw-final/inbox/NoInboxCapacityRecovery.itf/step-01/root/fixture/config.json",
+      "publishedSha256": "4cd493430afbd8e15e4f2556e4ffe63aa4401540f7f9b2eff0af4d82bafc153d",
+      "transformation": "Only token value replaced by its SHA-256 redaction marker; other JSON fields preserved."
+    },
+    {
+      "originalSha256": "4fa3761b2dbf50c4000e428723365e24471eea839890e60586f3843492819c42",
+      "path": "docs/impl/generated-fault-mbt/qualification/raw-final/inbox/NoInboxCapacityRecovery.itf/step-02/root/fixture/config.json",
+      "publishedSha256": "4cd493430afbd8e15e4f2556e4ffe63aa4401540f7f9b2eff0af4d82bafc153d",
+      "transformation": "Only token value replaced by its SHA-256 redaction marker; other JSON fields preserved."
+    },
+    {
+      "originalSha256": "4fa3761b2dbf50c4000e428723365e24471eea839890e60586f3843492819c42",
+      "path": "docs/impl/generated-fault-mbt/qualification/raw-final/inbox/NoInboxCapacityRecovery.itf/step-03/root/fixture/config.json",
+      "publishedSha256": "4cd493430afbd8e15e4f2556e4ffe63aa4401540f7f9b2eff0af4d82bafc153d",
+      "transformation": "Only token value replaced by its SHA-256 redaction marker; other JSON fields preserved."
+    },
+    {
+      "originalSha256": "4fa3761b2dbf50c4000e428723365e24471eea839890e60586f3843492819c42",
+      "path": "docs/impl/generated-fault-mbt/qualification/raw-final/inbox/NoInboxCapacityRecovery.itf/step-04/root/fixture/config.json",
+      "publishedSha256": "4cd493430afbd8e15e4f2556e4ffe63aa4401540f7f9b2eff0af4d82bafc153d",
+      "transformation": "Only token value replaced by its SHA-256 redaction marker; other JSON fields preserved."
+    },
+    {
+      "originalSha256": "4fa3761b2dbf50c4000e428723365e24471eea839890e60586f3843492819c42",
+      "path": "docs/impl/generated-fault-mbt/qualification/raw-final/inbox/NoInboxCapacityRecovery.itf/step-05/root/fixture/config.json",
+      "publishedSha256": "4cd493430afbd8e15e4f2556e4ffe63aa4401540f7f9b2eff0af4d82bafc153d",
+      "transformation": "Only token value replaced by its SHA-256 redaction marker; other JSON fields preserved."
+    },
+    {
+      "originalSha256": "4fa3761b2dbf50c4000e428723365e24471eea839890e60586f3843492819c42",
+      "path": "docs/impl/generated-fault-mbt/qualification/raw-final/inbox/NoInboxCapacityRecovery.itf/step-06/root/fixture/config.json",
+      "publishedSha256": "4cd493430afbd8e15e4f2556e4ffe63aa4401540f7f9b2eff0af4d82bafc153d",
+      "transformation": "Only token value replaced by its SHA-256 redaction marker; other JSON fields preserved."
+    },
+    {
+      "originalSha256": "4fa3761b2dbf50c4000e428723365e24471eea839890e60586f3843492819c42",
+      "path": "docs/impl/generated-fault-mbt/qualification/raw-final/inbox/NoInboxCapacityRecovery.itf/step-07/root/fixture/config.json",
+      "publishedSha256": "4cd493430afbd8e15e4f2556e4ffe63aa4401540f7f9b2eff0af4d82bafc153d",
+      "transformation": "Only token value replaced by its SHA-256 redaction marker; other JSON fields preserved."
+    }
+  ],
+  "schema": "cooperators.evidence-publication/v1",
+  "sourceFreeze": {
+    "path": "docs/impl/generated-fault-mbt/qualification/source-freeze.json",
+    "sha256": "697079cc8405ef2463a12a409026075fe154f649dd9623ae21ad6854b42f5f1b",
+    "unchanged": true
+  },
+  "utc": "2026-10-19T10:21:02.515698+00:00"
+}

@@ -1,0 +1,18 @@
+tlc evidence: /home/nzsn/Repos/Cooperators/docs/impl/generated-fault-mbt/d8-identity-policy-v3-model/profiles/identity
+PASS safe-identity; 26461 distinct states (/home/nzsn/Repos/Cooperators/docs/impl/generated-fault-mbt/d8-identity-policy-v3-model/profiles/identity/safe-identity.log)
+PASS fault-kind-identity; 91 distinct states (/home/nzsn/Repos/Cooperators/docs/impl/generated-fault-mbt/d8-identity-policy-v3-model/profiles/identity/fault-kind-identity.log)
+PASS fault-reused-id; 1414 distinct states (/home/nzsn/Repos/Cooperators/docs/impl/generated-fault-mbt/d8-identity-policy-v3-model/profiles/identity/fault-reused-id.log)
+PASS fault-retry-id; 73 distinct states (/home/nzsn/Repos/Cooperators/docs/impl/generated-fault-mbt/d8-identity-policy-v3-model/profiles/identity/fault-retry-id.log)
+PASS fault-reconnect-id; 1387 distinct states (/home/nzsn/Repos/Cooperators/docs/impl/generated-fault-mbt/d8-identity-policy-v3-model/profiles/identity/fault-reconnect-id.log)
+PASS fault-shared-token; 91 distinct states (/home/nzsn/Repos/Cooperators/docs/impl/generated-fault-mbt/d8-identity-policy-v3-model/profiles/identity/fault-shared-token.log)
+PASS fault-stale-token; 109 distinct states (/home/nzsn/Repos/Cooperators/docs/impl/generated-fault-mbt/d8-identity-policy-v3-model/profiles/identity/fault-stale-token.log)
+PASS fault-stale-enrollment; 1189 distinct states (/home/nzsn/Repos/Cooperators/docs/impl/generated-fault-mbt/d8-identity-policy-v3-model/profiles/identity/fault-stale-enrollment.log)
+PASS witness-NoSameKindEnrollment; 91 distinct states (/home/nzsn/Repos/Cooperators/docs/impl/generated-fault-mbt/d8-identity-policy-v3-model/profiles/identity/witness-NoSameKindEnrollment.log)
+PASS witness-NoRevokedAuthentication; 7381 distinct states (/home/nzsn/Repos/Cooperators/docs/impl/generated-fault-mbt/d8-identity-policy-v3-model/profiles/identity/witness-NoRevokedAuthentication.log)
+PASS witness-NoStableReconnect; 7381 distinct states (/home/nzsn/Repos/Cooperators/docs/impl/generated-fault-mbt/d8-identity-policy-v3-model/profiles/identity/witness-NoStableReconnect.log)
+PASS witness-NoEnrollmentRetry; 1333 distinct states (/home/nzsn/Repos/Cooperators/docs/impl/generated-fault-mbt/d8-identity-policy-v3-model/profiles/identity/witness-NoEnrollmentRetry.log)
+PASS witness-NoStaleEnrollmentRetry; 7381 distinct states (/home/nzsn/Repos/Cooperators/docs/impl/generated-fault-mbt/d8-identity-policy-v3-model/profiles/identity/witness-NoStaleEnrollmentRetry.log)
+PASS witness-NoRetiredEnrollmentRetry; 1405 distinct states (/home/nzsn/Repos/Cooperators/docs/impl/generated-fault-mbt/d8-identity-policy-v3-model/profiles/identity/witness-NoRetiredEnrollmentRetry.log)
+PASS witness-NoRetiredThenFresh; 1396 distinct states (/home/nzsn/Repos/Cooperators/docs/impl/generated-fault-mbt/d8-identity-policy-v3-model/profiles/identity/witness-NoRetiredThenFresh.log)
+PASS witness-NoRetiredAuthentication; 7201 distinct states (/home/nzsn/Repos/Cooperators/docs/impl/generated-fault-mbt/d8-identity-policy-v3-model/profiles/identity/witness-NoRetiredAuthentication.log)
+16/16 checks passed

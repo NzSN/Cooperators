@@ -1,0 +1,46 @@
+warning: methods `record_http` and `record_size_rejection` are never used
+  --> /home/nzsn/Repos/Cooperators/src/metrics.rs:28:19
+   |
+26 | impl Metrics {
+   | ------------ methods in this implementation
+27 |     /// Records one completed HTTP response.
+28 |     pub(crate) fn record_http(&self, path: &str, status: u16) {
+   |                   ^^^^^^^^^^^
+...
+35 |     pub(crate) fn record_size_rejection(&self) {
+   |                   ^^^^^^^^^^^^^^^^^^^^^
+   |
+   = note: `#[warn(dead_code)]` (part of `#[warn(unused)]`) on by default
+
+warning: `cooperators` (lib) generated 1 warning
+   Compiling cooperators-mbt v0.1.0 (/tmp/cooperators-mbt-retry)
+warning: unused variable: `initial`
+   --> /home/nzsn/Repos/Cooperators/spec/mbt/src/../writers/generated/MBWritersMirror.generated.rs:223:17
+    |
+223 | ...   let initial = Value::Record(params.iter().filter(|(k,_)| !k.starts_with('#') && *k != "action_taken" && *k != "parameters").m...
+    |           ^^^^^^^ help: if this is intentional, prefix it with an underscore: `_initial`
+    |
+    = note: `#[warn(unused_variables)]` (part of `#[warn(unused)]`) on by default
+
+warning: unused variable: `initial`
+   --> /home/nzsn/Repos/Cooperators/spec/mbt/src/../generated/MBCooperatorsMirror.generated.rs:291:17
+    |
+291 | ...   let initial = Value::Record(params.iter().filter(|(k,_)| !k.starts_with('#') && *k != "action_taken" && *k != "parameters").m...
+    |           ^^^^^^^ help: if this is intentional, prefix it with an underscore: `_initial`
+
+warning: constant `ADAPTER_ID` is never used
+  --> /home/nzsn/Repos/Cooperators/spec/mbt/src/main.rs:41:7
+   |
+41 | const ADAPTER_ID: &str = "cooperators.mbc/v1";
+   |       ^^^^^^^^^^
+   |
+   = note: `#[warn(dead_code)]` (part of `#[warn(unused)]`) on by default
+
+warning: constant `TARGET_PROFILE` is never used
+  --> /home/nzsn/Repos/Cooperators/spec/mbt/src/main.rs:42:7
+   |
+42 | const TARGET_PROFILE: &str = "mirrorrust-v2";
+   |       ^^^^^^^^^^^^^^
+
+warning: `cooperators-mbt` (bin "cooperators-mbt") generated 4 warnings (run `cargo fix --bin "cooperators-mbt" -p cooperators-mbt` to apply 2 suggestions)
+    Finished `dev` profile [unoptimized + debuginfo] target(s) in 1.32s

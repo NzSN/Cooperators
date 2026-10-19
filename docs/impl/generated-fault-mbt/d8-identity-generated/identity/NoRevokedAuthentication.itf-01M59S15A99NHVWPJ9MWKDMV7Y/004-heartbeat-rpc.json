@@ -1,0 +1,17 @@
+{
+  "method": "heartbeat",
+  "request": {
+    "token": {
+      "credential_hash": "sha256:b8676f60a5147314a0f345310572eef9974caef725cd097303562268b8881de2"
+    }
+  },
+  "response": {
+    "error": {
+      "code": -32001,
+      "data": {
+        "code": "UNAUTHENTICATED"
+      },
+      "message": "invalid agent token"
+    }
+  }
+}

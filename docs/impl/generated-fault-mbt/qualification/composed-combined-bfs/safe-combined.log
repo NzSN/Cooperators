@@ -1,0 +1,34 @@
+Picked up JAVA_TOOL_OPTIONS: -Djava.io.tmpdir=/tmp/coop-composed-final-java "-Djava.io.tmpdir=/home/nzsn/Repos/Cooperators/docs/impl/generated-fault-mbt/qualification/composed-combined-bfs/safe-combined-jvm-tmp"
+TLC2 Version 2.19 of 08 August 2024 (rev: 5a47802)
+Running breadth-first search Model-Checking with fp 41 and seed -5889191699259941042 with 1 worker on 12 cores with 2660MB heap and 64MB offheap memory [pid: 385369] (Linux 6.18.54.1-microsoft-standard-WSL2 amd64, Ubuntu 25.0.4.1 x86_64, MSBDiskFPSet, DiskStateQueue).
+Parsing file /home/nzsn/Repos/Cooperators/docs/impl/generated-fault-mbt/qualification/composed-combined-bfs/CooperatorsInstances.tla
+Parsing file /home/nzsn/Repos/Cooperators/docs/impl/generated-fault-mbt/qualification/composed-combined-bfs/safe-combined-jvm-tmp/Integers.tla
+Parsing file /home/nzsn/Repos/Cooperators/docs/impl/generated-fault-mbt/qualification/composed-combined-bfs/safe-combined-jvm-tmp/Sequences.tla
+Parsing file /home/nzsn/Repos/Cooperators/docs/impl/generated-fault-mbt/qualification/composed-combined-bfs/safe-combined-jvm-tmp/FiniteSets.tla
+Parsing file /home/nzsn/Repos/Cooperators/docs/impl/generated-fault-mbt/qualification/composed-combined-bfs/safe-combined-jvm-tmp/TLC.tla
+Parsing file /home/nzsn/Repos/Cooperators/docs/impl/generated-fault-mbt/qualification/composed-combined-bfs/safe-combined-jvm-tmp/Naturals.tla
+Parsing file /home/nzsn/Repos/Cooperators/docs/impl/generated-fault-mbt/qualification/composed-combined-bfs/AgentInstances.tla
+Parsing file /home/nzsn/Repos/Cooperators/docs/impl/generated-fault-mbt/qualification/composed-combined-bfs/Cooperators.tla
+Semantic processing of module Naturals
+Semantic processing of module Integers
+Semantic processing of module Sequences
+Semantic processing of module FiniteSets
+Semantic processing of module TLC
+Semantic processing of module AgentInstances
+Semantic processing of module Cooperators
+Semantic processing of module CooperatorsInstances
+Starting... (2026-10-19 18:01:05)
+Computing initial states...
+Finished computing initial states: 1 distinct state generated at 2026-10-19 18:01:07.
+Progress(4) at 2026-10-19 18:01:10: 2,257 states generated (2,257 s/min), 270 distinct states found (270 ds/min), 229 states left on queue.
+Progress(7) at 2026-10-19 18:02:10: 215,941 states generated (213,684 s/min), 20,049 distinct states found (19,779 ds/min), 17,099 states left on queue.
+Progress(7) at 2026-10-19 18:03:10: 479,686 states generated (263,745 s/min), 43,609 distinct states found (23,560 ds/min), 37,152 states left on queue.
+Model checking completed. No error has been found.
+  Estimates of the probability that TLC did not check all reachable states
+  because two distinct states had the same fingerprint:
+  calculated (optimistic):  val = 1.5E-9
+  based on the actual fingerprints:  val = 3.6E-10
+598776 states generated, 51871 distinct states found, 0 states left on queue.
+The depth of the complete state graph search is 7.
+The average outdegree of the complete state graph is 1 (minimum is 0, the maximum 31 and the 95th percentile is 0).
+Finished in 02min 27s at (2026-10-19 18:03:29)

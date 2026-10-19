@@ -1,0 +1,37 @@
+Picked up JAVA_TOOL_OPTIONS: "-Djava.io.tmpdir=/home/nzsn/Repos/Cooperators/docs/impl/generated-fault-mbt/d8-identity-policy-v3-model/profiles/rotation/safe-rotation-jvm-tmp"
+TLC2 Version 2.19 of 08 August 2024 (rev: 5a47802)
+Running depth-first search Model-Checking with fp 100 and seed 1536720933651228469 with 1 worker on 12 cores with 2660MB heap and 64MB offheap memory [pid: 798] (Linux 6.18.54.1-microsoft-standard-WSL2 amd64, Ubuntu 25.0.4.1 x86_64).
+Parsing file /home/nzsn/Repos/Cooperators/docs/impl/generated-fault-mbt/d8-identity-policy-v3-model/profiles/rotation/MBFaults.tla
+Parsing file /home/nzsn/Repos/Cooperators/docs/impl/generated-fault-mbt/d8-identity-policy-v3-model/profiles/rotation/safe-rotation-jvm-tmp/Integers.tla
+Parsing file /home/nzsn/Repos/Cooperators/docs/impl/generated-fault-mbt/d8-identity-policy-v3-model/profiles/rotation/safe-rotation-jvm-tmp/Sequences.tla
+Parsing file /home/nzsn/Repos/Cooperators/docs/impl/generated-fault-mbt/d8-identity-policy-v3-model/profiles/rotation/safe-rotation-jvm-tmp/FiniteSets.tla
+Parsing file /home/nzsn/Repos/Cooperators/docs/impl/generated-fault-mbt/d8-identity-policy-v3-model/profiles/rotation/safe-rotation-jvm-tmp/Naturals.tla
+Parsing file /home/nzsn/Repos/Cooperators/docs/impl/generated-fault-mbt/d8-identity-policy-v3-model/profiles/rotation/AgentInstances.tla
+Semantic processing of module Naturals
+Semantic processing of module Integers
+Semantic processing of module Sequences
+Semantic processing of module FiniteSets
+Semantic processing of module AgentInstances
+Semantic processing of module MBFaults
+Starting... (2026-10-19 18:01:26)
+Finished computing initial states: 1 states generated, with 1 of them distinct.
+Starting level 2: 1 states generated, 1 distinct states found.
+Starting level 3: 6 states generated, 6 distinct states found.
+Starting level 4: 26 states generated, 15 distinct states found.
+Starting level 5: 70 states generated, 31 distinct states found.
+Starting level 6: 162 states generated, 59 distinct states found.
+Starting level 7: 334 states generated, 111 distinct states found.
+Starting level 8: 650 states generated, 207 distinct states found.
+Starting level 9: 1218 states generated, 379 distinct states found.
+Starting level 10: 2238 states generated, 673 distinct states found.
+Starting level 11: 4000 states generated, 1153 distinct states found.
+Starting level 12: 6924 states generated, 1913 distinct states found.
+Starting level 13: 11630 states generated, 3045 distinct states found.
+Starting level 14: 18842 states generated, 4617 distinct states found.
+Model checking completed. No error has been found.
+  Estimates of the probability that TLC did not check all reachable states
+  because two distinct states had the same fingerprint:
+  calculated (optimistic):  val = 5.4E-12
+  based on the actual fingerprints:  val = .0028
+26054 states generated, 4617 distinct states found.
+Finished in 05s at (2026-10-19 18:01:29)

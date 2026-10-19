@@ -1,0 +1,13 @@
+{
+  "command": [
+    "cargo",
+    "metadata",
+    "--offline",
+    "--locked",
+    "--format-version",
+    "1"
+  ],
+  "cwd": "/home/nzsn/Repos/Cooperators",
+  "exit_code": 101,
+  "output": "error: failed to download `hyper v1.11.1`\n\nCaused by:\n  attempting to make an HTTP request, but --offline was specified\n"
+}

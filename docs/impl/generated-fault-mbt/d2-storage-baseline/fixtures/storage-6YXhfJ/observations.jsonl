@@ -1,0 +1,3 @@
+{"observation":{"receipts":[],"records":[]},"result":"none"}
+{"observation":{"receipts":[],"records":[{"id":1,"seq":0}]},"result":"io-error"}
+{"observation":{"receipts":[],"records":[{"id":1,"seq":0}]},"result":"pending"}

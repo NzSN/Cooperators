@@ -1,0 +1,10 @@
+   Compiling cooperators v0.1.0 (/home/nzsn/Repos/Cooperators)
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 18.75s
+     Running tests/uds.rs (target/debug/deps/uds-77dc9a4e88579d28)
+
+running 2 tests
+test second_bind_fails_while_the_first_daemon_is_listening ... ok
+test jsonrpc_echo_ping_and_status_over_a_real_uds_socket ... ok
+
+test result: ok. 2 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.05s
+

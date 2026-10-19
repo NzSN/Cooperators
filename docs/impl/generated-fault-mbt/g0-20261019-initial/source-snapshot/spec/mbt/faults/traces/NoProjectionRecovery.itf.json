@@ -1,0 +1,167 @@
+{
+  "#meta": {
+    "format": "ITF",
+    "goal": "NoProjectionRecovery",
+    "projection": "Observation only; internal state and ghost receipts omitted",
+    "scenario": "deadletter",
+    "source": "TLC MBFaults coverage counterexample",
+    "transitionBound": 7
+  },
+  "params": [],
+  "states": [
+    {
+      "#meta": {
+        "index": 0
+      },
+      "action_taken": "init",
+      "observation": {
+        "deadRecords": [],
+        "terminal": false,
+        "up": true
+      },
+      "parameters": {
+        "actor": "-",
+        "mode": "-",
+        "scenario": "deadletter",
+        "value": {
+          "#bigint": "0"
+        }
+      },
+      "result": "none"
+    },
+    {
+      "#meta": {
+        "index": 1
+      },
+      "action_taken": "mark-dead",
+      "observation": {
+        "deadRecords": [],
+        "terminal": true,
+        "up": true
+      },
+      "parameters": {
+        "actor": "-",
+        "mode": "durable-terminal",
+        "scenario": "deadletter",
+        "value": {
+          "#bigint": "1"
+        }
+      },
+      "result": "pending"
+    },
+    {
+      "#meta": {
+        "index": 2
+      },
+      "action_taken": "fail-projection",
+      "observation": {
+        "deadRecords": [],
+        "terminal": true,
+        "up": true
+      },
+      "parameters": {
+        "actor": "-",
+        "mode": "before-dead-append",
+        "scenario": "deadletter",
+        "value": {
+          "#bigint": "0"
+        }
+      },
+      "result": "io-error"
+    },
+    {
+      "#meta": {
+        "index": 3
+      },
+      "action_taken": "crash-dead",
+      "observation": {
+        "deadRecords": [],
+        "terminal": true,
+        "up": false
+      },
+      "parameters": {
+        "actor": "-",
+        "mode": "-",
+        "scenario": "deadletter",
+        "value": {
+          "#bigint": "0"
+        }
+      },
+      "result": "stopped"
+    },
+    {
+      "#meta": {
+        "index": 4
+      },
+      "action_taken": "recover-dead",
+      "observation": {
+        "deadRecords": [],
+        "terminal": true,
+        "up": true
+      },
+      "parameters": {
+        "actor": "-",
+        "mode": "reconcile-terminal-records",
+        "scenario": "deadletter",
+        "value": {
+          "#bigint": "0"
+        }
+      },
+      "result": "ok"
+    },
+    {
+      "#meta": {
+        "index": 5
+      },
+      "action_taken": "project-dead",
+      "observation": {
+        "deadRecords": [
+          {
+            "#bigint": "1"
+          }
+        ],
+        "terminal": true,
+        "up": true
+      },
+      "parameters": {
+        "actor": "-",
+        "mode": "dedupe-by-terminal",
+        "scenario": "deadletter",
+        "value": {
+          "#bigint": "1"
+        }
+      },
+      "result": "written"
+    },
+    {
+      "#meta": {
+        "index": 6
+      },
+      "action_taken": "finish-projection",
+      "observation": {
+        "deadRecords": [
+          {
+            "#bigint": "1"
+          }
+        ],
+        "terminal": true,
+        "up": true
+      },
+      "parameters": {
+        "actor": "-",
+        "mode": "-",
+        "scenario": "deadletter",
+        "value": {
+          "#bigint": "0"
+        }
+      },
+      "result": "ok"
+    }
+  ],
+  "vars": [
+    "action_taken",
+    "parameters",
+    "result",
+    "observation"
+  ]
+}

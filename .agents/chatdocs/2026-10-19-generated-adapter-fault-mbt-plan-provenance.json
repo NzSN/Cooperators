@@ -1,0 +1,21 @@
+{
+  "canonical_source": "docs/design/0002-generated-adapter-fault-mbt-plan.md",
+  "canonical_sha256": "50fd525dcf22c02f240961d29979d08a921638da74eecc139f825ba4fbd58256",
+  "rendered_at_utc": "2026-10-19T09:28:16.665779+00:00",
+  "renderer": "installed markdown-it-py; HTML-only presentation",
+  "status": "proposed; implementation not started",
+  "tests_rerun_for_presentation": false,
+  "base_index_sha256": "1740c7baca6d6ba0e3df06d01325e791d09c9a934a89eccd8937c7879d8d567b",
+  "preserved_archive_files": {
+    "2026-10-19-mbt-defect-coverage-provenance.json": "49a1939c9883f50ed44df2a41d2783857a2752d544869d7157c8f246f3f3a037",
+    "2026-10-19-fault-port-storage-recovery.itf.json": "b79b0ae030f8ae8705cad92e09ee11c4c4ea0e30f5dc39506e0e6bf448494e2e",
+    "index.html": "1740c7baca6d6ba0e3df06d01325e791d09c9a934a89eccd8937c7879d8d567b",
+    "2026-10-19-mbt-defect-coverage.html": "7431bb2cc9f05ba959c58d977d4522868f3ef6261582e2b1ae0185fc35319968",
+    "2026-10-19-fault-port-and-implementation-fixes-provenance.json": "0fff8d99e1466285b33ee05f2b766819ed86dfc5255b0a0756b688dd31943e5b",
+    "2026-10-19-generated-ports-and-fault-injection-provenance.json": "447955713c1b4fe6bf81f450b3e08b598626ac3b1daae47fc33018858159720d",
+    "2026-10-19-mbt-defect-coverage-evidence.log": "736486e3ac8ed5b92bc2680f3b8607535d3b91875b1dca991d794ef6012f0ddb",
+    "2026-10-19-generated-ports-and-fault-injection.html": "59a22b2b819ab4ed5f499eedeca57c3013854c98a9177595ec1bb0e7e43d47e5",
+    "2026-10-19-fault-port-and-implementation-fixes.html": "895225a1cf215afb6aed02249642aebe621a80fbec827eef2558b4b8a6849a67"
+  },
+  "visual_inspection": false
+}

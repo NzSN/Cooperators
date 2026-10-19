@@ -1,0 +1,62 @@
+{
+  "actualInstanceIds": [
+    "01M59SDB2BDNJPK52QR4KCMT39",
+    "01M59SDB2X47JW8W40TZZA8MA4"
+  ],
+  "actualMcpPids": [
+    373996,
+    374024
+  ],
+  "binarySha256": "c745ebf7330928b58cc5cd1ca8ce63fe29f4c1e428f97fd4bfce581e046d590d",
+  "classification": "actual process acceptance; full broker, MCP stdio pipes and daemon UDS",
+  "command": "COOP_REQUIRE_UDS=1 COOP_MBT_EVIDENCE_DIR=docs/impl/generated-fault-mbt/d8-process-acceptance cargo test --offline --test instance_launch -- --nocapture",
+  "fixtures": {
+    "instance-launch/embedded-root-01M59SCBBX38AAFY296NC831C0/metadata.json": "cdce3fd642aea3599788efb8675616fb1483a4509d253894be9d9dc17dc0e133",
+    "instance-launch/embedded-root-01M59SCBBX38AAFY296NC831C0/root/agents/01M59SCB9FRR136BB0196NMJKB/inbox.jsonl": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "instance-launch/embedded-root-01M59SCBBX38AAFY296NC831C0/root/channels/#presence.jsonl": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "instance-launch/embedded-root-01M59SCBBX38AAFY296NC831C0/root/registry.json": "97ea46936ceba137e2c34310df1045ef6412aeae0e26d8d79e1c6b89e0680de2",
+    "instance-launch/embedded-root-01M59SCBBX38AAFY296NC831C0/root/run/owner.lock": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "instance-launch/embedded-root-01M59SDB2F55NCCW1HSG6GJQR2/metadata.json": "1b5831014eef153ded3934d0a29e816edfedd22f10a7305a413e7bfa4d7bf0d4",
+    "instance-launch/embedded-root-01M59SDB2F55NCCW1HSG6GJQR2/root/agents/01M59SDB1H4VPSP3096JC4D11J/inbox.jsonl": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "instance-launch/embedded-root-01M59SDB2F55NCCW1HSG6GJQR2/root/channels/#presence.jsonl": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "instance-launch/embedded-root-01M59SDB2F55NCCW1HSG6GJQR2/root/registry.json": "7f7572d18cd63a8c38d1ef0e6a0a8ede0095dd60824446c81187e85e88bccdd3",
+    "instance-launch/embedded-root-01M59SDB2F55NCCW1HSG6GJQR2/root/run/owner.lock": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "instance-launch/two-mcp-01M59SDB6TWT18BGZXJ2QY1545/metadata.json": "5a36f58ea3bfc91afcafcfa142c64c3d0901647b415736eb1f9e7143c09bc357",
+    "instance-launch/two-mcp-01M59SDB6TWT18BGZXJ2QY1545/root/agents/01M59SDB1KSC38VNHQ8VNBB2N5/inbox.jsonl": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "instance-launch/two-mcp-01M59SDB6TWT18BGZXJ2QY1545/root/agents/01M59SDB2BDNJPK52QR4KCMT39/inbox.jsonl": "0e5acaa8fdfb763e0637f63560922bf27b7c21416286ee63bdf7bf3e97ea9705",
+    "instance-launch/two-mcp-01M59SDB6TWT18BGZXJ2QY1545/root/agents/01M59SDB2X47JW8W40TZZA8MA4/inbox.jsonl": "dfc19653371562e8f3b1ccba26d2a6e708f94f01d4d7328311de5ea1b7014fa3",
+    "instance-launch/two-mcp-01M59SDB6TWT18BGZXJ2QY1545/root/channels/#presence.jsonl": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "instance-launch/two-mcp-01M59SDB6TWT18BGZXJ2QY1545/root/daemon-test.stderr": "8a0bc045a4216753f73ed993d8530a6570c58beb6b6b9f572c95a68132828150",
+    "instance-launch/two-mcp-01M59SDB6TWT18BGZXJ2QY1545/root/docs/draft.jsonl": "244333b8b483e5fe34d7821323a50b8819fc43e59418593039565e206e061d8c",
+    "instance-launch/two-mcp-01M59SDB6TWT18BGZXJ2QY1545/root/queues/jobs.jsonl": "5706639ec81a66607ef38ef97ecea13988b18165dfcc5c9467cf49d4a6c137d4",
+    "instance-launch/two-mcp-01M59SDB6TWT18BGZXJ2QY1545/root/registry.json": "ca3a916f1d3f298c99b849c7e381a3c722590a3c74a54dfdbb5395af1660fe9f",
+    "instance-launch/two-mcp-01M59SDB6TWT18BGZXJ2QY1545/root/run/owner.lock": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  "passed": 2,
+  "skipped": 0,
+  "sourceSha256": {
+    "src/channels.rs": "6b3705bd6eb9ebcc375e7351f26ff8c7028c5268af7f12d6d0def9c088b53d64",
+    "src/client.rs": "f3a2306f1c9eb1c6bc88705abccc7377f0f9d5dac50142675b23b195a1b79cd9",
+    "src/docs.rs": "ce64c276bcc5c24bb45a9ca59da52bf08124316dd98a1cc0c76a408e5c5759e5",
+    "src/envelope.rs": "7f6427cb5d6bc1fc1fcb5801eac2a7ad5336d2daa25998bc8f62b2ddf9393510",
+    "src/error.rs": "94ab22ac5d56ffd5621e14a374b3e1665dbd03a50e2247793edb180868eb6047",
+    "src/faults.rs": "3a0bcf9df9ad02d69058225960f485942cfcee50fe78040f2078d3d4f4737730",
+    "src/id.rs": "3c9978366a887d6a790b0fe1e49e178c58bcafdbec3ba622d8fde22a014e3dfb",
+    "src/leases.rs": "d3003851a85b0d2ca0bab64e4d6efe91b7e9dde406bfaf330702e9a3c7af9ee5",
+    "src/lib.rs": "3da5ae4d719a9d9537257fd50a4a674175fe42cd8645f9cb42826fe5695c8f49",
+    "src/main.rs": "363a8317f1c64eaaea839def652e47881c5a96875978b15b11c51a73db4cb5ba",
+    "src/mcp.rs": "32c32ef91883240719a5746e2e0ae421b555652ce5323141f169ed0f4a28c7d5",
+    "src/messaging.rs": "af92dcee90159a2297f30b310ea568e9d066d19d329ddd690beeed384903ce13",
+    "src/metrics.rs": "bb5b7da51c8e63a205bac2636f9a373cfe5e85b09afd6d0f4b20d1eecec6e4cf",
+    "src/paths.rs": "42eae03c804d6ff639b1ae6445ad234db8926e096aea0683625c22ddc26b6bd9",
+    "src/presence.rs": "9049c080ae72fec1ed2807a8ef3ef68d7e5f74519269866dd2a2b6e69ba14df2",
+    "src/queues.rs": "7ef5aa98563f8b8060cd3ec675c656ca462981dee6f9abd90f1f8e86ea530b23",
+    "src/registry.rs": "1a66b3d9a3470cc94d067293ed4a35cd47def775b05e6028e4cd08e7a804ab59",
+    "src/rpc.rs": "085d4c74198fe2add7ad72eeba22effa3bc20a7be1b6b142195a1fc26f6b912c",
+    "src/server.rs": "8c65b9fa5e1640d3601e0b73e3c8db261ca4cab103698b3db41f9a1046690991",
+    "src/status.rs": "e69b9c586fa116cad133d7781aee67ff9032f0610f62a38742d5161581ca5260",
+    "src/storage.rs": "4f0e628a8fe1d749024e06faa24f0b051fa799a962a8d83768fbd6714e8790bd"
+  },
+  "testSourceSha256": "6d3724d128b1a36a8d09e16655a245e1584b7eee83d7e23b2d547218b6b2590d",
+  "tests": 2
+}

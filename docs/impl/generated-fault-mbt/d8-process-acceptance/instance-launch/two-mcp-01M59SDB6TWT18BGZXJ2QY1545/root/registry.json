@@ -1,0 +1,35 @@
+{
+  "v": 1,
+  "agents": {
+    "instance-01M59SDB2BDNJPK52QR4KCMT39": {
+      "agent_id": "01M59SDB2BDNJPK52QR4KCMT39",
+      "token_hash": "sha256:fdccf23da4c49cf3459d9478a5efd31e98f999bb37ca13937aa6e856a846d721",
+      "kind": "codex",
+      "capabilities": [],
+      "registered_at": "2026-10-19T09:55:45.970Z",
+      "display_name": "codex",
+      "launch_key_hash": "sha256:cc6e6a376bdee1f23b90dbf548bd04bd13d4484d5f2f4b218a9d3497434e04a2"
+    },
+    "instance-01M59SDB2X47JW8W40TZZA8MA4": {
+      "agent_id": "01M59SDB2X47JW8W40TZZA8MA4",
+      "token_hash": "sha256:f1aeb553923e21643fe4c74c6fc178dfc0640e99920910b379357c861b5891e5",
+      "kind": "codex",
+      "capabilities": [],
+      "registered_at": "2026-10-19T09:55:45.885Z",
+      "display_name": "codex",
+      "launch_key_hash": "sha256:f1aeb553923e21643fe4c74c6fc178dfc0640e99920910b379357c861b5891e5",
+      "retired": true
+    },
+    "shared-config": {
+      "agent_id": "01M59SDB1KSC38VNHQ8VNBB2N5",
+      "token_hash": "sha256:bd652c185d4d381aedcf82692cd781c74c03e13986fd5e3ed7474f9e9a968a0e",
+      "kind": "codex",
+      "capabilities": [],
+      "registered_at": "2026-10-19T09:55:45.843Z"
+    }
+  },
+  "revoked_token_hashes": [
+    "sha256:cc6e6a376bdee1f23b90dbf548bd04bd13d4484d5f2f4b218a9d3497434e04a2",
+    "sha256:f1aeb553923e21643fe4c74c6fc178dfc0640e99920910b379357c861b5891e5"
+  ]
+}

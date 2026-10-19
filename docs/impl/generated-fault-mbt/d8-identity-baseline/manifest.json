@@ -1,0 +1,10 @@
+{
+  "classification": "new-feature gap baseline; not generated-port MBT reproduction",
+  "command": "rustc --edition=2021 --test tests/instance_identity.rs -L dependency=target/debug/deps --extern cooperators=<cached rlib> --extern tokio=<cached rlib> --extern serde_json=<cached rlib>; /tmp/cooperators-identity-baseline --nocapture",
+  "observation": "Two independent callers presenting the same legacy credential authenticate as one actual ID; raw registry contains one record. Fresh per-launch enrollment API is absent.",
+  "files": {
+    "instance_identity.rs": "89107f37931aca31f741bfaa203828071ff79399072e6912f292876f44c2dd97",
+    "registry.rs": "e5c742837d7b07801fbdd20ff6884ef21c0af03c2d3456204faa6432c4ccc955",
+    "baseline.log": "82961e5a483f0b4e66b8d60fd61e868359532df00d746701b7a0c98ce2103580"
+  }
+}

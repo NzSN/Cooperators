@@ -1,0 +1,7 @@
+scaffolded reviewable proposal /tmp/coop-fault-interface-zgttr5tz/MBFaultDeadLetter.mirror-interface.scaffold.json f9a98f817b3ad0f54d85b310deecb673bc9d2ee19707fe6c440fd084239eb617
+model-interface check clean
+{"actions":[{"count":2,"id":"CrashDead"},{"count":1,"id":"FailProjection"},{"count":1,"id":"FinishProjection"},{"count":2,"id":"Initialize"},{"count":2,"id":"MarkDead"},{"count":3,"id":"ProjectDead"},{"count":2,"id":"RecoverDead"}],"schema":"mirrors.model-interface-coverage/v1","semanticDigest":"805fe73dbb8e170151ba01719ab3a80fc745f59907e874827e4153284aadfef8","states":13,"traces":2,"unseenActions":[]}
+Generated fault interface bridge and selected compiler checks clean
+PASS fault-deadletter /home/nzsn/Repos/Cooperators/spec/mbt/fault_interfaces/deadletter/traces/NoProjectionCrashRetry.itf.json
+PASS fault-deadletter /home/nzsn/Repos/Cooperators/spec/mbt/fault_interfaces/deadletter/traces/NoProjectionRecovery.itf.json
+fault MBT: 2 traces, 0 failures

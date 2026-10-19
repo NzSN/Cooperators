@@ -1,0 +1,108 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="color-scheme" content="light dark">
+<title>Cooperators — What current MBT can reveal</title>
+<style>
+:root{color-scheme:light;--bg:#f5f3ee;--paper:#fffefa;--ink:#202b31;--muted:#53656b;--line:#d7dedb;--accent:#075c59;--soft:#e8f2ef;--bad:#9e3027;--badbg:#fbede8;--pending:#765019;--pendingbg:#f9f0dd}
+*{box-sizing:border-box}html{scroll-behavior:smooth}body{margin:0;background:var(--bg);color:var(--ink);font:17px/1.65 system-ui,-apple-system,"Segoe UI",sans-serif}main{max-width:1100px;margin:auto;padding:34px 34px 64px}a{color:var(--accent);text-underline-offset:3px}a:focus-visible{outline:3px solid var(--accent);outline-offset:4px}nav{display:flex;flex-wrap:wrap;gap:8px 24px;font-size:.88rem;margin-bottom:30px}.eyebrow{color:var(--accent);font-size:.8rem;font-weight:750;letter-spacing:.12em;text-transform:uppercase}h1{font:700 clamp(2.1rem,5vw,3.6rem)/1.12 Georgia,serif;letter-spacing:-.025em;max-width:850px;margin:12px 0 18px}h2{font:700 1.55rem/1.3 Georgia,serif;margin:40px 0 14px}h3{font-size:1rem;line-height:1.4;margin:0 0 7px}p{margin:10px 0 16px}.lead{font-size:1.16rem;max-width:850px}.muted,small{color:var(--muted)}.panel{background:var(--paper);border:1px solid var(--line);border-radius:8px;padding:22px 26px}.result{border-left:5px solid var(--bad);margin:26px 0 16px}.facts{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin:18px 0}.fact{border-top:2px solid var(--line);padding:14px 0}.fact strong{font-size:1.85rem;display:block;line-height:1.25}.fact span{font-size:.9rem;color:var(--muted)}.table-wrap{overflow:auto;border:1px solid var(--line);border-radius:6px;background:var(--paper)}table{border-collapse:collapse;width:100%;text-align:left;font-size:.93rem}caption{text-align:left;font-weight:650;padding:14px 18px;border-bottom:1px solid var(--line)}th,td{padding:13px 17px;vertical-align:top;border-bottom:1px solid var(--line)}th{background:var(--soft);font-size:.82rem;letter-spacing:.025em}tr:last-child td{border-bottom:0}th:first-child{width:29%}.status{font-size:.77rem;font-weight:700;white-space:nowrap;border-radius:4px;padding:3px 7px;display:inline-block}.detected{background:var(--badbg);color:var(--bad)}.missing{background:var(--pendingbg);color:var(--pending)}code{font: .88em ui-monospace,SFMono-Regular,Consolas,monospace;overflow-wrap:anywhere}.traces{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin:18px 0}.trace{padding:18px;border:1px solid var(--line);background:var(--paper);border-radius:6px}.trace p{font-size:.92rem;margin-bottom:0}.flow{display:grid;grid-template-columns:repeat(4,1fr);list-style-position:inside;padding:0;gap:12px}.flow li{padding:16px;background:var(--soft);border-radius:5px;font-size:.94rem}.flow li span{display:block;color:var(--muted);font-size:.84rem;margin-top:6px}.note{border-left:3px solid var(--accent);padding:6px 0 6px 18px;margin:24px 0}ul,ol{padding-left:23px}li{margin-bottom:9px}.sources li{font-size:.92rem}.scope{font-size:.91rem}.meta{border-top:1px solid var(--line);margin-top:34px;padding-top:18px;font-size:.84rem}.break{overflow-wrap:anywhere}footer{font-size:.83rem;color:var(--muted);margin-top:36px}
+@media(max-width:760px){main{padding:22px 18px 42px}.facts{gap:12px}.traces,.flow{grid-template-columns:1fr}.panel{padding:18px}th,td{padding:11px 12px}.fact strong{font-size:1.55rem}table{min-width:650px}}
+@media(prefers-color-scheme:dark){:root{color-scheme:dark;--bg:#121b1e;--paper:#192529;--ink:#e8efeb;--muted:#afbfbd;--line:#35484b;--accent:#8ed7c9;--soft:#223a3a;--bad:#ffc1b4;--badbg:#472a27;--pending:#edd39e;--pendingbg:#3a3326}}
+@media print{:root{color-scheme:light}body{background:white;color:#111}main{max-width:none;padding:0;font-size:10pt}nav{display:none}h2{break-after:avoid}.panel,.trace,tr{break-inside:avoid}.table-wrap{overflow:visible}a{color:#111}.facts{margin:10px 0}h1{font-size:28pt}.traces{grid-template-columns:1fr}footer{margin-top:16px}}
+</style>
+</head>
+<body>
+<main>
+<nav aria-label="Report navigation"><a href="index.html">Chat document archive</a><a href="#coverage">Coverage</a><a href="#observed">Observed failures</a><a href="#oracle">Observation limits</a><a href="#next">Missing scenarios</a><a href="#sources">Sources</a></nav>
+<header>
+<div class="eyebrow">Cooperators · MBT coverage assessment · 19 October 2026</div>
+<h1>What can current MBT reveal?</h1>
+<p class="lead"><strong>Partly covered.</strong> The current harness exposes unsafe writer admission and mutation during rejected startup. The other reviewed defect effects and the new per-launch identity requirement still need additional scenarios and observations.</p>
+</header>
+<section class="panel result" aria-label="Recorded implementation result">
+<h2 style="margin-top:0">The recorded implementation gate is red</h2>
+<p>Both competing-writer traces accept two daemons for one root. A same-socket contender rejects only after repairing and appending to the active owner's log. These are observed implementation mismatches.</p>
+<p class="scope muted">This report presents existing evidence. Creating the report did not rerun MBT or change production code.</p>
+</section>
+<div class="facts" aria-label="Recorded trace counts">
+<div class="fact"><strong>39</strong><span>traces replayed</span></div>
+<div class="fact"><strong>36 passed</strong><span>34 protocol + 2 writer controls</span></div>
+<div class="fact"><strong>3 failed</strong><span>2 writer-admission + 1 startup-mutation</span></div>
+</div>
+<section id="coverage">
+<h2>Coverage by defect effect</h2>
+<div class="table-wrap"><table>
+<caption>Current replay coverage, rather than properties checked only in TLA+</caption>
+<thead><tr><th scope="col">Defect or effect</th><th scope="col">Current MBT</th><th scope="col">Evidence or missing capability</th></tr></thead>
+<tbody>
+<tr><td>Two writers admitted to one root</td><td><span class="status detected">Detected</span></td><td><code>NoCompeteW1</code> and <code>NoCompeteW2</code> observe both children serving the same root through different sockets.</td></tr>
+<tr><td>Rejected startup mutates active-owner logs</td><td><span class="status detected">Detected</span></td><td><code>NoRejectedRecovery</code> observes changed durable bytes, removal of an injected torn suffix, and an added recovery record.</td></tr>
+<tr><td>Data loss following failed <code>fsync</code></td><td><span class="status missing">Not covered</span></td><td>No injected sync failure followed by another append, restart, and comparison of acknowledged records against recovered disk data.</td></tr>
+<tr><td>Expired messages strand inbox capacity</td><td><span class="status missing">Not covered</span></td><td>Protocol sends use <code>ttl: None</code>; no expiry-only inbox, cursor-progress, or capacity-recovery scenario.</td></tr>
+<tr><td>Dead-letter projection is lost after failure</td><td><span class="status missing">Not covered</span></td><td>Ordinary dead-task behavior is exercised, but projection failure, restart reconciliation, and independent dead-log observations are missing.</td></tr>
+<tr><td>Failed document publication blocks retry</td><td><span class="status missing">Not covered</span></td><td>No failure between document-file creation and its first durable publication, followed by retry and version checks.</td></tr>
+<tr><td>Status omits a large final record</td><td><span class="status missing">Not covered</span></td><td>No record larger than the 64 KiB status tail window, followed by authoritative head comparison.</td></tr>
+<tr><td>Logs do not rotate</td><td><span class="status missing">Not covered</span></td><td>No threshold-crossing workload or physical-file and saved-cursor continuity checks.</td></tr>
+<tr><td>Independent launches share one identity</td><td><span class="status missing">Not covered</span></td><td>Protocol initialization manually registers distinct test names. It does not launch two clients sharing configuration or replay enrollment, retries, and credential lifecycle.</td></tr>
+</tbody></table></div>
+<p class="scope muted">The two writer rows concern the original root-ownership/startup finding. They do not represent two additional reviewed defect categories. The twelve injected faults in the composed TLA+ checker are model controls, not twelve additional confirmed Rust defects.</p>
+</section>
+<section id="observed">
+<h2>What the three failing traces show</h2>
+<div class="traces">
+<article class="trace"><h3><code>NoCompeteW1</code></h3><p>Start w1, then attempt w2 against the same root using another socket. Expected: w2 rejected. Observed: both writers remain active.</p></article>
+<article class="trace"><h3><code>NoCompeteW2</code></h3><p>Reverse the startup order. Expected: w1 rejected. Observed: both writers remain active. The defect occurs in either ordering.</p></article>
+<article class="trace"><h3><code>NoRejectedRecovery</code></h3><p>Inject a torn suffix, then attempt a competing start on the same socket. Rejection occurs, but the suffix is repaired and a recovery record is appended first.</p></article>
+</div>
+<p>The writer adapter reads actual child state and inbox bytes, including record tags, sequence numbers, hash-chain validity, and torn-tail state. It compares durable bytes before and after rejected startup and checks the responding PID during readiness. It does not infer these observations from the expected model state.</p>
+<p class="note"><strong>Consequence boundary:</strong> the traces detect unsafe admission and startup mutation. They stop at the first mismatch and do not establish downstream message loss or corruption caused by concurrent appenders. The torn suffix is an explicit test fixture, not a naturally observed storage failure.</p>
+<p><a href="2026-10-19-mbt-defect-coverage-evidence.log">Read the preserved replay log</a> · <a href="../../spec/mbt/README.md">Canonical MBT documentation</a></p>
+</section>
+<section id="oracle">
+<h2>Why a protocol replay can pass while a defect remains</h2>
+<ol class="flow" aria-label="Current protocol replay flow">
+<li>Model trace<span>Permitted send, claim, update, ack, and restart actions.</span></li>
+<li>Broker call<span>The in-process adapter invokes real daemon methods.</span></li>
+<li>Observation<span>Ack cursors come from the broker; the abstract log comes from adapter bookkeeping.</span></li>
+<li>Comparison<span>The observed structure is compared with the trace's expected state.</span></li>
+</ol>
+<p>The protocol adapter appends to its own abstract log after successful calls and retains that log across daemon reconstruction. It does not rebuild this observation from recovered durable files. A successful call with incorrect persistence can therefore pass until some later action exposes the loss.</p>
+<p>The 34 protocol traces also omit rejected-operation probes such as stale fences, wrong document versions, and foreign ownership. Restart coverage reconstructs <code>DaemonState</code>; it is not a power-loss experiment.</p>
+<p>The separate composed specification reports <strong>22/22 checks passed</strong>: four correct-policy safety profiles, twelve required fault counterexamples, and six reachability witnesses. Its configuration has two same-kind launches and a six-transition budget. Those checks validate the modeled policy within that configuration; the new identity and composed models are not yet connected to implementation MBT replay.</p>
+</section>
+<section id="next">
+<h2>What would expose the missing effects</h2>
+<p>Each missing scenario needs both a triggering action sequence and an observation taken from the broker or its durable data.</p>
+<ol>
+<li><strong>Storage:</strong> fail sync after bytes are written, attempt a subsequent append, restart, and verify every successful receipt against recovered records and sequence continuity.</li>
+<li><strong>Inbox expiry:</strong> fill a small inbox with expiring messages, advance a controlled clock, wait and acknowledge using returned cursors, then verify that a new send can succeed.</li>
+<li><strong>Dead letters:</strong> fail the dead-log append after the queue's terminal event is durable, restart or retry recovery, and inspect the terminal record and corresponding dead letter.</li>
+<li><strong>Document publication:</strong> fail the initial publication after the file is created, retry the same document name, and verify that version 1 becomes readable.</li>
+<li><strong>Status and rotation:</strong> compare status with the full durable head after a large record; cross the rotation threshold and read a complete ordered suffix from a cursor saved before rotation.</li>
+<li><strong>Instance identity:</strong> start two same-kind clients with shared configuration, observe their actual IDs and credentials, then exercise independent delivery, acknowledgment, dedupe, leases, enrollment retries, reconnects, and token rotation.</li>
+</ol>
+<p class="scope muted">These are coverage requirements, not changes implemented by this archive request. A fixed implementation should make the existing writer mismatches pass while the corresponding negative controls continue to detect deliberate faults.</p>
+</section>
+<section id="sources">
+<h2>Sources and evidence limits</h2>
+<ul class="sources">
+<li><a href="../../spec/mbt/README.md"><code>spec/mbt/README.md</code></a> — canonical suite definitions, recorded results, isolated-build qualification, and protocol observation limits.</li>
+<li><a href="../../spec/mbt/src/main.rs"><code>spec/mbt/src/main.rs</code></a> — initialization at lines 118–136; sends without TTL at 139–150; restart and reconstructed-log observation at 260–278.</li>
+<li><a href="../../spec/mbt/src/writers.rs"><code>spec/mbt/src/writers.rs</code></a> — process readiness and rejection classification; disk observations; controlled torn-tail injection at 311–321.</li>
+<li><a href="../../spec/MBWriters.tla"><code>spec/MBWriters.tla</code></a> — writer attempts and the five bounded trace goals.</li>
+<li><a href="../../spec/CooperatorsHardening.tla"><code>spec/CooperatorsHardening.tla</code></a> — seven hardening obligations, including storage, expiry, projection, publication, status, and rotation.</li>
+<li><a href="../../spec/CooperatorsInstances.tla"><code>spec/CooperatorsInstances.tla</code></a> and <a href="../../spec/README.md"><code>spec/README.md</code></a> — bounded identity/protocol composition and separate model-checking results.</li>
+<li><a href="../../docs/design/0001-cooperatorsd-broker.md"><code>docs/design/0001-cooperatorsd-broker.md</code></a> — canonical identity requirements and acceptance gates.</li>
+</ul>
+<div class="panel scope">
+<p><strong>Recorded runtime scope.</strong> The 39-trace result used unchanged core source in an isolated Cargo build with the unused HTTP module stubbed because the offline cache lacked pinned <code>hyper 1.11.1</code>. Writer traces used real UDS sockets and subprocesses with the production startup/recovery path and HTTP disabled. This does not qualify the full pinned binary or its HTTP transport.</p>
+<p><strong>Archive scope.</strong> This HTML is an archival presentation of the chat assessment, based on the canonical sources linked above. The existing replay log is copied unchanged. Rendering and link validation do not establish a new runtime test result.</p>
+<p><a href="2026-10-19-mbt-defect-coverage-provenance.json">Source identities and evidence hashes</a></p>
+</div>
+</section>
+<footer class="meta">Cooperators chat archive · Report date: 2026-10-19 · Checkout HEAD: <code>ccca77295277b10dad5234bf8ae3a916ad9a0a1a</code>. Specification and MBT work includes uncommitted changes; individual source hashes are retained in the provenance file.</footer>
+</main>
+</body>
+</html>

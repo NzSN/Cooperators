@@ -15,7 +15,7 @@
 //! Expiry and release append events whose sequence becomes the new fence, so
 //! a stale holder's write is rejected with `LEASE_LOST`.
 
-use std::collections::{BTreeMap, HashMap};
+use std::collections::{BTreeMap, BTreeSet, HashMap};
 use std::fs::{self, OpenOptions};
 use std::io::Write;
 use std::os::unix::fs::OpenOptionsExt;
@@ -379,10 +379,15 @@ fn encode_body(
     }
 }
 
-fn open_doc(root: &Path, name: &str) -> Result<(LogFile<DocEvent>, DocRuntime), BrokerError> {
+fn open_doc(
+    root: &Path,
+    name: &str,
+    rotation_bytes: u64,
+) -> Result<(LogFile<DocEvent>, DocRuntime), BrokerError> {
     validate_doc_name(name)?;
     let path = doc_path(root, name);
-    let (mut log, report) = LogFile::open(&path).map_err(BrokerError::from)?;
+    let (mut log, report) =
+        LogFile::open_rotating(&path, rotation_bytes).map_err(BrokerError::from)?;
     let truncated_bytes = report.truncated_bytes;
     let last_valid_offset = report.last_valid_offset;
     let was_truncated = report.was_truncated();
@@ -413,6 +418,7 @@ fn open_doc(root: &Path, name: &str) -> Result<(LogFile<DocEvent>, DocRuntime), 
 /// Loads every document log at daemon startup.
 pub(crate) fn load_all_docs(
     root: &Path,
+    rotation_bytes: u64,
 ) -> Result<
     (
         HashMap<String, LogFile<DocEvent>>,
@@ -428,24 +434,46 @@ pub(crate) fn load_all_docs(
         }
         Err(error) => return Err(error.into()),
     };
-    let mut names = Vec::new();
+    let mut names = BTreeSet::new();
     for entry in entries {
         let entry = entry?;
         let path = entry.path();
         if path.extension().and_then(|ext| ext.to_str()) == Some("jsonl") {
             if let Some(stem) = path.file_stem().and_then(|stem| stem.to_str()) {
-                names.push(stem.to_string());
+                names.insert(stem.to_string());
             }
         }
     }
-    names.sort();
+    // A crash after sealing can leave no active file. Discover the logical
+    // stream from its segment directory as well, without treating an empty
+    // segment directory as a resource.
+    match fs::read_dir(directory.join(".segments")) {
+        Ok(segments) => {
+            for entry in segments {
+                let entry = entry?;
+                if !entry.file_type()?.is_dir() {
+                    continue;
+                }
+                let logical = directory.join(entry.file_name());
+                if logical.extension().and_then(|ext| ext.to_str()) == Some("jsonl")
+                    && !crate::storage::segment_paths(&logical)?.is_empty()
+                {
+                    if let Some(stem) = logical.file_stem().and_then(|stem| stem.to_str()) {
+                        names.insert(stem.to_string());
+                    }
+                }
+            }
+        }
+        Err(error) if error.kind() == std::io::ErrorKind::NotFound => {}
+        Err(error) => return Err(error.into()),
+    }
     let mut logs = HashMap::new();
     let mut states = HashMap::new();
     for name in names {
         if validate_doc_name(&name).is_err() {
             continue;
         }
-        let (log, runtime) = open_doc(root, &name)?;
+        let (log, runtime) = open_doc(root, &name, rotation_bytes)?;
         logs.insert(name.clone(), log);
         states.insert(name, runtime);
     }
@@ -561,10 +589,10 @@ impl DaemonState {
         if self.doc_states.lock().await.contains_key(name) {
             return Ok(true);
         }
-        if !doc_path(&self.root, name).exists() {
+        if crate::storage::segment_paths(doc_path(&self.root, name))?.is_empty() {
             return Ok(false);
         }
-        let (log, runtime) = open_doc(&self.root, name)?;
+        let (log, runtime) = open_doc(&self.root, name, self.config.log_rotation_bytes)?;
         self.docs.lock().await.insert(name.to_string(), log);
         self.doc_states
             .lock()
@@ -608,7 +636,8 @@ impl DaemonState {
         Ok(true)
     }
 
-    /// Publishes version 1 of a document. Existing names are never recycled.
+    /// Publishes version 1 of a document. Committed names are never recycled;
+    /// an empty log left by interrupted creation may be retried.
     pub async fn publish_doc(
         &self,
         identity: &AgentIdentity,
@@ -622,13 +651,30 @@ impl DaemonState {
             return Err(BrokerError::invalid("mime must not be empty"));
         }
         let _send_guard = self.send_lock.lock().await;
-        if self.doc_states.lock().await.contains_key(name) || doc_path(&self.root, name).exists() {
+        if self
+            .doc_states
+            .lock()
+            .await
+            .get(name)
+            .is_some_and(|state| state.head > 0)
+        {
             return Err(BrokerError::application(
                 ErrorCode::Exists,
                 format!("document {name:?} already exists"),
             ));
         }
-        let (mut log, mut runtime) = open_doc(&self.root, name)?;
+        let (mut log, mut runtime) = open_doc(&self.root, name, self.config.log_rotation_bytes)?;
+        if runtime.head > 0 {
+            return Err(BrokerError::application(
+                ErrorCode::Exists,
+                format!("document {name:?} already exists"),
+            ));
+        }
+        #[cfg(feature = "mbt-injection")]
+        crate::faults::reach(
+            doc_path(&self.root, name),
+            crate::faults::FaultPoint::AfterDocCreate,
+        )?;
         let body = Body::new(mime.to_string(), body.text);
         let (inline, blob, storage) = encode_body(&self.root, &body)?;
         let mut event = base_event("doc_published", name, identity);

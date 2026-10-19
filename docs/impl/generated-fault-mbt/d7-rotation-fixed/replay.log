@@ -1,0 +1,16 @@
+scaffolded reviewable proposal /tmp/coop-fault-interface-5a4grw2m/MBFaultRotation.mirror-interface.scaffold.json 71034be79609f9d83a8c1053127719ac3f55965ea79a163876112529a51be5f7
+model-interface check clean
+{"actions":[{"count":8,"id":"BeginRotatingAppend"},{"count":7,"id":"CommitRotatingAppend"},{"count":1,"id":"CrashRotation"},{"count":3,"id":"Initialize"},{"count":8,"id":"PrepareSegment"},{"count":3,"id":"ReadCursor"},{"count":1,"id":"RecoverRotation"},{"count":1,"id":"SaveCursor"}],"schema":"mirrors.model-interface-coverage/v1","semanticDigest":"2df1903fa928586921a109f61504990f4d25c17ad8fc57916ca2d822eec9c9ee","states":32,"traces":3,"unseenActions":[]}
+Generated fault interface bridge and selected compiler checks clean
+rotation fixture: /home/nzsn/Repos/Cooperators/docs/impl/generated-fault-mbt/d7-rotation-fixed/fixtures/rotation/NoOversizedRotation.itf
+PASS fault-rotation /home/nzsn/Repos/Cooperators/spec/mbt/fault_interfaces/rotation/traces/NoOversizedRotation.itf.json
+rotation fixture: /home/nzsn/Repos/Cooperators/docs/impl/generated-fault-mbt/d7-rotation-fixed/fixtures/rotation/NoRotatedCursor.itf
+PASS fault-rotation /home/nzsn/Repos/Cooperators/spec/mbt/fault_interfaces/rotation/traces/NoRotatedCursor.itf.json
+rotation fixture: /home/nzsn/Repos/Cooperators/docs/impl/generated-fault-mbt/d7-rotation-fixed/fixtures/rotation/NoRotationCrashRecovery.itf
+PASS fault-rotation /home/nzsn/Repos/Cooperators/spec/mbt/fault_interfaces/rotation/traces/NoRotationCrashRecovery.itf.json
+rotation fixture: /home/nzsn/Repos/Cooperators/docs/impl/generated-fault-mbt/d7-rotation-fixed/fixtures/rotation/boundary-after-seal
+PASS actual process crash boundary after-seal
+rotation fixture: /home/nzsn/Repos/Cooperators/docs/impl/generated-fault-mbt/d7-rotation-fixed/fixtures/rotation/boundary-after-create
+PASS actual process crash boundary after-create
+PASS rotation crash boundaries
+fault MBT: 3 traces, 0 failures (including required rotation crash checks)

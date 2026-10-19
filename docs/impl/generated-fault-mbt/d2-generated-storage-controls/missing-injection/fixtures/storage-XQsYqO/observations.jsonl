@@ -1,0 +1,2 @@
+{"diagnosticControl":"storage-missing-injection","observation":{"receipts":[],"records":[]},"reportedObservation":{"receipts":[],"records":[]},"result":"none"}
+{"diagnosticControl":"storage-missing-injection","observation":{"receipts":[{"id":1,"seq":1}],"records":[{"id":1,"seq":1}]},"reportedObservation":{"receipts":[{"id":1,"seq":1}],"records":[{"id":1,"seq":1}]},"result":"ok"}

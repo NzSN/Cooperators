@@ -1,0 +1,1 @@
+{"v":1,"id":"01M59T4ST4RV9TW1BXF0N2157P","seq":1,"ts":"2026-10-19T10:08:34.628Z","from":"fault-agent","to":"fault-agent","kind":"fault-message","reply_to":null,"idempotency_key":null,"body":{"mime":"text/plain","text":"fixture"},"prev_hash":"sha256:0000000000000000000000000000000000000000000000000000000000000000"}

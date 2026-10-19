@@ -1,0 +1,384 @@
+Picked up JAVA_TOOL_OPTIONS: -Djava.io.tmpdir=/tmp/coop-composed-final-java "-Djava.io.tmpdir=/home/nzsn/Repos/Cooperators/docs/impl/generated-fault-mbt/qualification/composed-combined-bfs/witness-NoCombinedProtocol-jvm-tmp"
+TLC2 Version 2.19 of 08 August 2024 (rev: 5a47802)
+Running breadth-first search Model-Checking with fp 97 and seed 7769696872918789648 with 1 worker on 12 cores with 2660MB heap and 64MB offheap memory [pid: 393071] (Linux 6.18.54.1-microsoft-standard-WSL2 amd64, Ubuntu 25.0.4.1 x86_64, MSBDiskFPSet, DiskStateQueue).
+Parsing file /home/nzsn/Repos/Cooperators/docs/impl/generated-fault-mbt/qualification/composed-combined-bfs/CooperatorsInstances.tla
+Parsing file /home/nzsn/Repos/Cooperators/docs/impl/generated-fault-mbt/qualification/composed-combined-bfs/witness-NoCombinedProtocol-jvm-tmp/Integers.tla
+Parsing file /home/nzsn/Repos/Cooperators/docs/impl/generated-fault-mbt/qualification/composed-combined-bfs/witness-NoCombinedProtocol-jvm-tmp/Sequences.tla
+Parsing file /home/nzsn/Repos/Cooperators/docs/impl/generated-fault-mbt/qualification/composed-combined-bfs/witness-NoCombinedProtocol-jvm-tmp/FiniteSets.tla
+Parsing file /home/nzsn/Repos/Cooperators/docs/impl/generated-fault-mbt/qualification/composed-combined-bfs/witness-NoCombinedProtocol-jvm-tmp/TLC.tla
+Parsing file /home/nzsn/Repos/Cooperators/docs/impl/generated-fault-mbt/qualification/composed-combined-bfs/witness-NoCombinedProtocol-jvm-tmp/Naturals.tla
+Parsing file /home/nzsn/Repos/Cooperators/docs/impl/generated-fault-mbt/qualification/composed-combined-bfs/AgentInstances.tla
+Parsing file /home/nzsn/Repos/Cooperators/docs/impl/generated-fault-mbt/qualification/composed-combined-bfs/Cooperators.tla
+Semantic processing of module Naturals
+Semantic processing of module Integers
+Semantic processing of module Sequences
+Semantic processing of module FiniteSets
+Semantic processing of module TLC
+Semantic processing of module AgentInstances
+Semantic processing of module Cooperators
+Semantic processing of module CooperatorsInstances
+Starting... (2026-10-19 18:03:31)
+Computing initial states...
+Finished computing initial states: 1 distinct state generated at 2026-10-19 18:03:32.
+Progress(5) at 2026-10-19 18:03:35: 13,323 states generated (13,323 s/min), 1,266 distinct states found (1,266 ds/min), 1,044 states left on queue.
+Error: Invariant NoCombinedProtocol is violated.
+Error: The behavior up to this point is:
+State 1: <Initial predicate>
+/\ parametersChecked = TRUE
+/\ crashKeepsIdentity = TRUE
+/\ ackIsolated = TRUE
+/\ last = [ op |-> "init",
+  expected |-> "none",
+  actual |-> "none",
+  principal |-> "-id",
+  token |-> "-token",
+  target |-> "-id",
+  base |-> 0,
+  fence |-> 0,
+  cursor |-> 0 ]
+/\ decisionsCorrect = TRUE
+/\ ackCursor = (id1 :> 0 @@ id2 :> 0)
+/\ identityRefines = TRUE
+/\ crashedWithMessage = FALSE
+/\ authenticated = TRUE
+/\ recipientLive = TRUE
+/\ brokerRefines = TRUE
+/\ steps = 0
+/\ identity = [ id |-> (launchA :> "-id" @@ launchB :> "-id"),
+  active |-> {},
+  connected |-> {},
+  usedTokens |-> {},
+  tokenInstance |->
+      (token1 :> "-instance" @@ token2 :> "-instance" @@ token3 :> "-instance"),
+  fence |-> 0,
+  revoked |-> {},
+  tokenOwner |-> (token1 :> "-id" @@ token2 :> "-id" @@ token3 :> "-id"),
+  validTokens |-> {},
+  messages |-> <<>>,
+  enrolled |-> {},
+  kind |-> (launchA :> "codex" @@ launchB :> "codex"),
+  label |-> (launchA :> "codex" @@ launchB :> "codex"),
+  firstId |-> (launchA :> "-id" @@ launchB :> "-id"),
+  reply |-> (launchA :> "-id" @@ launchB :> "-id"),
+  currentToken |-> (launchA :> "-token" @@ launchB :> "-token"),
+  usedIds |-> {},
+  issuedOwner |-> (id1 :> "-instance" @@ id2 :> "-instance"),
+  inbox |-> (id1 :> <<>> @@ id2 :> <<>>),
+  requests |-> (id1 :> (sameKey :> "-id") @@ id2 :> (sameKey :> "-id")),
+  ack |-> (id1 :> 0 @@ id2 :> 0),
+  authorizedAck |-> (id1 :> 0 @@ id2 :> 0),
+  heartbeats |-> (id1 :> 0 @@ id2 :> 0),
+  authorizedHeartbeats |-> (id1 :> 0 @@ id2 :> 0),
+  heartbeatDone |-> {},
+  leaseHolder |-> "-id",
+  lastLease |->
+      [ caller |-> "-id",
+        holder |-> "-id",
+        supplied |-> 0,
+        current |-> 0,
+        granted |-> FALSE ] ]
+/\ actorBound = TRUE
+/\ log = <<>>
+/\ identityClock = 0
+
+State 2: <Next line 210, col 9 to line 213, col 69 of module CooperatorsInstances>
+/\ parametersChecked = TRUE
+/\ crashKeepsIdentity = TRUE
+/\ ackIsolated = TRUE
+/\ last = [ op |-> "lifecycle",
+  expected |-> "none",
+  actual |-> "none",
+  principal |-> "-id",
+  token |-> "-token",
+  target |-> "-id",
+  base |-> 0,
+  fence |-> 0,
+  cursor |-> 0 ]
+/\ decisionsCorrect = TRUE
+/\ ackCursor = (id1 :> 0 @@ id2 :> 0)
+/\ identityRefines = TRUE
+/\ crashedWithMessage = FALSE
+/\ authenticated = TRUE
+/\ recipientLive = TRUE
+/\ brokerRefines = TRUE
+/\ steps = 1
+/\ identity = [ id |-> (launchA :> id1 @@ launchB :> "-id"),
+  active |-> {launchA},
+  connected |-> {launchA},
+  usedTokens |-> {token1},
+  tokenInstance |->
+      (token1 :> launchA @@ token2 :> "-instance" @@ token3 :> "-instance"),
+  fence |-> 0,
+  revoked |-> {},
+  tokenOwner |-> (token1 :> id1 @@ token2 :> "-id" @@ token3 :> "-id"),
+  validTokens |-> {token1},
+  messages |-> <<>>,
+  enrolled |-> {launchA},
+  kind |-> (launchA :> "codex" @@ launchB :> "codex"),
+  label |-> (launchA :> "codex" @@ launchB :> "codex"),
+  firstId |-> (launchA :> id1 @@ launchB :> "-id"),
+  reply |-> (launchA :> id1 @@ launchB :> "-id"),
+  currentToken |-> (launchA :> token1 @@ launchB :> "-token"),
+  usedIds |-> {id1},
+  issuedOwner |-> (id1 :> launchA @@ id2 :> "-instance"),
+  inbox |-> (id1 :> <<>> @@ id2 :> <<>>),
+  requests |-> (id1 :> (sameKey :> "-id") @@ id2 :> (sameKey :> "-id")),
+  ack |-> (id1 :> 0 @@ id2 :> 0),
+  authorizedAck |-> (id1 :> 0 @@ id2 :> 0),
+  heartbeats |-> (id1 :> 0 @@ id2 :> 0),
+  authorizedHeartbeats |-> (id1 :> 0 @@ id2 :> 0),
+  heartbeatDone |-> {},
+  leaseHolder |-> "-id",
+  lastLease |->
+      [ caller |-> "-id",
+        holder |-> "-id",
+        supplied |-> 0,
+        current |-> 0,
+        granted |-> FALSE ] ]
+/\ actorBound = TRUE
+/\ log = <<>>
+/\ identityClock = 0
+
+State 3: <Next line 210, col 9 to line 213, col 69 of module CooperatorsInstances>
+/\ parametersChecked = TRUE
+/\ crashKeepsIdentity = TRUE
+/\ ackIsolated = TRUE
+/\ last = [ op |-> "lifecycle",
+  expected |-> "none",
+  actual |-> "none",
+  principal |-> "-id",
+  token |-> "-token",
+  target |-> "-id",
+  base |-> 0,
+  fence |-> 0,
+  cursor |-> 0 ]
+/\ decisionsCorrect = TRUE
+/\ ackCursor = (id1 :> 0 @@ id2 :> 0)
+/\ identityRefines = TRUE
+/\ crashedWithMessage = FALSE
+/\ authenticated = TRUE
+/\ recipientLive = TRUE
+/\ brokerRefines = TRUE
+/\ steps = 2
+/\ identity = [ id |-> (launchA :> id1 @@ launchB :> id2),
+  active |-> {launchA, launchB},
+  connected |-> {launchA, launchB},
+  usedTokens |-> {token1, token2},
+  tokenInstance |->
+      (token1 :> launchA @@ token2 :> launchB @@ token3 :> "-instance"),
+  fence |-> 0,
+  revoked |-> {},
+  tokenOwner |-> (token1 :> id1 @@ token2 :> id2 @@ token3 :> "-id"),
+  validTokens |-> {token1, token2},
+  messages |-> <<>>,
+  enrolled |-> {launchA, launchB},
+  kind |-> (launchA :> "codex" @@ launchB :> "codex"),
+  label |-> (launchA :> "codex" @@ launchB :> "codex"),
+  firstId |-> (launchA :> id1 @@ launchB :> id2),
+  reply |-> (launchA :> id1 @@ launchB :> id2),
+  currentToken |-> (launchA :> token1 @@ launchB :> token2),
+  usedIds |-> {id1, id2},
+  issuedOwner |-> (id1 :> launchA @@ id2 :> launchB),
+  inbox |-> (id1 :> <<>> @@ id2 :> <<>>),
+  requests |-> (id1 :> (sameKey :> "-id") @@ id2 :> (sameKey :> "-id")),
+  ack |-> (id1 :> 0 @@ id2 :> 0),
+  authorizedAck |-> (id1 :> 0 @@ id2 :> 0),
+  heartbeats |-> (id1 :> 0 @@ id2 :> 0),
+  authorizedHeartbeats |-> (id1 :> 0 @@ id2 :> 0),
+  heartbeatDone |-> {},
+  leaseHolder |-> "-id",
+  lastLease |->
+      [ caller |-> "-id",
+        holder |-> "-id",
+        supplied |-> 0,
+        current |-> 0,
+        granted |-> FALSE ] ]
+/\ actorBound = TRUE
+/\ log = <<>>
+/\ identityClock = 0
+
+State 4: <Next line 210, col 9 to line 213, col 69 of module CooperatorsInstances>
+/\ parametersChecked = TRUE
+/\ crashKeepsIdentity = TRUE
+/\ ackIsolated = TRUE
+/\ last = [ op |-> "send",
+  expected |-> "apply",
+  actual |-> "apply",
+  principal |-> id1,
+  token |-> token1,
+  target |-> id1,
+  base |-> 0,
+  fence |-> 0,
+  cursor |-> 0 ]
+/\ decisionsCorrect = TRUE
+/\ ackCursor = (id1 :> 0 @@ id2 :> 0)
+/\ identityRefines = TRUE
+/\ crashedWithMessage = FALSE
+/\ authenticated = TRUE
+/\ recipientLive = TRUE
+/\ brokerRefines = TRUE
+/\ steps = 3
+/\ identity = [ id |-> (launchA :> id1 @@ launchB :> id2),
+  active |-> {launchA, launchB},
+  connected |-> {launchA, launchB},
+  usedTokens |-> {token1, token2},
+  tokenInstance |->
+      (token1 :> launchA @@ token2 :> launchB @@ token3 :> "-instance"),
+  fence |-> 0,
+  revoked |-> {},
+  tokenOwner |-> (token1 :> id1 @@ token2 :> id2 @@ token3 :> "-id"),
+  validTokens |-> {token1, token2},
+  messages |-> <<>>,
+  enrolled |-> {launchA, launchB},
+  kind |-> (launchA :> "codex" @@ launchB :> "codex"),
+  label |-> (launchA :> "codex" @@ launchB :> "codex"),
+  firstId |-> (launchA :> id1 @@ launchB :> id2),
+  reply |-> (launchA :> id1 @@ launchB :> id2),
+  currentToken |-> (launchA :> token1 @@ launchB :> token2),
+  usedIds |-> {id1, id2},
+  issuedOwner |-> (id1 :> launchA @@ id2 :> launchB),
+  inbox |-> (id1 :> <<>> @@ id2 :> <<>>),
+  requests |-> (id1 :> (sameKey :> "-id") @@ id2 :> (sameKey :> "-id")),
+  ack |-> (id1 :> 0 @@ id2 :> 0),
+  authorizedAck |-> (id1 :> 0 @@ id2 :> 0),
+  heartbeats |-> (id1 :> 0 @@ id2 :> 0),
+  authorizedHeartbeats |-> (id1 :> 0 @@ id2 :> 0),
+  heartbeatDone |-> {},
+  leaseHolder |-> "-id",
+  lastLease |->
+      [ caller |-> "-id",
+        holder |-> "-id",
+        supplied |-> 0,
+        current |-> 0,
+        granted |-> FALSE ] ]
+/\ actorBound = TRUE
+/\ log = <<[key |-> sameKey, type |-> "msg", to |-> id1, from |-> id1]>>
+/\ identityClock = 0
+
+State 5: <Next line 210, col 9 to line 213, col 69 of module CooperatorsInstances>
+/\ parametersChecked = TRUE
+/\ crashKeepsIdentity = TRUE
+/\ ackIsolated = TRUE
+/\ last = [ op |-> "claim-task",
+  expected |-> "apply",
+  actual |-> "apply",
+  principal |-> id1,
+  token |-> token1,
+  target |-> "-id",
+  base |-> 0,
+  fence |-> 0,
+  cursor |-> 0 ]
+/\ decisionsCorrect = TRUE
+/\ ackCursor = (id1 :> 0 @@ id2 :> 0)
+/\ identityRefines = TRUE
+/\ crashedWithMessage = FALSE
+/\ authenticated = TRUE
+/\ recipientLive = TRUE
+/\ brokerRefines = TRUE
+/\ steps = 4
+/\ identity = [ id |-> (launchA :> id1 @@ launchB :> id2),
+  active |-> {launchA, launchB},
+  connected |-> {launchA, launchB},
+  usedTokens |-> {token1, token2},
+  tokenInstance |->
+      (token1 :> launchA @@ token2 :> launchB @@ token3 :> "-instance"),
+  fence |-> 0,
+  revoked |-> {},
+  tokenOwner |-> (token1 :> id1 @@ token2 :> id2 @@ token3 :> "-id"),
+  validTokens |-> {token1, token2},
+  messages |-> <<>>,
+  enrolled |-> {launchA, launchB},
+  kind |-> (launchA :> "codex" @@ launchB :> "codex"),
+  label |-> (launchA :> "codex" @@ launchB :> "codex"),
+  firstId |-> (launchA :> id1 @@ launchB :> id2),
+  reply |-> (launchA :> id1 @@ launchB :> id2),
+  currentToken |-> (launchA :> token1 @@ launchB :> token2),
+  usedIds |-> {id1, id2},
+  issuedOwner |-> (id1 :> launchA @@ id2 :> launchB),
+  inbox |-> (id1 :> <<>> @@ id2 :> <<>>),
+  requests |-> (id1 :> (sameKey :> "-id") @@ id2 :> (sameKey :> "-id")),
+  ack |-> (id1 :> 0 @@ id2 :> 0),
+  authorizedAck |-> (id1 :> 0 @@ id2 :> 0),
+  heartbeats |-> (id1 :> 0 @@ id2 :> 0),
+  authorizedHeartbeats |-> (id1 :> 0 @@ id2 :> 0),
+  heartbeatDone |-> {},
+  leaseHolder |-> "-id",
+  lastLease |->
+      [ caller |-> "-id",
+        holder |-> "-id",
+        supplied |-> 0,
+        current |-> 0,
+        granted |-> FALSE ] ]
+/\ actorBound = TRUE
+/\ log = << [key |-> sameKey, type |-> "msg", to |-> id1, from |-> id1],
+   [type |-> "claim", holder |-> id1, res |-> taskQueue] >>
+/\ identityClock = 0
+
+State 6: <Next line 210, col 9 to line 213, col 69 of module CooperatorsInstances>
+/\ parametersChecked = TRUE
+/\ crashKeepsIdentity = TRUE
+/\ ackIsolated = TRUE
+/\ last = [ op |-> "publish-doc",
+  expected |-> "apply",
+  actual |-> "apply",
+  principal |-> id1,
+  token |-> token1,
+  target |-> "-id",
+  base |-> 0,
+  fence |-> 0,
+  cursor |-> 0 ]
+/\ decisionsCorrect = TRUE
+/\ ackCursor = (id1 :> 0 @@ id2 :> 0)
+/\ identityRefines = TRUE
+/\ crashedWithMessage = FALSE
+/\ authenticated = TRUE
+/\ recipientLive = TRUE
+/\ brokerRefines = TRUE
+/\ steps = 5
+/\ identity = [ id |-> (launchA :> id1 @@ launchB :> id2),
+  active |-> {launchA, launchB},
+  connected |-> {launchA, launchB},
+  usedTokens |-> {token1, token2},
+  tokenInstance |->
+      (token1 :> launchA @@ token2 :> launchB @@ token3 :> "-instance"),
+  fence |-> 0,
+  revoked |-> {},
+  tokenOwner |-> (token1 :> id1 @@ token2 :> id2 @@ token3 :> "-id"),
+  validTokens |-> {token1, token2},
+  messages |-> <<>>,
+  enrolled |-> {launchA, launchB},
+  kind |-> (launchA :> "codex" @@ launchB :> "codex"),
+  label |-> (launchA :> "codex" @@ launchB :> "codex"),
+  firstId |-> (launchA :> id1 @@ launchB :> id2),
+  reply |-> (launchA :> id1 @@ launchB :> id2),
+  currentToken |-> (launchA :> token1 @@ launchB :> token2),
+  usedIds |-> {id1, id2},
+  issuedOwner |-> (id1 :> launchA @@ id2 :> launchB),
+  inbox |-> (id1 :> <<>> @@ id2 :> <<>>),
+  requests |-> (id1 :> (sameKey :> "-id") @@ id2 :> (sameKey :> "-id")),
+  ack |-> (id1 :> 0 @@ id2 :> 0),
+  authorizedAck |-> (id1 :> 0 @@ id2 :> 0),
+  heartbeats |-> (id1 :> 0 @@ id2 :> 0),
+  authorizedHeartbeats |-> (id1 :> 0 @@ id2 :> 0),
+  heartbeatDone |-> {},
+  leaseHolder |-> "-id",
+  lastLease |->
+      [ caller |-> "-id",
+        holder |-> "-id",
+        supplied |-> 0,
+        current |-> 0,
+        granted |-> FALSE ] ]
+/\ actorBound = TRUE
+/\ log = << [key |-> sameKey, type |-> "msg", to |-> id1, from |-> id1],
+   [type |-> "claim", holder |-> id1, res |-> taskQueue],
+   [ base |-> 0,
+     fence |-> 0,
+     type |-> "docput",
+     holder |-> id1,
+     doc |-> document ] >>
+/\ identityClock = 0
+
+27979 states generated, 2825 distinct states found, 2395 states left on queue.
+The depth of the complete state graph search is 6.
+The average outdegree of the complete state graph is 5 (minimum is 0, the maximum 31 and the 95th percentile is 31).
+Finished in 06s at (2026-10-19 18:03:36)

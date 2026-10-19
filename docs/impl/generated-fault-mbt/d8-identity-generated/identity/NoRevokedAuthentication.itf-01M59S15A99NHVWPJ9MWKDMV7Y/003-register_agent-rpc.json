@@ -1,0 +1,22 @@
+{
+  "method": "register_agent",
+  "request": {
+    "kind": "codex",
+    "name": "instance-01M59S15FP2W4D24BX692ASC8D",
+    "token": {
+      "credential_hash": "sha256:b8676f60a5147314a0f345310572eef9974caef725cd097303562268b8881de2"
+    }
+  },
+  "response": {
+    "result": {
+      "agent_id": "01M59S15FP2W4D24BX692ASC8D",
+      "capabilities": [],
+      "kind": "codex",
+      "name": "instance-01M59S15FP2W4D24BX692ASC8D",
+      "rotated": true,
+      "token": {
+        "credential_hash": "sha256:4779d05353afc6eae2a58eee1e9493f23bf5bcb6b58388653ff08f78236ea55f"
+      }
+    }
+  }
+}

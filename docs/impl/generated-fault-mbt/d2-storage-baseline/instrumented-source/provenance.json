@@ -1,0 +1,8 @@
+{
+  "qualification": "storage.rs reconstructed immediately by reversing only the quarantine patch; faults.rs/lib.rs copied unchanged after baseline capture; baseline executable and fixture observations are primary execution evidence",
+  "sha256": {
+    "storage.rs": "4a33ceb0ed76b716c22c2cfa30c92637523418e143d6b3c71977580c18099866",
+    "faults.rs": "86dcd8f9df11eb2978638f9ab1bb4f8839ed4c8735807a77060b3c80eb801b4c",
+    "lib.rs": "3da5ae4d719a9d9537257fd50a4a674175fe42cd8645f9cb42826fe5695c8f49"
+  }
+}

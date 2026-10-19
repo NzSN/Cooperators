@@ -1,0 +1,132 @@
+{
+  "bridgeManifestSha256": "867f853a666ec5e5d646b7827b4fb51977a26ab76b356f00d0242842e5e67435",
+  "cases": [
+    {
+      "case": "none-NoEnrollmentRetry",
+      "configSha256": "bd7a793504f161a8d9a29b6f4836ca7ab547114a3f15b0a38a1ca81c18b6379d",
+      "fault": "none",
+      "logSha256": "d883ca2bbd07ecb5d504949395e5a96b5d343ade63a469128fc9be3afc4e3274",
+      "probeSha256": "7183451f0a722baa2dd77717a297cb008e91d06b84130d425055ee24f9345c2c",
+      "trace": "NoEnrollmentRetry"
+    },
+    {
+      "case": "none-NoRetiredAuthentication",
+      "configSha256": "bd7a793504f161a8d9a29b6f4836ca7ab547114a3f15b0a38a1ca81c18b6379d",
+      "fault": "none",
+      "logSha256": "1ce32c7601bcd7f2005038acafeeecf5b342f8a997c6ad9169a0029a4db9ceb4",
+      "probeSha256": "1ac59e852476a4cb557d0e8b222548c1d51387670aad5e8f319ef7c89d3ac67f",
+      "trace": "NoRetiredAuthentication"
+    },
+    {
+      "case": "none-NoRetiredEnrollmentRetry",
+      "configSha256": "bd7a793504f161a8d9a29b6f4836ca7ab547114a3f15b0a38a1ca81c18b6379d",
+      "fault": "none",
+      "logSha256": "4949d90123003c6513150480daad9bbd4e26e0e2d9123041c090cbc0bf940647",
+      "probeSha256": "4cd96102160f984f4f3bedb177f11b1821960fb3b1209a56fce39286241e40cc",
+      "trace": "NoRetiredEnrollmentRetry"
+    },
+    {
+      "case": "none-NoRetiredThenFresh",
+      "configSha256": "bd7a793504f161a8d9a29b6f4836ca7ab547114a3f15b0a38a1ca81c18b6379d",
+      "fault": "none",
+      "logSha256": "2f536fd899c67dbe59c0b5d46ec4f3e74312684543acc93a0d0ea1e794dedc94",
+      "probeSha256": "8cc4a9130bfc34bce49635769623a5fbdf0da775f7c8ea8d58c50e6d6931130f",
+      "trace": "NoRetiredThenFresh"
+    },
+    {
+      "case": "none-NoRevokedAuthentication",
+      "configSha256": "bd7a793504f161a8d9a29b6f4836ca7ab547114a3f15b0a38a1ca81c18b6379d",
+      "fault": "none",
+      "logSha256": "50748421346786849b38c3c173d3568852d4ea42a31cb8a42307945cc319f63a",
+      "probeSha256": "1e9ce62a1b5149503ebd21127a87fd912514a59321355528c772d1a6a5e4ee29",
+      "trace": "NoRevokedAuthentication"
+    },
+    {
+      "case": "none-NoSameKindEnrollment",
+      "configSha256": "bd7a793504f161a8d9a29b6f4836ca7ab547114a3f15b0a38a1ca81c18b6379d",
+      "fault": "none",
+      "logSha256": "225d922bc79a21614c26e9aba50de1dea5f1c3ca27f8ba6c75a45bb7aa58b477",
+      "probeSha256": "4654202de040ac2faa0753fe2d2593f5ba8a7894076172716265b64c30f06bc9",
+      "trace": "NoSameKindEnrollment"
+    },
+    {
+      "case": "none-NoStableReconnect",
+      "configSha256": "bd7a793504f161a8d9a29b6f4836ca7ab547114a3f15b0a38a1ca81c18b6379d",
+      "fault": "none",
+      "logSha256": "1166666adf9f1bc1d80346009d78209da2209480f82304eb9e2fbfc507321dde",
+      "probeSha256": "6e01f312b14a47f3d727b69d2f5c2cd15abe6749e19af5204ddf7411f7e7ac81",
+      "trace": "NoStableReconnect"
+    },
+    {
+      "case": "none-NoStaleEnrollmentRetry",
+      "configSha256": "bd7a793504f161a8d9a29b6f4836ca7ab547114a3f15b0a38a1ca81c18b6379d",
+      "fault": "none",
+      "logSha256": "0cd484e864f7c4febaabfee8bfefb222d6ee9a871631ce8539c5bdcbf6be6407",
+      "probeSha256": "0d2f82eb16b3f64588f4750ffeadc45a692180202333b98010d494f4b386025d",
+      "trace": "NoStaleEnrollmentRetry"
+    },
+    {
+      "case": "kind-identity-NoSameKindEnrollment",
+      "configSha256": "853388ab8a1aeb1349855a34dd1ebcfc6068dfd29f9f4684674f1e6db941769c",
+      "fault": "kind-identity",
+      "logSha256": "4b6a087ab70a923f2132dba54ed23c6794f60eae174bc3163ffed57635bd2069",
+      "probeSha256": "4654202de040ac2faa0753fe2d2593f5ba8a7894076172716265b64c30f06bc9",
+      "trace": "NoSameKindEnrollment"
+    },
+    {
+      "case": "reconnect-id-NoStableReconnect",
+      "configSha256": "d9124aaa20662b282ccc8f8c7927af645602fac17d90669e3467b3616435be92",
+      "fault": "reconnect-id",
+      "logSha256": "315043c448031831c8715be61ed75251721e6db0e97ebb7ecebc6c28754a8faf",
+      "probeSha256": "6e01f312b14a47f3d727b69d2f5c2cd15abe6749e19af5204ddf7411f7e7ac81",
+      "trace": "NoStableReconnect"
+    },
+    {
+      "case": "shared-token-NoSameKindEnrollment",
+      "configSha256": "71ee57cf406ed8e853e0c43a8dbeacfb512c67a22c24ae9924fca8948515664a",
+      "fault": "shared-token",
+      "logSha256": "686929f9e4e01b1245c1e2eca8b47d8452d8e0983e85b6fbb7c0835f883a985f",
+      "probeSha256": "4654202de040ac2faa0753fe2d2593f5ba8a7894076172716265b64c30f06bc9",
+      "trace": "NoSameKindEnrollment"
+    },
+    {
+      "case": "stale-token-NoRevokedAuthentication",
+      "configSha256": "2bfa09d4d3f48d1c31c49096c479a3f781211c08a1533fac1df0744d23a36769",
+      "fault": "stale-token",
+      "logSha256": "a0b3fd3409fdb44d742121632bd745b580b2d09e3f8631b04ba3db834e580542",
+      "probeSha256": "1e9ce62a1b5149503ebd21127a87fd912514a59321355528c772d1a6a5e4ee29",
+      "trace": "NoRevokedAuthentication"
+    },
+    {
+      "case": "retry-id-NoEnrollmentRetry",
+      "configSha256": "f640bc5b6aa8764ee01f920db97a8afbe8f8f28669db63b52e9ac17ec576a0a4",
+      "fault": "retry-id",
+      "logSha256": "f9f08bc74326c744f65012d45bbb7d81ecf4e9f291a5f06a05d82acadee2f0db",
+      "probeSha256": "7183451f0a722baa2dd77717a297cb008e91d06b84130d425055ee24f9345c2c",
+      "trace": "NoEnrollmentRetry"
+    },
+    {
+      "case": "reused-id-NoRetiredThenFresh",
+      "configSha256": "e6cea4787e878175d03b896f2b6186c673557145597c1fea53acd43007792911",
+      "fault": "reused-id",
+      "logSha256": "26041e200e6186319b447c0e8be8eef151eada37c2b9c51b802de2538386bb15",
+      "probeSha256": "8cc4a9130bfc34bce49635769623a5fbdf0da775f7c8ea8d58c50e6d6931130f",
+      "trace": "NoRetiredThenFresh"
+    },
+    {
+      "case": "stale-enrollment-NoStaleEnrollmentRetry",
+      "configSha256": "73242fbfc985d9fa7739bd81ab430b2f0c0dded653da20897e1215c44884db05",
+      "fault": "stale-enrollment",
+      "logSha256": "2481c1ebda83166e175467fbb0345364082d676163d9bff3b522e4d495d5d695",
+      "probeSha256": "0d2f82eb16b3f64588f4750ffeadc45a692180202333b98010d494f4b386025d",
+      "trace": "NoStaleEnrollmentRetry"
+    }
+  ],
+  "profiles": [
+    "identity"
+  ],
+  "proofBoundary": "Bounded fixed-input checks against canonical MBFaults.Next; no implementation runtime execution.",
+  "registrySha256": "988b77892ff9899daba2789ef258a863b9b9f3619257343674d8e76b7b739301",
+  "schema": "cooperators.generated-interface-projection-check/v1",
+  "sourceSha256": "117e081f6f540f628862c7c77dbfe1f41705a732abeee91c68a4721096c3222a"
+}

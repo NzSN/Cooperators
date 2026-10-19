@@ -1,0 +1,386 @@
+{
+  "captured_at_utc": "2026-10-19T09:33:11.630823+00:00",
+  "tools": {
+    "model_interface_gen": {
+      "path": "/home/nzsn/Repos/Mirrors/.lake/build/bin/model_interface_gen",
+      "resolved_path": "/home/nzsn/Repos/Mirrors/.lake/build/bin/model_interface_gen",
+      "exists": true,
+      "sha256": "143fbe36a1143771d8ee15b76eb0ae6e661f70a7d4c04e58eba1af67ade05c35",
+      "bytes": 124702120,
+      "mtime_ns": 1791873046449162632
+    },
+    "ModelMirrors": {
+      "path": "/home/nzsn/.local/bin/ModelMirrors",
+      "resolved_path": "/home/nzsn/.local/bin/ModelMirrors",
+      "exists": true,
+      "sha256": "cb790cfc85b5152769d4d9efd7638a09a40b8dafd93276e5dd223a8b37ca348f",
+      "bytes": 129469800,
+      "mtime_ns": 1792374142151305813
+    },
+    "tlc_wrapper": {
+      "path": "/home/nzsn/.local/bin/tlc",
+      "resolved_path": "/home/nzsn/.local/bin/tlc",
+      "exists": true,
+      "sha256": "ea881140cdae0071a39db8b0ff03f3312e891b7cb0e05f137b00bf57145d18ec",
+      "bytes": 225,
+      "mtime_ns": 1779356588746708143
+    },
+    "tla2tools": {
+      "path": "/home/nzsn/.local/lib/tla2tools.jar",
+      "resolved_path": "/home/nzsn/.local/lib/tla2tools.jar",
+      "exists": true,
+      "sha256": "936a262061c914694dfd669a543be24573c45d5aa0ff20a8b96b23d01e050e88",
+      "bytes": 2274532,
+      "mtime_ns": 1779356588742708144
+    },
+    "apalache_wrapper": {
+      "path": "/home/nzsn/.apalache/bin/apalache-mc",
+      "resolved_path": "/home/nzsn/.apalache/bin/apalache-mc",
+      "exists": true,
+      "sha256": "f8d4643705369d0642d9345a479e7cc8b7929710dc966e7f9a374bf03e526fe4",
+      "bytes": 3388,
+      "mtime_ns": 1787711368000000000
+    },
+    "historical_mbt_binary": {
+      "path": "/tmp/cooperators-review-core/target/debug/cooperators-mbt",
+      "resolved_path": "/tmp/cooperators-review-core/target/debug/cooperators-mbt",
+      "exists": true,
+      "sha256": "72735a2049be09cd4f5929cf442af273f9953aee64f1498caeec457229582dc2",
+      "bytes": 65629384,
+      "mtime_ns": 1792381253170338623
+    }
+  },
+  "sibling_repositories": {
+    "Mirrors": {
+      "head": {
+        "command": [
+          "git",
+          "rev-parse",
+          "HEAD"
+        ],
+        "cwd": "/home/nzsn/Repos/Mirrors",
+        "exit_code": 0,
+        "output": "d1c5e7482c4adf02fd94820e239c1e39c240b1d2\n"
+      },
+      "status": {
+        "command": [
+          "git",
+          "status",
+          "--porcelain=v1"
+        ],
+        "cwd": "/home/nzsn/Repos/Mirrors",
+        "exit_code": 0,
+        "output": "?? .projectile-cache.eld\n?? Plans/dpm-review-remediation-evidence-20261013/\n"
+      }
+    },
+    "MirrorRust": {
+      "head": {
+        "command": [
+          "git",
+          "rev-parse",
+          "HEAD"
+        ],
+        "cwd": "/home/nzsn/Repos/MirrorRust",
+        "exit_code": 0,
+        "output": "5049e99886a3d1f775e60190478c26e39c9aefc9\n"
+      },
+      "status": {
+        "command": [
+          "git",
+          "status",
+          "--porcelain=v1"
+        ],
+        "cwd": "/home/nzsn/Repos/MirrorRust",
+        "exit_code": 0,
+        "output": ""
+      }
+    },
+    "ModelMirros": {
+      "head": {
+        "command": [
+          "git",
+          "rev-parse",
+          "HEAD"
+        ],
+        "cwd": "/home/nzsn/Repos/ModelMirros",
+        "exit_code": 0,
+        "output": "14e25c905abf5f3b096d8e545791bb1efe1b812e\n"
+      },
+      "status": {
+        "command": [
+          "git",
+          "status",
+          "--porcelain=v1"
+        ],
+        "cwd": "/home/nzsn/Repos/ModelMirros",
+        "exit_code": 0,
+        "output": ""
+      }
+    }
+  },
+  "versions_and_help": {
+    "cargo": {
+      "command": [
+        "cargo",
+        "--version"
+      ],
+      "cwd": null,
+      "exit_code": 0,
+      "output": "cargo 1.95.0 (f2d3ce0bd 2026-03-21)\n"
+    },
+    "rustc": {
+      "command": [
+        "rustc",
+        "-Vv"
+      ],
+      "cwd": null,
+      "exit_code": 0,
+      "output": "rustc 1.95.0 (59807616e 2026-04-14)\nbinary: rustc\ncommit-hash: 59807616e1fa2540724bfbac14d7976d7e4a3860\ncommit-date: 2026-04-14\nhost: x86_64-unknown-linux-gnu\nrelease: 1.95.0\nLLVM version: 22.1.2\n"
+    },
+    "python": {
+      "command": [
+        "python3",
+        "--version"
+      ],
+      "cwd": null,
+      "exit_code": 0,
+      "output": "Python 3.12.3\n"
+    },
+    "java": {
+      "command": [
+        "java",
+        "-version"
+      ],
+      "cwd": null,
+      "exit_code": 0,
+      "output": "openjdk version \"25.0.4.1\" 2026-08-18\nOpenJDK Runtime Environment (build 25.0.4.1+1-1-24.04.4-Ubuntu)\nOpenJDK 64-Bit Server VM (build 25.0.4.1+1-1-24.04.4-Ubuntu, mixed mode, sharing)\n"
+    },
+    "model_interface_gen": {
+      "command": [
+        "/home/nzsn/Repos/Mirrors/.lake/build/bin/model_interface_gen",
+        "--help"
+      ],
+      "cwd": null,
+      "exit_code": 2,
+      "output": "usage:\n  model_interface_gen resolve --spec FILE --contract FILE --evidence FILE\n    [--param-var NAME] --lock FILE [--diagnostics json]\n  model_interface_gen generate --lock FILE --target TARGET --out DIR\n    [--diagnostics json]\n  model_interface_gen bundle --lock FILE --target mirrorecma-async-v1 --out DIR\n    [--diagnostics json]\n  model_interface_gen check-bundle --spec FILE --contract FILE --evidence FILE\n    [--param-var NAME] --lock FILE --target mirrorecma-async-v1 --out DIR\n    [--diagnostics json]\n  model_interface_gen check --spec FILE --contract FILE --evidence FILE\n    [--param-var NAME] --lock FILE --target TARGET --out DIR\n    [--diagnostics json]\n  model_interface_gen generate-dpm|check-dpm --lock FILE --mapping FILE --target TARGET --out DIR\n    [--diagnostics json]\n  model_interface_gen compare-locks --from-lock OLD --to-lock NEW\n    [--diagnostics json]\n  model_interface_gen preflight --lock FILE --trace PATH\n    [--require-all-actions] [--diagnostics json]\n  model_interface_gen scaffold --spec FILE --evidence FILE\n    [--param-var NAME] [--projection PLAN] --proposal FILE\n    [--replace] [--diagnostics json]\n  model_interface_gen scaffold --reviewable --spec FILE --evidence FILE\n    [--evidence FILE ...] [--param-var NAME] [--projection PLAN] --proposal FILE\n  model_interface_gen seal-scaffold --spec FILE --evidence FILE [--evidence FILE ...]\n    [--param-var NAME] [--projection PLAN] --proposal FILE --review FILE --out DIR\n  model_interface_gen resolve-sealed --spec FILE --evidence FILE [--evidence FILE ...]\n    [--param-var NAME] [--projection PLAN] --sealed DIR [--corpus-manifest FILE] --lock FILE\n  model_interface_gen check-sealed|check-sealed-bundle --spec FILE --evidence FILE\n    [--evidence FILE ...] [--param-var NAME] [--projection PLAN] --sealed DIR\n    [--corpus-manifest FILE] --lock FILE --target TARGET --out DIR\n  model_interface_gen project-corpus --spec FILE --evidence RAW [--evidence RAW ...]\n    --projection PLAN --out DIR [--diagnostics json]\n  model_interface_gen check-corpus --out DIR --manifest-sha256 HASH [--diagnostics json]\n  model_interface_gen project-trace --spec FILE --evidence RAW\n    --projection PLAN --out PROJECTED --receipt RECEIPT\n    [--replace] [--diagnostics json]\n  model_interface_gen generate-cmake|check-cmake --spec FILE --contract FILE\n    --evidence FILE [--param-var NAME] --lock FILE --target CPP_TARGET --out DIR\n    (paths relative to the consumer root; optional CMake helpers)\n  TARGET: mirrorecma-v1 | mirrorecma-async-v1 | mirrorecma-async-v2 | mirrorcpp-v1 | mirrorcpp-v2 | mirrorrust-v1 | mirrorrust-v2 | mirrorlean-v1\n"
+    },
+    "ModelMirrors": {
+      "command": [
+        "/home/nzsn/.local/bin/ModelMirrors",
+        "--help"
+      ],
+      "cwd": null,
+      "exit_code": 2,
+      "output": "unknown mode; see usage below\nusage: mirror <mode> [options]\n  --version          print the Mirrors product version and exit\n  default            stdio mirror session (one session on stdin/stdout)\n  --serve <port> [--bind <addr>] [--jobs <n>]\n                     plain TCP mirror server (--bind defaults to all\n                     interfaces; an unresolvable bind address fails loudly;\n                     --jobs sizes the worker pool and job store, default 4)\n  --server <port> --tls --cert <c> --key <k> --ca <a>\n       [--registry <url>] [--jobs <n>] [--bind <addr>]\n       [--model-interface-allow-client <fp[,fp...]>]\n       [--model-interface-descriptor-read]\n                     mTLS server; model-interface access is disabled unless\n                     the verified client SHA-256 fingerprint is allowlisted;\n                     allowlisted clients get verify scope, and the descriptor\n                     flag additionally grants descriptor-read scope\n  validate (--host <h> --port <p> | --registry <url> --tls --cert <c>\n            --key <k> --ca <a>) [--pin <fp>] [--bound <n>] [--async] --spec <file>\n       [--dep <file>]... (recursively includes local EXTENDS/INSTANCE modules)\n                     validate a local TLA+ spec against a remote mirror\n  trace-gen <validation connection/model options> --out <new-directory>\n       [--num-traces <n>] [--view <name>] [--param-var <name>]\n       [--async --max-polls <n>]\n                     capture remote inline ITF traces and provenance locally\n\n"
+    },
+    "ModelMirrors_version": {
+      "command": [
+        "/home/nzsn/.local/bin/ModelMirrors",
+        "--version"
+      ],
+      "exit_code": 0,
+      "output": "v0.0.3.2\n"
+    }
+  },
+  "historical_evidence": {
+    "historical/multi-writer-build.log": {
+      "sha256": "dc83750de7518e4ef8020c36621b78332c2c3d6706162831de3b85f819ee0ba5",
+      "bytes": 2195
+    },
+    "historical/negative-control.log": {
+      "sha256": "4d2dee4264cb4838df37e71d13eefece4b386ad912bc56d519f739d08b3eb24e",
+      "bytes": 394
+    },
+    "historical/Cargo.toml": {
+      "sha256": "05932b566680f6dd63df5f33257c35ef53d436366c1a4f72a0bb594efafde6a1",
+      "bytes": 435
+    },
+    "historical/multi-writer-replay.log": {
+      "sha256": "736486e3ac8ed5b92bc2680f3b8607535d3b91875b1dca991d794ef6012f0ddb",
+      "bytes": 4433
+    },
+    "historical/missing-writer-trace.log": {
+      "sha256": "3b0954cfba2b6cc5aabf28b9f0566ecb72b47c8e2f4b9e7f225e053810ffbca5",
+      "bytes": 52
+    },
+    "historical/writer-negative-control.log": {
+      "sha256": "386a23c04f890a226fa2d07f3b6d855b3f9fc35266eaa13647cfdb18026d1755",
+      "bytes": 2612
+    },
+    "historical/MBCooperators.tla": {
+      "sha256": "f58c0a849164d75ef3ede4b775add689a697a232b5c2f31ebeb57d02f355ca16",
+      "bytes": 8190
+    },
+    "historical/writer-model-check.log": {
+      "sha256": "1e19fcc22535bd90885d5e9fe3295905053eff70f5c242d68630b460424a6914",
+      "bytes": 8059
+    },
+    "historical/Cargo.lock": {
+      "sha256": "acfa8d21770f31206564c1cca157891cfd539c6b852a813fa0e6c52254ff3004",
+      "bytes": 17425
+    },
+    "historical/isolated-core/Cargo.toml": {
+      "sha256": "32c6cb3e4f37ec163a9cb22e019de18eac000da6289414f23afbdeca223a4314",
+      "bytes": 231
+    },
+    "historical/isolated-core/Cargo.lock": {
+      "sha256": "66afd510cf2d57b617430ef0d211dac8bac54dad959f4f0ecc67416da747d7da",
+      "bytes": 9048
+    },
+    "historical/writer-traces/NoHandoff.itf.json": {
+      "sha256": "7430afaac793d02cf8b6274d7e3a3e3269288d8b035d7e5dee4ce327767a3290",
+      "bytes": 8827
+    },
+    "historical/writer-traces/NoCompeteW2.itf.json": {
+      "sha256": "4556384c73ecd9f316f04f34af418010b74df6f9a76d46af4214ccb2b20fc9da",
+      "bytes": 4551
+    },
+    "historical/writer-traces/NoIndependentRoots.itf.json": {
+      "sha256": "a0b48d916d7d070878541b86252207248c9629dc322587b422dbb2b014b5159b",
+      "bytes": 7491
+    },
+    "historical/writer-traces/NoRejectedRecovery.itf.json": {
+      "sha256": "a759f681c41eaeadcfb9f6b2aca28e2805e8e5a7b01a33966661bc4ebf5b3b0b",
+      "bytes": 7383
+    },
+    "historical/writer-traces/NoCompeteW1.itf.json": {
+      "sha256": "e347d40a33cd7f04a967b012bd76b9e71f1f2d7c9b93749dfeb8aac88022ebaa",
+      "bytes": 4551
+    },
+    "historical/isolated-core/src/lib.rs": {
+      "sha256": "6fbffc42a198d6c6bf08b28defd6a1b4589178dcfe2a809069d3be3fbdeaa40b",
+      "bytes": 1531
+    },
+    "historical/fixtures/coop-writers-mbt-87vz3T/w2-2.stderr.log": {
+      "sha256": "8b700b62c9a8a8a678f0002cf8e4c381bf16b95fefeb8d9f041d7868c8d7487f",
+      "bytes": 103
+    },
+    "historical/fixtures/coop-writers-mbt-87vz3T/w1-1.stderr.log": {
+      "sha256": "e457dae8921c946c610a0cf86f91505b0f4f25e8d535baa2abc502b809b06781",
+      "bytes": 113
+    },
+    "historical/fixtures/coop-writers-mbt-ltYSNm/w2-2.stderr.log": {
+      "sha256": "8cf84880616af26a0b4f68b9d7521103bbd732e1519926a3b11e368874c32af1",
+      "bytes": 109
+    },
+    "historical/fixtures/coop-writers-mbt-ltYSNm/w1-1.stderr.log": {
+      "sha256": "8a5e8a545eca19f18d485942ef3d86d91873b6965d84a1836a51a209c93ccc82",
+      "bytes": 113
+    },
+    "historical/fixtures/coop-writers-mbt-T51IkJ/w1-2.stderr.log": {
+      "sha256": "eb3606735e84c271411923207eb94f88c69b5c54d096c57584ba706fe679fd9a",
+      "bytes": 109
+    },
+    "historical/fixtures/coop-writers-mbt-T51IkJ/w2-1.stderr.log": {
+      "sha256": "849cc71e16c7c40f11ca98c88230e88644a6873236557287ec291a7c46f1115b",
+      "bytes": 113
+    },
+    "historical/fixtures/coop-writers-mbt-87vz3T/r2/registry.json": {
+      "sha256": "9374e2ea9b4fd49859a1db8175f0456a7b1e08d85182984bf4f390677ef8e9c7",
+      "bytes": 562
+    },
+    "historical/fixtures/coop-writers-mbt-87vz3T/r1/registry.json": {
+      "sha256": "f8c34674abfc3a10163c07b2e0fa469509f48085384360bf1e7bf70b2a956069",
+      "bytes": 562
+    },
+    "historical/fixtures/coop-writers-mbt-87vz3T/r2/channels/#presence.jsonl": {
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0
+    },
+    "historical/fixtures/coop-writers-mbt-87vz3T/r2/agents/01M593Z0NVPPZA12SBQFTWDB5H/inbox.jsonl": {
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0
+    },
+    "historical/fixtures/coop-writers-mbt-87vz3T/r2/agents/01M593Z0NQ1WNZW884QX0JAS3F/inbox.jsonl": {
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0
+    },
+    "historical/fixtures/coop-writers-mbt-87vz3T/r1/channels/#presence.jsonl": {
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0
+    },
+    "historical/fixtures/coop-writers-mbt-87vz3T/r1/agents/01M593Z0N9NWH3S5S5A12KCZ6F/inbox.jsonl": {
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0
+    },
+    "historical/fixtures/coop-writers-mbt-87vz3T/r1/agents/01M593Z0NG8KSMGA6GC28MKNGG/inbox.jsonl": {
+      "sha256": "00d8827b525c1f030ca36998e4597b52dafc12c73207f8d7ac57c696e753733e",
+      "bytes": 743
+    },
+    "historical/fixtures/coop-writers-mbt-ltYSNm/r2/registry.json": {
+      "sha256": "b697ba2a343967bc9dbf078ec2b3f18a6dbe37b08bc615639e23e73b0635a215",
+      "bytes": 562
+    },
+    "historical/fixtures/coop-writers-mbt-ltYSNm/r1/registry.json": {
+      "sha256": "957e7d20fd2569acba0d43175a6fa9e9d383666bc7f89151ec5651f179b0e417",
+      "bytes": 562
+    },
+    "historical/fixtures/coop-writers-mbt-ltYSNm/r2/channels/#presence.jsonl": {
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0
+    },
+    "historical/fixtures/coop-writers-mbt-ltYSNm/r2/agents/01M593Z0855E9E7XD7EJPFHTQB/inbox.jsonl": {
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0
+    },
+    "historical/fixtures/coop-writers-mbt-ltYSNm/r2/agents/01M593Z07XTMTSY9VZ21BP67D3/inbox.jsonl": {
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0
+    },
+    "historical/fixtures/coop-writers-mbt-ltYSNm/r1/channels/#presence.jsonl": {
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0
+    },
+    "historical/fixtures/coop-writers-mbt-ltYSNm/r1/agents/01M593Z07EKFJ71VY4C9NV4M5X/inbox.jsonl": {
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0
+    },
+    "historical/fixtures/coop-writers-mbt-ltYSNm/r1/agents/01M593Z07MF50MT2S9SXE0M5W9/inbox.jsonl": {
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0
+    },
+    "historical/fixtures/coop-writers-mbt-T51IkJ/r2/registry.json": {
+      "sha256": "4b03224608abf59496632c4ce966c5e8328cb6a54540c573e50a94850cef2580",
+      "bytes": 562
+    },
+    "historical/fixtures/coop-writers-mbt-T51IkJ/r1/registry.json": {
+      "sha256": "0f85dcded29c3cc7c8d164ed1c762f0c5be49358423fe44a1d5bcf612da2abf1",
+      "bytes": 562
+    },
+    "historical/fixtures/coop-writers-mbt-T51IkJ/r2/channels/#presence.jsonl": {
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0
+    },
+    "historical/fixtures/coop-writers-mbt-T51IkJ/r2/agents/01M593Z0BHJVRB2VNZF4NYDR46/inbox.jsonl": {
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0
+    },
+    "historical/fixtures/coop-writers-mbt-T51IkJ/r2/agents/01M593Z0BPNHES1XE6RGYAXKZK/inbox.jsonl": {
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0
+    },
+    "historical/fixtures/coop-writers-mbt-T51IkJ/r1/channels/#presence.jsonl": {
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0
+    },
+    "historical/fixtures/coop-writers-mbt-T51IkJ/r1/agents/01M593Z0AWRW42Y22V2ZTDRKVC/inbox.jsonl": {
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0
+    },
+    "historical/fixtures/coop-writers-mbt-T51IkJ/r1/agents/01M593Z0B98Y68JS6AX45BXNF9/inbox.jsonl": {
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0
+    }
+  },
+  "historical_command_evidence": {
+    "session_file": "/home/nzsn/.codex/sessions/2026/10/19/rollout-2026-10-19T09-47-34-01a151d7-b8f1-7301-a671-edf51c88f572.jsonl",
+    "observed_timestamps_utc": [
+      "2026-10-19T03:36:57.063Z",
+      "2026-10-19T03:40:47.873Z"
+    ],
+    "MIRROR_BIN": "/home/nzsn/.local/bin/ModelMirrors",
+    "CARGO_TARGET_DIR": "/tmp/cooperators-review-core/target",
+    "manifest": "/tmp/cooperators-mbt-retry/Cargo.toml",
+    "qualification": "Historical log plus retained fixtures copied without rerun. Current hashes are observations at capture time, not recovered historical hashes. Plain replay with local compiler checks; semantic-digest negotiation unsupported in recorded ModelMirrors version."
+  }
+}

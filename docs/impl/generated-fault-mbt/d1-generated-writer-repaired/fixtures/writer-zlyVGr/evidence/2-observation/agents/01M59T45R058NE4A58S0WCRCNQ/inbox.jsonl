@@ -1,0 +1,1 @@
+{"v":1,"id":"01M59T45TN8M4PVSDQYAZRE3GN","seq":1,"ts":"2026-10-19T10:08:14.165Z","from":"sender","to":"receiver","kind":"writers-test","reply_to":null,"idempotency_key":null,"body":{"mime":"text/plain","text":"w1"},"prev_hash":"sha256:0000000000000000000000000000000000000000000000000000000000000000"}

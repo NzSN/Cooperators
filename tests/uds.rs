@@ -136,11 +136,11 @@ async fn jsonrpc_echo_ping_and_status_over_a_real_uds_socket() {
     stream.flush().await.expect("flush notification");
     let after_notification = rpc(
         &mut reader,
-        json!({"jsonrpc": "2.0", "id": 9, "method": "echo", "params": "next"}),
+        json!({"jsonrpc": "2.0", "id": 9, "method": "echo", "params": {"text": "next"}}),
     )
     .await;
     assert_eq!(after_notification["id"], 9);
-    assert_eq!(after_notification["result"], "next");
+    assert_eq!(after_notification["result"], json!({"text": "next"}));
 
     let missing = rpc(
         &mut reader,

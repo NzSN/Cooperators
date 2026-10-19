@@ -1,0 +1,18 @@
+{
+  "v": 1,
+  "agents": {
+    "instance-01M59TAQYPCR1R7ZBKZZSBZF0V": {
+      "agent_id": "01M59TAQYPCR1R7ZBKZZSBZF0V",
+      "token_hash": "sha256:8c760794198840b1e338dc5185d8f9fee0f8f70054f3e79000e16cb1b26fc03e",
+      "kind": "codex",
+      "capabilities": [],
+      "registered_at": "2026-10-19T10:11:49.334Z",
+      "display_name": "codex",
+      "launch_key_hash": "sha256:8c760794198840b1e338dc5185d8f9fee0f8f70054f3e79000e16cb1b26fc03e",
+      "retired": true
+    }
+  },
+  "revoked_token_hashes": [
+    "sha256:8c760794198840b1e338dc5185d8f9fee0f8f70054f3e79000e16cb1b26fc03e"
+  ]
+}

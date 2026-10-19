@@ -1,0 +1,264 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>Cooperators — Generated-adapter fault MBT plan</title><style>
+*{box-sizing:border-box}html{scroll-behavior:smooth}body{margin:0;background:#f5f3ee;color:#202b31;font:17px/1.68 system-ui,-apple-system,"Segoe UI",sans-serif}main{max-width:1240px;margin:auto;padding:30px 30px 60px}a{color:#075c59;text-underline-offset:3px}a:focus-visible{outline:3px solid #075c59;outline-offset:4px}nav{display:flex;flex-wrap:wrap;gap:9px 21px;font-size:.85rem;padding:0 0 23px;border-bottom:1px solid #d7dedb;margin-bottom:27px}.eyebrow{font-size:.78rem;letter-spacing:.12em;text-transform:uppercase;color:#075c59;font-weight:700}h1{font:700 clamp(2rem,5vw,3.2rem)/1.18 Georgia,serif;max-width:930px;margin:12px 0 20px}h2{font:700 1.65rem/1.3 Georgia,serif;border-top:1px solid #d7dedb;padding-top:25px;margin:36px 0 16px}h3{font-size:1.15rem;line-height:1.4;color:#075c59;margin:34px 0 15px}h2,h3{scroll-margin-top:18px}p,ul,ol{max-width:970px}p{margin:12px 0 18px}li{margin:0 0 9px}ul,ol{padding-left:25px}code{font:.87em ui-monospace,SFMono-Regular,Consolas,monospace;overflow-wrap:anywhere}pre{padding:20px 22px;background:#e8f2ef;border:1px solid #d7dedb;border-radius:6px;overflow:auto;line-height:1.55;font-size:.89rem}pre code{font-size:1em;overflow-wrap:normal}.table-wrap{overflow:auto;border:1px solid #d7dedb;border-radius:6px;background:#fffefa;margin:20px 0}table{border-collapse:collapse;width:100%;min-width:1050px;text-align:left;font-size:.89rem}th,td{padding:13px 14px;border-bottom:1px solid #d7dedb;vertical-align:top}th{background:#e8f2ef;font-size:.8rem}tr:last-child td{border-bottom:0}.source{font-size:.87rem;color:#53656b;padding:15px 20px;background:#fffefa;border-left:4px solid #075c59;margin:0 0 25px}.meta{margin-top:35px;border-top:1px solid #d7dedb;padding-top:17px;font-size:.83rem;color:#53656b}
+@media(max-width:760px){main{padding:21px 16px 40px}pre{padding:15px}nav{gap:8px 16px}h3{font-size:1.06rem}}
+@media print{body{background:white;color:#111}main{max-width:none;padding:0;font-size:10pt}nav{display:none}h1{font-size:27pt}h2,h3{break-after:avoid}tr{break-inside:avoid}a{color:#111}.table-wrap{overflow:visible}table{min-width:0;font-size:8pt}th,td{padding:7px}pre{white-space:pre-wrap}}
+</style></head><body><main><nav aria-label="Plan navigation"><a href="index.html">Archive</a><a href="../../docs/design/0002-generated-adapter-fault-mbt-plan.md">Canonical plan</a><a href="#g0">G0</a><a href="#g1">G1</a><a href="#g2">G2</a><a href="#g3">G3</a><a href="#g4">G4</a><a href="#g5">G5</a><a href="#detection-matrix">Detection matrix</a></nav><div class="eyebrow">Cooperators · Execution plan · 19 October 2026</div><div class="source">HTML presentation of the <a href="../../docs/design/0002-generated-adapter-fault-mbt-plan.md">canonical implementation plan</a>. Status: proposed; implementation has not started. The canonical Markdown remains in <code>docs/design/</code>.</div><h1 id="generated-adapter-mbt-for-implementation-defects">Generated-adapter MBT for implementation defects</h1>
+<p>Date: 2026-10-19. Status: proposed execution plan; implementation has not started.</p>
+<p>The objective is to reproduce the seven reviewed implementation defect classes
+and the accepted per-launch identity requirement through compiler-generated
+adapter ports, then use the same cases to verify production fixes.</p>
+<p>This plan follows the architecture already used by the protocol and writer
+suites:</p>
+<pre><code class="language-text">TLA+ actions and traces + reviewed model-interface contract
+    -&gt; resolve/lock -&gt; generate/check Rust port and binding
+    -&gt; concrete Rust trait implementation + real fault hooks
+    -&gt; production Cooperators operations
+    -&gt; actual responses, receipts, files, and metadata
+    -&gt; MirrorRust/ModelMirrors replay comparison
+</code></pre>
+<p>The compiler owns port declarations, types, codecs, dispatch, lifecycle guards,
+digest bindings, and coverage plumbing. Concrete Rust trait implementations
+own production calls, failure/clock/barrier controls, and observations. Production
+fixes remain in the owning Cooperators modules.</p>
+<p>The custom Python/NDJSON fault driver is a standalone prototype. It is not the
+integration target. Retain the useful model, traces, and observation rules;
+reuse their tests where appropriate without maintaining another adapter protocol.</p>
+<h2 id="existing-foundation">Existing foundation</h2>
+<ul>
+<li><a href="../../spec/MBFaults.tla">MBFaults.tla</a>: eight bounded profiles, nineteen
+exported witnesses, and twenty-one deliberately faulty policies.</li>
+<li><a href="../../spec/mbt/faults/manifest.json">Fault corpus</a>: recorded 48 model checks
+and 40 fixed-input checks. The latter verify that the correct traces can
+distinguish all twenty-one faulty policies in the model.</li>
+<li><a href="../../spec/mbt/README.md">Current generated-adapter pipeline</a>: generated
+protocol/writer traits implemented by <code>CoopSut</code> and <code>WriterSut</code>.</li>
+<li>Existing runtime evidence: 34 protocol traces and two writer controls pass;
+three writer traces fail. That evidence used a documented isolated core build
+with HTTP disabled/stubbed, not the full pinned binary.</li>
+<li>The new fault profiles are not integrated into generated Rust bindings or
+the current Rust harness's <code>--suite all</code>.</li>
+</ul>
+<h2 id="execution-waves-and-gates">Execution waves and gates</h2>
+<p>Execute one bounded wave at a time. Preserve the existing dirty work and keep
+generated files compiler-owned. Do not combine instrumentation with semantic
+repairs before recording the faulty implementation's behavior.</p>
+<h3 id="g0">G0 — Freeze the baseline and test environment</h3>
+<p>Scope: evidence and tool/build setup only.</p>
+<ol>
+<li>Record checkout HEAD plus hashes of relevant dirty source/model/interface
+files. Record compiler binary/revision, MirrorRust revision, the actual
+ModelMirrors executable, build profile, and enabled features/transports.</li>
+<li>Verify offline Cargo resolution. The recorded missing <code>hyper =1.11.1</code>
+dependency must be checked again. Resolve any build change explicitly;
+an isolated core build remains scoped diagnostic evidence.</li>
+<li>Confirm a host environment supports real UDS/process tests. A denied socket,
+missing executable, or absent injection capability is a qualification
+failure/blocker, never a skipped passing case.</li>
+<li>Preserve the existing writer failures and protocol controls as the baseline.
+Reuse source-matching evidence where valid; rerun paths changed by later work.</li>
+</ol>
+<p>Gate: a reproducible build/run recipe and source/tool identities. Final runtime
+acceptance must identify the real binary and tested transport scope; it cannot
+inherit full-binary qualification from an HTTP-stubbed diagnostic build.</p>
+<h3 id="g1">G1 — Compiler-compatible storage interface</h3>
+<p>Scope: the storage profile first, without production correctness repairs.</p>
+<ol>
+<li>Review the observable schema. Expose actual operation results, raw record
+identity/sequence, and factual successful receipts. Internal state such as
+<code>durable</code>, pending work, or quarantine must not be invented by the adapter.
+Remove or redesign a projected field if no authoritative observation exists.</li>
+<li>Prove that the compiler accepts the TLC-derived ITF evidence, action names,
+parameter paths, initialization, and selected observations. Verify projected
+trace compatibility rather than assuming every source variable must become
+a runtime observation.</li>
+<li>Default to a typed contract per fault profile, sharing Rust fixture helpers.
+This avoids requiring one field to have eight unrelated record shapes.
+A unified tagged schema is an alternative only after compiler support is
+demonstrated. Keep the existing protocol/writer interfaces working.</li>
+<li>Follow the existing scaffold/review -&gt; resolve -&gt; generate -&gt; check pipeline
+with the supported Rust target. Record locks, semantic digests, compiler
+ownership manifests, and generated coverage.</li>
+<li>Compile the generated binding and a concrete storage trait implementation.
+Expected I/O errors and rejections become explicit result observations;
+unexpected port/tool failures remain <code>BindingError</code>.</li>
+</ol>
+<p>Planned ownership: model/trace wrappers under <code>spec/</code>; reviewed fault contracts,
+locks, generated bindings, and Rust implementations under <code>spec/mbt/</code>. Exact
+filenames follow the accepted profile layout. No generated file is hand-edited.</p>
+<p>Gate: compiler <code>check</code> is clean, the generated Rust binding compiles, and a
+normal storage control reaches production code through generated dispatch.
+This is interface acceptance, not defect reproduction.</p>
+<h3 id="g2">G2 — Real storage failures through the generated port</h3>
+<p>Scope: reusable injection seams plus a failing storage reproduction.</p>
+<ol>
+<li>Add narrow Rust I/O controls for a partial write and a sync error after bytes
+have been written. Normal builds retain real filesystem operations with
+injection disabled. Arm faults per fixture/operation, not globally by timing.</li>
+<li>Add barriers around the actual append operation: pause after write, release
+sync normally or with the armed error, and collect its real completion.
+Keep crash/recovery lifetime control separate from returning a synthetic error.</li>
+<li>Implement the generated storage methods using those controls. A follow-up
+append must reach the actual writer; the adapter cannot enforce the modeled
+rejection itself.</li>
+<li>Preserve successful API receipt history outside the restarted SUT. Compare
+IDs and sequences with raw recovered records. Read-only observation must not
+open a repairing <code>LogFile</code> handle or rebuild a predicted log from call order.</li>
+<li>Replay sync-error recovery, partial-write recovery, and preservation of an
+earlier acknowledged record. Preserve actual mismatches before fixing storage.</li>
+<li>Check normal append/restart controls and negative tests for a wrong receipt,
+corrupt observation, missing injection, and stale generated artifacts.</li>
+</ol>
+<p>Primary production seam: <code>src/storage.rs</code>; concrete port code belongs in
+<code>spec/mbt/src/</code>. Any instrumentation-induced semantic difference must be reviewed.</p>
+<p>Gate: a real storage mismatch through the compiler-generated binding, with
+actual bytes/receipts and matching build identity. A model mutant, a synthetic
+peer, or an unavailable hook does not satisfy this gate.</p>
+<h3 id="g3">G3 — Extend generated bindings and observations to every profile</h3>
+<p>Scope: the detection matrix below, still separating injection from fixes.</p>
+<ol>
+<li>Reuse the storage/compiler pattern for the remaining typed profiles.
+Extend the existing writer integration where appropriate; retain its
+independent-root and handoff controls.</li>
+<li>Implement clock, projection/publication barriers, process lifecycle, status,
+rotation, and session-provisioning operations against real code paths.</li>
+<li>Expand the nineteen-case starting corpus where necessary. In particular,
+rotation needs channel, queue, and document paths; identity needs actual
+delivery, acknowledgments, dedupe, presence, and cross-instance lease checks.</li>
+<li>Expose all required cases in the existing Rust/ModelMirrors harness. The
+expanded <code>all</code> gate must fail if a required trace, profile, observation,
+generated binding, or real hook is missing. Keep explicit suite selections.</li>
+<li>For each row, retain a minimal reproducing trace and authoritative evidence,
+or report an explicit blocked/missing-feature result. Do not label a missing
+capability as a reproduced implementation mismatch.</li>
+</ol>
+<p>Gate: every row has a reviewed generated interface, real execution path, and
+classified result. Compiler/projection issues are resolved before claiming
+implementation coverage.</p>
+<h3 id="g4">G4 — Fix production code and demonstrate the same cases pass</h3>
+<p>Fix one owning subsystem at a time after its reproduction is recorded. Keep
+fault activation and observation logic unchanged so the repair is measured by
+the original case. Add normal-operation and boundary controls relevant to that
+repair. Regenerate interfaces/traces and rerun the affected model checks when
+the modeled policy or public contract changes.</p>
+<p>Gate for each row: the known-bad behavior is recorded, the real source fix is
+reviewed, and the same generated-port replay now passes with actual observations.
+New features such as enrollment/rotation require positive production acceptance,
+not only the disappearance of a missing-capability error.</p>
+<h3 id="g5">G5 — Full qualification and closure</h3>
+<ol>
+<li>Run all required generated-interface checks and all required runtime profiles
+against an identified full build in an environment supporting its transports.</li>
+<li>Retain original protocol/writer regressions, relevant hardening progress
+properties, and fault-detection controls. Existing supported replay/digest
+limitations remain explicitly recorded rather than silently upgraded.</li>
+<li>Record corpus/contract/source/compiler/build hashes and a per-defect result
+ledger with the failing and repaired evidence.</li>
+<li>Retire the standalone NDJSON prototype only after the generated pipeline has
+equivalent reviewed coverage. Preserve useful model/tool regression tests.</li>
+</ol>
+<p>Persist qualification reports and artifact manifests under
+<code>docs/impl/generated-fault-mbt/</code>, identified by run/build ID. Retain the raw
+failing fixtures and logs at the locations referenced by those manifests;
+<code>/tmp</code> staging alone is not the retained qualification record.</p>
+<p>Gate: every listed defect/requirement has passing authoritative implementation
+evidence, and the aggregate gate cannot pass with missing coverage.</p>
+<h2 id="detection-matrix">Detection matrix</h2>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>ID</th>
+<th>Finding / requirement</th>
+<th>Trigger through generated methods</th>
+<th>Authoritative evidence</th>
+<th>Owning implementation</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>D1</td>
+<td>Multiple writers; replay before ownership</td>
+<td>Competing starts with same/different sockets; torn-tail fixture; rejected start and owner handoff</td>
+<td>Child PIDs/readiness, actual startup result, durable-file byte comparison, recovered sequence/hash continuity</td>
+<td><code>src/server.rs</code>, root ownership and storage opening</td>
+</tr>
+<tr>
+<td>D2</td>
+<td>Failed write/sync permits unsafe continuation or acknowledged data loss</td>
+<td>Partial write; post-write sync error; another append; controlled recovery/restart</td>
+<td>Actual error/success receipts held outside the SUT; raw record IDs, sequence/hash chain, recovered contents</td>
+<td><code>src/storage.rs</code></td>
+</tr>
+<tr>
+<td>D3</td>
+<td>Expired-only inbox strands capacity</td>
+<td>Fill a two-record inbox; expire via controlled clock; wait/ack with returned cursor; send again</td>
+<td>Returned batch/cursor, actual ack and pending count, send result, inbox records</td>
+<td><code>src/messaging.rs</code>, clock/config plumbing</td>
+</tr>
+<tr>
+<td>D4</td>
+<td>Lost or duplicate dead-letter projection</td>
+<td>Durable terminal event; projection failure; restart; crash after dead append before completion; retry</td>
+<td>Queue terminal record and all matching dead-log records; actual recovery-worker result</td>
+<td><code>src/queues.rs</code>, actual reconciliation path</td>
+</tr>
+<tr>
+<td>D5</td>
+<td>Failed initial publication reserves a ghost name</td>
+<td>Fail/crash after file creation and before initial durable publication; retry same name</td>
+<td>Actual publication error/result, file contents, readable committed version</td>
+<td><code>src/docs.rs</code></td>
+</tr>
+<tr>
+<td>D6</td>
+<td>Status omits a large final record</td>
+<td>Valid encoded record larger than 64 KiB; actual status call</td>
+<td>Raw final sequence and byte size versus reported head; read leaves bytes unchanged</td>
+<td><code>src/status.rs</code></td>
+</tr>
+<tr>
+<td>D7</td>
+<td>Missing rotation / broken saved cursor continuity</td>
+<td>Cross real configured threshold; save/read across segments; crash after segment preparation; oversized record</td>
+<td>Actual ordered segments, complete replay, returned suffix and cursor continuity</td>
+<td><code>src/storage.rs</code>, channel/queue/document readers and configuration</td>
+</tr>
+<tr>
+<td>D8</td>
+<td>Fresh launch must get its own identity</td>
+<td>Two same-kind clients sharing config; retries, reconnect, token rotation, independent messaging/presence/leases</td>
+<td>Actual issued IDs/tokens and metadata, auth outcomes, real inboxes/acks, presence and lease results</td>
+<td><code>src/registry.rs</code>, MCP/RPC/CLI provisioning and affected ownership paths</td>
+</tr>
+</tbody>
+</table></div>
+<p>Rotation fixtures must use a real supported threshold setting. If absent, record
+that feature gap; do not pretend a requested test threshold was applied. The
+design default is 256 MiB. A production-default reproduction and a small
+configurable-threshold regression have different resource and qualification
+scopes. Test support must not rotate files directly to manufacture success.</p>
+<p>Identity testing must exercise actual session bootstrap, not just pre-register
+two unique test names. Existing unique-name registrations already issue distinct
+IDs. The missing requirement is independent launch provisioning from shared
+configuration. Retrying/resuming an instance and starting another instance must
+remain distinct operations. Naming normalization must be bijective and based on
+actual replies; it cannot invent identities or credentials.</p>
+<h2 id="result-ledger-and-proof-boundary">Result ledger and proof boundary</h2>
+<p>Use separate states for each matrix row:</p>
+<ul>
+<li><strong>Not wired:</strong> compiler contract, binding, or Rust integration is missing.</li>
+<li><strong>Blocked:</strong> execution cannot provide the required hook, API, build, or environment.</li>
+<li><strong>Reproduced:</strong> a real operation mismatches the model, with authoritative evidence.</li>
+<li><strong>Not reproduced within tested scope:</strong> the case ran without a mismatch; expand or
+review coverage rather than declaring the reviewed defect absent automatically.</li>
+<li><strong>Fixed and verified:</strong> reviewed production changes make the same case and relevant
+controls pass under recorded source/build identities.</li>
+</ul>
+<p>The plan targets the enumerated findings and accepted identity requirement.
+Bounded MBT and model checks provide scoped evidence; they do not prove absence
+of every implementation defect. Plans and model results are not runtime closure.</p>
+<p>The immediate next implementation wave is <strong>G0 then G1/G2: the generated-port
+storage pilot</strong>. Expanding all profiles before that vertical slice passes its
+interface and reproduction gates risks repeating the standalone-prototype detour.</p>
+<footer class="meta">Source SHA-256: <code>50fd525dcf22c02f240961d29979d08a921638da74eecc139f825ba4fbd58256</code>. Rendered for browser presentation; no model, compiler, or implementation tests were run. <a href="2026-10-19-generated-adapter-fault-mbt-plan-provenance.json">Provenance</a>.</footer></main></body></html>

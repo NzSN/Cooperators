@@ -1,0 +1,14 @@
+[package]
+name = "cooperators-mbt"
+version = "0.1.0"
+edition = "2021"
+[[bin]]
+name = "cooperators-mbt"
+path = "/home/nzsn/Repos/Cooperators/spec/mbt/src/main.rs"
+[dependencies]
+cooperators = { path = "/tmp/cooperators-review-core" }
+mirrorrust = { path = "/home/nzsn/Repos/MirrorRust" }
+tokio = { version = "1", features = ["full"] }
+serde_json = { version = "1", features = ["arbitrary_precision"] }
+num-bigint = "0.4"
+tempfile = "3"

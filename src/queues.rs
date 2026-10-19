@@ -11,7 +11,7 @@
 //! `dead/<queue>.jsonl` with its full attempt history; otherwise it becomes
 //! pending again and the next claim uses `attempts + 1`.
 
-use std::collections::HashMap;
+use std::collections::{BTreeSet, HashMap, HashSet};
 use std::fs;
 use std::path::{Path, PathBuf};
 
@@ -22,7 +22,7 @@ use crate::error::{BrokerError, ErrorCode};
 use crate::id;
 use crate::registry::AgentIdentity;
 use crate::server::DaemonState;
-use crate::storage::{AppendReceipt, ChainRecord, LogFile};
+use crate::storage::{hash_record, AppendReceipt, ChainRecord, LogFile};
 
 /// Default maximum number of claims before a task is dead-lettered.
 pub const DEFAULT_MAX_ATTEMPTS: u64 = 5;
@@ -355,10 +355,12 @@ fn base_event(kind: &str, queue: &str) -> QueueEvent {
 fn open_queue(
     root: &Path,
     queue: &str,
+    rotation_bytes: u64,
 ) -> Result<(LogFile<QueueEvent>, QueueRuntime), BrokerError> {
     validate_queue_name(queue)?;
     let path = queue_path(root, queue);
-    let (mut log, report) = LogFile::open(&path).map_err(BrokerError::from)?;
+    let (mut log, report) =
+        LogFile::open_rotating(&path, rotation_bytes).map_err(BrokerError::from)?;
     let truncated_bytes = report.truncated_bytes;
     let last_valid_offset = report.last_valid_offset;
     let was_truncated = report.was_truncated();
@@ -380,6 +382,7 @@ fn open_queue(
 /// Loads every queue log at daemon startup.
 pub(crate) fn load_all_queues(
     root: &Path,
+    rotation_bytes: u64,
 ) -> Result<
     (
         HashMap<String, LogFile<QueueEvent>>,
@@ -395,24 +398,46 @@ pub(crate) fn load_all_queues(
         }
         Err(error) => return Err(error.into()),
     };
-    let mut names = Vec::new();
+    let mut names = BTreeSet::new();
     for entry in entries {
         let entry = entry?;
         let path = entry.path();
         if path.extension().and_then(|ext| ext.to_str()) == Some("jsonl") {
             if let Some(stem) = path.file_stem().and_then(|stem| stem.to_str()) {
-                names.push(stem.to_string());
+                names.insert(stem.to_string());
             }
         }
     }
-    names.sort();
+    // A crash after sealing can leave no active file. Discover the logical
+    // stream from its segment directory as well, without treating an empty
+    // segment directory as a resource.
+    match fs::read_dir(directory.join(".segments")) {
+        Ok(segments) => {
+            for entry in segments {
+                let entry = entry?;
+                if !entry.file_type()?.is_dir() {
+                    continue;
+                }
+                let logical = directory.join(entry.file_name());
+                if logical.extension().and_then(|ext| ext.to_str()) == Some("jsonl")
+                    && !crate::storage::segment_paths(&logical)?.is_empty()
+                {
+                    if let Some(stem) = logical.file_stem().and_then(|stem| stem.to_str()) {
+                        names.insert(stem.to_string());
+                    }
+                }
+            }
+        }
+        Err(error) if error.kind() == std::io::ErrorKind::NotFound => {}
+        Err(error) => return Err(error.into()),
+    }
     let mut logs = HashMap::new();
     let mut states = HashMap::new();
     for name in names {
         if validate_queue_name(&name).is_err() {
             continue;
         }
-        let (log, runtime) = open_queue(root, &name)?;
+        let (log, runtime) = open_queue(root, &name, rotation_bytes)?;
         logs.insert(name.clone(), log);
         states.insert(name, runtime);
     }
@@ -567,6 +592,7 @@ fn expire_queue_leases(
     log: &mut LogFile<QueueEvent>,
     runtime: &mut QueueRuntime,
     now_ms: u64,
+    rotation_bytes: u64,
 ) -> Result<u64, BrokerError> {
     let expired: Vec<String> = runtime
         .tasks
@@ -630,7 +656,7 @@ fn expire_queue_leases(
                 reason: "lease_expired".to_string(),
                 history,
             };
-            append_dead_letter(root, queue, record)?;
+            append_dead_letter(root, queue, record, rotation_bytes)?;
         }
         count += 1;
     }
@@ -641,10 +667,80 @@ fn append_dead_letter(
     root: &Path,
     queue: &str,
     mut record: DeadLetterRecord,
+    rotation_bytes: u64,
 ) -> Result<AppendReceipt, BrokerError> {
     let path = dead_path(root, queue);
-    let (mut log, _report) = LogFile::open(&path).map_err(BrokerError::from)?;
-    log.append(&mut record).map_err(BrokerError::from)
+    #[cfg(feature = "mbt-injection")]
+    crate::faults::reach(&path, crate::faults::FaultPoint::BeforeDeadProjection)?;
+    let (mut log, report) = LogFile::<DeadLetterRecord>::open_rotating(&path, rotation_bytes)
+        .map_err(BrokerError::from)?;
+    // The queue terminal event is authoritative; the dead-letter log is an
+    // idempotent projection keyed by the task's permanent identity.
+    if let Some(existing) = report
+        .records
+        .iter()
+        .find(|existing| existing.task_id == record.task_id)
+    {
+        return Ok(AppendReceipt {
+            seq: existing.seq,
+            hash: hash_record(existing).map_err(BrokerError::from)?,
+            bytes_written: 0,
+        });
+    }
+    let receipt = log.append(&mut record).map_err(BrokerError::from)?;
+    #[cfg(feature = "mbt-injection")]
+    crate::faults::reach(&path, crate::faults::FaultPoint::AfterDeadProjectionAppend)?;
+    Ok(receipt)
+}
+
+/// Recover projections whose terminal queue event committed before projection
+/// failed or the writer crashed. Called by the ordinary background sweeper.
+fn project_missing_dead_letters(
+    root: &Path,
+    queue: &str,
+    runtime: &QueueRuntime,
+    rotation_bytes: u64,
+) -> Result<(), BrokerError> {
+    let mut tasks: Vec<_> = runtime
+        .tasks
+        .values()
+        .filter(|task| task.phase == TaskPhase::Dead)
+        .collect();
+    if tasks.is_empty() {
+        return Ok(());
+    }
+    tasks.sort_by(|a, b| a.task_id.cmp(&b.task_id));
+    let path = dead_path(root, queue);
+    let (mut log, report) = LogFile::<DeadLetterRecord>::open_rotating(&path, rotation_bytes)
+        .map_err(BrokerError::from)?;
+    let projected: HashSet<_> = report
+        .records
+        .iter()
+        .map(|record| record.task_id.as_str())
+        .collect();
+    for task in tasks
+        .into_iter()
+        .filter(|task| !projected.contains(task.task_id.as_str()))
+    {
+        let mut record = DeadLetterRecord {
+            seq: 0,
+            prev_hash: String::new(),
+            ts: id::now_rfc3339(),
+            queue: queue.to_string(),
+            task_id: task.task_id.clone(),
+            payload: task.payload.clone(),
+            max_attempts: task.max_attempts,
+            attempts: task.attempts,
+            reason: task.reason.clone().unwrap_or_default(),
+            history: task.history.clone(),
+        };
+        #[cfg(feature = "mbt-injection")]
+        crate::faults::reach(&path, crate::faults::FaultPoint::BeforeDeadProjection)?;
+        log.append(&mut record)?;
+        #[cfg(feature = "mbt-injection")]
+        crate::faults::reach(&path, crate::faults::FaultPoint::AfterDeadProjectionAppend)?;
+    }
+    Ok(())
 }
 
 impl DaemonState {
@@ -658,10 +754,10 @@ impl DaemonState {
                 return Ok(true);
             }
         }
-        if !queue_path(&self.root, queue).exists() {
+        if crate::storage::segment_paths(queue_path(&self.root, queue))?.is_empty() {
             return Ok(false);
         }
-        let (log, runtime) = open_queue(&self.root, queue)?;
+        let (log, runtime) = open_queue(&self.root, queue, self.config.log_rotation_bytes)?;
         self.queues.lock().await.insert(queue.to_string(), log);
         self.queue_states
             .lock()
@@ -683,7 +779,7 @@ impl DaemonState {
                 format!("queue {queue:?} already exists"),
             ));
         }
-        let (mut log, mut runtime) = open_queue(&self.root, queue)?;
+        let (mut log, mut runtime) = open_queue(&self.root, queue, self.config.log_rotation_bytes)?;
         let mut event = base_event("queue_created", queue);
         let receipt = log.append(&mut event)?;
         apply_event(&mut runtime, &event)?;
@@ -773,7 +869,14 @@ impl DaemonState {
         let runtime = states
             .get_mut(queue)
             .ok_or_else(|| BrokerError::internal("queue state vanished"))?;
-        expire_queue_leases(&self.root, queue, log, runtime, now_ms)?;
+        expire_queue_leases(
+            &self.root,
+            queue,
+            log,
+            runtime,
+            now_ms,
+            self.config.log_rotation_bytes,
+        )?;
 
         let task = runtime.pending_task().cloned().ok_or_else(|| {
             BrokerError::application(
@@ -839,7 +942,14 @@ impl DaemonState {
         let runtime = states
             .get_mut(queue)
             .ok_or_else(|| BrokerError::application(ErrorCode::LeaseLost, "lease lost"))?;
-        expire_queue_leases(&self.root, queue, log, runtime, now_ms)?;
+        expire_queue_leases(
+            &self.root,
+            queue,
+            log,
+            runtime,
+            now_ms,
+            self.config.log_rotation_bytes,
+        )?;
         let task = runtime
             .tasks
             .values()
@@ -906,7 +1016,14 @@ impl DaemonState {
         let runtime = states
             .get_mut(&queue)
             .ok_or_else(|| BrokerError::internal("queue state vanished"))?;
-        expire_queue_leases(&self.root, &queue, log, runtime, now_ms)?;
+        expire_queue_leases(
+            &self.root,
+            &queue,
+            log,
+            runtime,
+            now_ms,
+            self.config.log_rotation_bytes,
+        )?;
         let task = runtime
             .tasks
             .values()
@@ -985,7 +1102,14 @@ impl DaemonState {
         let runtime = states
             .get_mut(&queue)
             .ok_or_else(|| BrokerError::internal("queue state vanished"))?;
-        expire_queue_leases(&self.root, &queue, log, runtime, now_ms)?;
+        expire_queue_leases(
+            &self.root,
+            &queue,
+            log,
+            runtime,
+            now_ms,
+            self.config.log_rotation_bytes,
+        )?;
         let task = runtime
             .tasks
             .values()
@@ -1062,6 +1186,7 @@ impl DaemonState {
                         reason: format!("failed: {reason}"),
                         history,
                     },
+                    self.config.log_rotation_bytes,
                 )?
                 .seq,
             )
@@ -1116,7 +1241,20 @@ impl DaemonState {
             let Some(runtime) = states.get_mut(&queue) else {
                 continue;
             };
-            total += expire_queue_leases(&self.root, &queue, log, runtime, now_ms)?;
+            total += expire_queue_leases(
+                &self.root,
+                &queue,
+                log,
+                runtime,
+                now_ms,
+                self.config.log_rotation_bytes,
+            )?;
+            project_missing_dead_letters(
+                &self.root,
+                &queue,
+                runtime,
+                self.config.log_rotation_bytes,
+            )?;
         }
         Ok(total)
     }
@@ -1137,7 +1275,14 @@ impl DaemonState {
         let Some(runtime) = states.get_mut(queue) else {
             return Ok(0);
         };
-        expire_queue_leases(&self.root, queue, log, runtime, u64::MAX)
+        expire_queue_leases(
+            &self.root,
+            queue,
+            log,
+            runtime,
+            u64::MAX,
+            self.config.log_rotation_bytes,
+        )
     }
 }
 

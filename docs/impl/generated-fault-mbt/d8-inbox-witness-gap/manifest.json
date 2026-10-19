@@ -1,0 +1,11 @@
+{
+  "classification": "witness coverage gap caught by fail-closed mutant discrimination",
+  "files": {
+    "check.log": "9372cda515e277bea8ce7ca6f3d2474f0c1c4921d91bf8ee5170991301f47a7e",
+    "MBFaults.tla": "892aa0544a41f3644006b0712e4314217bd93e45db1401d6dadd4fc7404811e2",
+    "TraceProbe.tla": "adc9eccf36e1623462160f60d9aa4845040983cfbafd84b455ec3806ad203c1a",
+    "AgentInstances.tla": "988b77892ff9899daba2789ef258a863b9b9f3619257343674d8e76b7b739301",
+    "README.md": "80ee575a31333d7fd77c4c04434b49cf91ad07e0ca876a24d6c52003b0692989",
+    "TraceProbe.cfg": "3be8b72b08677266d5aef0af8687b4bda2fc9dfd2bb3025e9289393943b3720f"
+  }
+}

@@ -1,0 +1,7 @@
+scaffolded reviewable proposal /tmp/coop-fault-interface-hr5h_bm9/MBFaultDocument.mirror-interface.scaffold.json 46e6a6baa566326466280ac9348dd3c0904c532f7a04a565b6f1c27d8f89359c
+model-interface check clean
+{"actions":[{"count":1,"id":"AbortPublish"},{"count":4,"id":"BeginPublish"},{"count":2,"id":"CommitPublish"},{"count":1,"id":"CrashDoc"},{"count":2,"id":"Initialize"},{"count":2,"id":"ReadDoc"},{"count":1,"id":"RecoverDoc"}],"schema":"mirrors.model-interface-coverage/v1","semanticDigest":"50ae2604007125547988460eceb95dc4e1fb7cece7bfedcaa77d534724f3c041","states":13,"traces":2,"unseenActions":[]}
+Generated fault interface bridge and selected compiler checks clean
+PASS fault-document /home/nzsn/Repos/Cooperators/spec/mbt/fault_interfaces/document/traces/NoDocumentCrashRetry.itf.json
+PASS fault-document /home/nzsn/Repos/Cooperators/spec/mbt/fault_interfaces/document/traces/NoDocumentRetry.itf.json
+fault MBT: 2 traces, 0 failed

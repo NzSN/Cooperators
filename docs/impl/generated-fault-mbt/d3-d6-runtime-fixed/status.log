@@ -1,0 +1,6 @@
+scaffolded proposal /tmp/coop-fault-interface-uafg4s64/MBFaultStatus.mirror-interface.scaffold.json
+model-interface check clean
+{"actions":[{"count":1,"id":"AppendStatus"},{"count":1,"id":"Initialize"},{"count":1,"id":"SampleStatus"}],"schema":"mirrors.model-interface-coverage/v1","semanticDigest":"3dec8d1704584d3e3b87ea4f2b39f018ea00a3c45b0faa7824386c1c6cd3093f","states":3,"traces":1,"unseenActions":[]}
+Generated fault interface bridge and selected compiler checks clean
+PASS fault-status /home/nzsn/Repos/Cooperators/spec/mbt/fault_interfaces/status/traces/NoLargeStatus.itf.json
+fault MBT: 1 traces, 0 failed

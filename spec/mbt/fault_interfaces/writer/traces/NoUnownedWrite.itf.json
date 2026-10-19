@@ -1,0 +1,108 @@
+{
+  "#meta": {
+    "format": "ITF",
+    "goal": "NoUnownedWrite",
+    "interfaceView": "MBFaultWriter",
+    "projection": "Observation only; internal state and ghost receipts omitted",
+    "scenario": "writer",
+    "source": "TLC MBFaults coverage counterexample",
+    "transitionBound": 6,
+    "varTypes": {
+      "action_taken": "Str",
+      "observation": "{owners: Set(Str), records: Seq(Int), rejected: Set(Str), torn: Bool}",
+      "parameters": "{actor: Str, mode: Str, scenario: Str, value: Int}",
+      "result": "Str"
+    }
+  },
+  "param_vars": [
+    "parameters"
+  ],
+  "params": [],
+  "states": [
+    {
+      "#meta": {
+        "index": 0
+      },
+      "action_taken": "init",
+      "observation": {
+        "owners": {
+          "#set": []
+        },
+        "records": [],
+        "rejected": {
+          "#set": []
+        },
+        "torn": false
+      },
+      "parameters": {
+        "actor": "-",
+        "mode": "-",
+        "scenario": "writer",
+        "value": {
+          "#bigint": "0"
+        }
+      },
+      "result": "none"
+    },
+    {
+      "#meta": {
+        "index": 1
+      },
+      "action_taken": "start",
+      "observation": {
+        "owners": {
+          "#set": [
+            "p2"
+          ]
+        },
+        "records": [],
+        "rejected": {
+          "#set": []
+        },
+        "torn": false
+      },
+      "parameters": {
+        "actor": "p2",
+        "mode": "different",
+        "scenario": "writer",
+        "value": {
+          "#bigint": "0"
+        }
+      },
+      "result": "ok"
+    },
+    {
+      "#meta": {
+        "index": 2
+      },
+      "action_taken": "writer-append",
+      "observation": {
+        "owners": {
+          "#set": [
+            "p2"
+          ]
+        },
+        "records": [],
+        "rejected": {
+          "#set": []
+        },
+        "torn": false
+      },
+      "parameters": {
+        "actor": "p1",
+        "mode": "-",
+        "scenario": "writer",
+        "value": {
+          "#bigint": "0"
+        }
+      },
+      "result": "not-owner"
+    }
+  ],
+  "vars": [
+    "observation",
+    "result",
+    "parameters",
+    "action_taken"
+  ]
+}

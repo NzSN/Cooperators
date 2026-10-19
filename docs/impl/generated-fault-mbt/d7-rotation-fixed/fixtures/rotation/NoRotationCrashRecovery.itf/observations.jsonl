@@ -1,0 +1,12 @@
+{"observation":{"cursor":{"file":1,"seq":0},"files":[[]],"readBack":[],"records":[],"up":true},"result":"none"}
+{"observation":{"cursor":{"file":1,"seq":0},"files":[[]],"readBack":[],"records":[],"up":true},"result":"pending"}
+{"observation":{"cursor":{"file":1,"seq":0},"files":[[]],"readBack":[],"records":[],"up":true},"result":"pending"}
+{"observation":{"cursor":{"file":1,"seq":0},"files":[[1]],"readBack":[],"records":[{"bytes":1,"id":1}],"up":true},"result":"ok"}
+{"observation":{"cursor":{"file":1,"seq":0},"files":[[1]],"readBack":[],"records":[{"bytes":1,"id":1}],"up":true},"result":"pending"}
+{"observation":{"cursor":{"file":1,"seq":0},"files":[[1],[]],"readBack":[],"records":[{"bytes":1,"id":1}],"up":true},"result":"pending"}
+{"observation":{"cursor":{"file":1,"seq":0},"files":[[1],[]],"readBack":[],"records":[{"bytes":1,"id":1}],"up":false},"result":"stopped"}
+{"observation":{"cursor":{"file":1,"seq":0},"files":[[1],[]],"readBack":[],"records":[{"bytes":1,"id":1}],"up":true},"result":"ok"}
+{"observation":{"cursor":{"file":1,"seq":0},"files":[[1],[]],"readBack":[],"records":[{"bytes":1,"id":1}],"up":true},"result":"pending"}
+{"observation":{"cursor":{"file":1,"seq":0},"files":[[1],[]],"readBack":[],"records":[{"bytes":1,"id":1}],"up":true},"result":"pending"}
+{"observation":{"cursor":{"file":1,"seq":0},"files":[[1],[2]],"readBack":[],"records":[{"bytes":1,"id":1},{"bytes":1,"id":2}],"up":true},"result":"ok"}
+{"observation":{"cursor":{"file":1,"seq":0},"files":[[1],[2]],"readBack":[1,2],"records":[{"bytes":1,"id":1},{"bytes":1,"id":2}],"up":true},"result":"ok"}

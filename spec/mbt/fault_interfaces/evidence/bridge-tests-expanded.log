@@ -1,0 +1,14 @@
+test_changed_canonical_trace_fails (test_bridge.BridgeTests.test_changed_canonical_trace_fails) ... ok
+test_changed_interface_view_fails (test_bridge.BridgeTests.test_changed_interface_view_fails) ... ok
+test_changed_projected_observation_fails (test_bridge.BridgeTests.test_changed_projected_observation_fails) ... ok
+test_different_compiler_identity_fails (test_bridge.BridgeTests.test_different_compiler_identity_fails) ... ok
+test_identity_allocation_names_follow_first_reply_and_preserve_collisions (test_bridge.BridgeTests.test_identity_allocation_names_follow_first_reply_and_preserve_collisions) ... ok
+test_missing_canonical_trace_fails (test_bridge.BridgeTests.test_missing_canonical_trace_fails) ... ok
+test_missing_projected_trace_fails (test_bridge.BridgeTests.test_missing_projected_trace_fails) ... ok
+test_model_change_rejects_stale_canonical_certificate (test_bridge.BridgeTests.test_model_change_rejects_stale_canonical_certificate) ... ok
+test_projection_retains_actual_outcomes_records_and_receipts (test_bridge.BridgeTests.test_projection_retains_actual_outcomes_records_and_receipts) ... ok
+
+----------------------------------------------------------------------
+Ran 9 tests in 0.844s
+
+OK

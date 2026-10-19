@@ -1,0 +1,119 @@
+TLC2 Version 2.19 of 08 August 2024 (rev: 5a47802)
+Running depth-first search Model-Checking with fp 116 and seed -3183012069666454254 with 1 worker on 12 cores with 2660MB heap and 64MB offheap memory [pid: 86] (Linux 6.18.54.1-microsoft-standard-WSL2 amd64, Ubuntu 25.0.4.1 x86_64).
+Parsing file /tmp/coop-fault-detection-w627jaua/continue-after-io-NoStorageRecovery/TraceProbe.tla
+Parsing file /tmp/coop-fault-detection-w627jaua/continue-after-io-NoStorageRecovery/MBFaults.tla
+Parsing file /tmp/TLC.tla
+Parsing file /tmp/Integers.tla
+Parsing file /tmp/Sequences.tla
+Parsing file /tmp/FiniteSets.tla
+Parsing file /tmp/Naturals.tla
+Parsing file /tmp/coop-fault-detection-w627jaua/continue-after-io-NoStorageRecovery/AgentInstances.tla
+Semantic processing of module Naturals
+Semantic processing of module Integers
+Semantic processing of module Sequences
+Semantic processing of module FiniteSets
+Semantic processing of module AgentInstances
+Semantic processing of module MBFaults
+Semantic processing of module TLC
+Semantic processing of module TraceProbe
+Starting... (2026-10-19 17:38:22)
+Finished computing initial states: 1 states generated, with 1 of them distinct.
+Starting level 2: 1 states generated, 1 distinct states found.
+Starting level 3: 3 states generated, 2 distinct states found.
+Starting level 4: 6 states generated, 3 distinct states found.
+Error: Invariant TraceConforms is violated.
+Error: The behavior up to this point is:
+State 1:
+/\ s = [ receipts |-> <<>>,
+  rejected |-> FALSE,
+  disk |-> <<>>,
+  phase |-> "ready",
+  poisoned |-> FALSE,
+  pending |-> 0,
+  durable |-> <<>>,
+  nextSeq |-> 1,
+  nextId |-> 1,
+  failures |-> 0,
+  partialFailure |-> FALSE,
+  recovered |-> FALSE,
+  committedAfterRecovery |-> FALSE ]
+/\ action_taken = "init"
+/\ parameters = [actor |-> "-", mode |-> "-", scenario |-> "storage", value |-> 0]
+/\ result = "none"
+/\ steps = 0
+/\ observation = [ receipts |-> <<>>,
+  records |-> <<>>,
+  phase |-> "ready",
+  recoveryRequired |-> FALSE ]
+
+State 2:
+/\ s = [ receipts |-> <<>>,
+  rejected |-> FALSE,
+  disk |-> <<[id |-> 1, seq |-> 1]>>,
+  phase |-> "written",
+  poisoned |-> FALSE,
+  pending |-> 1,
+  durable |-> <<>>,
+  nextSeq |-> 1,
+  nextId |-> 2,
+  failures |-> 0,
+  partialFailure |-> FALSE,
+  recovered |-> FALSE,
+  committedAfterRecovery |-> FALSE ]
+/\ action_taken = "append-bytes"
+/\ parameters = [actor |-> "-", mode |-> "whole", scenario |-> "storage", value |-> 1]
+/\ result = "pending"
+/\ steps = 1
+/\ observation = [ receipts |-> <<>>,
+  records |-> <<[id |-> 1, seq |-> 1]>>,
+  phase |-> "written",
+  recoveryRequired |-> FALSE ]
+
+State 3:
+/\ s = [ receipts |-> <<>>,
+  rejected |-> FALSE,
+  disk |-> <<[id |-> 1, seq |-> 1]>>,
+  phase |-> "ready",
+  poisoned |-> FALSE,
+  pending |-> 0,
+  durable |-> <<>>,
+  nextSeq |-> 1,
+  nextId |-> 2,
+  failures |-> 1,
+  partialFailure |-> FALSE,
+  recovered |-> FALSE,
+  committedAfterRecovery |-> FALSE ]
+/\ action_taken = "sync-fail"
+/\ parameters = [actor |-> "-", mode |-> "-", scenario |-> "storage", value |-> 0]
+/\ result = "io-error"
+/\ steps = 2
+/\ observation = [ receipts |-> <<>>,
+  records |-> <<[id |-> 1, seq |-> 1]>>,
+  phase |-> "ready",
+  recoveryRequired |-> FALSE ]
+
+State 4:
+/\ s = [ receipts |-> <<>>,
+  rejected |-> FALSE,
+  disk |-> <<[id |-> 1, seq |-> 1], [id |-> 2, seq |-> 1]>>,
+  phase |-> "written",
+  poisoned |-> FALSE,
+  pending |-> 2,
+  durable |-> <<>>,
+  nextSeq |-> 1,
+  nextId |-> 3,
+  failures |-> 1,
+  partialFailure |-> FALSE,
+  recovered |-> FALSE,
+  committedAfterRecovery |-> FALSE ]
+/\ action_taken = "append-bytes"
+/\ parameters = [actor |-> "-", mode |-> "whole", scenario |-> "storage", value |-> 2]
+/\ result = "pending"
+/\ steps = 3
+/\ observation = [ receipts |-> <<>>,
+  records |-> <<[id |-> 1, seq |-> 1], [id |-> 2, seq |-> 1]>>,
+  phase |-> "written",
+  recoveryRequired |-> FALSE ]
+
+10 states generated, 4 distinct states found.
+Finished in 01s at (2026-10-19 17:38:22)

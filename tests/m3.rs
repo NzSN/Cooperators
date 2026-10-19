@@ -728,7 +728,7 @@ async fn http_tools_list_matches_the_stdio_catalog() {
     let root = temp.path().join("root");
     let mut client = HttpDriver::start(&root).await;
     let wire = client.tools_list().await;
-    assert_eq!(wire.len(), 21, "HTTP tools/list exposes the full surface");
+    assert_eq!(wire.len(), 23, "HTTP tools/list exposes the full surface");
     let catalog = mcp::tool_catalog();
     for expected in &catalog {
         let wire_tool = wire
@@ -807,7 +807,7 @@ async fn http_requires_bearer_and_rejects_bad_tokens() {
 #[tokio::test]
 async fn tools_list_exposes_every_method_with_matching_schemas() {
     let catalog = mcp::tool_catalog();
-    assert_eq!(catalog.len(), 21, "every design §9 tool is present");
+    assert_eq!(catalog.len(), 23, "broker and instance tools are present");
     let names: Vec<&str> = catalog.iter().map(|tool| tool.name.as_ref()).collect();
     for spec in TOOL_SPECS {
         assert!(
@@ -821,6 +821,8 @@ async fn tools_list_exposes_every_method_with_matching_schemas() {
 
     // Independent contract for the daemon param shapes in src/server.rs.
     let contract: &[(&str, &[&str], &[&str])] = &[
+        ("coop_instance_metadata", &[], &[]),
+        ("coop_retire_agent", &[], &[]),
         (
             "coop_register_agent",
             &["name"],
@@ -973,7 +975,7 @@ struct StdioProcess {
 impl StdioProcess {
     async fn spawn(root: &Path, token: &str) -> Self {
         let mut child = Command::new(env!("CARGO_BIN_EXE_coop"))
-            .args(["mcp-stdio", "--embedded"])
+            .args(["mcp-stdio", "--embedded", "--resume"])
             .env("COOPERATORS_HOME", root)
             .env("COOP_TOKEN", token)
             .env_remove("COOP_SOCKET")
@@ -1111,7 +1113,7 @@ async fn mcp_stdio_subprocess_roundtrip_over_pipes() {
         .await;
     let tools = process.read_response(2).await;
     let wire_tools = tools["result"]["tools"].as_array().expect("tools array");
-    assert_eq!(wire_tools.len(), 21);
+    assert_eq!(wire_tools.len(), 23);
     let expected = mcp::tool_catalog();
     for expected_tool in &expected {
         let wire = wire_tools

@@ -1,0 +1,6 @@
+PASS /home/nzsn/Repos/Cooperators/spec/mbt/writers/traces/NoCompeteW1.itf.json
+PASS /home/nzsn/Repos/Cooperators/spec/mbt/writers/traces/NoCompeteW2.itf.json
+PASS /home/nzsn/Repos/Cooperators/spec/mbt/writers/traces/NoHandoff.itf.json
+PASS /home/nzsn/Repos/Cooperators/spec/mbt/writers/traces/NoIndependentRoots.itf.json
+PASS /home/nzsn/Repos/Cooperators/spec/mbt/writers/traces/NoRejectedRecovery.itf.json
+mbt: 5 traces, 0 failed

@@ -1,0 +1,5 @@
+{
+  "target/debug/coop": "db69860b4aa5025ac7e248e8b7661d525509cd6362e15c4f160b7023e2595657",
+  "spec/mbt/target/debug/cooperators-mbt": "b388a0bc61a04e575461e6eb0a01619ac6ab9b793317b02e9a0a9fbf4732a180",
+  "note": "Observed after feature test gate and during default test compilation; later final manifest pins final binaries."
+}

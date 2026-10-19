@@ -1,0 +1,106 @@
+TLC2 Version 2.19 of 08 August 2024 (rev: 5a47802)
+Running depth-first search Model-Checking with fp 27 and seed 2301695687087845025 with 1 worker on 12 cores with 2660MB heap and 64MB offheap memory [pid: 607] (Linux 6.18.54.1-microsoft-standard-WSL2 amd64, Ubuntu 25.0.4.1 x86_64).
+Parsing file /home/nzsn/Repos/Cooperators/docs/impl/generated-fault-mbt/d8-identity-policy-model/MBFaults.tla
+Parsing file /tmp/Integers.tla
+Parsing file /tmp/Sequences.tla
+Parsing file /tmp/FiniteSets.tla
+Parsing file /tmp/Naturals.tla
+Parsing file /home/nzsn/Repos/Cooperators/docs/impl/generated-fault-mbt/d8-identity-policy-model/AgentInstances.tla
+Semantic processing of module Naturals
+Semantic processing of module Integers
+Semantic processing of module Sequences
+Semantic processing of module FiniteSets
+Semantic processing of module AgentInstances
+Semantic processing of module MBFaults
+Starting... (2026-10-19 17:54:31)
+Finished computing initial states: 1 states generated, with 1 of them distinct.
+Starting level 2: 1 states generated, 1 distinct states found.
+Starting level 3: 4 states generated, 4 distinct states found.
+Starting level 4: 15 states generated, 12 distinct states found.
+Error: Invariant DocumentRetryable is violated.
+Error: The behavior up to this point is:
+State 1:
+/\ enrollmentHistory = [ rejected |-> {},
+  firstToken |-> [launch1 |-> "-token", launch2 |-> "-token"],
+  retried |-> {},
+  retired |-> {},
+  freshAfterRetire |-> FALSE,
+  safe |-> TRUE ]
+/\ s = [ phase |-> "idle",
+  up |-> TRUE,
+  file |-> FALSE,
+  version |-> 0,
+  failures |-> 0,
+  crashes |-> 0,
+  interrupted |-> FALSE ]
+/\ action_taken = "init"
+/\ parameters = [actor |-> "-", value |-> 0, mode |-> "-", scenario |-> "document"]
+/\ result = "none"
+/\ steps = 0
+/\ observation = [up |-> TRUE, file |-> FALSE, version |-> 0]
+
+State 2:
+/\ enrollmentHistory = [ rejected |-> {},
+  firstToken |-> [launch1 |-> "-token", launch2 |-> "-token"],
+  retried |-> {},
+  retired |-> {},
+  freshAfterRetire |-> FALSE,
+  safe |-> TRUE ]
+/\ s = [ phase |-> "preparing",
+  up |-> TRUE,
+  file |-> TRUE,
+  version |-> 0,
+  failures |-> 0,
+  crashes |-> 0,
+  interrupted |-> FALSE ]
+/\ action_taken = "begin-publish"
+/\ parameters = [actor |-> "-", value |-> 0, mode |-> "same-name", scenario |-> "document"]
+/\ result = "pending"
+/\ steps = 1
+/\ observation = [up |-> TRUE, file |-> TRUE, version |-> 0]
+
+State 3:
+/\ enrollmentHistory = [ rejected |-> {},
+  firstToken |-> [launch1 |-> "-token", launch2 |-> "-token"],
+  retried |-> {},
+  retired |-> {},
+  freshAfterRetire |-> FALSE,
+  safe |-> TRUE ]
+/\ s = [ phase |-> "idle",
+  up |-> TRUE,
+  file |-> TRUE,
+  version |-> 0,
+  failures |-> 1,
+  crashes |-> 0,
+  interrupted |-> FALSE ]
+/\ action_taken = "abort-publish"
+/\ parameters = [ actor |-> "-",
+  value |-> 0,
+  mode |-> "after-file-before-record",
+  scenario |-> "document" ]
+/\ result = "io-error"
+/\ steps = 2
+/\ observation = [up |-> TRUE, file |-> TRUE, version |-> 0]
+
+State 4:
+/\ enrollmentHistory = [ rejected |-> {},
+  firstToken |-> [launch1 |-> "-token", launch2 |-> "-token"],
+  retried |-> {},
+  retired |-> {},
+  freshAfterRetire |-> FALSE,
+  safe |-> TRUE ]
+/\ s = [ phase |-> "idle",
+  up |-> TRUE,
+  file |-> TRUE,
+  version |-> 0,
+  failures |-> 1,
+  crashes |-> 0,
+  interrupted |-> FALSE ]
+/\ action_taken = "begin-publish"
+/\ parameters = [actor |-> "-", value |-> 0, mode |-> "same-name", scenario |-> "document"]
+/\ result = "exists"
+/\ steps = 3
+/\ observation = [up |-> TRUE, file |-> TRUE, version |-> 0]
+
+47 states generated, 27 distinct states found.
+Finished in 01s at (2026-10-19 17:54:32)

@@ -1,0 +1,129 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="color-scheme" content="light dark">
+<title>Cooperators — Fault-injection port and implementation fixes</title>
+<style>
+:root{color-scheme:light;--bg:#f5f3ee;--paper:#fffefa;--ink:#202b31;--muted:#53656b;--line:#d7dedb;--accent:#075c59;--soft:#e8f2ef;--amber:#765019;--amberbg:#f9f0dd;--red:#9e3027}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--ink);font:17px/1.65 system-ui,-apple-system,"Segoe UI",sans-serif}main{max-width:1120px;margin:auto;padding:32px 30px 64px}a{color:var(--accent);text-underline-offset:3px}a:focus-visible{outline:3px solid var(--accent);outline-offset:4px}nav{display:flex;flex-wrap:wrap;gap:8px 22px;font-size:.86rem;margin-bottom:30px}.eyebrow{color:var(--accent);font-size:.78rem;font-weight:750;letter-spacing:.12em;text-transform:uppercase}h1{font:700 clamp(2.1rem,5vw,3.5rem)/1.15 Georgia,serif;letter-spacing:-.02em;max-width:950px;margin:12px 0 20px}h2{font:700 1.55rem/1.3 Georgia,serif;margin:38px 0 14px}h3{font-size:1.05rem;margin:0 0 10px}p{margin:10px 0 17px}.lead{font-size:1.16rem;max-width:900px}.muted,small{color:var(--muted)}.panel{padding:22px 25px;border:1px solid var(--line);border-radius:7px;background:var(--paper)}.pair{display:grid;grid-template-columns:1fr 1fr;gap:18px;margin:24px 0}.pair article{border-top:4px solid var(--accent)}.pair article:last-child{border-top-color:var(--amber)}.pair p{font-size:.96rem;margin-bottom:8px}.label{font-size:.75rem;font-weight:750;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);margin-bottom:7px}.note{border-left:3px solid var(--accent);padding:6px 0 6px 18px;margin:22px 0}.pending{background:var(--amberbg);color:var(--amber);font-weight:650;padding:2px 7px;border-radius:4px;white-space:nowrap;font-size:.8rem}.table-wrap{overflow:auto;background:var(--paper);border:1px solid var(--line);border-radius:6px}table{width:100%;border-collapse:collapse;text-align:left;font-size:.92rem}caption{text-align:left;padding:13px 16px;border-bottom:1px solid var(--line);font-weight:650}th,td{padding:12px 15px;border-bottom:1px solid var(--line);vertical-align:top}th{background:var(--soft);font-size:.81rem}tr:last-child td{border-bottom:0}code{font:.88em ui-monospace,SFMono-Regular,Consolas,monospace;overflow-wrap:anywhere}pre{padding:17px 19px;border-radius:5px;background:var(--soft);overflow:auto;font-size:.9rem;line-height:1.55}figure{margin:24px 0}.flow{display:grid;grid-template-columns:1fr 25px 1fr 25px 1fr 25px 1fr;align-items:stretch;gap:5px}.node{border:1px solid var(--line);border-radius:6px;background:var(--paper);padding:17px 14px}.node strong{display:block;margin-bottom:6px;font-size:.95rem}.node span{display:block;font-size:.85rem;color:var(--muted)}.arrow{display:flex;align-items:center;justify-content:center;color:var(--accent);font-size:1.4rem}.node.port{border:2px dashed var(--accent)}figcaption{font-size:.86rem;color:var(--muted);margin-top:12px}.facts{display:flex;gap:24px;flex-wrap:wrap;padding:18px 0;margin:12px 0;border-top:1px solid var(--line);border-bottom:1px solid var(--line)}.facts strong{display:block;font-size:1.4rem}.facts span{font-size:.86rem;color:var(--muted)}.scope,.sources{font-size:.91rem}ul,ol{padding-left:24px}li{margin-bottom:9px}.steps li{padding:4px 0}.meta{border-top:1px solid var(--line);padding-top:18px;margin-top:34px;font-size:.84rem;color:var(--muted)}.danger{color:var(--red)}
+@media(max-width:760px){main{padding:22px 17px 44px}.pair{grid-template-columns:1fr}.flow{grid-template-columns:1fr}.arrow{transform:rotate(90deg);line-height:1.1}table{min-width:650px}.compact table{min-width:530px}.panel{padding:18px}th,td{padding:11px 12px}}
+@media(prefers-color-scheme:dark){:root{color-scheme:dark;--bg:#121b1e;--paper:#192529;--ink:#e8efeb;--muted:#afbfbd;--line:#35484b;--accent:#8ed7c9;--soft:#223a3a;--amber:#edd39e;--amberbg:#3a3326;--red:#ffc1b4}}
+@media print{body{background:white;color:#111}main{max-width:none;padding:0;font-size:10pt}nav{display:none}h1{font-size:28pt}h2{break-after:avoid}.panel,tr,.node{break-inside:avoid}.table-wrap{overflow:visible}.pair{grid-template-columns:1fr}.flow{grid-template-columns:1fr 20px 1fr 20px 1fr 20px 1fr}a{color:#111}}
+</style>
+</head>
+<body><main>
+<nav aria-label="Document navigation"><a href="index.html">Archive</a><a href="#port">The port</a><a href="#example">Worked example</a><a href="#fixes">Implementation fixes</a><a href="#status">Current status</a><a href="#closure">Completion gate</a><a href="#sources">Sources</a></nav>
+<header>
+<div class="eyebrow">Cooperators · Explanation · 19 October 2026</div>
+<h1>Fault-injection port and implementation fixes</h1>
+<p class="lead">The <strong>fault-injection port</strong> makes a failure reproducible in the real Rust code and reports what happened. The <strong>implementation fixes</strong> change that Rust code so it behaves correctly when the failure occurs.</p>
+</header>
+<div class="pair">
+<article class="panel"><div class="label">Testing work</div><h2 style="margin-top:0">Build the port</h2><p>Give the replay driver a way to fail one sync, pause at a crash boundary, advance time, restart the broker, and inspect real records and responses.</p><p><strong>Result:</strong> a reliable reproduction and measurement tool. A faulty broker can still fail its tests.</p></article>
+<article class="panel"><div class="label">Product correctness work</div><h2 style="margin-top:0">Fix the implementation</h2><p>Change ownership, append/recovery, inbox, projection, publication, status, rotation, and enrollment behavior in the owning Rust modules.</p><p><strong>Result:</strong> the real broker satisfies the tested requirements, including when failures are injected.</p></article>
+</div>
+<section id="port">
+<h2>What “port” means here</h2>
+<p>A port is a test interface implemented by an adapter executable. Our replay driver launches it and exchanges one JSON message per line through standard input and output. Its behavior is specified by <a href="../../spec/mbt/faults/contract.json"><code>contract.json</code></a>.</p>
+<p>The adapter invokes real Cooperators Rust functions or starts actual broker processes. It translates a model action such as <code>sync-fail</code> into a controlled failure at the corresponding point in the production append path, then returns the real outcome and observations.</p>
+<figure aria-labelledby="flow-caption">
+<div class="flow">
+<div class="node"><strong>Replay driver</strong><span>Reads the trace and sends operation inputs. Keeps expected outcomes for comparison.</span></div><div class="arrow" aria-hidden="true">→</div>
+<div class="node port"><strong>Fault-injection port</strong><span>Dispatches calls, arms controls, manages test lifetimes, and reads actual observations. Still to be implemented.</span></div><div class="arrow" aria-hidden="true">→</div>
+<div class="node"><strong>Real Rust broker</strong><span>Runs the production append, queue, document, registry, and recovery code under the selected conditions.</span></div><div class="arrow" aria-hidden="true">↔</div>
+<div class="node"><strong>Actual state</strong><span>Files, processes, receipts, cursors, versions, and issued identities.</span></div>
+</div>
+<figcaption id="flow-caption">Actual responses and observations return through the port to the driver, which compares them with the model. Expected observations are never sent to the port.</figcaption>
+</figure>
+<p>For example, a request to the port can look like this:</p>
+<pre><code>{"id":3,"op":"sync-fail","parameters":{
+  "scenario":"storage","actor":"-","value":0,"mode":"-"
+}}</code></pre>
+<p class="scope">These are replay-interface operation names. They are not existing public broker RPC methods. The port needs real hooks and barriers to pause and resume the normal Rust operation at these stages. A <code>pending</code> model result can mean that the operation has reached a test checkpoint before completion.</p>
+<div class="table-wrap compact"><table>
+<caption>Four pieces the Rust port needs</caption>
+<thead><tr><th scope="col">Piece</th><th scope="col">Purpose</th><th scope="col">Concrete example</th></tr></thead>
+<tbody>
+<tr><td>Failure hook</td><td>Make one selected operation fail inside its real code path.</td><td>Return an I/O error from the sync operation after the append has written bytes.</td></tr>
+<tr><td>Barrier</td><td>Pause at an exact checkpoint so the crash window is reproducible.</td><td>Stop after a dead letter is appended and before projection completion is recorded.</td></tr>
+<tr><td>Lifecycle and clock control</td><td>Exercise restart, independent writers/sessions, and expiry.</td><td>Start two daemons on one root or advance the clock past message expiry.</td></tr>
+<tr><td>Observation reader</td><td>Measure actual results independently of predicted model state.</td><td>Read inbox bytes, dead-letter copies, returned cursors, committed versions, and enrollment replies.</td></tr>
+</tbody></table></div>
+<p class="note">A valid port drives the existing implementation. It cannot manufacture a dead letter, invent two distinct IDs, or return a predicted cursor to make a trace pass. Unsupported controls or observations must fail capability preflight.</p>
+<p>A suitable implementation can use a separate test binary and test-only I/O, clock, and barrier hooks. Normal production execution keeps fault controls disabled. That wiring is a proposed implementation approach, not functionality already present.</p>
+</section>
+<section id="example">
+<h2>Worked example: sync fails after bytes were written</h2>
+<p>The current append path writes bytes, calls <code>sync_all()</code>, and advances its in-memory sequence only after sync succeeds. If sync returns an error, the bytes can remain while the handle still has its old sequence. Continuing through that handle can reuse a sequence and cause later recovery to discard an acknowledged record.</p>
+<p>The new model chooses quarantine until recovery. The following is the actual generated <code>NoStorageRecovery</code> test sequence, starting after fixture initialization. It is a model test, not a newly executed Rust log.</p>
+<div class="table-wrap"><table>
+<thead><tr><th scope="col">Step</th><th scope="col">Port operation</th><th scope="col">Expected modeled outcome</th><th scope="col">What this requires in Rust</th></tr></thead>
+<tbody>
+<tr><td>1</td><td><code>append-bytes</code>, record 1</td><td><code>pending</code></td><td>Pause the real append after its bytes are written, before sync completes.</td></tr>
+<tr><td>2</td><td><code>sync-fail</code></td><td><code>io-error</code></td><td>Exercise the real error-handling path with uncertain bytes still possible.</td></tr>
+<tr><td>3</td><td>Attempt <code>append-bytes</code>, record 2</td><td><code>recovery-required</code></td><td>Refuse further appends through the uncertain writer. The adapter must not provide this refusal itself.</td></tr>
+<tr><td>4</td><td><code>recover-storage</code>, retained prefix 0</td><td><code>ok</code></td><td>Recover the actual file and rebuild the valid head. This fixture drops only an unacknowledged tail.</td></tr>
+<tr><td>5</td><td>Retry <code>append-bytes</code>, record 2</td><td><code>pending</code></td><td>Append through the recovered writer using the rebuilt sequence.</td></tr>
+<tr><td>6</td><td><code>sync-ok</code></td><td><code>ok</code> plus an actual receipt</td><td>Complete the real durable append; report its actual receipt sequence together with the request's record tag.</td></tr>
+<tr><td>7</td><td><code>inspect-storage</code></td><td>Recovered records agree with the successful receipt.</td><td>Read the actual log and compare it with the receipt history held by the driver.</td></tr>
+</tbody></table></div>
+<p><strong>Building the port</strong> implements the pause, injected sync error, restart/recovery control, and independent reads. <strong>Fixing storage</strong> makes step 3 refuse an unsafe append and makes recovery preserve all acknowledged records.</p>
+<p>The paired <code>NoAcknowledgedRecovery</code> scenario first obtains a successful receipt, then injects a partial write and recovers. It verifies that an earlier acknowledgment and a later successful append remain consistent with actual records. The driver keeps receipt history across restart; the adapter cannot supply a replacement history.</p>
+<p class="scope"><a href="2026-10-19-fault-port-storage-recovery.itf.json">Preserved generated storage trace</a> · <a href="../../spec/mbt/faults/traces/NoAcknowledgedRecovery.itf.json">Canonical acknowledged-recovery trace</a>. Other legal recovery cases may retain unacknowledged bytes. Injected faults and retained-prefix fixtures do not prove filesystem power-loss behavior.</p>
+</section>
+<section id="fixes">
+<h2>What the implementation fixes involve</h2>
+<p>These changes belong in production behavior. The table describes required outcomes and the current model's proposed policies; it does not claim the changes have been implemented.</p>
+<div class="table-wrap"><table>
+<thead><tr><th scope="col">Area</th><th scope="col">Production behavior to implement</th><th scope="col">Port/test responsibility</th></tr></thead>
+<tbody>
+<tr><td>Writer ownership<br><a href="../../src/server.rs"><code>src/server.rs</code></a></td><td>Acquire root-scoped exclusive ownership before state initialization, log replay, or recovery; hold it for the daemon's lifetime. Contenders using different sockets must still reject.</td><td>Launch real competing processes and check that rejected starts leave durable files unchanged.</td></tr>
+<tr><td>Append/recovery<br><a href="../../src/storage.rs"><code>src/storage.rs</code></a></td><td>Quarantine an uncertain writer after write/sync failure until reconciliation; rebuild sequence/hash state from recovered data and preserve acknowledged records.</td><td>Inject partial writes and sync failures, attempt another append, recover, and compare real receipts with real records.</td></tr>
+<tr><td>Inbox expiry<br><a href="../../src/messaging.rs"><code>src/messaging.rs</code></a></td><td>Return a safe cursor across scanned expired records so wait followed by acknowledgment can release capacity, without skipping undelivered live messages.</td><td>Control time, fill a small inbox, check the returned cursor and actual pending count, then send again.</td></tr>
+<tr><td>Dead letters<br><a href="../../src/queues.rs"><code>src/queues.rs</code></a></td><td>Recover outstanding projection from durable queue termination; retry after failure/restart and deduplicate by terminal identity.</td><td>Fail or crash between terminal append, dead-letter append, and completion; inspect the actual dead log for missing or duplicate copies.</td></tr>
+<tr><td>Initial publication<br><a href="../../src/docs.rs"><code>src/docs.rs</code></a></td><td>Use committed/recovered publication state as the authority. An unfinished file must remain retryable instead of permanently reserving the name.</td><td>Fail after file creation, retry the same name, and read committed version 1.</td></tr>
+<tr><td>Status<br><a href="../../src/status.rs"><code>src/status.rs</code></a></td><td>Read the complete final record or use a verified head index, including when a record exceeds the 64 KiB tail window.</td><td>Create a valid oversized record, invoke actual status reporting, and compare its head with the log.</td></tr>
+<tr><td>Rotation<br><a href="../../src/storage.rs"><code>src/storage.rs</code></a> and log readers</td><td>Implement segment rotation, ordered replay, and stable cursor reads through boundaries and crashes; follow the declared oversized-record policy.</td><td>Configure a small threshold, control the segment-creation crash window, and read from a cursor saved before rotation.</td></tr>
+<tr><td>Per-launch identity<br><a href="../../src/registry.rs"><code>src/registry.rs</code></a>, session provisioning</td><td>Enroll each new launch with fresh credentials and an ID; preserve that ID on retry/reconnect; revoke old credentials after rotation.</td><td>Start two same-kind clients sharing configuration and observe distinct actual identities. The driver rejects synthetic aliases hiding a shared ID.</td></tr>
+</tbody></table></div>
+<p class="scope">Per-launch enrollment is an unimplemented requirement. Existing unique-name registrations already issue distinct IDs; two processes deliberately sharing a token still authenticate as the same existing identity. Creating a new session requires the provisioning change, not an ID invented in the test adapter.</p>
+</section>
+<section id="status">
+<h2>What exists today</h2>
+<div class="table-wrap compact"><table>
+<thead><tr><th scope="col">Component</th><th scope="col">Current state</th><th scope="col">What that establishes</th></tr></thead>
+<tbody>
+<tr><td>TLA+ failure/recovery model and ITF corpus</td><td>Implemented</td><td>A bounded policy and nineteen scenarios capable of distinguishing the modeled bad policies.</td></tr>
+<tr><td>Replay driver, comparisons, receipt ledger, capability checks</td><td>Implemented in Python</td><td>The tool can consume a conforming implementation port and reject mismatches or missing support.</td></tr>
+<tr><td>Real Rust fault-injection port and missing hooks</td><td><span class="pending">Pending</span></td><td>The new scenarios have not yet been replayed against the real broker through this port.</td></tr>
+<tr><td>Production fixes for the reviewed defects</td><td><span class="pending">Pending</span></td><td>Model/tool success does not close the implementation defects.</td></tr>
+</tbody></table></div>
+<div class="facts"><div><strong>48 / 48</strong><span>model checks</span></div><div><strong>40 / 40</strong><span>fixed-input trace checks</span></div><div><strong>22 / 22</strong><span>tool regression tests</span></div></div>
+<p class="scope">Those recorded results are model/tool evidence: eight safe profiles, twenty-one required fault counterexamples, and nineteen witnesses; the forty additional checks replay the fixed inputs through the TLA+ model. Synthetic peers in tool tests do not qualify Rust. The older real writer suite recorded three failures among thirty-nine traces in its documented isolated core build. No models or runtime tests were rerun to create this explanation.</p>
+</section>
+<section id="closure">
+<h2>How the two pieces close a defect</h2>
+<ol class="steps">
+<li><strong>Wire the real path.</strong> Implement the relevant port capability and observation reader. Keep fault controls in test/diagnostic wiring and preserve the normal production code path.</li>
+<li><strong>Reproduce the failure.</strong> Run the generated scenario against the faulty broker and retain its actual mismatch. Missing capability means the test is blocked; it is not a reproduced defect.</li>
+<li><strong>Change the owning Rust code.</strong> Apply the appropriate ownership, recovery, cursor, projection, publication, status, rotation, or enrollment fix.</li>
+<li><strong>Verify the repaired behavior.</strong> Replay the same controlled scenario successfully and keep the original protocol/writer and relevant progress regressions passing. Retain source, contract, corpus, and build identities with the result.</li>
+</ol>
+<p>The direct dependency is: <strong>model → reproducible test interface → observed implementation failure → code fix → passing implementation evidence.</strong> The port supplies the testing interface; the fixes supply the corrected runtime behavior.</p>
+</section>
+<section id="sources">
+<h2>Canonical sources</h2>
+<ul class="sources">
+<li><a href="../../spec/mbt/faults/README.md">Failure/recovery contract and implementation completion gate</a> — canonical description of the required work.</li>
+<li><a href="../../spec/mbt/faults/contract.json">Port protocol, capabilities, and observation sources</a> — concrete interface a Rust adapter must satisfy.</li>
+<li><a href="../../spec/mbt/replay_faults.py">Existing replay driver</a> — negotiation, real-response comparison, external receipt ledger, and identity bijections.</li>
+<li><a href="../../spec/MBFaults.tla">Failure/recovery model</a> and <a href="../../spec/mbt/faults/manifest.json">corpus qualification manifest</a> — bounded model and recorded trace-check identities.</li>
+<li><a href="../../docs/design/0001-cooperatorsd-broker.md">Broker design and accepted identity requirement</a>.</li>
+<li><a href="2026-10-19-mbt-defect-coverage.html">Earlier MBT coverage assessment</a> — retained as its original dated report.</li>
+</ul>
+</section>
+<footer class="meta">Archival explanation, 2026-10-19. Canonical sources remain in <code>spec/</code>, <code>src/</code>, and <code>docs/</code>. Only this report, its supporting assets, and the archive index were changed. <a href="2026-10-19-fault-port-and-implementation-fixes-provenance.json">Source identities and sample-trace hash</a>. Browser launch and visual inspection are reported separately in the delivery message.</footer>
+</main></body>
+</html>

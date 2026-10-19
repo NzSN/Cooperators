@@ -1,0 +1,27 @@
+scaffolded reviewable proposal /tmp/coop-fault-interface-xmyecsud/MBFaultStorage.mirror-interface.scaffold.json d25ca543865a25babc7476584b229e4fafa5d1f916caf0432ceebf358ed75e09
+model-interface check clean
+{"actions":[{"count":9,"id":"AppendBytes"},{"count":3,"id":"Initialize"},{"count":3,"id":"InspectStorage"},{"count":3,"id":"RecoverStorage"},{"count":1,"id":"SyncFail"},{"count":4,"id":"SyncOk"}],"schema":"mirrors.model-interface-coverage/v1","semanticDigest":"396ddbafc8cb224ae03c7b5cd4b82f26b8bb47151ec1975a93a661935a548ab7","states":23,"traces":3,"unseenActions":[]}
+scaffolded reviewable proposal /tmp/coop-fault-interface-t3botpmi/MBFaultWriter.mirror-interface.scaffold.json 9018e5fa360fad3e4c2ba32bd5b21a1e93e861dc0c567cb5f49421d7ac8f89a5
+model-interface check clean
+{"actions":[{"count":4,"id":"Initialize"},{"count":7,"id":"Start"},{"count":1,"id":"Stop"},{"count":1,"id":"TearTail"},{"count":3,"id":"WriterAppend"}],"schema":"mirrors.model-interface-coverage/v1","semanticDigest":"85e0bc7092f8b11bda66d2638fef9d40bfed7f429a971b4cc410e39949e1357b","states":16,"traces":4,"unseenActions":[]}
+scaffolded proposal /tmp/coop-fault-interface-9srtqnwf/MBFaultInbox.mirror-interface.scaffold.json
+model-interface check clean
+{"actions":[{"count":1,"id":"ExpireInbox"},{"count":1,"id":"InboxAck"},{"count":4,"id":"InboxSend"},{"count":1,"id":"InboxWait"},{"count":1,"id":"Initialize"}],"schema":"mirrors.model-interface-coverage/v1","semanticDigest":"9213850235d76e2c14aab792cb3729480de10c8ad76b1ca442ac58f10933b93c","states":8,"traces":1,"unseenActions":[]}
+scaffolded reviewable proposal /tmp/coop-fault-interface-dqdvaj1s/MBFaultDeadLetter.mirror-interface.scaffold.json 0e4c3f235fd140cd6f57f65a143464f1f6d9e06da9ad3cf7ea9b48a10738dbf8
+model-interface check clean
+{"actions":[{"count":2,"id":"CrashDead"},{"count":1,"id":"FailProjection"},{"count":1,"id":"FinishProjection"},{"count":2,"id":"Initialize"},{"count":2,"id":"MarkDead"},{"count":3,"id":"ProjectDead"},{"count":2,"id":"RecoverDead"}],"schema":"mirrors.model-interface-coverage/v1","semanticDigest":"805fe73dbb8e170151ba01719ab3a80fc745f59907e874827e4153284aadfef8","states":13,"traces":2,"unseenActions":[]}
+scaffolded reviewable proposal /tmp/coop-fault-interface-vrljfxjd/MBFaultDocument.mirror-interface.scaffold.json 46e6a6baa566326466280ac9348dd3c0904c532f7a04a565b6f1c27d8f89359c
+model-interface check clean
+{"actions":[{"count":1,"id":"AbortPublish"},{"count":4,"id":"BeginPublish"},{"count":2,"id":"CommitPublish"},{"count":1,"id":"CrashDoc"},{"count":2,"id":"Initialize"},{"count":2,"id":"ReadDoc"},{"count":1,"id":"RecoverDoc"}],"schema":"mirrors.model-interface-coverage/v1","semanticDigest":"50ae2604007125547988460eceb95dc4e1fb7cece7bfedcaa77d534724f3c041","states":13,"traces":2,"unseenActions":[]}
+scaffolded proposal /tmp/coop-fault-interface-tcckh358/MBFaultStatus.mirror-interface.scaffold.json
+model-interface check clean
+{"actions":[{"count":1,"id":"AppendStatus"},{"count":1,"id":"Initialize"},{"count":1,"id":"SampleStatus"}],"schema":"mirrors.model-interface-coverage/v1","semanticDigest":"3dec8d1704584d3e3b87ea4f2b39f018ea00a3c45b0faa7824386c1c6cd3093f","states":3,"traces":1,"unseenActions":[]}
+scaffolded reviewable proposal /tmp/coop-fault-interface-x6otxtd4/MBFaultRotation.mirror-interface.scaffold.json 22bdcaa0f7bfbe21f87b1fc8b00bb3f2f8da74516bfb3e63d91c1c6748184090
+model-interface check clean
+{"actions":[{"count":8,"id":"BeginRotatingAppend"},{"count":7,"id":"CommitRotatingAppend"},{"count":1,"id":"CrashRotation"},{"count":3,"id":"Initialize"},{"count":8,"id":"PrepareSegment"},{"count":3,"id":"ReadCursor"},{"count":1,"id":"RecoverRotation"},{"count":1,"id":"SaveCursor"}],"schema":"mirrors.model-interface-coverage/v1","semanticDigest":"2df1903fa928586921a109f61504990f4d25c17ad8fc57916ca2d822eec9c9ee","states":32,"traces":3,"unseenActions":[]}
+scaffolded reviewable proposal /tmp/coop-fault-interface-w83zdcr8/MBFaultIdentity.mirror-interface.scaffold.json 3cb6e623da49a453333091578d01ad0cfeefda5f890b80f767e20ce1dbf7c9e3
+model-interface check clean
+{"actions":[{"count":1,"id":"Authenticate"},{"count":1,"id":"Disconnect"},{"count":6,"id":"Enroll"},{"count":3,"id":"Initialize"},{"count":1,"id":"Reconnect"},{"count":1,"id":"RotateToken"}],"schema":"mirrors.model-interface-coverage/v1","semanticDigest":"3c7dd3687be1587a8378d4f38ea303143d5ea3136310dc9693a3c6783e43cc05","states":13,"traces":3,"unseenActions":[]}
+Generated fault interface bridge and selected compiler checks clean
+FAIL fault-inbox /home/nzsn/Repos/Cooperators/spec/mbt/fault_interfaces/inbox/traces/NoInboxCapacityRecovery.itf.json: step mismatch on action "inbox-wait": expected {"observation":{"ack":0,"cursor":2,"head":2,"messages":[],"pending":2},"result":"ok"}, got {"observation":{"ack":0,"cursor":0,"head":2,"messages":[],"pending":2},"result":"ok"}
+fault MBT: 1 traces, 1 failed

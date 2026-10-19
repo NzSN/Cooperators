@@ -1,0 +1,21 @@
+{
+  "first": {
+    "agent_id": "01M59SDB2BDNJPK52QR4KCMT39",
+    "capabilities": [],
+    "display_name": "codex",
+    "kind": "codex",
+    "name": "instance-01M59SDB2BDNJPK52QR4KCMT39",
+    "retired": false
+  },
+  "first_pid": 373996,
+  "second": {
+    "agent_id": "01M59SDB2X47JW8W40TZZA8MA4",
+    "capabilities": [],
+    "display_name": "codex",
+    "kind": "codex",
+    "name": "instance-01M59SDB2X47JW8W40TZZA8MA4",
+    "retired": false
+  },
+  "second_pid": 374024,
+  "shared_agent_id": "01M59SDB1KSC38VNHQ8VNBB2N5"
+}

@@ -24,7 +24,7 @@ use std::collections::HashMap;
 use std::fs;
 use std::io;
 use std::net::SocketAddr;
-use std::os::unix::fs::{FileTypeExt, PermissionsExt};
+use std::os::unix::fs::{FileTypeExt, OpenOptionsExt, PermissionsExt};
 use std::os::unix::net::UnixStream as StdUnixStream;
 use std::path::{Path, PathBuf};
 use std::sync::atomic::{AtomicBool, Ordering};
@@ -104,6 +104,8 @@ pub struct DaemonConfig {
     /// bytes). A send that would exceed this fails with
     /// `RESOURCE_EXHAUSTED`.
     pub max_inbox_bytes: u64,
+    /// Segment size threshold for channel, queue, and document logs.
+    pub log_rotation_bytes: u64,
 }
 
 impl DaemonConfig {
@@ -119,6 +121,7 @@ impl DaemonConfig {
             wait_batch_limit: 100,
             max_inbox_messages: DEFAULT_MAX_INBOX_MESSAGES,
             max_inbox_bytes: DEFAULT_MAX_INBOX_BYTES,
+            log_rotation_bytes: crate::storage::DEFAULT_ROTATION_BYTES,
         }
     }
 }
@@ -126,6 +129,9 @@ impl DaemonConfig {
 /// Shared daemon state: identity plus the M1 indexes.
 #[derive(Debug)]
 pub struct DaemonState {
+    // Background tasks hold the state, so ownership outlives every writer even
+    // if the listening future is cancelled before the process exits.
+    _root_lease: Option<RootLease>,
     pub(crate) root: PathBuf,
     started: Instant,
     started_at: String,
@@ -151,6 +157,14 @@ pub struct DaemonState {
 }
 
 impl DaemonState {
+    /// Production constructor: locks the root before replay and holds ownership
+    /// until all state users, including background workers, have gone away.
+    pub fn owned(config: DaemonConfig) -> Result<Self, BrokerError> {
+        let lease = acquire_root_lease(&config.root)?;
+        let mut state = Self::with_config(config)?;
+        state._root_lease = Some(lease);
+        Ok(state)
+    }
     /// Creates state with design-default TTLs.
     ///
     /// Panics when the registry or inbox logs cannot be replayed; daemon
@@ -173,12 +187,17 @@ impl DaemonState {
                 inboxes.insert(record.agent_id.clone(), inbox);
             }
         }
-        let presence_log = crate::channels::open_channel(&config.root, "#presence")?;
+        let presence_log = crate::channels::open_channel_rotating(
+            &config.root,
+            "#presence",
+            config.log_rotation_bytes,
+        )?;
         let mut channel_logs = HashMap::new();
         channel_logs.insert("#presence".to_string(), presence_log);
 
-        let (queues, queue_states) = queues::load_all_queues(&config.root)?;
-        let (docs, doc_states) = docs::load_all_docs(&config.root)?;
+        let (queues, queue_states) =
+            queues::load_all_queues(&config.root, config.log_rotation_bytes)?;
+        let (docs, doc_states) = docs::load_all_docs(&config.root, config.log_rotation_bytes)?;
 
         let mut presence = Presence::default();
         let now_ms = id::unix_millis();
@@ -187,6 +206,7 @@ impl DaemonState {
         }
 
         Ok(Self {
+            _root_lease: None,
             root: config.root.clone(),
             started: Instant::now(),
             started_at: id::now_rfc3339(),
@@ -249,6 +269,39 @@ impl DaemonState {
 #[derive(Debug, Default)]
 pub struct ConnectionSession {
     token: Option<String>,
+}
+
+/// Exclusive ownership of a bus root, released by the kernel on process exit.
+/// Keep the lock file in place: unlinking it would allow locks on two inodes.
+#[derive(Debug)]
+pub struct RootLease {
+    _file: fs::File,
+}
+
+/// Acquires ownership before any registry/log replay or recovery. The lock is
+/// rooted in the bus directory and is independent of COOP_SOCKET.
+pub fn acquire_root_lease(root: &Path) -> io::Result<RootLease> {
+    paths::create_private_dir(root)?;
+    paths::create_private_dir(&root.join("run"))?;
+    let path = root.join("run/owner.lock");
+    let file = fs::OpenOptions::new()
+        .read(true)
+        .write(true)
+        .create(true)
+        .truncate(false)
+        .mode(0o600)
+        .open(&path)?;
+    file.try_lock().map_err(|error| {
+        let cause = io::Error::from(error);
+        io::Error::new(
+            cause.kind(),
+            format!(
+                "bus root {} already owned or unavailable: {cause}",
+                root.display()
+            ),
+        )
+    })?;
+    Ok(RootLease { _file: file })
 }
 
 /// Creates the bus layout, clears a stale socket, binds the listener, and
@@ -320,10 +373,10 @@ pub async fn run(root: &Path) -> io::Result<()> {
 /// daemon to UDS-only instead of taking the broker down.
 pub async fn run_with_options(root: &Path, options: ServerOptions) -> io::Result<()> {
     let config = DaemonConfig::new(root.to_path_buf());
-    let state = Arc::new(
-        DaemonState::with_config(config)
-            .map_err(|error| io::Error::other(format!("initialize daemon state: {error}")))?,
-    );
+    let state = Arc::new(DaemonState::owned(config).map_err(|error| match error {
+        BrokerError::Io(error) => error,
+        error => io::Error::other(format!("initialize daemon state: {error}")),
+    })?);
     let (listener, socket) = bind(root)?;
     state.spawn_presence_sweeper();
     state.spawn_lease_sweeper();
@@ -417,6 +470,38 @@ async fn route(
                 .map_err(BrokerError::into_rpc_error)?;
             session.token = Some(registration.token.clone());
             to_value(registration)
+        }
+        "enroll_agent" => {
+            let params: EnrollParams = parse_params(&request.params)?;
+            let enrollment = state
+                .enroll_agent(
+                    params.launch_key,
+                    params.kind,
+                    params.display_name,
+                    params.capabilities,
+                )
+                .await
+                .map_err(BrokerError::into_rpc_error)?;
+            session.token = Some(enrollment.token.clone());
+            to_value(enrollment)
+        }
+        "instance_metadata" | "retire_agent" => {
+            let identity = authenticate_request(state, session, &request.params).await?;
+            let token = session
+                .token
+                .as_deref()
+                .ok_or_else(|| RpcError::internal("authenticated session has no token"))?;
+            let metadata = if request.method == "retire_agent" {
+                state.retire_agent(token).await
+            } else {
+                state.instance_metadata(token).await
+            }
+            .map_err(BrokerError::into_rpc_error)?;
+            debug_assert_eq!(identity.agent_id, metadata.agent_id);
+            if request.method == "retire_agent" {
+                session.token = None;
+            }
+            to_value(metadata)
         }
         method if AUTHENTICATED_METHODS.contains(&method) => {
             let identity = authenticate_request(state, session, &request.params).await?;
@@ -728,6 +813,15 @@ fn parse_body_fields(body: Option<&Value>, text: Option<&str>) -> Result<Body, R
 
 fn to_value<T: serde::Serialize>(value: T) -> Result<Value, RpcError> {
     serde_json::to_value(value).map_err(|error| RpcError::internal(error.to_string()))
+}
+
+#[derive(Debug, Deserialize)]
+struct EnrollParams {
+    launch_key: String,
+    kind: String,
+    display_name: String,
+    #[serde(default)]
+    capabilities: Option<Vec<String>>,
 }
 
 #[derive(Debug, Deserialize)]

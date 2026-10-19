@@ -7,12 +7,16 @@ The protocol and semantics are specified in
 
 ## Process model
 
-- One daemon per bus root. The daemon is the only writer of bus logs.
+- One daemon per bus root. Daemon and embedded startup lock `run/owner.lock`
+  before replay; the kernel releases ownership after the last writer exits.
+  Keep that lock file in place. Changing the socket does not change ownership.
 - `coop daemon run` serves newline-delimited JSON-RPC on
   `<root>/run/daemon.sock` (0600) and, by default, the MCP/HTTP surface on
   `127.0.0.1:7420`.
 - `coop mcp-stdio` is a per-client adapter; it opens one UDS connection per
-  tool call. It does not own state.
+  tool call. Each launch enrolls a fresh unique instance, using
+  `--kind`/`--display-name` for repeatable labels. `--resume` explicitly reuses
+  `COOP_TOKEN`/`--token`. Metadata and retirement have MCP tools.
 - `coop mcp-stdio --embedded` runs against a root in-process and is for tests
   and debugging only. Do not point it at a root while a daemon is running.
 
@@ -30,7 +34,7 @@ stderr when running under a supervisor, for example
 | `COOPERATORS_HOME` | daemon, CLI, stdio | `$HOME/.local/share/cooperators` | Bus root. Overrides `--root`. |
 | `--root <DIR>` | all commands | platform default | Ignored when `COOPERATORS_HOME` is non-empty. |
 | `COOP_SOCKET` | daemon, CLI, stdio | `<root>/run/daemon.sock` | Explicit socket path; useful when the client cannot derive the root. |
-| `COOP_TOKEN` | CLI, stdio | none | Agent bearer token when `--token` is omitted. |
+| `COOP_TOKEN` | CLI, stdio with `--resume` | none | Agent bearer token when `--token` is omitted. Fresh stdio launches enroll independently. |
 | `--token <TOKEN>` | all commands | none | Global CLI flag; wins over `COOP_TOKEN`. |
 | `COOP_HTTP_ADDR` | daemon | `127.0.0.1:7420` | HTTP MCP/health/metrics address. `off` or `none` disables the listener. |
 | `--http-addr <ADDR>` | `daemon run` | `COOP_HTTP_ADDR` or `127.0.0.1:7420` | CLI flag wins. |

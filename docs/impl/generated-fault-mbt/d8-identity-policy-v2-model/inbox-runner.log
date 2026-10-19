@@ -1,0 +1,5 @@
+tlc evidence: /home/nzsn/Repos/Cooperators/docs/impl/generated-fault-mbt/d8-identity-policy-v2-model/profiles/inbox
+PASS safe-inbox; 414 distinct states (/home/nzsn/Repos/Cooperators/docs/impl/generated-fault-mbt/d8-identity-policy-v2-model/profiles/inbox/safe-inbox.log)
+PASS fault-expired-cursor; 23 distinct states (/home/nzsn/Repos/Cooperators/docs/impl/generated-fault-mbt/d8-identity-policy-v2-model/profiles/inbox/fault-expired-cursor.log)
+PASS witness-NoInboxCapacityRecovery; 281 distinct states (/home/nzsn/Repos/Cooperators/docs/impl/generated-fault-mbt/d8-identity-policy-v2-model/profiles/inbox/witness-NoInboxCapacityRecovery.log)
+3/3 checks passed

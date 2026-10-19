@@ -1,0 +1,155 @@
+{
+  "captured_at_utc": "2026-10-19T09:32:29.601172+00:00",
+  "dependencies": {
+    "clap": {
+      "requested": "=4.6.6",
+      "cached_archives": [
+        "/home/nzsn/.cargo/registry/cache/index.crates.io-1949cf8c6b5b557f/clap-4.5.53.crate",
+        "/home/nzsn/.cargo/registry/cache/index.crates.io-1949cf8c6b5b557f/clap-4.5.58.crate",
+        "/home/nzsn/.cargo/registry/cache/index.crates.io-1949cf8c6b5b557f/clap-4.6.4.crate",
+        "/home/nzsn/.cargo/registry/cache/index.crates.io-1949cf8c6b5b557f/clap-4.6.5.crate",
+        "/home/nzsn/.cargo/registry/cache/index.crates.io-1949cf8c6b5b557f/clap-4.6.6.crate"
+      ],
+      "requested_cached": true
+    },
+    "serde": {
+      "requested": "=1.0.228",
+      "cached_archives": [
+        "/home/nzsn/.cargo/registry/cache/index.crates.io-1949cf8c6b5b557f/serde-1.0.219.crate",
+        "/home/nzsn/.cargo/registry/cache/index.crates.io-1949cf8c6b5b557f/serde-1.0.228.crate",
+        "/home/nzsn/.cargo/registry/cache/index.crates.io-1949cf8c6b5b557f/serde-1.0.229.crate"
+      ],
+      "requested_cached": true
+    },
+    "serde_json": {
+      "requested": "=1.0.149",
+      "cached_archives": [
+        "/home/nzsn/.cargo/registry/cache/index.crates.io-1949cf8c6b5b557f/serde_json-1.0.149.crate",
+        "/home/nzsn/.cargo/registry/cache/index.crates.io-1949cf8c6b5b557f/serde_json-1.0.150.crate",
+        "/home/nzsn/.cargo/registry/cache/index.crates.io-1949cf8c6b5b557f/serde_json-1.0.151.crate",
+        "/home/nzsn/.cargo/registry/cache/index.crates.io-1949cf8c6b5b557f/serde_json-1.0.154.crate"
+      ],
+      "requested_cached": true
+    },
+    "sha2": {
+      "requested": "=0.10.9",
+      "cached_archives": [
+        "/home/nzsn/.cargo/registry/cache/index.crates.io-1949cf8c6b5b557f/sha2-0.10.8.crate",
+        "/home/nzsn/.cargo/registry/cache/index.crates.io-1949cf8c6b5b557f/sha2-0.10.9.crate",
+        "/home/nzsn/.cargo/registry/cache/index.crates.io-1949cf8c6b5b557f/sha2-0.11.0.crate"
+      ],
+      "requested_cached": true
+    },
+    "tokio": {
+      "requested": "=1.53.1",
+      "cached_archives": [
+        "/home/nzsn/.cargo/registry/cache/index.crates.io-1949cf8c6b5b557f/tokio-1.52.3.crate",
+        "/home/nzsn/.cargo/registry/cache/index.crates.io-1949cf8c6b5b557f/tokio-1.53.1.crate",
+        "/home/nzsn/.cargo/registry/cache/index.crates.io-1949cf8c6b5b557f/tokio-1.53.2.crate",
+        "/home/nzsn/.cargo/registry/cache/index.crates.io-1949cf8c6b5b557f/tokio-graceful-0.2.2.crate",
+        "/home/nzsn/.cargo/registry/cache/index.crates.io-1949cf8c6b5b557f/tokio-macros-2.7.0.crate",
+        "/home/nzsn/.cargo/registry/cache/index.crates.io-1949cf8c6b5b557f/tokio-macros-2.7.2.crate",
+        "/home/nzsn/.cargo/registry/cache/index.crates.io-1949cf8c6b5b557f/tokio-native-tls-0.3.1.crate",
+        "/home/nzsn/.cargo/registry/cache/index.crates.io-1949cf8c6b5b557f/tokio-rustls-0.26.4.crate",
+        "/home/nzsn/.cargo/registry/cache/index.crates.io-1949cf8c6b5b557f/tokio-rustls-0.26.6.crate",
+        "/home/nzsn/.cargo/registry/cache/index.crates.io-1949cf8c6b5b557f/tokio-stream-0.1.18.crate",
+        "/home/nzsn/.cargo/registry/cache/index.crates.io-1949cf8c6b5b557f/tokio-stream-0.1.19.crate",
+        "/home/nzsn/.cargo/registry/cache/index.crates.io-1949cf8c6b5b557f/tokio-test-0.4.5.crate",
+        "/home/nzsn/.cargo/registry/cache/index.crates.io-1949cf8c6b5b557f/tokio-util-0.7.18.crate",
+        "/home/nzsn/.cargo/registry/cache/index.crates.io-1949cf8c6b5b557f/tokio-util-0.7.20.crate"
+      ],
+      "requested_cached": true
+    },
+    "rmcp": {
+      "requested": "=3.2.0",
+      "cached_archives": [
+        "/home/nzsn/.cargo/registry/cache/index.crates.io-1949cf8c6b5b557f/rmcp-3.2.0.crate",
+        "/home/nzsn/.cargo/registry/cache/index.crates.io-1949cf8c6b5b557f/rmcp-macros-3.2.0.crate"
+      ],
+      "requested_cached": true
+    },
+    "bytes": {
+      "requested": "=1.12.1",
+      "cached_archives": [
+        "/home/nzsn/.cargo/registry/cache/index.crates.io-1949cf8c6b5b557f/bytes-1.11.0.crate",
+        "/home/nzsn/.cargo/registry/cache/index.crates.io-1949cf8c6b5b557f/bytes-1.11.1.crate",
+        "/home/nzsn/.cargo/registry/cache/index.crates.io-1949cf8c6b5b557f/bytes-1.12.1.crate",
+        "/home/nzsn/.cargo/registry/cache/index.crates.io-1949cf8c6b5b557f/bytes-utils-0.1.4.crate"
+      ],
+      "requested_cached": true
+    },
+    "http": {
+      "requested": "=1.5.0",
+      "cached_archives": [
+        "/home/nzsn/.cargo/registry/cache/index.crates.io-1949cf8c6b5b557f/http-0.2.12.crate",
+        "/home/nzsn/.cargo/registry/cache/index.crates.io-1949cf8c6b5b557f/http-1.4.0.crate",
+        "/home/nzsn/.cargo/registry/cache/index.crates.io-1949cf8c6b5b557f/http-1.5.0.crate",
+        "/home/nzsn/.cargo/registry/cache/index.crates.io-1949cf8c6b5b557f/http-body-0.4.6.crate",
+        "/home/nzsn/.cargo/registry/cache/index.crates.io-1949cf8c6b5b557f/http-body-1.0.1.crate",
+        "/home/nzsn/.cargo/registry/cache/index.crates.io-1949cf8c6b5b557f/http-body-1.1.0.crate",
+        "/home/nzsn/.cargo/registry/cache/index.crates.io-1949cf8c6b5b557f/http-body-util-0.1.3.crate",
+        "/home/nzsn/.cargo/registry/cache/index.crates.io-1949cf8c6b5b557f/http-body-util-0.1.5.crate",
+        "/home/nzsn/.cargo/registry/cache/index.crates.io-1949cf8c6b5b557f/http-range-header-0.4.2.crate"
+      ],
+      "requested_cached": true
+    },
+    "http-body": {
+      "requested": "=1.0.1",
+      "cached_archives": [
+        "/home/nzsn/.cargo/registry/cache/index.crates.io-1949cf8c6b5b557f/http-body-0.4.6.crate",
+        "/home/nzsn/.cargo/registry/cache/index.crates.io-1949cf8c6b5b557f/http-body-1.0.1.crate",
+        "/home/nzsn/.cargo/registry/cache/index.crates.io-1949cf8c6b5b557f/http-body-1.1.0.crate",
+        "/home/nzsn/.cargo/registry/cache/index.crates.io-1949cf8c6b5b557f/http-body-util-0.1.3.crate",
+        "/home/nzsn/.cargo/registry/cache/index.crates.io-1949cf8c6b5b557f/http-body-util-0.1.5.crate"
+      ],
+      "requested_cached": true
+    },
+    "http-body-util": {
+      "requested": "=0.1.3",
+      "cached_archives": [
+        "/home/nzsn/.cargo/registry/cache/index.crates.io-1949cf8c6b5b557f/http-body-util-0.1.3.crate",
+        "/home/nzsn/.cargo/registry/cache/index.crates.io-1949cf8c6b5b557f/http-body-util-0.1.5.crate"
+      ],
+      "requested_cached": true
+    },
+    "hyper": {
+      "requested": "=1.11.1",
+      "cached_archives": [
+        "/home/nzsn/.cargo/registry/cache/index.crates.io-1949cf8c6b5b557f/hyper-1.12.0.crate",
+        "/home/nzsn/.cargo/registry/cache/index.crates.io-1949cf8c6b5b557f/hyper-1.8.1.crate",
+        "/home/nzsn/.cargo/registry/cache/index.crates.io-1949cf8c6b5b557f/hyper-rustls-0.27.10.crate",
+        "/home/nzsn/.cargo/registry/cache/index.crates.io-1949cf8c6b5b557f/hyper-rustls-0.27.7.crate",
+        "/home/nzsn/.cargo/registry/cache/index.crates.io-1949cf8c6b5b557f/hyper-timeout-0.5.2.crate",
+        "/home/nzsn/.cargo/registry/cache/index.crates.io-1949cf8c6b5b557f/hyper-tls-0.6.0.crate",
+        "/home/nzsn/.cargo/registry/cache/index.crates.io-1949cf8c6b5b557f/hyper-util-0.1.20.crate",
+        "/home/nzsn/.cargo/registry/cache/index.crates.io-1949cf8c6b5b557f/hyper-util-0.1.21.crate"
+      ],
+      "requested_cached": false
+    },
+    "hyper-util": {
+      "requested": "=0.1.20",
+      "cached_archives": [
+        "/home/nzsn/.cargo/registry/cache/index.crates.io-1949cf8c6b5b557f/hyper-util-0.1.20.crate",
+        "/home/nzsn/.cargo/registry/cache/index.crates.io-1949cf8c6b5b557f/hyper-util-0.1.21.crate"
+      ],
+      "requested_cached": true
+    },
+    "tower-service": {
+      "requested": "=0.3.3",
+      "cached_archives": [
+        "/home/nzsn/.cargo/registry/cache/index.crates.io-1949cf8c6b5b557f/tower-service-0.3.3.crate"
+      ],
+      "requested_cached": true
+    }
+  },
+  "socket_probes": {
+    "uds": {
+      "status": "blocked",
+      "error": "PermissionError(1, 'Operation not permitted')"
+    },
+    "tcp-loopback": {
+      "status": "blocked",
+      "error": "PermissionError(1, 'Operation not permitted')"
+    }
+  }
+}

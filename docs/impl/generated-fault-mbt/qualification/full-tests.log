@@ -1,0 +1,146 @@
+   Compiling cooperators v0.1.0 (/home/nzsn/Repos/Cooperators)
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 1m 00s
+     Running unittests src/lib.rs (target/debug/deps/cooperators-d88fc52c4affa89f)
+
+running 9 tests
+test id::tests::generated_ulids_are_valid ... ok
+test id::tests::ulid_time_encoding_matches_spec_vector ... ok
+test id::tests::rfc3339_format_is_stable ... ok
+test registry::tests::token_hash_is_sha256_and_tokens_are_128_bits ... ok
+test registry::tests::registry_roundtrip_keeps_only_token_hashes ... ok
+test server::tests::ndjson_request_response_framing_over_an_in_process_stream ... ok
+test server::tests::notifications_produce_no_response ... ok
+test server::tests::status_reports_identity_and_an_empty_head_map ... ok
+test server::tests::dispatch_handles_ping_echo_and_unknown_methods ... ok
+
+test result: ok. 9 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.05s
+
+     Running unittests src/main.rs (target/debug/deps/coop-acdcaa02af68e338)
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running tests/envelope.rs (target/debug/deps/envelope-d0f17fbdd72941ba)
+
+running 4 tests
+test envelope_serde_roundtrip_preserves_every_design_field ... ok
+test optional_fields_accept_absence_and_serialize_as_null ... ok
+test validation_rejects_draft_and_malformed_records ... ok
+test new_envelope_has_ulid_timestamp_and_genesis_link ... ok
+
+test result: ok. 4 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running tests/error.rs (target/debug/deps/error-fcf6cee864544580)
+
+running 1 test
+test taxonomy_maps_to_distinct_server_reserved_jsonrpc_codes ... ok
+
+test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running tests/instance_identity.rs (target/debug/deps/instance_identity-90e91a59ce1e318e)
+
+running 10 tests
+test invalid_launch_secrets_do_not_create_registry_records ... ok
+test existing_v1_registry_deserializes_without_new_fields ... ok
+test enrollment_retry_with_changed_metadata_is_rejected_without_mutation ... ok
+test enrollment_cannot_reuse_current_or_revoked_legacy_credentials ... ok
+test same_kind_launches_are_distinct_and_retry_survives_registry_reload ... ok
+test rotated_launch_key_never_revives_and_canonical_metadata_survives ... ok
+test legacy_shared_credential_observes_one_identity ... ok
+test retirement_reserves_identity_and_alias_and_revokes_credentials_durably ... ok
+test concurrent_retry_uses_one_actual_id_and_independent_launch_uses_another ... ok
+test enrolled_instances_keep_message_ack_presence_and_lease_ownership_isolated ... ok
+
+test result: ok. 10 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.22s
+
+     Running tests/instance_launch.rs (target/debug/deps/instance_launch-9c8cc1a241fd4f6d)
+
+running 2 tests
+test embedded_mcp_competitor_cannot_mutate_the_active_instance_root ... ok
+test two_mcp_processes_sharing_configuration_keep_independent_principals ... ok
+
+test result: ok. 2 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.97s
+
+     Running tests/log_rotation.rs (target/debug/deps/log_rotation-c7524d78a40c4ae8)
+
+running 4 tests
+test status_of_sealed_only_log_is_read_only_and_uses_logical_path ... ok
+test document_versions_and_fences_survive_dotted_log_rotation_and_restart ... ok
+test queue_lease_fences_survive_dotted_log_rotation_and_restart ... ok
+test channel_cursor_and_dedupe_survive_rotation_and_restart ... ok
+
+test result: ok. 4 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.46s
+
+     Running tests/m1.rs (target/debug/deps/m1-28ae6810ea101bf1)
+
+running 8 tests
+test dedupe_returns_original_seq_without_second_append ... ok
+test restart_rebuilds_messages_dedupe_and_auth_without_shutdown_hooks ... ok
+test register_auth_roundtrip_and_wrong_token_rejection ... ok
+test ndjson_session_auth_and_messaging_over_in_process_streams ... ok
+test send_wait_ack_ordering_and_peek_semantics ... ok
+test ttl_messages_expire_for_waiters_but_survive_in_the_log ... ok
+test presence_stale_transition_and_heartbeat_revival ... ok
+test presence_gone_transition_with_short_ttl ... ok
+
+test result: ok. 8 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.63s
+
+     Running tests/m1_daemon.rs (target/debug/deps/m1_daemon-0fac2ee29217abc3)
+
+running 1 test
+test kill_9_restart_preserves_messages_dedupe_and_cli_roundtrip ... ok
+
+test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.34s
+
+     Running tests/m2.rs (target/debug/deps/m2-c374fd1a6aa20d9c)
+
+running 6 tests
+test queue_renew_and_fail_retry_then_dead_letter ... ok
+test restart_replays_queue_leases_doc_claims_and_channels ... ok
+test channel_publish_dedupe_read_and_cursor_replay ... ok
+test restart_after_expiry_requeues_task_and_frees_doc_claim ... ok
+test doc_cas_claim_exclusion_expired_write_and_blob_roundtrip ... ok
+test queue_claim_expiry_requeue_dead_letter_and_stale_fence ... ok
+
+test result: ok. 6 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 2.27s
+
+     Running tests/m3.rs (target/debug/deps/m3-29e816dd464e7380)
+
+running 10 tests
+test daemon_status_is_namespaced_as_coop_get_status ... ok
+test unreachable_daemon_is_a_tool_error_not_a_protocol_error ... ok
+test tools_list_exposes_every_method_with_matching_schemas ... ok
+test http_requires_bearer_and_rejects_bad_tokens ... ok
+test unknown_tool_is_a_tool_error_with_method_not_found ... ok
+test http_tools_list_matches_the_stdio_catalog ... FAILED
+test http_messaging_presence_and_status_roundtrip ... ok
+test mcp_stdio_subprocess_roundtrip_over_pipes ... FAILED
+test golden_transcripts_match_uds_and_mcp_tool_layer ... ok
+test http_endpoint_parity_in_process ... ok
+
+failures:
+
+---- http_tools_list_matches_the_stdio_catalog stdout ----
+
+thread 'http_tools_list_matches_the_stdio_catalog' (369589) panicked at tests/m3.rs:731:5:
+assertion `left == right` failed: HTTP tools/list exposes the full surface
+  left: 23
+ right: 21
+note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
+
+---- mcp_stdio_subprocess_roundtrip_over_pipes stdout ----
+
+thread 'mcp_stdio_subprocess_roundtrip_over_pipes' (369590) panicked at tests/m3.rs:1116:5:
+assertion `left == right` failed
+  left: 23
+ right: 21
+
+
+failures:
+    http_tools_list_matches_the_stdio_catalog
+    mcp_stdio_subprocess_roundtrip_over_pipes
+
+test result: FAILED. 8 passed; 2 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.85s
+
+error: test failed, to rerun pass `--test m3`

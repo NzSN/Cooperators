@@ -1,0 +1,40 @@
+PASS /tmp/cooperators-mbt-retry/traces/NoAck__violation.itf.json
+PASS /tmp/cooperators-mbt-retry/traces/NoAck__violation1.itf.json
+PASS /tmp/cooperators-mbt-retry/traces/NoAck__violation2.itf.json
+PASS /tmp/cooperators-mbt-retry/traces/NoComplete__violation.itf.json
+PASS /tmp/cooperators-mbt-retry/traces/NoComplete__violation1.itf.json
+PASS /tmp/cooperators-mbt-retry/traces/NoComplete__violation2.itf.json
+PASS /tmp/cooperators-mbt-retry/traces/NoCrash__violation.itf.json
+PASS /tmp/cooperators-mbt-retry/traces/NoCrash__violation1.itf.json
+PASS /tmp/cooperators-mbt-retry/traces/NoCrash__violation2.itf.json
+PASS /tmp/cooperators-mbt-retry/traces/NoDead__violation.itf.json
+PASS /tmp/cooperators-mbt-retry/traces/NoDead__violation1.itf.json
+PASS /tmp/cooperators-mbt-retry/traces/NoDead__violation2.itf.json
+PASS /tmp/cooperators-mbt-retry/traces/NoExpire__violation.itf.json
+PASS /tmp/cooperators-mbt-retry/traces/NoExpire__violation1.itf.json
+PASS /tmp/cooperators-mbt-retry/traces/NoExpire__violation2.itf.json
+PASS /tmp/cooperators-mbt-retry/traces/NoFail__violation.itf.json
+PASS /tmp/cooperators-mbt-retry/traces/NoFail__violation1.itf.json
+PASS /tmp/cooperators-mbt-retry/traces/NoFail__violation2.itf.json
+PASS /tmp/cooperators-mbt-retry/traces/NoRelease__violation.itf.json
+PASS /tmp/cooperators-mbt-retry/traces/NoRelease__violation1.itf.json
+PASS /tmp/cooperators-mbt-retry/traces/NoRelease__violation2.itf.json
+PASS /tmp/cooperators-mbt-retry/traces/TraceComplete__violation.itf.json
+PASS /tmp/cooperators-mbt-retry/traces/TraceComplete__violation1.itf.json
+PASS /tmp/cooperators-mbt-retry/traces/TraceComplete__violation10.itf.json
+PASS /tmp/cooperators-mbt-retry/traces/TraceComplete__violation11.itf.json
+PASS /tmp/cooperators-mbt-retry/traces/TraceComplete__violation12.itf.json
+PASS /tmp/cooperators-mbt-retry/traces/TraceComplete__violation2.itf.json
+PASS /tmp/cooperators-mbt-retry/traces/TraceComplete__violation3.itf.json
+PASS /tmp/cooperators-mbt-retry/traces/TraceComplete__violation4.itf.json
+PASS /tmp/cooperators-mbt-retry/traces/TraceComplete__violation5.itf.json
+PASS /tmp/cooperators-mbt-retry/traces/TraceComplete__violation6.itf.json
+PASS /tmp/cooperators-mbt-retry/traces/TraceComplete__violation7.itf.json
+PASS /tmp/cooperators-mbt-retry/traces/TraceComplete__violation8.itf.json
+PASS /tmp/cooperators-mbt-retry/traces/TraceComplete__violation9.itf.json
+FAIL /tmp/cooperators-mbt-retry/writers/traces/NoCompeteW1.itf.json: step mismatch on action "start": expected {"records":[["r1",[]],["r2",[]]],"rejected":[["w1",false],["w2",true]],"rejectedReadOnly":true,"seqs":[["r1",[]],["r2",[]]],"torn":[["r1",false],["r2",false]],"valid":[["r1",true],["r2",true]],"writers":[["w1","r1"],["w2","-"]]}, got {"records":[["r1",[]],["r2",[]]],"rejected":[["w1",false],["w2",false]],"rejectedReadOnly":true,"seqs":[["r1",[]],["r2",[]]],"torn":[["r1",false],["r2",false]],"valid":[["r1",true],["r2",true]],"writers":[["w1","r1"],["w2","r1"]]}; evidence: /tmp/coop-writers-mbt-ltYSNm
+FAIL /tmp/cooperators-mbt-retry/writers/traces/NoCompeteW2.itf.json: step mismatch on action "start": expected {"records":[["r1",[]],["r2",[]]],"rejected":[["w1",true],["w2",false]],"rejectedReadOnly":true,"seqs":[["r1",[]],["r2",[]]],"torn":[["r1",false],["r2",false]],"valid":[["r1",true],["r2",true]],"writers":[["w1","-"],["w2","r1"]]}, got {"records":[["r1",[]],["r2",[]]],"rejected":[["w1",false],["w2",false]],"rejectedReadOnly":true,"seqs":[["r1",[]],["r2",[]]],"torn":[["r1",false],["r2",false]],"valid":[["r1",true],["r2",true]],"writers":[["w1","r1"],["w2","r1"]]}; evidence: /tmp/coop-writers-mbt-T51IkJ
+PASS /tmp/cooperators-mbt-retry/writers/traces/NoHandoff.itf.json
+PASS /tmp/cooperators-mbt-retry/writers/traces/NoIndependentRoots.itf.json
+FAIL /tmp/cooperators-mbt-retry/writers/traces/NoRejectedRecovery.itf.json: step mismatch on action "start": expected {"records":[["r1",["w1"]],["r2",[]]],"rejected":[["w1",false],["w2",true]],"rejectedReadOnly":true,"seqs":[["r1",[1]],["r2",[]]],"torn":[["r1",true],["r2",false]],"valid":[["r1",true],["r2",true]],"writers":[["w1","r1"],["w2","-"]]}, got {"records":[["r1",["w1","recovery"]],["r2",[]]],"rejected":[["w1",false],["w2",true]],"rejectedReadOnly":false,"seqs":[["r1",[1,2]],["r2",[]]],"torn":[["r1",false],["r2",false]],"valid":[["r1",true],["r2",true]],"writers":[["w1","r1"],["w2","-"]]}; evidence: /tmp/coop-writers-mbt-87vz3T
+mbt: 39 traces, 3 failed

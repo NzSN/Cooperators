@@ -16,7 +16,7 @@ M4 performance is in [`docs/impl/perf-smoke.md`](docs/impl/perf-smoke.md).
 - Channels with replayable cursors.
 - Work queues with leases, fencing tokens, retries, and dead letters.
 - Versioned documents with compare-and-swap updates and exclusive edit leases.
-- 21 MCP tools prefixed `coop_*`, exposed identically over stdio and
+- 23 MCP tools prefixed `coop_*`, exposed identically over stdio and
   streamable HTTP.
 - Per-inbox backpressure, `/healthz`, and bearer-protected Prometheus
   `/metrics` on the HTTP listener.
@@ -95,8 +95,14 @@ COOP_TOKEN='<token>' ./target/release/coop agents --include-stale
 ## MCP client configuration
 
 The primary integration path is `coop mcp-stdio`: each MCP client spawns a
-small adapter that forwards tool calls to the daemon over the Unix socket. The
-adapter reads `COOP_TOKEN`, `COOP_SOCKET`, and `COOPERATORS_HOME`.
+small adapter that forwards tool calls to the daemon over the Unix socket.
+Each independent launch enrolls a fresh instance, even when configurations
+contain the same `COOP_TOKEN`. Socket reconnects within that process retain its
+credential. Use `--resume` to explicitly reuse `COOP_TOKEN`/`--token`.
+`--kind codex --display-name codex` gives repeated human labels while IDs and
+routing aliases stay unique. `coop_instance_metadata` returns that identity;
+`coop_retire_agent` revokes it permanently. Enrollment retries reuse one launch
+key; an old launch key cannot restore a rotated or retired credential.
 
 ### Codex
 
@@ -105,10 +111,9 @@ Add to `~/.codex/config.toml` (use the absolute path to your build):
 ```toml
 [mcp_servers.cooperators]
 command = "/home/you/Repos/Cooperators/target/release/coop"
-args = ["mcp-stdio"]
+args = ["mcp-stdio", "--kind", "codex", "--display-name", "codex"]
 
 [mcp_servers.cooperators.env]
-COOP_TOKEN = "<agent token>"
 COOP_SOCKET = "/home/you/.local/share/cooperators/run/daemon.sock"
 ```
 
@@ -121,9 +126,8 @@ Add to the client's `mcpServers` configuration:
   "mcpServers": {
     "cooperators": {
       "command": "/home/you/Repos/Cooperators/target/release/coop",
-      "args": ["mcp-stdio"],
+      "args": ["mcp-stdio", "--kind", "claude", "--display-name", "claude"],
       "env": {
-        "COOP_TOKEN": "<agent token>",
         "COOP_SOCKET": "/home/you/.local/share/cooperators/run/daemon.sock"
       }
     }
@@ -151,8 +155,9 @@ not be running against the same root.
 All tools are prefixed `coop_`, for example `coop_register_agent`,
 `coop_send_message`, `coop_wait_message`, `coop_ack`, `coop_publish`,
 `coop_create_queue`, `coop_claim_task`, `coop_publish_doc`, and
-`coop_get_status`. The full 21-tool surface, schemas, and semantics are in
-design §9.
+`coop_get_status`, `coop_instance_metadata`, and `coop_retire_agent`.
+The original broker tools are specified in design §9; instance lifecycle
+behavior is described in design §4.1.
 
 ## Environment variables
 
@@ -160,7 +165,7 @@ design §9.
 |---|---|---|
 | `COOPERATORS_HOME` | daemon, CLI, stdio adapter | Bus root. Overrides `--root`; defaults to `$HOME/.local/share/cooperators`. |
 | `COOP_SOCKET` | daemon, CLI, stdio adapter | Explicit Unix socket path. Overrides `<root>/run/daemon.sock`. |
-| `COOP_TOKEN` | CLI, stdio adapter | Agent token when `--token` is omitted. |
+| `COOP_TOKEN` | CLI, stdio adapter with `--resume` | Agent token when `--token` is omitted. Fresh stdio launches enroll independently. |
 | `COOP_HTTP_ADDR` | daemon | HTTP MCP listen address. `off`/`none` disables it. CLI `--http-addr` wins. |
 
 Command-line flags: `--root <DIR>`, `--token <TOKEN>` (global), and
@@ -205,7 +210,15 @@ Metric names and operator procedures are in [`docs/operator.md`](docs/operator.m
   Protect MCP client configs and environment variables.
 - There is no message encryption and no encryption at rest. The append-only
   JSONL logs are readable by the account that owns the bus root.
-- `--embedded` bypasses daemon serialization; use it only for tests/debugging.
+- `--embedded` and the daemon both hold the root ownership lock before replay.
+  A competing writer is refused even when it uses a different socket.
+
+Channel, queue, document, and dead-letter streams rotate at
+`DaemonConfig::log_rotation_bytes` (default 256 MiB). Sealed segments live in
+`.segments/<original-filename>/`; logical cursor filenames and global sequence
+numbers stay stable. Inbox and expiry logs remain unsegmented. After an
+uncertain write or sync failure, the writer requires reopening and recovery
+before another append.
 
 ## Tests
 

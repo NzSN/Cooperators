@@ -5,3 +5,6 @@ spec/*_TTrace_*.tla
 spec/_apalache-out/
 spec/mbt/target/
 **/_apalache-out/
+__pycache__/
+/docs/impl/generated-fault-mbt/d2-storage-baseline/cooperators-mbt-baseline
+/docs/impl/generated-fault-mbt/qualification/hardening/*-states/

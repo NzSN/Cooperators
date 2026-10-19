@@ -4,8 +4,8 @@
 //! output (`generated/MBCooperatorsMirror.generated.rs`, semantic digest in
 //! `Cooperators.mirror-interface.lock.json`); this file implements the
 //! generated typed port (`MBCooperatorsPort`) against the real daemon and
-//! replays the Apalache trace battery through the negotiated ModelMirrors
-//! path (`run_client_with_traces_negotiated`).
+//! replays the protocol and root-ownership batteries through ModelMirrors.
+//! Root-ownership traces use real daemon subprocesses and disk observations.
 //!
 //! Oracle boundary and limits: see README.md.
 
@@ -21,6 +21,14 @@ use cooperators::server::{DaemonConfig, DaemonState};
 
 use mirrorrust::{run_client_with_traces, ApalacheConfig, BindingError, FallibleStateComputer};
 use num_bigint::BigInt;
+
+mod fault_support;
+mod faults_identity;
+mod faults_rotation;
+mod faults_runtime;
+mod faults_storage;
+mod faults_writer;
+mod writers;
 
 #[path = "../generated/MBCooperatorsMirror.generated.rs"]
 #[allow(dead_code)]
@@ -57,7 +65,16 @@ struct CoopSut {
     doc_version: u64,
 }
 
-fn log_rec(ty: &str, from: &str, to: &str, key: &str, res: &str, holder: &str, fence: u64, base: u64) -> MiTypeO1Item {
+fn log_rec(
+    ty: &str,
+    from: &str,
+    to: &str,
+    key: &str,
+    res: &str,
+    holder: &str,
+    fence: u64,
+    base: u64,
+) -> MiTypeO1Item {
     MiTypeO1Item {
         field_0: to_bigint(base),
         field_1: to_bigint(fence),
@@ -99,12 +116,19 @@ impl CoopSut {
     }
 
     fn identity(&self, name: &str) -> Result<AgentIdentity, BindingError> {
-        let token = self.tokens.get(name).ok_or_else(|| BindingError::new("unknown_agent", name))?;
-        self.rt.block_on(self.state.authenticate(token)).map_err(daemon_err)
+        let token = self
+            .tokens
+            .get(name)
+            .ok_or_else(|| BindingError::new("unknown_agent", name))?;
+        self.rt
+            .block_on(self.state.authenticate(token))
+            .map_err(daemon_err)
     }
 
     fn acked(&self, name: &str) -> u64 {
-        let Some(id) = self.ids.get(name) else { return 0 };
+        let Some(id) = self.ids.get(name) else {
+            return 0;
+        };
         self.rt
             .block_on(self.state.wait_message(id, None, Duration::from_millis(0)))
             .map(|b| parse_seq(&b.acked_cursor))
@@ -127,9 +151,14 @@ impl MBCooperatorsPort for CoopSut {
             self.ids.insert(name.to_string(), reg.agent_id);
             self.tokens.insert(name.to_string(), reg.token);
         }
-        self.rt.block_on(self.state.create_queue(QUEUE)).map_err(daemon_err)?;
         self.rt
-            .block_on(self.state.enqueue(QUEUE, serde_json::json!("task0"), Some(MAX_ATTEMPTS)))
+            .block_on(self.state.create_queue(QUEUE))
+            .map_err(daemon_err)?;
+        self.rt
+            .block_on(
+                self.state
+                    .enqueue(QUEUE, serde_json::json!("task0"), Some(MAX_ATTEMPTS)),
+            )
             .map_err(daemon_err)?;
         Ok(())
     }
@@ -139,20 +168,36 @@ impl MBCooperatorsPort for CoopSut {
         let req = SendRequest {
             to: self.ids[&input.to].clone(),
             kind: "mbt".to_string(),
-            body: Body { mime: "text/plain".to_string(), text: "mbt".to_string() },
+            body: Body {
+                mime: "text/plain".to_string(),
+                text: "mbt".to_string(),
+            },
             reply_to: None,
             idempotency_key: Some(input.key.clone()),
             ttl: None,
         };
-        self.rt.block_on(self.state.send_message(&from, req)).map_err(daemon_err)?;
-        self.log.push(log_rec("msg", &input.from, &input.to, &input.key, "-", "-", 0, 0));
+        self.rt
+            .block_on(self.state.send_message(&from, req))
+            .map_err(daemon_err)?;
+        self.log.push(log_rec(
+            "msg",
+            &input.from,
+            &input.to,
+            &input.key,
+            "-",
+            "-",
+            0,
+            0,
+        ));
         Ok(())
     }
 
     fn ack(&mut self, input: AckInput) -> Result<(), BindingError> {
         let id = self.ids[&input.holder].clone();
         let cursor = input.cursor.to_string();
-        self.rt.block_on(self.state.ack(&id, &cursor)).map_err(daemon_err)?;
+        self.rt
+            .block_on(self.state.ack(&id, &cursor))
+            .map_err(daemon_err)?;
         Ok(())
     }
 
@@ -160,61 +205,135 @@ impl MBCooperatorsPort for CoopSut {
         let who = self.identity(&input.holder)?;
         let abs_fence = (self.log.len() as u64) + 1;
         if input.res == QUEUE {
-            let r = self.rt.block_on(self.state.claim_task(&who, QUEUE, LEASE_TTL_S)).map_err(daemon_err)?;
+            let r = self
+                .rt
+                .block_on(self.state.claim_task(&who, QUEUE, LEASE_TTL_S))
+                .map_err(daemon_err)?;
             self.q_lease = Some((r.lease_id, r.fence, abs_fence));
         } else {
-            let r = self.rt.block_on(self.state.claim_doc(&who, DOC, LEASE_TTL_S)).map_err(daemon_err)?;
+            let r = self
+                .rt
+                .block_on(self.state.claim_doc(&who, DOC, LEASE_TTL_S))
+                .map_err(daemon_err)?;
             self.d_lease = Some((r.lease_id, r.fence, abs_fence));
         }
-        self.log.push(log_rec("claim", "-", "-", "-", &input.res, &input.holder, 0, 0));
+        self.log.push(log_rec(
+            "claim",
+            "-",
+            "-",
+            "-",
+            &input.res,
+            &input.holder,
+            0,
+            0,
+        ));
         Ok(())
     }
 
     fn expire(&mut self, input: ExpireInput) -> Result<(), BindingError> {
         if input.res == QUEUE {
             let fence = self.q_lease.as_ref().map(|(_, _, af)| *af).unwrap_or(0);
-            let n = self.rt.block_on(self.state.debug_force_expire_queue(QUEUE)).map_err(daemon_err)?;
-            if n == 0 { return Err(BindingError::new("daemon_rejected", "no queue lease to expire")); }
+            let n = self
+                .rt
+                .block_on(self.state.debug_force_expire_queue(QUEUE))
+                .map_err(daemon_err)?;
+            if n == 0 {
+                return Err(BindingError::new(
+                    "daemon_rejected",
+                    "no queue lease to expire",
+                ));
+            }
             self.q_lease = None;
-            self.log.push(log_rec("expire", "-", "-", "-", &input.res, "-", fence, 0));
+            self.log
+                .push(log_rec("expire", "-", "-", "-", &input.res, "-", fence, 0));
         } else {
             let fence = self.d_lease.as_ref().map(|(_, _, af)| *af).unwrap_or(0);
-            let ok = self.rt.block_on(self.state.debug_force_expire_doc(DOC)).map_err(daemon_err)?;
-            if !ok { return Err(BindingError::new("daemon_rejected", "no doc claim to expire")); }
+            let ok = self
+                .rt
+                .block_on(self.state.debug_force_expire_doc(DOC))
+                .map_err(daemon_err)?;
+            if !ok {
+                return Err(BindingError::new(
+                    "daemon_rejected",
+                    "no doc claim to expire",
+                ));
+            }
             self.d_lease = None;
-            self.log.push(log_rec("expire", "-", "-", "-", &input.res, "-", fence, 0));
+            self.log
+                .push(log_rec("expire", "-", "-", "-", &input.res, "-", fence, 0));
         }
         Ok(())
     }
 
     fn complete(&mut self, input: CompleteInput) -> Result<(), BindingError> {
-        let (lease_id, fence, abs_fence) =
-            self.q_lease.take().ok_or_else(|| BindingError::new("adapter_state", "no active q lease"))?;
+        let (lease_id, fence, abs_fence) = self
+            .q_lease
+            .take()
+            .ok_or_else(|| BindingError::new("adapter_state", "no active q lease"))?;
         let who = self.identity(&input.holder)?;
         self.rt
-            .block_on(self.state.complete_task(&who, &lease_id, fence, serde_json::json!("done"), None))
+            .block_on(self.state.complete_task(
+                &who,
+                &lease_id,
+                fence,
+                serde_json::json!("done"),
+                None,
+            ))
             .map_err(daemon_err)?;
-        self.log.push(log_rec("complete", "-", "-", "-", QUEUE, &input.holder, abs_fence, 0));
+        self.log.push(log_rec(
+            "complete",
+            "-",
+            "-",
+            "-",
+            QUEUE,
+            &input.holder,
+            abs_fence,
+            0,
+        ));
         Ok(())
     }
 
     fn fail(&mut self, input: FailInput) -> Result<(), BindingError> {
-        let (lease_id, fence, abs_fence) =
-            self.q_lease.take().ok_or_else(|| BindingError::new("adapter_state", "no active q lease"))?;
+        let (lease_id, fence, abs_fence) = self
+            .q_lease
+            .take()
+            .ok_or_else(|| BindingError::new("adapter_state", "no active q lease"))?;
         let who = self.identity(&input.holder)?;
         self.rt
             .block_on(self.state.fail_task(&who, &lease_id, fence, "mbt-fail"))
             .map_err(daemon_err)?;
-        self.log.push(log_rec("fail", "-", "-", "-", QUEUE, &input.holder, abs_fence, 0));
+        self.log.push(log_rec(
+            "fail",
+            "-",
+            "-",
+            "-",
+            QUEUE,
+            &input.holder,
+            abs_fence,
+            0,
+        ));
         Ok(())
     }
 
     fn release(&mut self, input: ReleaseInput) -> Result<(), BindingError> {
-        let (lease_id, fence, abs_fence) =
-            self.d_lease.take().ok_or_else(|| BindingError::new("adapter_state", "no active d lease"))?;
+        let (lease_id, fence, abs_fence) = self
+            .d_lease
+            .take()
+            .ok_or_else(|| BindingError::new("adapter_state", "no active d lease"))?;
         let who = self.identity(&input.holder)?;
-        self.rt.block_on(self.state.release_doc(&who, &lease_id, fence)).map_err(daemon_err)?;
-        self.log.push(log_rec("release", "-", "-", "-", DOC, &input.holder, abs_fence, 0));
+        self.rt
+            .block_on(self.state.release_doc(&who, &lease_id, fence))
+            .map_err(daemon_err)?;
+        self.log.push(log_rec(
+            "release",
+            "-",
+            "-",
+            "-",
+            DOC,
+            &input.holder,
+            abs_fence,
+            0,
+        ));
         Ok(())
     }
 
@@ -225,12 +344,16 @@ impl MBCooperatorsPort for CoopSut {
                 &who,
                 DOC,
                 "text/plain",
-                Body { mime: "text/plain".to_string(), text: "mbt doc".to_string() },
+                Body {
+                    mime: "text/plain".to_string(),
+                    text: "mbt doc".to_string(),
+                },
                 None,
             ))
             .map_err(daemon_err)?;
         self.doc_version = 1;
-        self.log.push(log_rec("docput", "-", "-", "-", DOC, &input.holder, 0, 0));
+        self.log
+            .push(log_rec("docput", "-", "-", "-", DOC, &input.holder, 0, 0));
         Ok(())
     }
 
@@ -238,20 +361,33 @@ impl MBCooperatorsPort for CoopSut {
         let who = self.identity(&input.holder)?;
         let base = self.doc_version;
         let abs_fence = self.d_lease.as_ref().map(|(_, _, af)| *af).unwrap_or(0);
-        let lease_owned: Option<(String, u64)> = self.d_lease.as_ref().map(|(lid, f, _)| (lid.clone(), *f));
+        let lease_owned: Option<(String, u64)> =
+            self.d_lease.as_ref().map(|(lid, f, _)| (lid.clone(), *f));
         let lease = lease_owned.as_ref().map(|(lid, f)| (lid.as_str(), *f));
         self.rt
             .block_on(self.state.update_doc(
                 &who,
                 DOC,
                 base,
-                Body { mime: "text/plain".to_string(), text: "mbt update".to_string() },
+                Body {
+                    mime: "text/plain".to_string(),
+                    text: "mbt update".to_string(),
+                },
                 None,
                 lease,
             ))
             .map_err(daemon_err)?;
         self.doc_version += 1;
-        self.log.push(log_rec("docput", "-", "-", "-", DOC, &input.holder, abs_fence, base));
+        self.log.push(log_rec(
+            "docput",
+            "-",
+            "-",
+            "-",
+            DOC,
+            &input.holder,
+            abs_fence,
+            base,
+        ));
         Ok(())
     }
 
@@ -259,7 +395,9 @@ impl MBCooperatorsPort for CoopSut {
         self.state = DaemonState::with_config(DaemonConfig::new(&self.root)).map_err(daemon_err)?;
         for name in AGENTS {
             let token = self.tokens[name].clone();
-            self.rt.block_on(self.state.authenticate(&token)).map_err(daemon_err)?;
+            self.rt
+                .block_on(self.state.authenticate(&token))
+                .map_err(daemon_err)?;
         }
         // Leases survive via log replay: stored (lease_id, fence) stay valid.
         Ok(())
@@ -308,23 +446,112 @@ fn replay_one(bin: &str, path: &Path) -> Result<(), String> {
     // which this ModelMirrors 0.1.1.0 build lacks; replay uses the plain
     // trace path. The semantic digest/lock still binds adapter to spec via
     // `model_interface_gen check`.
-    run_client_with_traces(bin, apalache_cfg(), vec![path.to_string_lossy().into_owned()], compute)
-        .map_err(|e| e.to_string())
+    run_client_with_traces(
+        bin,
+        apalache_cfg(),
+        vec![path.to_string_lossy().into_owned()],
+        compute,
+    )
+    .map_err(|e| e.to_string())
 }
 
 fn main() -> ExitCode {
+    let args: Vec<String> = std::env::args().skip(1).collect();
+    if args
+        .first()
+        .is_some_and(|arg| arg == "--fault-rotation-child")
+    {
+        let result = if args.len() == 3 {
+            args[2]
+                .parse::<u64>()
+                .map_err(|e| e.to_string())
+                .and_then(|units| faults_rotation::child(Path::new(&args[1]), units))
+        } else {
+            Err("rotation child requires ROOT UNITS".into())
+        };
+        return match result {
+            Ok(()) => ExitCode::SUCCESS,
+            Err(error) => {
+                eprintln!("rotation child failed: {error}");
+                ExitCode::FAILURE
+            }
+        };
+    }
+    if args
+        .first()
+        .is_some_and(|arg| arg == "--runtime-fixture-child")
+    {
+        return if args.len() == 3 {
+            faults_runtime::child_main(&args[1], Path::new(&args[2]))
+        } else {
+            eprintln!("runtime fixture child requires PROFILE ROOT");
+            ExitCode::FAILURE
+        };
+    }
+    if args.first().is_some_and(|arg| arg == "--writer-child") {
+        return if args.len() == 2 {
+            writers::child_main(Path::new(&args[1]))
+        } else {
+            eprintln!("internal writer child requires a root path");
+            ExitCode::FAILURE
+        };
+    }
+    let mut suite = "all";
+    let mut skip_gen = false;
+    let mut scenario: Option<&str> = None;
+    let mut index = 0;
+    while index < args.len() {
+        match args[index].as_str() {
+            "--skip-gen" => skip_gen = true,
+            "--suite" if index + 1 < args.len() => {
+                index += 1;
+                suite = &args[index];
+            }
+            "--scenario" if index + 1 < args.len() => {
+                index += 1;
+                scenario = Some(&args[index]);
+            }
+            "--help" | "-h" => {
+                println!("cooperators-mbt [--skip-gen] [--suite all|protocol|writers|faults] [--scenario PROFILE]");
+                return ExitCode::SUCCESS;
+            }
+            other => {
+                eprintln!("unknown or incomplete argument: {other}");
+                return ExitCode::FAILURE;
+            }
+        }
+        index += 1;
+    }
+    if !matches!(suite, "all" | "protocol" | "writers" | "faults") {
+        eprintln!("suite must be all, protocol, writers, or faults");
+        return ExitCode::FAILURE;
+    }
     let bin = match std::env::var("MIRROR_BIN") {
         Ok(b) if !b.is_empty() => b,
         _ => {
-            eprintln!("MIRROR_BIN not set; skipping MBT (set it to the ModelMirrors binary)");
-            return ExitCode::SUCCESS;
+            eprintln!("MIRROR_BIN not set; set it to the ModelMirrors binary");
+            return ExitCode::FAILURE;
         }
     };
-    let skip_gen = std::env::args().any(|a| a == "--skip-gen");
     let spec_abs = spec_path();
-    let traces_dir = Path::new(env!("CARGO_MANIFEST_DIR")).join("traces");
+    let home = Path::new(env!("CARGO_MANIFEST_DIR"));
+    let traces_dir = home.join("traces");
 
-    if !skip_gen {
+    if suite == "faults" {
+        return match run_fault_profiles(&bin, home, scenario) {
+            Ok(()) => ExitCode::SUCCESS,
+            Err(error) => {
+                eprintln!("fault MBT gate failed: {error}");
+                ExitCode::FAILURE
+            }
+        };
+    }
+    if scenario.is_some() {
+        eprintln!("--scenario requires --suite faults");
+        return ExitCode::FAILURE;
+    }
+
+    if !skip_gen && suite != "writers" {
         // Trace generation runs Apalache directly: the ModelMirrors gen
         // protocol inlines all traces in one response line, which overflows
         // MirrorRust's 64 KiB protocol-line cap beyond ~3 Cooperators-sized
@@ -368,16 +595,25 @@ fn main() -> ExitCode {
                 .map(|e| e.path())
                 .filter(|p| {
                     p.is_dir()
-                        && p.metadata().and_then(|m| m.modified()).map(|t| t >= marker).unwrap_or(false)
+                        && p.metadata()
+                            .and_then(|m| m.modified())
+                            .map(|t| t >= marker)
+                            .unwrap_or(false)
                 })
                 .collect();
             runs.sort();
-            let latest = runs.last().unwrap_or_else(|| panic!("no apalache run dir for {inv}"));
+            let latest = runs
+                .last()
+                .unwrap_or_else(|| panic!("no apalache run dir for {inv}"));
             let mut found = 0usize;
-            for entry in std::fs::read_dir(latest).expect("run dir").filter_map(|e| e.ok()) {
+            for entry in std::fs::read_dir(latest)
+                .expect("run dir")
+                .filter_map(|e| e.ok())
+            {
                 let name = entry.file_name().to_string_lossy().into_owned();
                 if name.starts_with("violation") && name.ends_with(".itf.json") {
-                    std::fs::copy(entry.path(), traces_dir.join(format!("{inv}__{name}"))).expect("copy trace");
+                    std::fs::copy(entry.path(), traces_dir.join(format!("{inv}__{name}")))
+                        .expect("copy trace");
                     found += 1;
                 }
             }
@@ -385,21 +621,62 @@ fn main() -> ExitCode {
         }
     }
 
-    let mut traces: Vec<PathBuf> = std::fs::read_dir(&traces_dir)
-        .expect("traces dir")
-        .filter_map(|e| e.ok())
-        .map(|e| e.path())
-        .filter(|p| p.is_file() && p.extension().is_some_and(|x| x == "json"))
-        .collect();
-    traces.sort();
-    if traces.is_empty() {
-        eprintln!("no traces in {}", traces_dir.display());
-        return ExitCode::FAILURE;
+    if !skip_gen && suite != "protocol" {
+        match std::process::Command::new("python3")
+            .arg(home.join("generate_writers.py"))
+            .status()
+        {
+            Ok(status) if status.success() => {}
+            other => {
+                eprintln!("writer trace generation failed: {other:?}");
+                return ExitCode::FAILURE;
+            }
+        }
+    }
+
+    let mut traces = Vec::new();
+    for (name, dir) in [
+        ("protocol", traces_dir),
+        ("writers", home.join("writers/traces")),
+    ] {
+        if suite != "all" && suite != name {
+            continue;
+        }
+        if name == "writers" {
+            for required in writers::REQUIRED_TRACES {
+                if !dir.join(required).is_file() {
+                    eprintln!("missing required writer trace: {required}");
+                    return ExitCode::FAILURE;
+                }
+            }
+        }
+        let mut paths: Vec<_> = match std::fs::read_dir(&dir) {
+            Ok(entries) => entries
+                .filter_map(|entry| entry.ok())
+                .map(|entry| entry.path())
+                .filter(|path| path.is_file() && path.extension().is_some_and(|x| x == "json"))
+                .collect(),
+            Err(error) => {
+                eprintln!("read {} traces at {}: {error}", name, dir.display());
+                return ExitCode::FAILURE;
+            }
+        };
+        paths.sort();
+        if paths.is_empty() {
+            eprintln!("no {name} traces in {}", dir.display());
+            return ExitCode::FAILURE;
+        }
+        traces.extend(paths.into_iter().map(|path| (name, path)));
     }
 
     let mut failures = 0;
-    for trace in &traces {
-        match replay_one(&bin, trace) {
+    for (name, trace) in &traces {
+        let result = if *name == "writers" {
+            writers::replay(&bin, trace)
+        } else {
+            replay_one(&bin, trace)
+        };
+        match result {
             Ok(()) => eprintln!("PASS {}", trace.display()),
             Err(e) => {
                 failures += 1;
@@ -408,5 +685,96 @@ fn main() -> ExitCode {
         }
     }
     eprintln!("mbt: {} traces, {} failed", traces.len(), failures);
-    if failures > 0 { ExitCode::FAILURE } else { ExitCode::SUCCESS }
+    if suite == "all" {
+        if let Err(error) = run_fault_profiles(&bin, home, None) {
+            eprintln!("fault MBT gate failed: {error}");
+            failures += 1;
+        }
+    }
+    if failures > 0 {
+        ExitCode::FAILURE
+    } else {
+        ExitCode::SUCCESS
+    }
+}
+
+fn run_fault_profiles(bin: &str, home: &Path, selected: Option<&str>) -> Result<(), String> {
+    let profiles = [
+        "writer",
+        "storage",
+        "inbox",
+        "deadletter",
+        "document",
+        "status",
+        "rotation",
+        "identity",
+    ];
+    if selected.is_some_and(|name| !profiles.contains(&name)) {
+        eprintln!("unknown fault profile");
+        return Err("unknown fault profile".into());
+    }
+    let mut check = std::process::Command::new("python3");
+    check
+        .arg(home.join("generate_fault_interfaces.py"))
+        .arg("--check");
+    if let Some(profile) = selected {
+        check.arg("--profile").arg(profile);
+    }
+    let checked = check.status().map_err(|e| e.to_string())?;
+    if !checked.success() {
+        return Err("compiler-generated fault interface check failed".into());
+    }
+    let mut total = 0;
+    let mut failed = 0;
+    for profile in profiles {
+        if selected.is_some_and(|name| name != profile) {
+            continue;
+        }
+        let dir = home.join("fault_interfaces").join(profile).join("traces");
+        let mut traces = std::fs::read_dir(&dir)
+            .map_err(|e| e.to_string())?
+            .map(|entry| entry.map(|e| e.path()))
+            .collect::<Result<Vec<_>, _>>()
+            .map_err(|e| e.to_string())?;
+        traces.retain(|path| path.extension().is_some_and(|ext| ext == "json"));
+        traces.sort();
+        if traces.is_empty() {
+            return Err(format!("missing required {profile} traces"));
+        }
+        for trace in traces {
+            total += 1;
+            let result = match profile {
+                "storage" => faults_storage::replay(bin, &trace),
+                "writer" => faults_writer::replay(bin, &trace),
+                "identity" => faults_identity::replay(bin, &trace),
+                "rotation" => faults_rotation::replay(bin, &trace),
+                "inbox" | "deadletter" | "document" | "status" => {
+                    faults_runtime::replay(profile, bin, &trace)
+                }
+                _ => Err(format!("fault profile {profile} not wired")),
+            };
+            match result {
+                Ok(()) => eprintln!("PASS fault-{profile} {}", trace.display()),
+                Err(error) => {
+                    failed += 1;
+                    eprintln!("FAIL fault-{profile} {}: {error}", trace.display());
+                }
+            }
+        }
+        if profile == "rotation" {
+            match faults_rotation::check_crash_boundaries() {
+                Ok(()) => eprintln!("PASS rotation crash boundaries"),
+                Err(error) => {
+                    failed += 1;
+                    eprintln!("FAIL rotation crash boundaries: {error}");
+                }
+            }
+        }
+    }
+    eprintln!("fault MBT: {total} traces, {failed} failures");
+    if failed == 0 {
+        Ok(())
+    } else {
+        Err(format!("{failed} fault traces failed"))
+    }
 }

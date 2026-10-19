@@ -1,0 +1,172 @@
+{
+  "binarySha256": "d33f3148efe20477e7a41316b9fe6b1518dab1106c4f4cbd51f313458137c2da",
+  "date": "2026-10-19",
+  "files": [
+    {
+      "bytes": 2460,
+      "path": "README.md",
+      "sha256": "9fffb4ea5570363d1eb989940e267c41cd443589532de4bce0bab31afa7bf825"
+    },
+    {
+      "bytes": 5088,
+      "path": "build.log",
+      "sha256": "f656a3551098dfdd1a22d94b7cd462bc498f52433c5b840b682ef10f5f44e008"
+    },
+    {
+      "bytes": 360,
+      "path": "corrupt-observation/fixtures/storage-WYYefo/observations.jsonl",
+      "sha256": "9fae698e3bd088dc6f29cbbf8d5558ccdd4cb19335ce1d2075f93d801cf023a9"
+    },
+    {
+      "bytes": 10,
+      "path": "corrupt-observation/fixtures/storage-WYYefo/storage.jsonl",
+      "sha256": "fde44263b96c69c63d9ee1a685cb1c599e39fd042d58fea8267c8fbbcd06e496"
+    },
+    {
+      "bytes": 359,
+      "path": "corrupt-observation/fixtures/storage-nsR3uE/observations.jsonl",
+      "sha256": "26b3cb03de08ffc4681c008a8750f2263410bb6d0de7ed51ab36f2b7f36486da"
+    },
+    {
+      "bytes": 122,
+      "path": "corrupt-observation/fixtures/storage-nsR3uE/storage.jsonl",
+      "sha256": "f6ef404661e7f5bafd38fb2325d9cde0056a3edcb2e472579e49e0ff7fd1c9d0"
+    },
+    {
+      "bytes": 359,
+      "path": "corrupt-observation/fixtures/storage-wUIMk6/observations.jsonl",
+      "sha256": "26b3cb03de08ffc4681c008a8750f2263410bb6d0de7ed51ab36f2b7f36486da"
+    },
+    {
+      "bytes": 122,
+      "path": "corrupt-observation/fixtures/storage-wUIMk6/storage.jsonl",
+      "sha256": "f6ef404661e7f5bafd38fb2325d9cde0056a3edcb2e472579e49e0ff7fd1c9d0"
+    },
+    {
+      "bytes": 2170,
+      "path": "corrupt-observation/replay.log",
+      "sha256": "e52c2f1f5505266dea7bc46aa5be53e512bc472753d8bdac44179cdb82a78954"
+    },
+    {
+      "bytes": 382,
+      "path": "missing-injection/fixtures/storage-XQsYqO/observations.jsonl",
+      "sha256": "6bc14317b6c9640822534819af236d393275b03e3f0007a8ce5cfbc51acc6546"
+    },
+    {
+      "bytes": 122,
+      "path": "missing-injection/fixtures/storage-XQsYqO/storage.jsonl",
+      "sha256": "f6ef404661e7f5bafd38fb2325d9cde0056a3edcb2e472579e49e0ff7fd1c9d0"
+    },
+    {
+      "bytes": 1067,
+      "path": "missing-injection/replay.log",
+      "sha256": "83a96954d7b9f542f6aca0f91c42a8608d931a685b8ddca9cdffb1e80c9bcbc2"
+    },
+    {
+      "bytes": 700,
+      "path": "normal/fixtures/storage-CdBJog/observations.jsonl",
+      "sha256": "c18e87ff99eb0c342d286753a2b162a1fc733328614c3a064e02427d828a2682"
+    },
+    {
+      "bytes": 244,
+      "path": "normal/fixtures/storage-CdBJog/storage.jsonl",
+      "sha256": "985ebd41e5b47f6b7d934978b74a75c4cb251be52753e29df3443d320454b75d"
+    },
+    {
+      "bytes": 800,
+      "path": "normal/fixtures/storage-PWxNhG/observations.jsonl",
+      "sha256": "88ca69a516fad467a6675edf0900dc2500af0d651abaa3716eddde541d62a072"
+    },
+    {
+      "bytes": 244,
+      "path": "normal/fixtures/storage-PWxNhG/storage.jsonl",
+      "sha256": "cfea15ae0ba395151cd9d46bd7462cd8514a415d03bb1f03b7c8f4d71402bba5"
+    },
+    {
+      "bytes": 553,
+      "path": "normal/fixtures/storage-zccw5N/observations.jsonl",
+      "sha256": "1ff09d3a5f4c77a7e2783aaf3e909733d82083a7bd8250f616f53a4fbf8dd593"
+    },
+    {
+      "bytes": 122,
+      "path": "normal/fixtures/storage-zccw5N/storage.jsonl",
+      "sha256": "38d0d326f0a82df15acfae9341fbe59ea24d7f30b69329c1fc46b21a8e8e88a0"
+    },
+    {
+      "bytes": 1439,
+      "path": "normal/replay.log",
+      "sha256": "4751a0849a7f00678d203e5b30c75bf44d8e58cc96c9897942b63d2e185a7291"
+    },
+    {
+      "bytes": 3599,
+      "path": "source-build-identity.json",
+      "sha256": "96e2852d8c265be7658e09b4ed45e3f9fbaa72fa26d769a438df95dc4dab0ed7"
+    },
+    {
+      "bytes": 1112,
+      "path": "wrong-receipt/fixtures/storage-3QX4Bt/observations.jsonl",
+      "sha256": "f5dc7f2eca53afe53584f115060d66a7466e6def103e1a91b9e1deab3dc5f278"
+    },
+    {
+      "bytes": 122,
+      "path": "wrong-receipt/fixtures/storage-3QX4Bt/storage.jsonl",
+      "sha256": "38d0d326f0a82df15acfae9341fbe59ea24d7f30b69329c1fc46b21a8e8e88a0"
+    },
+    {
+      "bytes": 1403,
+      "path": "wrong-receipt/fixtures/storage-pzfptm/observations.jsonl",
+      "sha256": "e494c40995c31d1c291642226ae190a3b173321ed2befcc86d36cf3cfd31ac15"
+    },
+    {
+      "bytes": 244,
+      "path": "wrong-receipt/fixtures/storage-pzfptm/storage.jsonl",
+      "sha256": "985ebd41e5b47f6b7d934978b74a75c4cb251be52753e29df3443d320454b75d"
+    },
+    {
+      "bytes": 565,
+      "path": "wrong-receipt/fixtures/storage-xpH8vs/observations.jsonl",
+      "sha256": "10b7a8421dbb50ebc3b033e2a990ca53257c719f8271c1e2b67c85cc86e856f7"
+    },
+    {
+      "bytes": 122,
+      "path": "wrong-receipt/fixtures/storage-xpH8vs/storage.jsonl",
+      "sha256": "f6ef404661e7f5bafd38fb2325d9cde0056a3edcb2e472579e49e0ff7fd1c9d0"
+    },
+    {
+      "bytes": 2235,
+      "path": "wrong-receipt/replay.log",
+      "sha256": "75cbf86210b9eff509151175ade220c33cf951b63d50d56fcafe9f5137d9e658"
+    }
+  ],
+  "runs": [
+    {
+      "exitCode": 0,
+      "failed": 0,
+      "name": "normal",
+      "traces": 3
+    },
+    {
+      "control": "storage-wrong-receipt",
+      "exitCode": 1,
+      "failed": 3,
+      "name": "wrong-receipt",
+      "traces": 3
+    },
+    {
+      "control": "storage-corrupt-observation",
+      "exitCode": 1,
+      "failed": 3,
+      "name": "corrupt-observation",
+      "traces": 3
+    },
+    {
+      "control": "storage-missing-injection",
+      "exitCode": 101,
+      "failFast": true,
+      "name": "missing-injection",
+      "tracesStarted": 1
+    }
+  ],
+  "schema": "cooperators.generated-fault-runtime-qualification/v1",
+  "scope": "Full Cooperators crate with mbt-injection; plain generated-port MirrorRust/ModelMirrors replay. Writer children use real UDS with HTTP disabled; storage uses real LogFile I/O."
+}

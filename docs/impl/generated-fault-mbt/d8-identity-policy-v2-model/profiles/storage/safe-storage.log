@@ -1,0 +1,11 @@
+TLC2 Version 2.19 of 08 August 2024 (rev: 5a47802)
+Running depth-first search Model-Checking with fp 37 and seed -3155306268219145742 with 1 worker on 12 cores with 2660MB heap and 64MB offheap memory [pid: 19] (Linux 6.18.54.1-microsoft-standard-WSL2 amd64, Ubuntu 25.0.4.1 x86_64).
+Parsing file /home/nzsn/Repos/Cooperators/docs/impl/generated-fault-mbt/d8-identity-policy-v2-model/profiles/storage/MBFaults.tla
+Parsing file /tmp/Integers.tla
+
+Fatal errors while parsing TLA+ spec in file MBFaults
+
+java.lang.NullPointerException: Cannot invoke "String.length()" because "str" is null
+Starting... (2026-10-19 17:59:23)
+Error: Parsing or semantic analysis failed. Module-Table lookup failure for module name MBFaults derived from MBFaults file name.
+Finished in 02s at (2026-10-19 17:59:23)

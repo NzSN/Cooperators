@@ -1,0 +1,97 @@
+{
+  "report_date": "2026-10-19",
+  "archived_at_utc": "2026-10-19T07:36:10.979475+00:00",
+  "canonical_source": "spec/mbt/faults/README.md",
+  "head": "ccca77295277b10dad5234bf8ae3a916ad9a0a1a",
+  "working_tree_note": "Contains uncommitted specification and MBT work. Use the per-file hashes below.",
+  "models_or_runtime_tests_rerun_for_explanation": false,
+  "rust_fault_port_exists": false,
+  "implementation_defects_closed_by_report": false,
+  "recorded_results": {
+    "model_checks": 48,
+    "fixed_input_checks": 40,
+    "exported_traces": 19,
+    "tool_regression_tests": 22,
+    "scope": "Existing model/tool evidence; no new Rust fault replay."
+  },
+  "source_hashes": [
+    {
+      "path": "spec/mbt/faults/README.md",
+      "sha256": "6c998d7b02e3369a7068aca173eca127149fd9ca6f90889bb3401bc68e2e5514"
+    },
+    {
+      "path": "spec/mbt/faults/contract.json",
+      "sha256": "317423034b88d00bf217343ef4611600f57b75ce06d794cb82739c66f53f0f13"
+    },
+    {
+      "path": "spec/mbt/faults/manifest.json",
+      "sha256": "b2100091563028df119f7d9a228a24066ac4c9b4ea20103c32dc92534fc55584"
+    },
+    {
+      "path": "spec/mbt/replay_faults.py",
+      "sha256": "ad708c45adc3d8c633a15c70534143d031b2a0142693d25278e5615725910e4f"
+    },
+    {
+      "path": "spec/MBFaults.tla",
+      "sha256": "8dfb916fe2c2f69516ecaf11da3e31596167818fdcc94859afb7e676ea6fc19c"
+    },
+    {
+      "path": "spec/mbt/faults/traces/NoStorageRecovery.itf.json",
+      "sha256": "b79b0ae030f8ae8705cad92e09ee11c4c4ea0e30f5dc39506e0e6bf448494e2e"
+    },
+    {
+      "path": "spec/mbt/faults/traces/NoAcknowledgedRecovery.itf.json",
+      "sha256": "8a679f80b650119f240151ac829cf8510f9f4deff95fa0c3ffa3034ae1493b79"
+    },
+    {
+      "path": "docs/design/0001-cooperatorsd-broker.md",
+      "sha256": "59bf2e49b8af2fcefb6823566f301d9cda28b4dcd2155beac538505547a063ef"
+    },
+    {
+      "path": "src/server.rs",
+      "sha256": "1875c62eae06d106d4a3560df66eafe6666a601ae8d6523e9f3614418e33c729"
+    },
+    {
+      "path": "src/storage.rs",
+      "sha256": "879c7d71a93bbf9d484b608aba9469f4b7b2ad9e3f1abb27c87d1c69bf1b2521"
+    },
+    {
+      "path": "src/messaging.rs",
+      "sha256": "73addb25dad5e693a95a28dca8da3c9c730e91b8c075b3378f12f764dff6a604"
+    },
+    {
+      "path": "src/queues.rs",
+      "sha256": "042f8971c69e216700cbfe6abba15f0b1e739d86e7652a3d55824f2b373d1f1b"
+    },
+    {
+      "path": "src/docs.rs",
+      "sha256": "f0c35e15af0f8505db884337f55c7942acf31ee3df7360254c6dcd98564c4941"
+    },
+    {
+      "path": "src/status.rs",
+      "sha256": "a3c1f98b82b36c483ce88057c9f2c62f0454b5d93ede00d17677376d53bc6953"
+    },
+    {
+      "path": "src/registry.rs",
+      "sha256": "e5c742837d7b07801fbdd20ff6884ef21c0af03c2d3456204faa6432c4ccc955"
+    }
+  ],
+  "sample_trace": {
+    "original": "/home/nzsn/Repos/Cooperators/spec/mbt/faults/traces/NoStorageRecovery.itf.json",
+    "archived": "2026-10-19-fault-port-storage-recovery.itf.json",
+    "sha256": "b79b0ae030f8ae8705cad92e09ee11c4c4ea0e30f5dc39506e0e6bf448494e2e",
+    "meaning": "Generated model scenario, not an implementation execution log."
+  },
+  "preserved_archive_files": {
+    "2026-10-19-mbt-defect-coverage-provenance.json": "49a1939c9883f50ed44df2a41d2783857a2752d544869d7157c8f246f3f3a037",
+    "index.html": "33f1eb32bbee2deb2fdf2f8d22747c8b5bfb1b331e48b502c36eb28c41c81540",
+    "2026-10-19-mbt-defect-coverage.html": "7431bb2cc9f05ba959c58d977d4522868f3ef6261582e2b1ae0185fc35319968",
+    "2026-10-19-mbt-defect-coverage-evidence.log": "736486e3ac8ed5b92bc2680f3b8607535d3b91875b1dca991d794ef6012f0ddb"
+  },
+  "base_index_sha256": "33f1eb32bbee2deb2fdf2f8d22747c8b5bfb1b331e48b502c36eb28c41c81540",
+  "presentation": {
+    "format": "HTML only",
+    "visual_inspection": false,
+    "external_resources": false
+  }
+}

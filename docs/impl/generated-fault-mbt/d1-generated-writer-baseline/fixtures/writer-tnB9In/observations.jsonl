@@ -1,0 +1,3 @@
+{"observation":{"owners":{"#set":[]},"records":[],"rejected":{"#set":[]},"torn":false},"rawValidity":true,"rejectedReadOnly":true,"result":"none"}
+{"observation":{"owners":{"#set":["p2"]},"records":[],"rejected":{"#set":[]},"torn":false},"rawValidity":true,"rejectedReadOnly":true,"result":"ok"}
+{"observation":{"owners":{"#set":["p2"]},"records":[{"#bigint":"1"}],"rejected":{"#set":[]},"torn":false},"rawValidity":true,"rejectedReadOnly":true,"result":"ok"}

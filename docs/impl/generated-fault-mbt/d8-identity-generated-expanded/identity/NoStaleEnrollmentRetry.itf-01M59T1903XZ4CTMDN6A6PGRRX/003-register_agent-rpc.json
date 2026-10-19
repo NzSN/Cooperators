@@ -1,0 +1,22 @@
+{
+  "method": "register_agent",
+  "request": {
+    "kind": "codex",
+    "name": "instance-01M59T1990EWZTFGWWXXQ1G6EJ",
+    "token": {
+      "credential_hash": "sha256:9725053331924824ee6a4e50f1295deb57665becf978f3f7a064ceaa4d2fbdb1"
+    }
+  },
+  "response": {
+    "result": {
+      "agent_id": "01M59T1990EWZTFGWWXXQ1G6EJ",
+      "capabilities": [],
+      "kind": "codex",
+      "name": "instance-01M59T1990EWZTFGWWXXQ1G6EJ",
+      "rotated": true,
+      "token": {
+        "credential_hash": "sha256:b106114503aa247db76c77750d53a755e8232c268ca666259717ba9024997102"
+      }
+    }
+  }
+}

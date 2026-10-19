@@ -1,0 +1,252 @@
+{
+  "actions": [
+    {
+      "id": "Send",
+      "inputs": [
+        {
+          "expectedType": {
+            "kind": "str"
+          },
+          "from": {
+            "path": [
+              {
+                "field": "parameters"
+              },
+              {
+                "field": "writer"
+              }
+            ],
+            "root": "stepParameters"
+          },
+          "id": "Writer"
+        }
+      ],
+      "wireAction": "send",
+      "wireAliases": []
+    },
+    {
+      "id": "Start",
+      "inputs": [
+        {
+          "expectedType": {
+            "kind": "str"
+          },
+          "from": {
+            "path": [
+              {
+                "field": "parameters"
+              },
+              {
+                "field": "root"
+              }
+            ],
+            "root": "stepParameters"
+          },
+          "id": "Root"
+        },
+        {
+          "expectedType": {
+            "kind": "str"
+          },
+          "from": {
+            "path": [
+              {
+                "field": "parameters"
+              },
+              {
+                "field": "socket"
+              }
+            ],
+            "root": "stepParameters"
+          },
+          "id": "Socket"
+        },
+        {
+          "expectedType": {
+            "kind": "str"
+          },
+          "from": {
+            "path": [
+              {
+                "field": "parameters"
+              },
+              {
+                "field": "writer"
+              }
+            ],
+            "root": "stepParameters"
+          },
+          "id": "Writer"
+        }
+      ],
+      "wireAction": "start",
+      "wireAliases": []
+    },
+    {
+      "id": "Stop",
+      "inputs": [
+        {
+          "expectedType": {
+            "kind": "str"
+          },
+          "from": {
+            "path": [
+              {
+                "field": "parameters"
+              },
+              {
+                "field": "writer"
+              }
+            ],
+            "root": "stepParameters"
+          },
+          "id": "Writer"
+        }
+      ],
+      "wireAction": "stop",
+      "wireAliases": []
+    },
+    {
+      "id": "TearTail",
+      "inputs": [
+        {
+          "expectedType": {
+            "kind": "str"
+          },
+          "from": {
+            "path": [
+              {
+                "field": "parameters"
+              },
+              {
+                "field": "root"
+              }
+            ],
+            "root": "stepParameters"
+          },
+          "id": "Root"
+        }
+      ],
+      "wireAction": "tear_tail",
+      "wireAliases": []
+    }
+  ],
+  "initializers": [
+    {
+      "id": "Initialize",
+      "inputs": [],
+      "wireAction": "init",
+      "wireAliases": []
+    }
+  ],
+  "interfaceVersion": "1.0.0",
+  "model": {
+    "module": "MBWriters",
+    "source": "MBWriters.tla"
+  },
+  "observations": [
+    {
+      "expectedType": {
+        "key": {
+          "kind": "str"
+        },
+        "kind": "map",
+        "value": {
+          "element": {
+            "kind": "str"
+          },
+          "kind": "seq"
+        }
+      },
+      "id": "Records",
+      "provenance": "implementation",
+      "wireName": "records"
+    },
+    {
+      "expectedType": {
+        "key": {
+          "kind": "str"
+        },
+        "kind": "map",
+        "value": {
+          "kind": "bool"
+        }
+      },
+      "id": "Rejected",
+      "provenance": "implementation",
+      "wireName": "rejected"
+    },
+    {
+      "expectedType": {
+        "kind": "bool"
+      },
+      "id": "RejectedReadOnly",
+      "provenance": "implementation",
+      "wireName": "rejectedReadOnly"
+    },
+    {
+      "expectedType": {
+        "key": {
+          "kind": "str"
+        },
+        "kind": "map",
+        "value": {
+          "element": {
+            "kind": "int"
+          },
+          "kind": "seq"
+        }
+      },
+      "id": "Seqs",
+      "provenance": "implementation",
+      "wireName": "seqs"
+    },
+    {
+      "expectedType": {
+        "key": {
+          "kind": "str"
+        },
+        "kind": "map",
+        "value": {
+          "kind": "bool"
+        }
+      },
+      "id": "Torn",
+      "provenance": "implementation",
+      "wireName": "torn"
+    },
+    {
+      "expectedType": {
+        "key": {
+          "kind": "str"
+        },
+        "kind": "map",
+        "value": {
+          "kind": "bool"
+        }
+      },
+      "id": "Valid",
+      "provenance": "implementation",
+      "wireName": "valid"
+    },
+    {
+      "expectedType": {
+        "key": {
+          "kind": "str"
+        },
+        "kind": "map",
+        "value": {
+          "kind": "str"
+        }
+      },
+      "id": "Writers",
+      "provenance": "implementation",
+      "wireName": "writers"
+    }
+  ],
+  "schema": "mirrors.model-interface/v1",
+  "wire": {
+    "actionVariable": "action_taken",
+    "parameterVariable": "parameters"
+  }
+}

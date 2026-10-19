@@ -1,0 +1,11 @@
+scaffolded reviewable proposal /tmp/coop-fault-interface-7c6dovd6/MBFaultIdentity.mirror-interface.scaffold.json 3cb6e623da49a453333091578d01ad0cfeefda5f890b80f767e20ce1dbf7c9e3
+model-interface check clean
+{"actions":[{"count":1,"id":"Authenticate"},{"count":1,"id":"Disconnect"},{"count":6,"id":"Enroll"},{"count":3,"id":"Initialize"},{"count":1,"id":"Reconnect"},{"count":1,"id":"RotateToken"}],"schema":"mirrors.model-interface-coverage/v1","semanticDigest":"3c7dd3687be1587a8378d4f38ea303143d5ea3136310dc9693a3c6783e43cc05","states":13,"traces":3,"unseenActions":[]}
+Generated fault interface bridge and selected compiler checks clean
+identity evidence: docs/impl/generated-fault-mbt/d8-identity-generated/identity/NoRevokedAuthentication.itf-01M59S15A99NHVWPJ9MWKDMV7Y
+PASS fault-identity /home/nzsn/Repos/Cooperators/spec/mbt/fault_interfaces/identity/traces/NoRevokedAuthentication.itf.json
+identity evidence: docs/impl/generated-fault-mbt/d8-identity-generated/identity/NoSameKindEnrollment.itf-01M59S15MXPXH4FJRG57GBRYYV
+PASS fault-identity /home/nzsn/Repos/Cooperators/spec/mbt/fault_interfaces/identity/traces/NoSameKindEnrollment.itf.json
+identity evidence: docs/impl/generated-fault-mbt/d8-identity-generated/identity/NoStableReconnect.itf-01M59S15ZBSJ8YNXWVTGC14SRY
+PASS fault-identity /home/nzsn/Repos/Cooperators/spec/mbt/fault_interfaces/identity/traces/NoStableReconnect.itf.json
+fault MBT: 3 traces, 0 failed

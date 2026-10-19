@@ -1,0 +1,389 @@
+{
+  "actions": [
+    {
+      "id": "Ack",
+      "inputs": [
+        {
+          "expectedType": {
+            "kind": "int"
+          },
+          "from": {
+            "path": [
+              {
+                "field": "parameters"
+              },
+              {
+                "field": "cursor"
+              }
+            ],
+            "root": "stepParameters"
+          },
+          "id": "Cursor"
+        },
+        {
+          "expectedType": {
+            "kind": "str"
+          },
+          "from": {
+            "path": [
+              {
+                "field": "parameters"
+              },
+              {
+                "field": "holder"
+              }
+            ],
+            "root": "stepParameters"
+          },
+          "id": "Holder"
+        }
+      ],
+      "wireAction": "ack",
+      "wireAliases": []
+    },
+    {
+      "id": "Claim",
+      "inputs": [
+        {
+          "expectedType": {
+            "kind": "str"
+          },
+          "from": {
+            "path": [
+              {
+                "field": "parameters"
+              },
+              {
+                "field": "holder"
+              }
+            ],
+            "root": "stepParameters"
+          },
+          "id": "Holder"
+        },
+        {
+          "expectedType": {
+            "kind": "str"
+          },
+          "from": {
+            "path": [
+              {
+                "field": "parameters"
+              },
+              {
+                "field": "res"
+              }
+            ],
+            "root": "stepParameters"
+          },
+          "id": "Res"
+        }
+      ],
+      "wireAction": "claim",
+      "wireAliases": []
+    },
+    {
+      "id": "Complete",
+      "inputs": [
+        {
+          "expectedType": {
+            "kind": "str"
+          },
+          "from": {
+            "path": [
+              {
+                "field": "parameters"
+              },
+              {
+                "field": "holder"
+              }
+            ],
+            "root": "stepParameters"
+          },
+          "id": "Holder"
+        }
+      ],
+      "wireAction": "complete",
+      "wireAliases": []
+    },
+    {
+      "id": "Crash",
+      "inputs": [],
+      "wireAction": "crash",
+      "wireAliases": []
+    },
+    {
+      "id": "Expire",
+      "inputs": [
+        {
+          "expectedType": {
+            "kind": "str"
+          },
+          "from": {
+            "path": [
+              {
+                "field": "parameters"
+              },
+              {
+                "field": "res"
+              }
+            ],
+            "root": "stepParameters"
+          },
+          "id": "Res"
+        }
+      ],
+      "wireAction": "expire",
+      "wireAliases": []
+    },
+    {
+      "id": "Fail",
+      "inputs": [
+        {
+          "expectedType": {
+            "kind": "str"
+          },
+          "from": {
+            "path": [
+              {
+                "field": "parameters"
+              },
+              {
+                "field": "holder"
+              }
+            ],
+            "root": "stepParameters"
+          },
+          "id": "Holder"
+        }
+      ],
+      "wireAction": "fail",
+      "wireAliases": []
+    },
+    {
+      "id": "Publish",
+      "inputs": [
+        {
+          "expectedType": {
+            "kind": "str"
+          },
+          "from": {
+            "path": [
+              {
+                "field": "parameters"
+              },
+              {
+                "field": "holder"
+              }
+            ],
+            "root": "stepParameters"
+          },
+          "id": "Holder"
+        }
+      ],
+      "wireAction": "publish",
+      "wireAliases": []
+    },
+    {
+      "id": "Release",
+      "inputs": [
+        {
+          "expectedType": {
+            "kind": "str"
+          },
+          "from": {
+            "path": [
+              {
+                "field": "parameters"
+              },
+              {
+                "field": "holder"
+              }
+            ],
+            "root": "stepParameters"
+          },
+          "id": "Holder"
+        }
+      ],
+      "wireAction": "release",
+      "wireAliases": []
+    },
+    {
+      "id": "Send",
+      "inputs": [
+        {
+          "expectedType": {
+            "kind": "str"
+          },
+          "from": {
+            "path": [
+              {
+                "field": "parameters"
+              },
+              {
+                "field": "from"
+              }
+            ],
+            "root": "stepParameters"
+          },
+          "id": "From"
+        },
+        {
+          "expectedType": {
+            "kind": "str"
+          },
+          "from": {
+            "path": [
+              {
+                "field": "parameters"
+              },
+              {
+                "field": "key"
+              }
+            ],
+            "root": "stepParameters"
+          },
+          "id": "Key"
+        },
+        {
+          "expectedType": {
+            "kind": "str"
+          },
+          "from": {
+            "path": [
+              {
+                "field": "parameters"
+              },
+              {
+                "field": "to"
+              }
+            ],
+            "root": "stepParameters"
+          },
+          "id": "To"
+        }
+      ],
+      "wireAction": "send",
+      "wireAliases": []
+    },
+    {
+      "id": "Update",
+      "inputs": [
+        {
+          "expectedType": {
+            "kind": "str"
+          },
+          "from": {
+            "path": [
+              {
+                "field": "parameters"
+              },
+              {
+                "field": "holder"
+              }
+            ],
+            "root": "stepParameters"
+          },
+          "id": "Holder"
+        }
+      ],
+      "wireAction": "update",
+      "wireAliases": []
+    }
+  ],
+  "initializers": [
+    {
+      "id": "Initialize",
+      "inputs": [],
+      "wireAction": "init",
+      "wireAliases": []
+    }
+  ],
+  "interfaceVersion": "1.0.0",
+  "model": {
+    "module": "MBCooperators",
+    "source": "MBCooperators.tla"
+  },
+  "observations": [
+    {
+      "expectedType": {
+        "key": {
+          "kind": "str"
+        },
+        "kind": "map",
+        "value": {
+          "kind": "int"
+        }
+      },
+      "id": "AckCursor",
+      "provenance": "implementation",
+      "wireName": "ackCursor"
+    },
+    {
+      "expectedType": {
+        "element": {
+          "fields": [
+            {
+              "type": {
+                "kind": "int"
+              },
+              "wireName": "base"
+            },
+            {
+              "type": {
+                "kind": "int"
+              },
+              "wireName": "fence"
+            },
+            {
+              "type": {
+                "kind": "str"
+              },
+              "wireName": "from"
+            },
+            {
+              "type": {
+                "kind": "str"
+              },
+              "wireName": "holder"
+            },
+            {
+              "type": {
+                "kind": "str"
+              },
+              "wireName": "key"
+            },
+            {
+              "type": {
+                "kind": "str"
+              },
+              "wireName": "res"
+            },
+            {
+              "type": {
+                "kind": "str"
+              },
+              "wireName": "to"
+            },
+            {
+              "type": {
+                "kind": "str"
+              },
+              "wireName": "type"
+            }
+          ],
+          "kind": "record"
+        },
+        "kind": "seq"
+      },
+      "id": "Log",
+      "provenance": "implementation",
+      "wireName": "log"
+    }
+  ],
+  "schema": "mirrors.model-interface/v1",
+  "wire": {
+    "actionVariable": "action_taken",
+    "parameterVariable": "parameters"
+  }
+}

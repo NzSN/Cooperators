@@ -1,0 +1,255 @@
+Picked up JAVA_TOOL_OPTIONS: "-Djava.io.tmpdir=/tmp/coop-fault-detection-2dmglnx0/reused-id-NoRetiredThenFresh/jvm-tmp"
+TLC2 Version 2.19 of 08 August 2024 (rev: 5a47802)
+Running depth-first search Model-Checking with fp 62 and seed 637862592303937536 with 1 worker on 12 cores with 2660MB heap and 64MB offheap memory [pid: 1290] (Linux 6.18.54.1-microsoft-standard-WSL2 amd64, Ubuntu 25.0.4.1 x86_64).
+Parsing file /tmp/coop-fault-detection-2dmglnx0/reused-id-NoRetiredThenFresh/TraceProbe.tla
+Parsing file /tmp/coop-fault-detection-2dmglnx0/reused-id-NoRetiredThenFresh/MBFaults.tla
+Parsing file /tmp/coop-fault-detection-2dmglnx0/reused-id-NoRetiredThenFresh/jvm-tmp/TLC.tla
+Parsing file /tmp/coop-fault-detection-2dmglnx0/reused-id-NoRetiredThenFresh/jvm-tmp/Integers.tla
+Parsing file /tmp/coop-fault-detection-2dmglnx0/reused-id-NoRetiredThenFresh/jvm-tmp/Sequences.tla
+Parsing file /tmp/coop-fault-detection-2dmglnx0/reused-id-NoRetiredThenFresh/jvm-tmp/FiniteSets.tla
+Parsing file /tmp/coop-fault-detection-2dmglnx0/reused-id-NoRetiredThenFresh/jvm-tmp/Naturals.tla
+Parsing file /tmp/coop-fault-detection-2dmglnx0/reused-id-NoRetiredThenFresh/AgentInstances.tla
+Semantic processing of module Naturals
+Semantic processing of module Integers
+Semantic processing of module Sequences
+Semantic processing of module FiniteSets
+Semantic processing of module AgentInstances
+Semantic processing of module MBFaults
+Semantic processing of module TLC
+Semantic processing of module TraceProbe
+Starting... (2026-10-19 18:04:41)
+Finished computing initial states: 1 states generated, with 1 of them distinct.
+Starting level 2: 1 states generated, 1 distinct states found.
+Starting level 3: 2 states generated, 2 distinct states found.
+Starting level 4: 4 states generated, 3 distinct states found.
+Error: Invariant TraceConforms is violated.
+Error: The behavior up to this point is:
+State 1:
+/\ enrollmentHistory = [ rejected |-> {},
+  firstToken |-> [launch1 |-> "-token", launch2 |-> "-token"],
+  retried |-> {},
+  retired |-> {},
+  freshAfterRetire |-> FALSE,
+  safe |-> TRUE ]
+/\ s = [ active |-> {},
+  connected |-> {},
+  enrolled |-> {},
+  id |-> [launch1 |-> "-id", launch2 |-> "-id"],
+  usedIds |-> {},
+  currentToken |-> [launch1 |-> "-token", launch2 |-> "-token"],
+  usedTokens |-> {},
+  ack |-> [id1 |-> 0, id2 |-> 0, id3 |-> 0],
+  messages |-> <<>>,
+  reply |-> [launch1 |-> "-id", launch2 |-> "-id"],
+  kind |-> [launch1 |-> "codex", launch2 |-> "codex"],
+  label |-> [launch1 |-> "codex", launch2 |-> "codex"],
+  revoked |-> {},
+  tokenInstance |->
+      [token1 |-> "-instance", token2 |-> "-instance", token3 |-> "-instance"],
+  firstId |-> [launch1 |-> "-id", launch2 |-> "-id"],
+  issuedOwner |->
+      [id1 |-> "-instance", id2 |-> "-instance", id3 |-> "-instance"],
+  tokenOwner |-> [token1 |-> "-id", token2 |-> "-id", token3 |-> "-id"],
+  validTokens |-> {},
+  inbox |-> [id1 |-> <<>>, id2 |-> <<>>, id3 |-> <<>>],
+  requests |->
+      [ id1 |-> ("shared-key" :> "-id"),
+        id2 |-> ("shared-key" :> "-id"),
+        id3 |-> ("shared-key" :> "-id") ],
+  authorizedAck |-> [id1 |-> 0, id2 |-> 0, id3 |-> 0],
+  heartbeats |-> [id1 |-> 0, id2 |-> 0, id3 |-> 0],
+  authorizedHeartbeats |-> [id1 |-> 0, id2 |-> 0, id3 |-> 0],
+  heartbeatDone |-> {},
+  leaseHolder |-> "-id",
+  fence |-> 0,
+  lastLease |->
+      [ caller |-> "-id",
+        holder |-> "-id",
+        supplied |-> 0,
+        current |-> 0,
+        granted |-> FALSE ] ]
+/\ action_taken = "init"
+/\ parameters = [actor |-> "-", mode |-> "-", scenario |-> "identity", value |-> 0]
+/\ result = "none"
+/\ steps = 0
+/\ observation = [ active |-> {},
+  connected |-> {},
+  currentTokens |-> [launch1 |-> "-token", launch2 |-> "-token"],
+  ids |-> [launch1 |-> "-id", launch2 |-> "-id"],
+  kinds |-> [launch1 |-> "codex", launch2 |-> "codex"],
+  labels |-> [launch1 |-> "codex", launch2 |-> "codex"],
+  replies |-> [launch1 |-> "-id", launch2 |-> "-id"] ]
+
+State 2:
+/\ enrollmentHistory = [ rejected |-> {},
+  firstToken |-> [launch1 |-> "token1", launch2 |-> "-token"],
+  retried |-> {},
+  retired |-> {},
+  freshAfterRetire |-> FALSE,
+  safe |-> TRUE ]
+/\ s = [ active |-> {"launch1"},
+  connected |-> {"launch1"},
+  enrolled |-> {"launch1"},
+  id |-> [launch1 |-> "id2", launch2 |-> "-id"],
+  usedIds |-> {"id2"},
+  currentToken |-> [launch1 |-> "token1", launch2 |-> "-token"],
+  usedTokens |-> {"token1"},
+  ack |-> [id1 |-> 0, id2 |-> 0, id3 |-> 0],
+  messages |-> <<>>,
+  reply |-> [launch1 |-> "id2", launch2 |-> "-id"],
+  kind |-> [launch1 |-> "codex", launch2 |-> "codex"],
+  label |-> [launch1 |-> "codex", launch2 |-> "codex"],
+  revoked |-> {},
+  tokenInstance |->
+      [token1 |-> "launch1", token2 |-> "-instance", token3 |-> "-instance"],
+  firstId |-> [launch1 |-> "id2", launch2 |-> "-id"],
+  issuedOwner |-> [id1 |-> "-instance", id2 |-> "launch1", id3 |-> "-instance"],
+  tokenOwner |-> [token1 |-> "id2", token2 |-> "-id", token3 |-> "-id"],
+  validTokens |-> {"token1"},
+  inbox |-> [id1 |-> <<>>, id2 |-> <<>>, id3 |-> <<>>],
+  requests |->
+      [ id1 |-> ("shared-key" :> "-id"),
+        id2 |-> ("shared-key" :> "-id"),
+        id3 |-> ("shared-key" :> "-id") ],
+  authorizedAck |-> [id1 |-> 0, id2 |-> 0, id3 |-> 0],
+  heartbeats |-> [id1 |-> 0, id2 |-> 0, id3 |-> 0],
+  authorizedHeartbeats |-> [id1 |-> 0, id2 |-> 0, id3 |-> 0],
+  heartbeatDone |-> {},
+  leaseHolder |-> "-id",
+  fence |-> 0,
+  lastLease |->
+      [ caller |-> "-id",
+        holder |-> "-id",
+        supplied |-> 0,
+        current |-> 0,
+        granted |-> FALSE ] ]
+/\ action_taken = "enroll"
+/\ parameters = [ actor |-> "launch1",
+  mode |-> "fresh-launch-key",
+  scenario |-> "identity",
+  value |-> 0 ]
+/\ result = "ok"
+/\ steps = 1
+/\ observation = [ active |-> {"launch1"},
+  connected |-> {"launch1"},
+  currentTokens |-> [launch1 |-> "token1", launch2 |-> "-token"],
+  ids |-> [launch1 |-> "id2", launch2 |-> "-id"],
+  kinds |-> [launch1 |-> "codex", launch2 |-> "codex"],
+  labels |-> [launch1 |-> "codex", launch2 |-> "codex"],
+  replies |-> [launch1 |-> "id2", launch2 |-> "-id"] ]
+
+State 3:
+/\ enrollmentHistory = [ rejected |-> {},
+  firstToken |-> [launch1 |-> "token1", launch2 |-> "-token"],
+  retried |-> {},
+  retired |-> {"launch1"},
+  freshAfterRetire |-> FALSE,
+  safe |-> TRUE ]
+/\ s = [ active |-> {},
+  connected |-> {},
+  enrolled |-> {"launch1"},
+  id |-> [launch1 |-> "id2", launch2 |-> "-id"],
+  usedIds |-> {"id2"},
+  currentToken |-> [launch1 |-> "token1", launch2 |-> "-token"],
+  usedTokens |-> {"token1"},
+  ack |-> [id1 |-> 0, id2 |-> 0, id3 |-> 0],
+  messages |-> <<>>,
+  reply |-> [launch1 |-> "id2", launch2 |-> "-id"],
+  kind |-> [launch1 |-> "codex", launch2 |-> "codex"],
+  label |-> [launch1 |-> "codex", launch2 |-> "codex"],
+  revoked |-> {"token1"},
+  tokenInstance |->
+      [token1 |-> "launch1", token2 |-> "-instance", token3 |-> "-instance"],
+  firstId |-> [launch1 |-> "id2", launch2 |-> "-id"],
+  issuedOwner |-> [id1 |-> "-instance", id2 |-> "launch1", id3 |-> "-instance"],
+  tokenOwner |-> [token1 |-> "id2", token2 |-> "-id", token3 |-> "-id"],
+  validTokens |-> {},
+  inbox |-> [id1 |-> <<>>, id2 |-> <<>>, id3 |-> <<>>],
+  requests |->
+      [ id1 |-> ("shared-key" :> "-id"),
+        id2 |-> ("shared-key" :> "-id"),
+        id3 |-> ("shared-key" :> "-id") ],
+  authorizedAck |-> [id1 |-> 0, id2 |-> 0, id3 |-> 0],
+  heartbeats |-> [id1 |-> 0, id2 |-> 0, id3 |-> 0],
+  authorizedHeartbeats |-> [id1 |-> 0, id2 |-> 0, id3 |-> 0],
+  heartbeatDone |-> {},
+  leaseHolder |-> "-id",
+  fence |-> 0,
+  lastLease |->
+      [ caller |-> "-id",
+        holder |-> "-id",
+        supplied |-> 0,
+        current |-> 0,
+        granted |-> FALSE ] ]
+/\ action_taken = "retire"
+/\ parameters = [actor |-> "launch1", mode |-> "-", scenario |-> "identity", value |-> 0]
+/\ result = "ok"
+/\ steps = 2
+/\ observation = [ active |-> {},
+  connected |-> {},
+  currentTokens |-> [launch1 |-> "token1", launch2 |-> "-token"],
+  ids |-> [launch1 |-> "id2", launch2 |-> "-id"],
+  kinds |-> [launch1 |-> "codex", launch2 |-> "codex"],
+  labels |-> [launch1 |-> "codex", launch2 |-> "codex"],
+  replies |-> [launch1 |-> "id2", launch2 |-> "-id"] ]
+
+State 4:
+/\ enrollmentHistory = [ rejected |-> {},
+  firstToken |-> [launch1 |-> "token1", launch2 |-> "token2"],
+  retried |-> {},
+  retired |-> {"launch1"},
+  freshAfterRetire |-> TRUE,
+  safe |-> TRUE ]
+/\ s = [ active |-> {"launch2"},
+  connected |-> {"launch2"},
+  enrolled |-> {"launch1", "launch2"},
+  id |-> [launch1 |-> "id2", launch2 |-> "id2"],
+  usedIds |-> {"id2"},
+  currentToken |-> [launch1 |-> "token1", launch2 |-> "token2"],
+  usedTokens |-> {"token1", "token2"},
+  ack |-> [id1 |-> 0, id2 |-> 0, id3 |-> 0],
+  messages |-> <<>>,
+  reply |-> [launch1 |-> "id2", launch2 |-> "id2"],
+  kind |-> [launch1 |-> "codex", launch2 |-> "codex"],
+  label |-> [launch1 |-> "codex", launch2 |-> "codex"],
+  revoked |-> {"token1"},
+  tokenInstance |->
+      [token1 |-> "launch1", token2 |-> "launch2", token3 |-> "-instance"],
+  firstId |-> [launch1 |-> "id2", launch2 |-> "id2"],
+  issuedOwner |-> [id1 |-> "-instance", id2 |-> "launch1", id3 |-> "-instance"],
+  tokenOwner |-> [token1 |-> "id2", token2 |-> "id2", token3 |-> "-id"],
+  validTokens |-> {"token2"},
+  inbox |-> [id1 |-> <<>>, id2 |-> <<>>, id3 |-> <<>>],
+  requests |->
+      [ id1 |-> ("shared-key" :> "-id"),
+        id2 |-> ("shared-key" :> "-id"),
+        id3 |-> ("shared-key" :> "-id") ],
+  authorizedAck |-> [id1 |-> 0, id2 |-> 0, id3 |-> 0],
+  heartbeats |-> [id1 |-> 0, id2 |-> 0, id3 |-> 0],
+  authorizedHeartbeats |-> [id1 |-> 0, id2 |-> 0, id3 |-> 0],
+  heartbeatDone |-> {},
+  leaseHolder |-> "-id",
+  fence |-> 0,
+  lastLease |->
+      [ caller |-> "-id",
+        holder |-> "-id",
+        supplied |-> 0,
+        current |-> 0,
+        granted |-> FALSE ] ]
+/\ action_taken = "enroll"
+/\ parameters = [ actor |-> "launch2",
+  mode |-> "fresh-launch-key",
+  scenario |-> "identity",
+  value |-> 0 ]
+/\ result = "ok"
+/\ steps = 3
+/\ observation = [ active |-> {"launch2"},
+  connected |-> {"launch2"},
+  currentTokens |-> [launch1 |-> "token1", launch2 |-> "token2"],
+  ids |-> [launch1 |-> "id2", launch2 |-> "id2"],
+  kinds |-> [launch1 |-> "codex", launch2 |-> "codex"],
+  labels |-> [launch1 |-> "codex", launch2 |-> "codex"],
+  replies |-> [launch1 |-> "id2", launch2 |-> "id2"] ]
+
+8 states generated, 5 distinct states found.
+Finished in 04s at (2026-10-19 18:04:42)

@@ -45,6 +45,15 @@ enum Command {
         /// (tests and single-process debugging; the daemon must not be running)
         #[arg(long)]
         embedded: bool,
+        /// Reuse COOP_TOKEN/--token instead of enrolling a fresh instance
+        #[arg(long)]
+        resume: bool,
+        /// Kind shared by instances of the same agent application
+        #[arg(long, default_value = "agent")]
+        kind: String,
+        /// Repeatable human label; routing identity remains unique
+        #[arg(long, default_value = "agent")]
+        display_name: String,
     },
     /// Register a new agent name (or rotate an existing token)
     Register {
@@ -144,10 +153,15 @@ async fn main() -> ExitCode {
                 }
             }
         }
-        Command::McpStdio { embedded } => {
+        Command::McpStdio {
+            embedded,
+            resume,
+            kind,
+            display_name,
+        } => {
             let token = token_option(&cli.token);
             let backend = if embedded {
-                match server::DaemonState::with_config(server::DaemonConfig::new(root.clone())) {
+                match server::DaemonState::owned(server::DaemonConfig::new(root.clone())) {
                     Ok(state) => mcp::Backend::embedded(Arc::new(state)),
                     Err(error) => {
                         eprintln!("coop mcp-stdio: initialize bus root: {error}");
@@ -157,7 +171,20 @@ async fn main() -> ExitCode {
             } else {
                 mcp::Backend::uds(paths::socket_path(&root))
             };
-            match mcp::serve_stdio(mcp::CoopMcpHandler::stdio(backend, token)).await {
+            let handler = if resume {
+                mcp::CoopMcpHandler::stdio(backend, token)
+            } else {
+                match mcp::CoopMcpHandler::fresh_stdio(backend, kind, display_name, Vec::new())
+                    .await
+                {
+                    Ok(handler) => handler,
+                    Err(error) => {
+                        eprintln!("coop mcp-stdio: enrollment failed: {}", error.message);
+                        return ExitCode::FAILURE;
+                    }
+                }
+            };
+            match mcp::serve_stdio(handler).await {
                 Ok(()) => ExitCode::SUCCESS,
                 Err(error) => {
                     eprintln!("coop mcp-stdio: {error}");

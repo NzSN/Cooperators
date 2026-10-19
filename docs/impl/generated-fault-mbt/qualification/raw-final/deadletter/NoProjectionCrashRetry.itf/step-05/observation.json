@@ -1,0 +1,10 @@
+{
+  "observation": {
+    "deadRecords": [
+      1
+    ],
+    "terminal": true,
+    "up": true
+  },
+  "result": "already-projected"
+}

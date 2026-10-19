@@ -1,0 +1,17 @@
+scaffolded reviewable proposal /tmp/coop-fault-interface-z49xktnt/MBFaultWriter.mirror-interface.scaffold.json b594314ce5ade5869903071d3dd613e1c16ab21a952319366b5940b84f0aaf25
+model-interface check clean
+{"actions":[{"count":4,"id":"Initialize"},{"count":7,"id":"Start"},{"count":1,"id":"Stop"},{"count":1,"id":"TearTail"},{"count":3,"id":"WriterAppend"}],"schema":"mirrors.model-interface-coverage/v1","semanticDigest":"85e0bc7092f8b11bda66d2638fef9d40bfed7f429a971b4cc410e39949e1357b","states":16,"traces":4,"unseenActions":[]}
+Generated fault interface bridge and selected compiler checks clean
+writer fault fixture: /home/nzsn/Repos/Cooperators/docs/impl/generated-fault-mbt/d1-generated-writer-repaired/fixtures/writer-rrbG8x
+retained writer fault fixture: /home/nzsn/Repos/Cooperators/docs/impl/generated-fault-mbt/d1-generated-writer-repaired/fixtures/writer-rrbG8x
+PASS fault-writer /home/nzsn/Repos/Cooperators/spec/mbt/fault_interfaces/writer/traces/NoRejectedRepair.itf.json
+writer fault fixture: /home/nzsn/Repos/Cooperators/docs/impl/generated-fault-mbt/d1-generated-writer-repaired/fixtures/writer-0Ug4Ob
+retained writer fault fixture: /home/nzsn/Repos/Cooperators/docs/impl/generated-fault-mbt/d1-generated-writer-repaired/fixtures/writer-0Ug4Ob
+PASS fault-writer /home/nzsn/Repos/Cooperators/spec/mbt/fault_interfaces/writer/traces/NoUnownedWrite.itf.json
+writer fault fixture: /home/nzsn/Repos/Cooperators/docs/impl/generated-fault-mbt/d1-generated-writer-repaired/fixtures/writer-zlyVGr
+retained writer fault fixture: /home/nzsn/Repos/Cooperators/docs/impl/generated-fault-mbt/d1-generated-writer-repaired/fixtures/writer-zlyVGr
+PASS fault-writer /home/nzsn/Repos/Cooperators/spec/mbt/fault_interfaces/writer/traces/NoWriterHandoff.itf.json
+writer fault fixture: /home/nzsn/Repos/Cooperators/docs/impl/generated-fault-mbt/d1-generated-writer-repaired/fixtures/writer-Fo5qNT
+retained writer fault fixture: /home/nzsn/Repos/Cooperators/docs/impl/generated-fault-mbt/d1-generated-writer-repaired/fixtures/writer-Fo5qNT
+PASS fault-writer /home/nzsn/Repos/Cooperators/spec/mbt/fault_interfaces/writer/traces/NoWriterRejection.itf.json
+fault MBT: 4 traces, 0 failures

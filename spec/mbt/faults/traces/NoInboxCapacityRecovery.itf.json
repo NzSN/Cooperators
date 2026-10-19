@@ -1,0 +1,259 @@
+{
+  "#meta": {
+    "format": "ITF",
+    "goal": "NoInboxCapacityRecovery",
+    "projection": "Observation only; internal state and ghost receipts omitted",
+    "scenario": "inbox",
+    "source": "TLC MBFaults coverage counterexample",
+    "transitionBound": 8
+  },
+  "params": [],
+  "states": [
+    {
+      "#meta": {
+        "index": 0
+      },
+      "action_taken": "init",
+      "observation": {
+        "ack": {
+          "#bigint": "0"
+        },
+        "cursor": {
+          "#bigint": "0"
+        },
+        "head": {
+          "#bigint": "0"
+        },
+        "messages": [],
+        "pending": {
+          "#bigint": "0"
+        }
+      },
+      "parameters": {
+        "actor": "-",
+        "mode": "-",
+        "scenario": "inbox",
+        "value": {
+          "#bigint": "0"
+        }
+      },
+      "result": "none"
+    },
+    {
+      "#meta": {
+        "index": 1
+      },
+      "action_taken": "inbox-send",
+      "observation": {
+        "ack": {
+          "#bigint": "0"
+        },
+        "cursor": {
+          "#bigint": "0"
+        },
+        "head": {
+          "#bigint": "1"
+        },
+        "messages": [],
+        "pending": {
+          "#bigint": "1"
+        }
+      },
+      "parameters": {
+        "actor": "-",
+        "mode": "expiring",
+        "scenario": "inbox",
+        "value": {
+          "#bigint": "0"
+        }
+      },
+      "result": "ok"
+    },
+    {
+      "#meta": {
+        "index": 2
+      },
+      "action_taken": "inbox-send",
+      "observation": {
+        "ack": {
+          "#bigint": "0"
+        },
+        "cursor": {
+          "#bigint": "0"
+        },
+        "head": {
+          "#bigint": "2"
+        },
+        "messages": [],
+        "pending": {
+          "#bigint": "2"
+        }
+      },
+      "parameters": {
+        "actor": "-",
+        "mode": "expiring",
+        "scenario": "inbox",
+        "value": {
+          "#bigint": "0"
+        }
+      },
+      "result": "ok"
+    },
+    {
+      "#meta": {
+        "index": 3
+      },
+      "action_taken": "expire-inbox",
+      "observation": {
+        "ack": {
+          "#bigint": "0"
+        },
+        "cursor": {
+          "#bigint": "0"
+        },
+        "head": {
+          "#bigint": "2"
+        },
+        "messages": [],
+        "pending": {
+          "#bigint": "2"
+        }
+      },
+      "parameters": {
+        "actor": "-",
+        "mode": "controlled-clock",
+        "scenario": "inbox",
+        "value": {
+          "#bigint": "0"
+        }
+      },
+      "result": "ok"
+    },
+    {
+      "#meta": {
+        "index": 4
+      },
+      "action_taken": "inbox-send",
+      "observation": {
+        "ack": {
+          "#bigint": "0"
+        },
+        "cursor": {
+          "#bigint": "0"
+        },
+        "head": {
+          "#bigint": "2"
+        },
+        "messages": [],
+        "pending": {
+          "#bigint": "2"
+        }
+      },
+      "parameters": {
+        "actor": "-",
+        "mode": "expiring",
+        "scenario": "inbox",
+        "value": {
+          "#bigint": "0"
+        }
+      },
+      "result": "full"
+    },
+    {
+      "#meta": {
+        "index": 5
+      },
+      "action_taken": "inbox-wait",
+      "observation": {
+        "ack": {
+          "#bigint": "0"
+        },
+        "cursor": {
+          "#bigint": "2"
+        },
+        "head": {
+          "#bigint": "2"
+        },
+        "messages": [],
+        "pending": {
+          "#bigint": "2"
+        }
+      },
+      "parameters": {
+        "actor": "-",
+        "mode": "batch-one",
+        "scenario": "inbox",
+        "value": {
+          "#bigint": "0"
+        }
+      },
+      "result": "ok"
+    },
+    {
+      "#meta": {
+        "index": 6
+      },
+      "action_taken": "inbox-ack",
+      "observation": {
+        "ack": {
+          "#bigint": "2"
+        },
+        "cursor": {
+          "#bigint": "2"
+        },
+        "head": {
+          "#bigint": "2"
+        },
+        "messages": [],
+        "pending": {
+          "#bigint": "0"
+        }
+      },
+      "parameters": {
+        "actor": "-",
+        "mode": "returned-cursor",
+        "scenario": "inbox",
+        "value": {
+          "#bigint": "2"
+        }
+      },
+      "result": "ok"
+    },
+    {
+      "#meta": {
+        "index": 7
+      },
+      "action_taken": "inbox-send",
+      "observation": {
+        "ack": {
+          "#bigint": "2"
+        },
+        "cursor": {
+          "#bigint": "2"
+        },
+        "head": {
+          "#bigint": "3"
+        },
+        "messages": [],
+        "pending": {
+          "#bigint": "1"
+        }
+      },
+      "parameters": {
+        "actor": "-",
+        "mode": "expiring",
+        "scenario": "inbox",
+        "value": {
+          "#bigint": "0"
+        }
+      },
+      "result": "ok"
+    }
+  ],
+  "vars": [
+    "action_taken",
+    "parameters",
+    "result",
+    "observation"
+  ]
+}

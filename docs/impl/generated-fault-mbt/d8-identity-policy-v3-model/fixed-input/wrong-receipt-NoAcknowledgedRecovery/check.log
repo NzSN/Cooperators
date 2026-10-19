@@ -1,0 +1,114 @@
+Picked up JAVA_TOOL_OPTIONS: "-Djava.io.tmpdir=/tmp/coop-fault-detection-2dmglnx0/wrong-receipt-NoAcknowledgedRecovery/jvm-tmp"
+TLC2 Version 2.19 of 08 August 2024 (rev: 5a47802)
+Running depth-first search Model-Checking with fp 95 and seed 4287776130130264430 with 1 worker on 12 cores with 2660MB heap and 64MB offheap memory [pid: 852] (Linux 6.18.54.1-microsoft-standard-WSL2 amd64, Ubuntu 25.0.4.1 x86_64).
+Parsing file /tmp/coop-fault-detection-2dmglnx0/wrong-receipt-NoAcknowledgedRecovery/TraceProbe.tla
+Parsing file /tmp/coop-fault-detection-2dmglnx0/wrong-receipt-NoAcknowledgedRecovery/MBFaults.tla
+Parsing file /tmp/coop-fault-detection-2dmglnx0/wrong-receipt-NoAcknowledgedRecovery/jvm-tmp/TLC.tla
+Parsing file /tmp/coop-fault-detection-2dmglnx0/wrong-receipt-NoAcknowledgedRecovery/jvm-tmp/Integers.tla
+Parsing file /tmp/coop-fault-detection-2dmglnx0/wrong-receipt-NoAcknowledgedRecovery/jvm-tmp/Sequences.tla
+Parsing file /tmp/coop-fault-detection-2dmglnx0/wrong-receipt-NoAcknowledgedRecovery/jvm-tmp/FiniteSets.tla
+Parsing file /tmp/coop-fault-detection-2dmglnx0/wrong-receipt-NoAcknowledgedRecovery/jvm-tmp/Naturals.tla
+Parsing file /tmp/coop-fault-detection-2dmglnx0/wrong-receipt-NoAcknowledgedRecovery/AgentInstances.tla
+Semantic processing of module Naturals
+Semantic processing of module Integers
+Semantic processing of module Sequences
+Semantic processing of module FiniteSets
+Semantic processing of module AgentInstances
+Semantic processing of module MBFaults
+Semantic processing of module TLC
+Semantic processing of module TraceProbe
+Starting... (2026-10-19 18:04:17)
+Finished computing initial states: 1 states generated, with 1 of them distinct.
+Starting level 2: 1 states generated, 1 distinct states found.
+Starting level 3: 3 states generated, 2 distinct states found.
+Error: Invariant TraceConforms is violated.
+Error: The behavior up to this point is:
+State 1:
+/\ enrollmentHistory = [ rejected |-> {},
+  firstToken |-> [launch1 |-> "-token", launch2 |-> "-token"],
+  retried |-> {},
+  retired |-> {},
+  freshAfterRetire |-> FALSE,
+  safe |-> TRUE ]
+/\ s = [ phase |-> "ready",
+  receipts |-> <<>>,
+  rejected |-> FALSE,
+  disk |-> <<>>,
+  poisoned |-> FALSE,
+  pending |-> 0,
+  durable |-> <<>>,
+  nextSeq |-> 1,
+  nextId |-> 1,
+  failures |-> 0,
+  partialFailure |-> FALSE,
+  recovered |-> FALSE,
+  committedAfterRecovery |-> FALSE ]
+/\ action_taken = "init"
+/\ parameters = [actor |-> "-", mode |-> "-", scenario |-> "storage", value |-> 0]
+/\ result = "none"
+/\ steps = 0
+/\ observation = [ phase |-> "ready",
+  receipts |-> <<>>,
+  records |-> <<>>,
+  recoveryRequired |-> FALSE ]
+
+State 2:
+/\ enrollmentHistory = [ rejected |-> {},
+  firstToken |-> [launch1 |-> "-token", launch2 |-> "-token"],
+  retried |-> {},
+  retired |-> {},
+  freshAfterRetire |-> FALSE,
+  safe |-> TRUE ]
+/\ s = [ phase |-> "written",
+  receipts |-> <<>>,
+  rejected |-> FALSE,
+  disk |-> <<[id |-> 1, seq |-> 1]>>,
+  poisoned |-> FALSE,
+  pending |-> 1,
+  durable |-> <<>>,
+  nextSeq |-> 1,
+  nextId |-> 2,
+  failures |-> 0,
+  partialFailure |-> FALSE,
+  recovered |-> FALSE,
+  committedAfterRecovery |-> FALSE ]
+/\ action_taken = "append-bytes"
+/\ parameters = [actor |-> "-", mode |-> "whole", scenario |-> "storage", value |-> 1]
+/\ result = "pending"
+/\ steps = 1
+/\ observation = [ phase |-> "written",
+  receipts |-> <<>>,
+  records |-> <<[id |-> 1, seq |-> 1]>>,
+  recoveryRequired |-> FALSE ]
+
+State 3:
+/\ enrollmentHistory = [ rejected |-> {},
+  firstToken |-> [launch1 |-> "-token", launch2 |-> "-token"],
+  retried |-> {},
+  retired |-> {},
+  freshAfterRetire |-> FALSE,
+  safe |-> TRUE ]
+/\ s = [ phase |-> "ready",
+  receipts |-> <<[id |-> 1, seq |-> 2]>>,
+  rejected |-> FALSE,
+  disk |-> <<[id |-> 1, seq |-> 1]>>,
+  poisoned |-> FALSE,
+  pending |-> 0,
+  durable |-> <<[id |-> 1, seq |-> 1]>>,
+  nextSeq |-> 2,
+  nextId |-> 2,
+  failures |-> 0,
+  partialFailure |-> FALSE,
+  recovered |-> FALSE,
+  committedAfterRecovery |-> FALSE ]
+/\ action_taken = "sync-ok"
+/\ parameters = [actor |-> "-", mode |-> "-", scenario |-> "storage", value |-> 0]
+/\ result = "ok"
+/\ steps = 2
+/\ observation = [ phase |-> "ready",
+  receipts |-> <<[id |-> 1, seq |-> 2]>>,
+  records |-> <<[id |-> 1, seq |-> 1]>>,
+  recoveryRequired |-> FALSE ]
+
+6 states generated, 3 distinct states found.
+Finished in 05s at (2026-10-19 18:04:18)

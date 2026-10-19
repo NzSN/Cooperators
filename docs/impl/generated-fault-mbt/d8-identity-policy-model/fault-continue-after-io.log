@@ -1,0 +1,169 @@
+TLC2 Version 2.19 of 08 August 2024 (rev: 5a47802)
+Running depth-first search Model-Checking with fp 62 and seed -2147135386374332654 with 1 worker on 12 cores with 2660MB heap and 64MB offheap memory [pid: 221] (Linux 6.18.54.1-microsoft-standard-WSL2 amd64, Ubuntu 25.0.4.1 x86_64).
+Parsing file /home/nzsn/Repos/Cooperators/docs/impl/generated-fault-mbt/d8-identity-policy-model/MBFaults.tla
+Parsing file /tmp/Integers.tla
+Parsing file /tmp/Sequences.tla
+Parsing file /tmp/FiniteSets.tla
+Parsing file /tmp/Naturals.tla
+Parsing file /home/nzsn/Repos/Cooperators/docs/impl/generated-fault-mbt/d8-identity-policy-model/AgentInstances.tla
+Semantic processing of module Naturals
+Semantic processing of module Integers
+Semantic processing of module Sequences
+Semantic processing of module FiniteSets
+Semantic processing of module AgentInstances
+Semantic processing of module MBFaults
+Starting... (2026-10-19 17:53:55)
+Finished computing initial states: 1 states generated, with 1 of them distinct.
+Starting level 2: 1 states generated, 1 distinct states found.
+Starting level 3: 6 states generated, 5 distinct states found.
+Starting level 4: 30 states generated, 20 distinct states found.
+Starting level 5: 122 states generated, 58 distinct states found.
+Error: Invariant ReceiptsSurvive is violated.
+Error: The behavior up to this point is:
+State 1:
+/\ enrollmentHistory = [ rejected |-> {},
+  firstToken |-> [launch1 |-> "-token", launch2 |-> "-token"],
+  retried |-> {},
+  retired |-> {},
+  freshAfterRetire |-> FALSE,
+  safe |-> TRUE ]
+/\ s = [ rejected |-> FALSE,
+  disk |-> <<>>,
+  phase |-> "ready",
+  poisoned |-> FALSE,
+  receipts |-> <<>>,
+  pending |-> 0,
+  durable |-> <<>>,
+  nextSeq |-> 1,
+  nextId |-> 1,
+  failures |-> 0,
+  partialFailure |-> FALSE,
+  recovered |-> FALSE,
+  committedAfterRecovery |-> FALSE ]
+/\ action_taken = "init"
+/\ parameters = [actor |-> "-", value |-> 0, mode |-> "-", scenario |-> "storage"]
+/\ result = "none"
+/\ steps = 0
+/\ observation = [ records |-> <<>>,
+  phase |-> "ready",
+  recoveryRequired |-> FALSE,
+  receipts |-> <<>> ]
+
+State 2:
+/\ enrollmentHistory = [ rejected |-> {},
+  firstToken |-> [launch1 |-> "-token", launch2 |-> "-token"],
+  retried |-> {},
+  retired |-> {},
+  freshAfterRetire |-> FALSE,
+  safe |-> TRUE ]
+/\ s = [ rejected |-> FALSE,
+  disk |-> <<[id |-> 1, seq |-> 0]>>,
+  phase |-> "ready",
+  poisoned |-> FALSE,
+  receipts |-> <<>>,
+  pending |-> 0,
+  durable |-> <<>>,
+  nextSeq |-> 1,
+  nextId |-> 2,
+  failures |-> 1,
+  partialFailure |-> TRUE,
+  recovered |-> FALSE,
+  committedAfterRecovery |-> FALSE ]
+/\ action_taken = "append-bytes"
+/\ parameters = [actor |-> "-", value |-> 1, mode |-> "partial", scenario |-> "storage"]
+/\ result = "io-error"
+/\ steps = 1
+/\ observation = [ records |-> <<[id |-> 1, seq |-> 0]>>,
+  phase |-> "ready",
+  recoveryRequired |-> FALSE,
+  receipts |-> <<>> ]
+
+State 3:
+/\ enrollmentHistory = [ rejected |-> {},
+  firstToken |-> [launch1 |-> "-token", launch2 |-> "-token"],
+  retried |-> {},
+  retired |-> {},
+  freshAfterRetire |-> FALSE,
+  safe |-> TRUE ]
+/\ s = [ rejected |-> FALSE,
+  disk |-> <<[id |-> 1, seq |-> 0], [id |-> 2, seq |-> 1]>>,
+  phase |-> "written",
+  poisoned |-> FALSE,
+  receipts |-> <<>>,
+  pending |-> 2,
+  durable |-> <<>>,
+  nextSeq |-> 1,
+  nextId |-> 3,
+  failures |-> 1,
+  partialFailure |-> TRUE,
+  recovered |-> FALSE,
+  committedAfterRecovery |-> FALSE ]
+/\ action_taken = "append-bytes"
+/\ parameters = [actor |-> "-", value |-> 2, mode |-> "whole", scenario |-> "storage"]
+/\ result = "pending"
+/\ steps = 2
+/\ observation = [ records |-> <<[id |-> 1, seq |-> 0], [id |-> 2, seq |-> 1]>>,
+  phase |-> "written",
+  recoveryRequired |-> FALSE,
+  receipts |-> <<>> ]
+
+State 4:
+/\ enrollmentHistory = [ rejected |-> {},
+  firstToken |-> [launch1 |-> "-token", launch2 |-> "-token"],
+  retried |-> {},
+  retired |-> {},
+  freshAfterRetire |-> FALSE,
+  safe |-> TRUE ]
+/\ s = [ rejected |-> FALSE,
+  disk |-> <<[id |-> 1, seq |-> 0], [id |-> 2, seq |-> 1]>>,
+  phase |-> "ready",
+  poisoned |-> FALSE,
+  receipts |-> <<[id |-> 2, seq |-> 1]>>,
+  pending |-> 0,
+  durable |-> <<[id |-> 1, seq |-> 0], [id |-> 2, seq |-> 1]>>,
+  nextSeq |-> 2,
+  nextId |-> 3,
+  failures |-> 1,
+  partialFailure |-> TRUE,
+  recovered |-> FALSE,
+  committedAfterRecovery |-> FALSE ]
+/\ action_taken = "sync-ok"
+/\ parameters = [actor |-> "-", value |-> 0, mode |-> "-", scenario |-> "storage"]
+/\ result = "ok"
+/\ steps = 3
+/\ observation = [ records |-> <<[id |-> 1, seq |-> 0], [id |-> 2, seq |-> 1]>>,
+  phase |-> "ready",
+  recoveryRequired |-> FALSE,
+  receipts |-> <<[id |-> 2, seq |-> 1]>> ]
+
+State 5:
+/\ enrollmentHistory = [ rejected |-> {},
+  firstToken |-> [launch1 |-> "-token", launch2 |-> "-token"],
+  retried |-> {},
+  retired |-> {},
+  freshAfterRetire |-> FALSE,
+  safe |-> TRUE ]
+/\ s = [ rejected |-> FALSE,
+  disk |-> <<>>,
+  phase |-> "ready",
+  poisoned |-> FALSE,
+  receipts |-> <<[id |-> 2, seq |-> 1]>>,
+  pending |-> 0,
+  durable |-> <<>>,
+  nextSeq |-> 1,
+  nextId |-> 3,
+  failures |-> 1,
+  partialFailure |-> TRUE,
+  recovered |-> TRUE,
+  committedAfterRecovery |-> FALSE ]
+/\ action_taken = "recover-storage"
+/\ parameters = [actor |-> "-", value |-> 2, mode |-> "retained-prefix", scenario |-> "storage"]
+/\ result = "ok"
+/\ steps = 4
+/\ observation = [ records |-> <<>>,
+  phase |-> "ready",
+  recoveryRequired |-> FALSE,
+  receipts |-> <<[id |-> 2, seq |-> 1]>> ]
+
+378 states generated, 139 distinct states found.
+Finished in 01s at (2026-10-19 17:53:56)

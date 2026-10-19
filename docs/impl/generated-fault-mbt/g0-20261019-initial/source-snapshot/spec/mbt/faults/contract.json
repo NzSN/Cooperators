@@ -1,0 +1,246 @@
+{
+  "failureFixtureRules": [
+    "append-bytes is a real instrumented append stopped before sync, not a standalone replacement implementation of the append algorithm.",
+    "A partial write leaves a measurable raw fragment tagged with the request ID; seq=0 is its observation sentinel, not a valid stored sequence.",
+    "sync-fail injects an error after bytes were written; it must not force those bytes to disappear.",
+    "recover-storage value is a controlled retained raw-prefix length. The correct fixture never removes an acknowledged durable prefix. Filesystem power-loss behavior itself is not proved.",
+    "tear-tail is an explicit fixture mutation, not a claim of natural corruption. No normal writer append follows a torn fixture until owner restart.",
+    "project-dead and recover-dead drive the production projection/reconciliation path; they must not directly manufacture an expected dead letter in the adapter.",
+    "A repeated projection is idempotent by durable terminal identity, including a crash after append and before completion.",
+    "Crash actions discard only the modeled volatile state, preserve durable records, and actually end/reconstruct the SUT lifetime.",
+    "If an internal observation, clock, failpoint, barrier, or RPC is unavailable, omit its capability and fail replay before any operation. No emulation, inferred success, skipped profile, or predicted observation is allowed.",
+    "An unowned writer append must reach the real protected SUT operation, not be rejected by adapter bookkeeping.",
+    "Adapter children stay in its POSIX process group; the runner terminates and waits on that group after each trace. Unsupported detached-child cleanup is a port failure."
+  ],
+  "hello": {
+    "request": {
+      "id": 0,
+      "op": "hello",
+      "schema": "cooperators.fault-port/v1"
+    },
+    "requiredReplyFields": [
+      "id",
+      "schema",
+      "capabilities",
+      "implementation"
+    ]
+  },
+  "initialization": "op=init with first-state parameters; create a fresh temporary fixture for this trace and return result=none with actual initial observation.",
+  "limits": [
+    "Focused profiles are not a proof of unrestricted cross-subsystem composition.",
+    "Existing protocol and writer suites remain required.",
+    "Safety-only bounded checks do not replace the original hardening liveness checks.",
+    "A passing adapter declaration is not independent proof of its provenance; implementation and injection seams require review."
+  ],
+  "model": "MBFaults",
+  "observations": "ITF-compatible values: records are objects, sequences arrays, sets use #set, functions use #map; integers may be JSON integers or #bigint.",
+  "operation": {
+    "parameterFields": [
+      "scenario",
+      "actor",
+      "value",
+      "mode"
+    ],
+    "requestFields": [
+      "id",
+      "op",
+      "parameters"
+    ],
+    "requiredReplyFields": [
+      "id",
+      "result",
+      "observation"
+    ],
+    "result": "Exact model response category, not an unconditional ok."
+  },
+  "profiles": {
+    "deadletter": {
+      "actions": [
+        "mark-dead",
+        "project-dead",
+        "finish-projection",
+        "fail-projection",
+        "crash-dead",
+        "recover-dead"
+      ],
+      "capabilities": [
+        "terminal-append-barrier",
+        "dead-append-failure",
+        "crash-after-dead-append",
+        "production-projection-worker",
+        "read-only-raw-log-scan"
+      ],
+      "observations": {
+        "deadRecords": "all matching durable dead-letter records, including duplicates",
+        "terminal": "durable queue terminal event",
+        "up": "actual process or daemon-state lifetime"
+      }
+    },
+    "document": {
+      "actions": [
+        "begin-publish",
+        "commit-publish",
+        "abort-publish",
+        "crash-doc",
+        "recover-doc",
+        "read-doc"
+      ],
+      "capabilities": [
+        "publish-before-record-barrier",
+        "publish-failure-after-create",
+        "crash-before-publish-commit"
+      ],
+      "observations": {
+        "file": "actual file existence",
+        "up": "actual process or daemon-state lifetime",
+        "version": "authoritative committed document version; absent is 0"
+      }
+    },
+    "identity": {
+      "actions": [
+        "enroll",
+        "disconnect",
+        "reconnect",
+        "rotate-token",
+        "retire",
+        "authenticate"
+      ],
+      "capabilities": [
+        "fresh-launch-enrollment",
+        "retry-stable-enrollment",
+        "independent-session-lifetimes",
+        "token-rotation-and-revocation"
+      ],
+      "observations": {
+        "active": "actual enrolled live sessions",
+        "connected": "actual connection state",
+        "currentTokens": "issued credentials, renamed through a strict bijection",
+        "ids": "actual instance IDs from enrollment/registry",
+        "kinds": "actual kind metadata; both must be codex",
+        "labels": "actual display metadata; both are codex",
+        "replies": "actual enrollment reply IDs"
+      }
+    },
+    "inbox": {
+      "actions": [
+        "inbox-send",
+        "expire-inbox",
+        "inbox-wait",
+        "inbox-ack"
+      ],
+      "capabilities": [
+        "controlled-clock",
+        "inbox-capacity-two",
+        "wait-batch-one",
+        "authoritative-inbox-accounting"
+      ],
+      "observations": {
+        "ack": "broker acknowledgment cursor",
+        "cursor": "last wait response cursor",
+        "head": "actual inbox head",
+        "messages": "actual last wait response IDs",
+        "pending": "actual pending count"
+      }
+    },
+    "rotation": {
+      "actions": [
+        "begin-rotating-append",
+        "prepare-segment",
+        "commit-rotating-append",
+        "save-cursor",
+        "read-cursor",
+        "crash-rotation",
+        "recover-rotation"
+      ],
+      "capabilities": [
+        "encoded-record-size-fixture",
+        "rotation-threshold-fixture",
+        "segment-creation-barrier",
+        "crash-after-segment-creation",
+        "actual-cursor-read",
+        "read-only-raw-log-scan"
+      ],
+      "observations": {
+        "cursor": "saved real cursor normalized to stable segment and sequence",
+        "files": "actual ordered segments, including empty prepared segments",
+        "readBack": "actual IDs returned by the cursor read",
+        "records": "all actual durable records with measured sizes",
+        "up": "actual process or daemon-state lifetime"
+      }
+    },
+    "status": {
+      "actions": [
+        "append-status",
+        "sample-status"
+      ],
+      "capabilities": [
+        "encoded-record-size-fixture",
+        "actual-status-rpc",
+        "read-only-raw-log-scan"
+      ],
+      "observations": {
+        "records": "durable record IDs and measured encoded sizes in declared units",
+        "reported": "actual reported sequence head; missing nonempty head is -1"
+      }
+    },
+    "storage": {
+      "actions": [
+        "append-bytes",
+        "sync-ok",
+        "sync-fail",
+        "recover-storage",
+        "inspect-storage"
+      ],
+      "capabilities": [
+        "write-failure-injection",
+        "sync-failure-after-write",
+        "append-barriers",
+        "controlled-unsynced-retention",
+        "read-only-raw-log-scan",
+        "actual-append-receipts"
+      ],
+      "observations": {
+        "phase": "actual append barrier state",
+        "receipts": "Driver-owned history of actual successful API receipts; never obtained from adapter observation or reset on recovery.",
+        "records": "raw file records or tagged incomplete fragments; never the predicted log",
+        "recoveryRequired": "observed writer quarantine; may require a diagnostic test seam"
+      }
+    },
+    "writer": {
+      "actions": [
+        "start",
+        "stop",
+        "writer-append",
+        "tear-tail"
+      ],
+      "capabilities": [
+        "real-subprocesses",
+        "root-ownership",
+        "read-only-raw-log-scan",
+        "torn-tail-fixture",
+        "unowned-write-attempt"
+      ],
+      "observations": {
+        "owners": "live children responding with their own PIDs",
+        "records": "read-only disk scan; recovery records normalize to 99",
+        "rejected": "classified process startup outcomes",
+        "torn": "raw incomplete suffix"
+      }
+    }
+  },
+  "receiptReply": "On successful sync-ok, include receipt={id,seq} from the real append completion. Storage observations exclude receipts; only the driver adds its external reply history before comparison.",
+  "requiredIdentityBinding": "Successful enroll/reconnect/rotate-token replies include binding={agent_id,token} from actual backend replies/authentication; both must agree with the observed actor. The runner alone binds their abstract names bijectively. Never assign synthetic IDs to clients.",
+  "schema": "cooperators.fault-port/v1",
+  "scope": "Instrumented implementation replay contract; does not claim a Rust adapter already exists.",
+  "sizeFixture": {
+    "measurement": "Total encoded record bytes including separators, not body-text length. Pad valid fixture records to the exact sizes. Oversized records occupy a segment alone; the next append rotates.",
+    "recordSizeUnits": [
+      1,
+      3
+    ],
+    "rotateThresholdUnits": 2,
+    "tailWindowUnits": 2,
+    "unitBytes": 32768
+  },
+  "wire": "One request and response per UTF-8 NDJSON line; request IDs must match; adapter receives no expected observations."
+}

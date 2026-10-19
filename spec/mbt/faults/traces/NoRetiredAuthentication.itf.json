@@ -1,0 +1,446 @@
+{
+  "#meta": {
+    "format": "ITF",
+    "goal": "NoRetiredAuthentication",
+    "projection": "Observation only; internal state and ghost receipts omitted",
+    "scenario": "identity",
+    "source": "TLC MBFaults coverage counterexample",
+    "transitionBound": 5
+  },
+  "params": [],
+  "states": [
+    {
+      "#meta": {
+        "index": 0
+      },
+      "action_taken": "init",
+      "observation": {
+        "active": {
+          "#set": []
+        },
+        "connected": {
+          "#set": []
+        },
+        "currentTokens": {
+          "#map": [
+            [
+              "launch1",
+              "-token"
+            ],
+            [
+              "launch2",
+              "-token"
+            ]
+          ]
+        },
+        "ids": {
+          "#map": [
+            [
+              "launch1",
+              "-id"
+            ],
+            [
+              "launch2",
+              "-id"
+            ]
+          ]
+        },
+        "kinds": {
+          "#map": [
+            [
+              "launch1",
+              "codex"
+            ],
+            [
+              "launch2",
+              "codex"
+            ]
+          ]
+        },
+        "labels": {
+          "#map": [
+            [
+              "launch1",
+              "codex"
+            ],
+            [
+              "launch2",
+              "codex"
+            ]
+          ]
+        },
+        "replies": {
+          "#map": [
+            [
+              "launch1",
+              "-id"
+            ],
+            [
+              "launch2",
+              "-id"
+            ]
+          ]
+        }
+      },
+      "parameters": {
+        "actor": "-",
+        "mode": "-",
+        "scenario": "identity",
+        "value": {
+          "#bigint": "0"
+        }
+      },
+      "result": "none"
+    },
+    {
+      "#meta": {
+        "index": 1
+      },
+      "action_taken": "enroll",
+      "observation": {
+        "active": {
+          "#set": [
+            "launch1"
+          ]
+        },
+        "connected": {
+          "#set": [
+            "launch1"
+          ]
+        },
+        "currentTokens": {
+          "#map": [
+            [
+              "launch1",
+              "token2"
+            ],
+            [
+              "launch2",
+              "-token"
+            ]
+          ]
+        },
+        "ids": {
+          "#map": [
+            [
+              "launch1",
+              "id3"
+            ],
+            [
+              "launch2",
+              "-id"
+            ]
+          ]
+        },
+        "kinds": {
+          "#map": [
+            [
+              "launch1",
+              "codex"
+            ],
+            [
+              "launch2",
+              "codex"
+            ]
+          ]
+        },
+        "labels": {
+          "#map": [
+            [
+              "launch1",
+              "codex"
+            ],
+            [
+              "launch2",
+              "codex"
+            ]
+          ]
+        },
+        "replies": {
+          "#map": [
+            [
+              "launch1",
+              "id3"
+            ],
+            [
+              "launch2",
+              "-id"
+            ]
+          ]
+        }
+      },
+      "parameters": {
+        "actor": "launch1",
+        "mode": "fresh-launch-key",
+        "scenario": "identity",
+        "value": {
+          "#bigint": "0"
+        }
+      },
+      "result": "ok"
+    },
+    {
+      "#meta": {
+        "index": 2
+      },
+      "action_taken": "retire",
+      "observation": {
+        "active": {
+          "#set": []
+        },
+        "connected": {
+          "#set": []
+        },
+        "currentTokens": {
+          "#map": [
+            [
+              "launch1",
+              "token2"
+            ],
+            [
+              "launch2",
+              "-token"
+            ]
+          ]
+        },
+        "ids": {
+          "#map": [
+            [
+              "launch1",
+              "id3"
+            ],
+            [
+              "launch2",
+              "-id"
+            ]
+          ]
+        },
+        "kinds": {
+          "#map": [
+            [
+              "launch1",
+              "codex"
+            ],
+            [
+              "launch2",
+              "codex"
+            ]
+          ]
+        },
+        "labels": {
+          "#map": [
+            [
+              "launch1",
+              "codex"
+            ],
+            [
+              "launch2",
+              "codex"
+            ]
+          ]
+        },
+        "replies": {
+          "#map": [
+            [
+              "launch1",
+              "id3"
+            ],
+            [
+              "launch2",
+              "-id"
+            ]
+          ]
+        }
+      },
+      "parameters": {
+        "actor": "launch1",
+        "mode": "-",
+        "scenario": "identity",
+        "value": {
+          "#bigint": "0"
+        }
+      },
+      "result": "ok"
+    },
+    {
+      "#meta": {
+        "index": 3
+      },
+      "action_taken": "enroll",
+      "observation": {
+        "active": {
+          "#set": [
+            "launch2"
+          ]
+        },
+        "connected": {
+          "#set": [
+            "launch2"
+          ]
+        },
+        "currentTokens": {
+          "#map": [
+            [
+              "launch1",
+              "token2"
+            ],
+            [
+              "launch2",
+              "token3"
+            ]
+          ]
+        },
+        "ids": {
+          "#map": [
+            [
+              "launch1",
+              "id3"
+            ],
+            [
+              "launch2",
+              "id1"
+            ]
+          ]
+        },
+        "kinds": {
+          "#map": [
+            [
+              "launch1",
+              "codex"
+            ],
+            [
+              "launch2",
+              "codex"
+            ]
+          ]
+        },
+        "labels": {
+          "#map": [
+            [
+              "launch1",
+              "codex"
+            ],
+            [
+              "launch2",
+              "codex"
+            ]
+          ]
+        },
+        "replies": {
+          "#map": [
+            [
+              "launch1",
+              "id3"
+            ],
+            [
+              "launch2",
+              "id1"
+            ]
+          ]
+        }
+      },
+      "parameters": {
+        "actor": "launch2",
+        "mode": "fresh-launch-key",
+        "scenario": "identity",
+        "value": {
+          "#bigint": "0"
+        }
+      },
+      "result": "ok"
+    },
+    {
+      "#meta": {
+        "index": 4
+      },
+      "action_taken": "authenticate",
+      "observation": {
+        "active": {
+          "#set": [
+            "launch2"
+          ]
+        },
+        "connected": {
+          "#set": [
+            "launch2"
+          ]
+        },
+        "currentTokens": {
+          "#map": [
+            [
+              "launch1",
+              "token2"
+            ],
+            [
+              "launch2",
+              "token3"
+            ]
+          ]
+        },
+        "ids": {
+          "#map": [
+            [
+              "launch1",
+              "id3"
+            ],
+            [
+              "launch2",
+              "id1"
+            ]
+          ]
+        },
+        "kinds": {
+          "#map": [
+            [
+              "launch1",
+              "codex"
+            ],
+            [
+              "launch2",
+              "codex"
+            ]
+          ]
+        },
+        "labels": {
+          "#map": [
+            [
+              "launch1",
+              "codex"
+            ],
+            [
+              "launch2",
+              "codex"
+            ]
+          ]
+        },
+        "replies": {
+          "#map": [
+            [
+              "launch1",
+              "id3"
+            ],
+            [
+              "launch2",
+              "id1"
+            ]
+          ]
+        }
+      },
+      "parameters": {
+        "actor": "launch1",
+        "mode": "current",
+        "scenario": "identity",
+        "value": {
+          "#bigint": "0"
+        }
+      },
+      "result": "unauthenticated"
+    }
+  ],
+  "vars": [
+    "action_taken",
+    "parameters",
+    "result",
+    "observation"
+  ]
+}

@@ -1,0 +1,21 @@
+scaffolded reviewable proposal /tmp/coop-fault-interface-lso9ug7v/MBFaultIdentity.mirror-interface.scaffold.json 1e5836a3cf63f2de4446c43b9bf1e6091dc52ebe14ff17b7d65b7bcb4734df1a
+model-interface check clean
+{"actions":[{"count":2,"id":"Authenticate"},{"count":1,"id":"Disconnect"},{"count":18,"id":"Enroll"},{"count":8,"id":"Initialize"},{"count":1,"id":"Reconnect"},{"count":3,"id":"Retire"},{"count":2,"id":"RotateToken"}],"schema":"mirrors.model-interface-coverage/v1","semanticDigest":"6239df76e649d0c746e16f2bef86ad3662d1b6dd29fb369ee20bc24479571755","states":35,"traces":8,"unseenActions":[]}
+Generated fault interface bridge and selected compiler checks clean
+identity evidence: docs/impl/generated-fault-mbt/d8-identity-generated-expanded/identity/NoEnrollmentRetry.itf-01M59T17BPB94HMT2N21RFBW23
+PASS fault-identity /home/nzsn/Repos/Cooperators/spec/mbt/fault_interfaces/identity/traces/NoEnrollmentRetry.itf.json
+identity evidence: docs/impl/generated-fault-mbt/d8-identity-generated-expanded/identity/NoRetiredAuthentication.itf-01M59T17SVVGMK85W9NQ62VWNP
+PASS fault-identity /home/nzsn/Repos/Cooperators/spec/mbt/fault_interfaces/identity/traces/NoRetiredAuthentication.itf.json
+identity evidence: docs/impl/generated-fault-mbt/d8-identity-generated-expanded/identity/NoRetiredEnrollmentRetry.itf-01M59T180Z3M0DJREBGP40FDP1
+PASS fault-identity /home/nzsn/Repos/Cooperators/spec/mbt/fault_interfaces/identity/traces/NoRetiredEnrollmentRetry.itf.json
+identity evidence: docs/impl/generated-fault-mbt/d8-identity-generated-expanded/identity/NoRetiredThenFresh.itf-01M59T18665C3F41WPKN1V3SA9
+PASS fault-identity /home/nzsn/Repos/Cooperators/spec/mbt/fault_interfaces/identity/traces/NoRetiredThenFresh.itf.json
+identity evidence: docs/impl/generated-fault-mbt/d8-identity-generated-expanded/identity/NoRevokedAuthentication.itf-01M59T18BSXSBY2HZPQTS25N24
+PASS fault-identity /home/nzsn/Repos/Cooperators/spec/mbt/fault_interfaces/identity/traces/NoRevokedAuthentication.itf.json
+identity evidence: docs/impl/generated-fault-mbt/d8-identity-generated-expanded/identity/NoSameKindEnrollment.itf-01M59T18KSVFTHPYDAR3HJ3CCK
+PASS fault-identity /home/nzsn/Repos/Cooperators/spec/mbt/fault_interfaces/identity/traces/NoSameKindEnrollment.itf.json
+identity evidence: docs/impl/generated-fault-mbt/d8-identity-generated-expanded/identity/NoStableReconnect.itf-01M59T18SV25VD5YR0YNPBYG4P
+PASS fault-identity /home/nzsn/Repos/Cooperators/spec/mbt/fault_interfaces/identity/traces/NoStableReconnect.itf.json
+identity evidence: docs/impl/generated-fault-mbt/d8-identity-generated-expanded/identity/NoStaleEnrollmentRetry.itf-01M59T1903XZ4CTMDN6A6PGRRX
+PASS fault-identity /home/nzsn/Repos/Cooperators/spec/mbt/fault_interfaces/identity/traces/NoStaleEnrollmentRetry.itf.json
+fault MBT: 8 traces, 0 failures (including required rotation crash checks)

@@ -1,0 +1,111 @@
+Picked up JAVA_TOOL_OPTIONS: "-Djava.io.tmpdir=/tmp/coop-fault-detection-2dmglnx0/doc-file-gate-NoDocumentRetry/jvm-tmp"
+TLC2 Version 2.19 of 08 August 2024 (rev: 5a47802)
+Running depth-first search Model-Checking with fp 118 and seed -4898984948471649850 with 1 worker on 12 cores with 2660MB heap and 64MB offheap memory [pid: 958] (Linux 6.18.54.1-microsoft-standard-WSL2 amd64, Ubuntu 25.0.4.1 x86_64).
+Parsing file /tmp/coop-fault-detection-2dmglnx0/doc-file-gate-NoDocumentRetry/TraceProbe.tla
+Parsing file /tmp/coop-fault-detection-2dmglnx0/doc-file-gate-NoDocumentRetry/MBFaults.tla
+Parsing file /tmp/coop-fault-detection-2dmglnx0/doc-file-gate-NoDocumentRetry/jvm-tmp/TLC.tla
+Parsing file /tmp/coop-fault-detection-2dmglnx0/doc-file-gate-NoDocumentRetry/jvm-tmp/Integers.tla
+Parsing file /tmp/coop-fault-detection-2dmglnx0/doc-file-gate-NoDocumentRetry/jvm-tmp/Sequences.tla
+Parsing file /tmp/coop-fault-detection-2dmglnx0/doc-file-gate-NoDocumentRetry/jvm-tmp/FiniteSets.tla
+Parsing file /tmp/coop-fault-detection-2dmglnx0/doc-file-gate-NoDocumentRetry/jvm-tmp/Naturals.tla
+Parsing file /tmp/coop-fault-detection-2dmglnx0/doc-file-gate-NoDocumentRetry/AgentInstances.tla
+Semantic processing of module Naturals
+Semantic processing of module Integers
+Semantic processing of module Sequences
+Semantic processing of module FiniteSets
+Semantic processing of module AgentInstances
+Semantic processing of module MBFaults
+Semantic processing of module TLC
+Semantic processing of module TraceProbe
+Starting... (2026-10-19 18:04:23)
+Finished computing initial states: 1 states generated, with 1 of them distinct.
+Starting level 2: 1 states generated, 1 distinct states found.
+Starting level 3: 2 states generated, 2 distinct states found.
+Starting level 4: 4 states generated, 3 distinct states found.
+Error: Invariant TraceConforms is violated.
+Error: The behavior up to this point is:
+State 1:
+/\ enrollmentHistory = [ rejected |-> {},
+  firstToken |-> [launch1 |-> "-token", launch2 |-> "-token"],
+  retried |-> {},
+  retired |-> {},
+  freshAfterRetire |-> FALSE,
+  safe |-> TRUE ]
+/\ s = [ file |-> FALSE,
+  up |-> TRUE,
+  version |-> 0,
+  phase |-> "idle",
+  failures |-> 0,
+  crashes |-> 0,
+  interrupted |-> FALSE ]
+/\ action_taken = "init"
+/\ parameters = [actor |-> "-", mode |-> "-", scenario |-> "document", value |-> 0]
+/\ result = "none"
+/\ steps = 0
+/\ observation = [file |-> FALSE, up |-> TRUE, version |-> 0]
+
+State 2:
+/\ enrollmentHistory = [ rejected |-> {},
+  firstToken |-> [launch1 |-> "-token", launch2 |-> "-token"],
+  retried |-> {},
+  retired |-> {},
+  freshAfterRetire |-> FALSE,
+  safe |-> TRUE ]
+/\ s = [ file |-> TRUE,
+  up |-> TRUE,
+  version |-> 0,
+  phase |-> "preparing",
+  failures |-> 0,
+  crashes |-> 0,
+  interrupted |-> FALSE ]
+/\ action_taken = "begin-publish"
+/\ parameters = [actor |-> "-", mode |-> "same-name", scenario |-> "document", value |-> 0]
+/\ result = "pending"
+/\ steps = 1
+/\ observation = [file |-> TRUE, up |-> TRUE, version |-> 0]
+
+State 3:
+/\ enrollmentHistory = [ rejected |-> {},
+  firstToken |-> [launch1 |-> "-token", launch2 |-> "-token"],
+  retried |-> {},
+  retired |-> {},
+  freshAfterRetire |-> FALSE,
+  safe |-> TRUE ]
+/\ s = [ file |-> TRUE,
+  up |-> TRUE,
+  version |-> 0,
+  phase |-> "idle",
+  failures |-> 1,
+  crashes |-> 0,
+  interrupted |-> FALSE ]
+/\ action_taken = "abort-publish"
+/\ parameters = [ actor |-> "-",
+  mode |-> "after-file-before-record",
+  scenario |-> "document",
+  value |-> 0 ]
+/\ result = "io-error"
+/\ steps = 2
+/\ observation = [file |-> TRUE, up |-> TRUE, version |-> 0]
+
+State 4:
+/\ enrollmentHistory = [ rejected |-> {},
+  firstToken |-> [launch1 |-> "-token", launch2 |-> "-token"],
+  retried |-> {},
+  retired |-> {},
+  freshAfterRetire |-> FALSE,
+  safe |-> TRUE ]
+/\ s = [ file |-> TRUE,
+  up |-> TRUE,
+  version |-> 0,
+  phase |-> "idle",
+  failures |-> 1,
+  crashes |-> 0,
+  interrupted |-> FALSE ]
+/\ action_taken = "begin-publish"
+/\ parameters = [actor |-> "-", mode |-> "same-name", scenario |-> "document", value |-> 0]
+/\ result = "exists"
+/\ steps = 3
+/\ observation = [file |-> TRUE, up |-> TRUE, version |-> 0]
+
+7 states generated, 4 distinct states found.
+Finished in 05s at (2026-10-19 18:04:24)

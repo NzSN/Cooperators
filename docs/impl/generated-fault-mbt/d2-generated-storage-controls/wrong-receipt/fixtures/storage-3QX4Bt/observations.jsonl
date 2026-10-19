@@ -1,0 +1,6 @@
+{"diagnosticControl":"storage-wrong-receipt","observation":{"receipts":[],"records":[]},"reportedObservation":{"receipts":[],"records":[]},"result":"none"}
+{"diagnosticControl":"storage-wrong-receipt","observation":{"receipts":[],"records":[{"id":1,"seq":0}]},"reportedObservation":{"receipts":[],"records":[{"id":1,"seq":0}]},"result":"io-error"}
+{"diagnosticControl":"storage-wrong-receipt","observation":{"receipts":[],"records":[{"id":1,"seq":0}]},"reportedObservation":{"receipts":[],"records":[{"id":1,"seq":0}]},"result":"recovery-required"}
+{"diagnosticControl":"storage-wrong-receipt","observation":{"receipts":[],"records":[]},"reportedObservation":{"receipts":[],"records":[]},"result":"ok"}
+{"diagnosticControl":"storage-wrong-receipt","observation":{"receipts":[],"records":[{"id":2,"seq":1}]},"reportedObservation":{"receipts":[],"records":[{"id":2,"seq":1}]},"result":"pending"}
+{"diagnosticControl":"storage-wrong-receipt","observation":{"receipts":[{"id":2,"seq":1}],"records":[{"id":2,"seq":1}]},"reportedObservation":{"receipts":[{"id":2,"seq":2}],"records":[{"id":2,"seq":1}]},"result":"ok"}

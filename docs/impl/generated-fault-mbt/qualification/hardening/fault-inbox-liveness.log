@@ -1,0 +1,126 @@
+TLC2 Version 2.19 of 08 August 2024 (rev: 5a47802)
+Running breadth-first search Model-Checking with fp 71 and seed -3373543324723812113 with 1 worker on 12 cores with 2660MB heap and 64MB offheap memory [pid: 376608] (Linux 6.18.54.1-microsoft-standard-WSL2 amd64, Ubuntu 25.0.4.1 x86_64, MSBDiskFPSet, DiskStateQueue).
+Parsing file /home/nzsn/Repos/Cooperators/docs/impl/generated-fault-mbt/qualification/hardening/CooperatorsHardening.tla
+Parsing file /tmp/Integers.tla
+Parsing file /tmp/Sequences.tla
+Parsing file /tmp/FiniteSets.tla
+Parsing file /tmp/Naturals.tla
+Semantic processing of module Naturals
+Semantic processing of module Integers
+Semantic processing of module Sequences
+Semantic processing of module FiniteSets
+Semantic processing of module CooperatorsHardening
+Starting... (2026-10-19 17:56:54)
+Implied-temporal checking--satisfiability problem has 1 branches.
+Computing initial states...
+Finished computing initial states: 1 distinct state generated at 2026-10-19 17:56:55.
+Progress(13) at 2026-10-19 17:56:56: 265 states generated, 132 distinct states found, 0 states left on queue.
+Checking temporal properties for the complete state space with 132 total distinct states at (2026-10-19 17:56:56)
+Error: Temporal properties were violated.
+
+Error: The following behavior constitutes a counter-example:
+
+State 1: <Initial predicate>
+st = [ sent |-> 0,
+  ack |-> 0,
+  expired |-> {},
+  cursor |-> 0,
+  scanned |-> 0,
+  delivered |-> {},
+  waited |-> FALSE ]
+
+State 2: <Next line 197, col 9 to line 203, col 50 of module CooperatorsHardening>
+st = [ sent |-> 1,
+  ack |-> 0,
+  expired |-> {},
+  cursor |-> 0,
+  scanned |-> 0,
+  delivered |-> {},
+  waited |-> FALSE ]
+
+State 3: <Next line 197, col 9 to line 203, col 50 of module CooperatorsHardening>
+st = [ sent |-> 2,
+  ack |-> 0,
+  expired |-> {},
+  cursor |-> 0,
+  scanned |-> 0,
+  delivered |-> {},
+  waited |-> FALSE ]
+
+State 4: <Next line 197, col 9 to line 203, col 50 of module CooperatorsHardening>
+st = [ sent |-> 2,
+  ack |-> 0,
+  expired |-> {2},
+  cursor |-> 0,
+  scanned |-> 0,
+  delivered |-> {},
+  waited |-> FALSE ]
+
+State 5: <Next line 197, col 9 to line 203, col 50 of module CooperatorsHardening>
+st = [ sent |-> 2,
+  ack |-> 0,
+  expired |-> {2},
+  cursor |-> 1,
+  scanned |-> 1,
+  delivered |-> {1},
+  waited |-> TRUE ]
+
+State 6: <Next line 197, col 9 to line 203, col 50 of module CooperatorsHardening>
+st = [ sent |-> 2,
+  ack |-> 1,
+  expired |-> {2},
+  cursor |-> 1,
+  scanned |-> 1,
+  delivered |-> {1},
+  waited |-> FALSE ]
+
+State 7: <Next line 197, col 9 to line 203, col 50 of module CooperatorsHardening>
+st = [ sent |-> 3,
+  ack |-> 1,
+  expired |-> {2},
+  cursor |-> 1,
+  scanned |-> 1,
+  delivered |-> {1},
+  waited |-> FALSE ]
+
+State 8: <Next line 197, col 9 to line 203, col 50 of module CooperatorsHardening>
+st = [ sent |-> 3,
+  ack |-> 1,
+  expired |-> {2, 3},
+  cursor |-> 1,
+  scanned |-> 1,
+  delivered |-> {1},
+  waited |-> FALSE ]
+
+State 9: <Next line 197, col 9 to line 203, col 50 of module CooperatorsHardening>
+st = [ sent |-> 3,
+  ack |-> 1,
+  expired |-> {1, 2, 3},
+  cursor |-> 1,
+  scanned |-> 1,
+  delivered |-> {1},
+  waited |-> FALSE ]
+
+State 10: <Next line 197, col 9 to line 203, col 50 of module CooperatorsHardening>
+st = [ sent |-> 3,
+  ack |-> 1,
+  expired |-> {1, 2, 3},
+  cursor |-> 1,
+  scanned |-> 3,
+  delivered |-> {},
+  waited |-> TRUE ]
+
+State 11: <Next line 197, col 9 to line 203, col 50 of module CooperatorsHardening>
+st = [ sent |-> 3,
+  ack |-> 1,
+  expired |-> {1, 2, 3},
+  cursor |-> 1,
+  scanned |-> 3,
+  delivered |-> {},
+  waited |-> FALSE ]
+
+Back to state 10: <Next line 197, col 9 to line 203, col 50 of module CooperatorsHardening>
+
+Finished checking temporal properties in 00s at 2026-10-19 17:56:56
+265 states generated, 132 distinct states found, 0 states left on queue.
+Finished in 03s at (2026-10-19 17:56:56)

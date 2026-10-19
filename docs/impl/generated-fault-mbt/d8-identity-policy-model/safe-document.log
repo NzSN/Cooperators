@@ -1,0 +1,31 @@
+TLC2 Version 2.19 of 08 August 2024 (rev: 5a47802)
+Running depth-first search Model-Checking with fp 23 and seed -5816426291494493424 with 1 worker on 12 cores with 2660MB heap and 64MB offheap memory [pid: 581] (Linux 6.18.54.1-microsoft-standard-WSL2 amd64, Ubuntu 25.0.4.1 x86_64).
+Parsing file /home/nzsn/Repos/Cooperators/docs/impl/generated-fault-mbt/d8-identity-policy-model/MBFaults.tla
+Parsing file /tmp/Integers.tla
+Parsing file /tmp/Sequences.tla
+Parsing file /tmp/FiniteSets.tla
+Parsing file /tmp/Naturals.tla
+Parsing file /home/nzsn/Repos/Cooperators/docs/impl/generated-fault-mbt/d8-identity-policy-model/AgentInstances.tla
+Semantic processing of module Naturals
+Semantic processing of module Integers
+Semantic processing of module Sequences
+Semantic processing of module FiniteSets
+Semantic processing of module AgentInstances
+Semantic processing of module MBFaults
+Starting... (2026-10-19 17:54:29)
+Finished computing initial states: 1 states generated, with 1 of them distinct.
+Starting level 2: 1 states generated, 1 distinct states found.
+Starting level 3: 4 states generated, 4 distinct states found.
+Starting level 4: 15 states generated, 12 distinct states found.
+Starting level 5: 47 states generated, 29 distinct states found.
+Starting level 6: 121 states generated, 56 distinct states found.
+Starting level 7: 260 states generated, 94 distinct states found.
+Starting level 8: 488 states generated, 139 distinct states found.
+Starting level 9: 819 states generated, 188 distinct states found.
+Model checking completed. No error has been found.
+  Estimates of the probability that TLC did not check all reachable states
+  because two distinct states had the same fingerprint:
+  calculated (optimistic):  val = 9.8E-15
+  based on the actual fingerprints:  val = 8.8E-6
+1150 states generated, 188 distinct states found.
+Finished in 02s at (2026-10-19 17:54:30)

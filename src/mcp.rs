@@ -83,6 +83,18 @@ pub struct ToolSpec {
 /// The complete v1 tool surface, in design §9 order.
 pub const TOOL_SPECS: &[ToolSpec] = &[
     ToolSpec {
+        tool: "coop_instance_metadata",
+        method: "instance_metadata",
+        description: "Read the current instance's unique identity and display metadata.",
+        schema: schema_heartbeat,
+    },
+    ToolSpec {
+        tool: "coop_retire_agent",
+        method: "retire_agent",
+        description: "Permanently retire this instance and revoke its credential.",
+        schema: schema_heartbeat,
+    },
+    ToolSpec {
         tool: "coop_register_agent",
         method: "register_agent",
         description:
@@ -406,6 +418,39 @@ pub struct CoopMcpHandler {
 }
 
 impl CoopMcpHandler {
+    /// Provisions one fresh identity per independent stdio process launch.
+    /// A single random launch key is reused for transport retries so a lost
+    /// enrollment response cannot allocate a second identity.
+    pub async fn fresh_stdio(
+        backend: Backend,
+        kind: String,
+        display_name: String,
+        capabilities: Vec<String>,
+    ) -> Result<Self, RpcError> {
+        let launch_key =
+            crate::registry::new_token().map_err(crate::error::BrokerError::into_rpc_error)?;
+        let params = json!({"launch_key": launch_key, "kind": kind,
+            "display_name": display_name, "capabilities": capabilities});
+        let mut attempts = 0;
+        let reply = loop {
+            match backend.call("enroll_agent", params.clone()).await {
+                Ok(reply) => break reply,
+                Err(error)
+                    if error.code == ErrorCode::DaemonUnreachable.rpc_code() && attempts < 2 =>
+                {
+                    attempts += 1;
+                    tokio::time::sleep(Duration::from_millis(25)).await;
+                }
+                Err(error) => return Err(error),
+            }
+        };
+        let token = reply
+            .get("token")
+            .and_then(Value::as_str)
+            .ok_or_else(|| RpcError::internal("enrollment reply has no credential"))?;
+        Ok(Self::stdio(backend, Some(token.to_string())))
+    }
+
     /// Handler for `coop mcp-stdio`.
     pub fn stdio(backend: Backend, token: Option<String>) -> Self {
         Self::stdio_with_limit(backend, token, MAX_STDIO_MESSAGE_BYTES)
@@ -507,6 +552,9 @@ impl CoopMcpHandler {
                             *self.token.write().await = Some(new_token.to_string());
                         }
                     }
+                }
+                if spec.method == "retire_agent" && self.auth == AuthMode::Captured {
+                    *self.token.write().await = None;
                 }
                 CallToolResult::structured(result).into()
             }

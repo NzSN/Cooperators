@@ -1,0 +1,100 @@
+# Usage statistics is OFF. We care about your privacy.
+# If you want to help our project, consider enabling statistics with config --enable-stats=true.
+
+Output directory: /tmp/coop-writer-model-check-6gy96v28/_apalache-out/MBWriters.tla/2026-10-19T11-39-23_16606907098708960037
+# APALACHE version: 0.62.2 | build: f0dec98                       I@11:39:23.697
+Tuning:                                                           I@11:39:23.712
+PASS #0: SanyParser                                               I@11:39:24.003
+PASS #1: TypeCheckerSnowcat                                       I@11:39:24.416
+ > Running Snowcat .::.                                           I@11:39:24.416
+ > Your types are purrfect!                                       I@11:39:25.109
+ > All expressions are typed                                      I@11:39:25.110
+PASS #2: ConfigurationPass                                        I@11:39:25.111
+  > Set the initialization predicate to Init                      I@11:39:25.116
+  > Set the transition predicate to Next                          I@11:39:25.116
+  > Set the constant initialization predicate to CInit            I@11:39:25.117
+  > Set an invariant to RootWriterExclusive                       I@11:39:25.117
+PASS #3: DesugarerPass                                            I@11:39:25.123
+  > Desugaring...                                                 I@11:39:25.123
+PASS #4: InlinePass                                               I@11:39:25.334
+Leaving only relevant operators: CInit, CInitPrimed, Init, InitPrimed, Next, RootWriterExclusive I@11:39:25.334
+PASS #5: TemporalPass                                             I@11:39:25.414
+  > Rewriting temporal operators...                               I@11:39:25.414
+  > No temporal property specified, nothing to encode             I@11:39:25.415
+PASS #6: InlinePass                                               I@11:39:25.415
+Leaving only relevant operators: CInit, CInitPrimed, Init, InitPrimed, Next, RootWriterExclusive I@11:39:25.416
+PASS #7: PrimingPass                                              I@11:39:25.425
+  > Introducing CInitPrimed for CInit'                            I@11:39:25.430
+  > Introducing InitPrimed for Init'                              I@11:39:25.438
+PASS #8: VCGen                                                    I@11:39:25.439
+  > Producing verification conditions from the invariant RootWriterExclusive I@11:39:25.440
+  > VCGen produced 1 verification condition(s)                    I@11:39:25.450
+PASS #9: PreprocessingPass                                        I@11:39:25.453
+  > Before preprocessing: unique renaming                         I@11:39:25.453
+ > Applying standard transformations:                             I@11:39:25.466
+  > PrimePropagation                                              I@11:39:25.467
+  > Desugarer                                                     I@11:39:25.469
+  > UniqueRenamer                                                 I@11:39:25.472
+  > Normalizer                                                    I@11:39:25.478
+  > SetMembershipSimplifier                                       I@11:39:25.486
+  > Keramelizer                                                   I@11:39:25.490
+  > After preprocessing: UniqueRenamer                            I@11:39:25.499
+PASS #10: TransitionFinderPass                                    I@11:39:25.507
+  > Found 1 initializing transitions                              I@11:39:25.532
+  > Found 4 transitions                                           I@11:39:25.546
+  > Found constant initializer CInit                              I@11:39:25.547
+  > Applying unique renaming                                      I@11:39:25.549
+PASS #11: OptimizationPass                                        I@11:39:25.554
+ > Applying optimizations:                                        I@11:39:25.559
+  > ConstSimplifier                                               I@11:39:25.560
+  > ExprOptimizer                                                 I@11:39:25.566
+  > SetMembershipSimplifier                                       I@11:39:25.572
+  > ConstSimplifier                                               I@11:39:25.573
+PASS #12: AnalysisPass                                            I@11:39:25.578
+ > Marking skolemizable existentials and sets to be expanded...   I@11:39:25.580
+  > Skolemization                                                 I@11:39:25.580
+  > Expansion                                                     I@11:39:25.582
+  > Remove unused let-in defs                                     I@11:39:25.585
+ > Running analyzers...                                           I@11:39:25.589
+  > Introduced expression grades                                  I@11:39:25.593
+PASS #13: BoundedChecker                                          I@11:39:25.594
+State 0: Checking 1 state invariants                              I@11:39:25.994
+State 0: state invariant 0 holds.                                 I@11:39:26.063
+Step 0: picking a transition out of 1 transition(s)               I@11:39:26.069
+State 1: Checking 1 state invariants                              I@11:39:26.306
+State 1: state invariant 0 holds.                                 I@11:39:26.325
+Step 1: Transition #1 is disabled                                 I@11:39:26.340
+Step 1: Transition #2 is disabled                                 I@11:39:26.381
+Step 1: Transition #3 is disabled                                 I@11:39:26.405
+Step 1: picking a transition out of 1 transition(s)               I@11:39:26.406
+State 2: Checking 1 state invariants                              I@11:39:26.524
+State 2: state invariant 0 holds.                                 I@11:39:26.536
+State 2: Checking 1 state invariants                              I@11:39:26.554
+State 2: state invariant 0 holds.                                 I@11:39:26.570
+Step 2: Transition #3 is disabled                                 I@11:39:26.629
+Step 2: picking a transition out of 3 transition(s)               I@11:39:26.630
+State 3: Checking 1 state invariants                              I@11:39:26.749
+State 3: state invariant 0 holds.                                 I@11:39:26.766
+State 3: Checking 1 state invariants                              I@11:39:26.780
+State 3: state invariant 0 holds.                                 I@11:39:26.792
+Step 3: picking a transition out of 4 transition(s)               I@11:39:26.852
+State 4: Checking 1 state invariants                              I@11:39:26.979
+State 4: state invariant 0 holds.                                 I@11:39:26.996
+State 4: Checking 1 state invariants                              I@11:39:27.009
+State 4: state invariant 0 holds.                                 I@11:39:27.021
+Step 4: picking a transition out of 4 transition(s)               I@11:39:27.086
+State 5: Checking 1 state invariants                              I@11:39:27.186
+State 5: state invariant 0 holds.                                 I@11:39:27.205
+State 5: Checking 1 state invariants                              I@11:39:27.223
+State 5: state invariant 0 holds.                                 I@11:39:27.244
+Step 5: picking a transition out of 4 transition(s)               I@11:39:27.337
+State 6: Checking 1 state invariants                              I@11:39:27.437
+State 6: state invariant 0 holds.                                 I@11:39:27.463
+State 6: Checking 1 state invariants                              I@11:39:27.516
+State 6: state invariant 0 holds.                                 I@11:39:27.525
+Step 6: picking a transition out of 4 transition(s)               I@11:39:27.627
+The outcome is: NoError                                           I@11:39:27.655
+Checker reports no error up to computation length 6               I@11:39:27.656
+It took me 0 days  0 hours  0 min  3 sec                          I@11:39:27.658
+Total time: 3.956 sec                                             I@11:39:27.658
+EXITCODE: OK

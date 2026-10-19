@@ -1,0 +1,567 @@
+{
+  "#meta": {
+    "format": "ITF",
+    "format-description": "https://apalache-mc.org/docs/adr/015adr-trace.html",
+    "description": "Created by Apalache on Mon Oct 19 11:36:13 CST 2026",
+    "varTypes": {
+      "seqs": "(Str -> Seq(Int))",
+      "rejected": "(Str -> Bool)",
+      "writers": "(Str -> Str)",
+      "torn": "(Str -> Bool)",
+      "valid": "(Str -> Bool)",
+      "rejectedReadOnly": "Bool",
+      "parameters": "{ root: Str, socket: Str, writer: Str }",
+      "records": "(Str -> Seq(Str))",
+      "action_taken": "Str"
+    }
+  },
+  "params": [
+    "Roots",
+    "Writers"
+  ],
+  "vars": [
+    "seqs",
+    "rejected",
+    "writers",
+    "torn",
+    "valid",
+    "rejectedReadOnly",
+    "parameters",
+    "records",
+    "action_taken"
+  ],
+  "states": [
+    {
+      "#meta": {
+        "index": 0
+      },
+      "action_taken": "init",
+      "parameters": {
+        "root": "-",
+        "socket": "-",
+        "writer": "-"
+      },
+      "records": {
+        "#map": [
+          [
+            "r1",
+            []
+          ],
+          [
+            "r2",
+            []
+          ]
+        ]
+      },
+      "rejected": {
+        "#map": [
+          [
+            "w1",
+            false
+          ],
+          [
+            "w2",
+            false
+          ]
+        ]
+      },
+      "rejectedReadOnly": true,
+      "seqs": {
+        "#map": [
+          [
+            "r1",
+            []
+          ],
+          [
+            "r2",
+            []
+          ]
+        ]
+      },
+      "torn": {
+        "#map": [
+          [
+            "r1",
+            false
+          ],
+          [
+            "r2",
+            false
+          ]
+        ]
+      },
+      "valid": {
+        "#map": [
+          [
+            "r1",
+            true
+          ],
+          [
+            "r2",
+            true
+          ]
+        ]
+      },
+      "writers": {
+        "#map": [
+          [
+            "w1",
+            "-"
+          ],
+          [
+            "w2",
+            "-"
+          ]
+        ]
+      }
+    },
+    {
+      "#meta": {
+        "index": 1
+      },
+      "action_taken": "start",
+      "parameters": {
+        "root": "r1",
+        "socket": "same",
+        "writer": "w1"
+      },
+      "records": {
+        "#map": [
+          [
+            "r1",
+            []
+          ],
+          [
+            "r2",
+            []
+          ]
+        ]
+      },
+      "rejected": {
+        "#map": [
+          [
+            "w1",
+            false
+          ],
+          [
+            "w2",
+            false
+          ]
+        ]
+      },
+      "rejectedReadOnly": true,
+      "seqs": {
+        "#map": [
+          [
+            "r1",
+            []
+          ],
+          [
+            "r2",
+            []
+          ]
+        ]
+      },
+      "torn": {
+        "#map": [
+          [
+            "r1",
+            false
+          ],
+          [
+            "r2",
+            false
+          ]
+        ]
+      },
+      "valid": {
+        "#map": [
+          [
+            "r1",
+            true
+          ],
+          [
+            "r2",
+            true
+          ]
+        ]
+      },
+      "writers": {
+        "#map": [
+          [
+            "w1",
+            "r1"
+          ],
+          [
+            "w2",
+            "-"
+          ]
+        ]
+      }
+    },
+    {
+      "#meta": {
+        "index": 2
+      },
+      "action_taken": "send",
+      "parameters": {
+        "root": "-",
+        "socket": "-",
+        "writer": "w1"
+      },
+      "records": {
+        "#map": [
+          [
+            "r1",
+            [
+              "w1"
+            ]
+          ],
+          [
+            "r2",
+            []
+          ]
+        ]
+      },
+      "rejected": {
+        "#map": [
+          [
+            "w1",
+            false
+          ],
+          [
+            "w2",
+            false
+          ]
+        ]
+      },
+      "rejectedReadOnly": true,
+      "seqs": {
+        "#map": [
+          [
+            "r1",
+            [
+              {
+                "#bigint": "1"
+              }
+            ]
+          ],
+          [
+            "r2",
+            []
+          ]
+        ]
+      },
+      "torn": {
+        "#map": [
+          [
+            "r1",
+            false
+          ],
+          [
+            "r2",
+            false
+          ]
+        ]
+      },
+      "valid": {
+        "#map": [
+          [
+            "r1",
+            true
+          ],
+          [
+            "r2",
+            true
+          ]
+        ]
+      },
+      "writers": {
+        "#map": [
+          [
+            "w1",
+            "r1"
+          ],
+          [
+            "w2",
+            "-"
+          ]
+        ]
+      }
+    },
+    {
+      "#meta": {
+        "index": 3
+      },
+      "action_taken": "stop",
+      "parameters": {
+        "root": "-",
+        "socket": "-",
+        "writer": "w1"
+      },
+      "records": {
+        "#map": [
+          [
+            "r1",
+            [
+              "w1"
+            ]
+          ],
+          [
+            "r2",
+            []
+          ]
+        ]
+      },
+      "rejected": {
+        "#map": [
+          [
+            "w1",
+            false
+          ],
+          [
+            "w2",
+            false
+          ]
+        ]
+      },
+      "rejectedReadOnly": true,
+      "seqs": {
+        "#map": [
+          [
+            "r1",
+            [
+              {
+                "#bigint": "1"
+              }
+            ]
+          ],
+          [
+            "r2",
+            []
+          ]
+        ]
+      },
+      "torn": {
+        "#map": [
+          [
+            "r1",
+            false
+          ],
+          [
+            "r2",
+            false
+          ]
+        ]
+      },
+      "valid": {
+        "#map": [
+          [
+            "r1",
+            true
+          ],
+          [
+            "r2",
+            true
+          ]
+        ]
+      },
+      "writers": {
+        "#map": [
+          [
+            "w1",
+            "-"
+          ],
+          [
+            "w2",
+            "-"
+          ]
+        ]
+      }
+    },
+    {
+      "#meta": {
+        "index": 4
+      },
+      "action_taken": "start",
+      "parameters": {
+        "root": "r1",
+        "socket": "same",
+        "writer": "w2"
+      },
+      "records": {
+        "#map": [
+          [
+            "r1",
+            [
+              "w1"
+            ]
+          ],
+          [
+            "r2",
+            []
+          ]
+        ]
+      },
+      "rejected": {
+        "#map": [
+          [
+            "w1",
+            false
+          ],
+          [
+            "w2",
+            false
+          ]
+        ]
+      },
+      "rejectedReadOnly": true,
+      "seqs": {
+        "#map": [
+          [
+            "r1",
+            [
+              {
+                "#bigint": "1"
+              }
+            ]
+          ],
+          [
+            "r2",
+            []
+          ]
+        ]
+      },
+      "torn": {
+        "#map": [
+          [
+            "r1",
+            false
+          ],
+          [
+            "r2",
+            false
+          ]
+        ]
+      },
+      "valid": {
+        "#map": [
+          [
+            "r1",
+            true
+          ],
+          [
+            "r2",
+            true
+          ]
+        ]
+      },
+      "writers": {
+        "#map": [
+          [
+            "w1",
+            "-"
+          ],
+          [
+            "w2",
+            "r1"
+          ]
+        ]
+      }
+    },
+    {
+      "#meta": {
+        "index": 5
+      },
+      "action_taken": "send",
+      "parameters": {
+        "root": "-",
+        "socket": "-",
+        "writer": "w2"
+      },
+      "records": {
+        "#map": [
+          [
+            "r1",
+            [
+              "w1",
+              "w2"
+            ]
+          ],
+          [
+            "r2",
+            []
+          ]
+        ]
+      },
+      "rejected": {
+        "#map": [
+          [
+            "w1",
+            false
+          ],
+          [
+            "w2",
+            false
+          ]
+        ]
+      },
+      "rejectedReadOnly": true,
+      "seqs": {
+        "#map": [
+          [
+            "r1",
+            [
+              {
+                "#bigint": "1"
+              },
+              {
+                "#bigint": "2"
+              }
+            ]
+          ],
+          [
+            "r2",
+            []
+          ]
+        ]
+      },
+      "torn": {
+        "#map": [
+          [
+            "r1",
+            false
+          ],
+          [
+            "r2",
+            false
+          ]
+        ]
+      },
+      "valid": {
+        "#map": [
+          [
+            "r1",
+            true
+          ],
+          [
+            "r2",
+            true
+          ]
+        ]
+      },
+      "writers": {
+        "#map": [
+          [
+            "w1",
+            "-"
+          ],
+          [
+            "w2",
+            "r1"
+          ]
+        ]
+      }
+    }
+  ]
+}

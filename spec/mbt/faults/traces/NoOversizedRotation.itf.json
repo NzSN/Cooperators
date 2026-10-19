@@ -1,0 +1,366 @@
+{
+  "#meta": {
+    "format": "ITF",
+    "goal": "NoOversizedRotation",
+    "projection": "Observation only; internal state and ghost receipts omitted",
+    "scenario": "rotation",
+    "source": "TLC MBFaults coverage counterexample",
+    "transitionBound": 12
+  },
+  "params": [],
+  "states": [
+    {
+      "#meta": {
+        "index": 0
+      },
+      "action_taken": "init",
+      "observation": {
+        "cursor": {
+          "file": {
+            "#bigint": "1"
+          },
+          "seq": {
+            "#bigint": "0"
+          }
+        },
+        "files": [
+          []
+        ],
+        "readBack": [],
+        "records": [],
+        "up": true
+      },
+      "parameters": {
+        "actor": "-",
+        "mode": "-",
+        "scenario": "rotation",
+        "value": {
+          "#bigint": "0"
+        }
+      },
+      "result": "none"
+    },
+    {
+      "#meta": {
+        "index": 1
+      },
+      "action_taken": "begin-rotating-append",
+      "observation": {
+        "cursor": {
+          "file": {
+            "#bigint": "1"
+          },
+          "seq": {
+            "#bigint": "0"
+          }
+        },
+        "files": [
+          []
+        ],
+        "readBack": [],
+        "records": [],
+        "up": true
+      },
+      "parameters": {
+        "actor": "-",
+        "mode": "encoded-record-units",
+        "scenario": "rotation",
+        "value": {
+          "#bigint": "3"
+        }
+      },
+      "result": "pending"
+    },
+    {
+      "#meta": {
+        "index": 2
+      },
+      "action_taken": "prepare-segment",
+      "observation": {
+        "cursor": {
+          "file": {
+            "#bigint": "1"
+          },
+          "seq": {
+            "#bigint": "0"
+          }
+        },
+        "files": [
+          []
+        ],
+        "readBack": [],
+        "records": [],
+        "up": true
+      },
+      "parameters": {
+        "actor": "-",
+        "mode": "before-record-commit",
+        "scenario": "rotation",
+        "value": {
+          "#bigint": "0"
+        }
+      },
+      "result": "pending"
+    },
+    {
+      "#meta": {
+        "index": 3
+      },
+      "action_taken": "commit-rotating-append",
+      "observation": {
+        "cursor": {
+          "file": {
+            "#bigint": "1"
+          },
+          "seq": {
+            "#bigint": "0"
+          }
+        },
+        "files": [
+          [
+            {
+              "#bigint": "1"
+            }
+          ]
+        ],
+        "readBack": [],
+        "records": [
+          {
+            "bytes": {
+              "#bigint": "3"
+            },
+            "id": {
+              "#bigint": "1"
+            }
+          }
+        ],
+        "up": true
+      },
+      "parameters": {
+        "actor": "-",
+        "mode": "-",
+        "scenario": "rotation",
+        "value": {
+          "#bigint": "0"
+        }
+      },
+      "result": "ok"
+    },
+    {
+      "#meta": {
+        "index": 4
+      },
+      "action_taken": "begin-rotating-append",
+      "observation": {
+        "cursor": {
+          "file": {
+            "#bigint": "1"
+          },
+          "seq": {
+            "#bigint": "0"
+          }
+        },
+        "files": [
+          [
+            {
+              "#bigint": "1"
+            }
+          ]
+        ],
+        "readBack": [],
+        "records": [
+          {
+            "bytes": {
+              "#bigint": "3"
+            },
+            "id": {
+              "#bigint": "1"
+            }
+          }
+        ],
+        "up": true
+      },
+      "parameters": {
+        "actor": "-",
+        "mode": "encoded-record-units",
+        "scenario": "rotation",
+        "value": {
+          "#bigint": "1"
+        }
+      },
+      "result": "pending"
+    },
+    {
+      "#meta": {
+        "index": 5
+      },
+      "action_taken": "prepare-segment",
+      "observation": {
+        "cursor": {
+          "file": {
+            "#bigint": "1"
+          },
+          "seq": {
+            "#bigint": "0"
+          }
+        },
+        "files": [
+          [
+            {
+              "#bigint": "1"
+            }
+          ],
+          []
+        ],
+        "readBack": [],
+        "records": [
+          {
+            "bytes": {
+              "#bigint": "3"
+            },
+            "id": {
+              "#bigint": "1"
+            }
+          }
+        ],
+        "up": true
+      },
+      "parameters": {
+        "actor": "-",
+        "mode": "before-record-commit",
+        "scenario": "rotation",
+        "value": {
+          "#bigint": "0"
+        }
+      },
+      "result": "pending"
+    },
+    {
+      "#meta": {
+        "index": 6
+      },
+      "action_taken": "commit-rotating-append",
+      "observation": {
+        "cursor": {
+          "file": {
+            "#bigint": "1"
+          },
+          "seq": {
+            "#bigint": "0"
+          }
+        },
+        "files": [
+          [
+            {
+              "#bigint": "1"
+            }
+          ],
+          [
+            {
+              "#bigint": "2"
+            }
+          ]
+        ],
+        "readBack": [],
+        "records": [
+          {
+            "bytes": {
+              "#bigint": "3"
+            },
+            "id": {
+              "#bigint": "1"
+            }
+          },
+          {
+            "bytes": {
+              "#bigint": "1"
+            },
+            "id": {
+              "#bigint": "2"
+            }
+          }
+        ],
+        "up": true
+      },
+      "parameters": {
+        "actor": "-",
+        "mode": "-",
+        "scenario": "rotation",
+        "value": {
+          "#bigint": "0"
+        }
+      },
+      "result": "ok"
+    },
+    {
+      "#meta": {
+        "index": 7
+      },
+      "action_taken": "read-cursor",
+      "observation": {
+        "cursor": {
+          "file": {
+            "#bigint": "1"
+          },
+          "seq": {
+            "#bigint": "0"
+          }
+        },
+        "files": [
+          [
+            {
+              "#bigint": "1"
+            }
+          ],
+          [
+            {
+              "#bigint": "2"
+            }
+          ]
+        ],
+        "readBack": [
+          {
+            "#bigint": "1"
+          },
+          {
+            "#bigint": "2"
+          }
+        ],
+        "records": [
+          {
+            "bytes": {
+              "#bigint": "3"
+            },
+            "id": {
+              "#bigint": "1"
+            }
+          },
+          {
+            "bytes": {
+              "#bigint": "1"
+            },
+            "id": {
+              "#bigint": "2"
+            }
+          }
+        ],
+        "up": true
+      },
+      "parameters": {
+        "actor": "-",
+        "mode": "all-segments",
+        "scenario": "rotation",
+        "value": {
+          "#bigint": "0"
+        }
+      },
+      "result": "ok"
+    }
+  ],
+  "vars": [
+    "action_taken",
+    "parameters",
+    "result",
+    "observation"
+  ]
+}

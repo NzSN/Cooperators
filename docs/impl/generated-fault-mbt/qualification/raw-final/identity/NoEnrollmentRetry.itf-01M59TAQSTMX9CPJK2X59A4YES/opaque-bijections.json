@@ -1,0 +1,11 @@
+{
+  "credential_hashes": {
+    "sha256:32d5b254816f66ae40c6f3094bdcbe254699bf22a61bcb7d63b218a87dbd6420": "token2",
+    "sha256:a11df9aa536cd64c4ffed54b1c11b70a77fa726d35a01e3ad0f3c08d634522ba": "token1"
+  },
+  "ids": {
+    "01M59TAQVRZWR0C1TPQN3S6GFE": "id1",
+    "01M59TAQW2VN4Q343Y2J6Z5ZRF": "id2"
+  },
+  "rule": "independent first issuance order; repeated actual values keep their original alias"
+}

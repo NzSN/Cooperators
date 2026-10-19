@@ -7,9 +7,9 @@
 //!
 //! Cursors address `(file, seq)` as a JSON object:
 //! `{"file":"channels/build.jsonl","seq":17}`. The string forms `"17"`,
-//! `"seq:17"`, and `"channels/build.jsonl#17"` are also accepted. Rotation is
-//! not implemented yet; a cursor naming any other file is rejected rather
-//! than silently repositioned.
+//! `"seq:17"`, and `"channels/build.jsonl#17"` are also accepted. Rotation
+//! preserves this logical stream name across physical segments. Sequence
+//! numbers remain global, so saved cursors continue through rotation.
 
 use std::collections::HashMap;
 use std::sync::Arc;
@@ -26,7 +26,7 @@ use crate::id;
 use crate::messaging::{parse_cursor, validate_channel_name, DAEMON_SENDER};
 use crate::registry::AgentIdentity;
 use crate::server::DaemonState;
-use crate::storage::LogFile;
+use crate::storage::{segment_paths, LogFile};
 
 /// Maximum records one `read_channel` call returns.
 pub const MAX_READ_LIMIT: usize = 1000;
@@ -97,13 +97,15 @@ pub struct ChannelReadBatch {
 }
 
 /// Opens (creating if needed) one channel and rebuilds its indexes.
-pub(crate) fn open_channel(
+pub(crate) fn open_channel_rotating(
     root: &std::path::Path,
     channel: &str,
+    rotation_bytes: u64,
 ) -> Result<ChannelLog, BrokerError> {
     validate_channel_name(channel)?;
     let path = root.join("channels").join(format!("{channel}.jsonl"));
-    let (mut log, report) = LogFile::open(&path).map_err(BrokerError::from)?;
+    let (mut log, report) =
+        LogFile::open_rotating(&path, rotation_bytes).map_err(BrokerError::from)?;
     let truncated = report.was_truncated();
     let truncated_bytes = report.truncated_bytes;
     let last_valid_offset = report.last_valid_offset;
@@ -221,7 +223,10 @@ impl DaemonState {
         let _send_guard = self.send_lock.lock().await;
         let mut logs = self.channel_logs.lock().await;
         if !logs.contains_key(channel) {
-            logs.insert(channel.to_string(), open_channel(&self.root, channel)?);
+            logs.insert(
+                channel.to_string(),
+                open_channel_rotating(&self.root, channel, self.config().log_rotation_bytes)?,
+            );
         }
         let log = logs
             .get_mut(channel)
@@ -293,18 +298,22 @@ impl DaemonState {
             let (messages, head, notified) = {
                 let mut logs = self.channel_logs.lock().await;
                 if !logs.contains_key(channel) {
-                    if !self
-                        .root
-                        .join("channels")
-                        .join(format!("{channel}.jsonl"))
-                        .exists()
+                    if segment_paths(self.root.join("channels").join(format!("{channel}.jsonl")))?
+                        .is_empty()
                     {
                         return Err(BrokerError::application(
                             ErrorCode::NotFound,
                             format!("unknown channel {channel:?}"),
                         ));
                     }
-                    logs.insert(channel.to_string(), open_channel(&self.root, channel)?);
+                    logs.insert(
+                        channel.to_string(),
+                        open_channel_rotating(
+                            &self.root,
+                            channel,
+                            self.config().log_rotation_bytes,
+                        )?,
+                    );
                 }
                 let log = logs
                     .get_mut(channel)

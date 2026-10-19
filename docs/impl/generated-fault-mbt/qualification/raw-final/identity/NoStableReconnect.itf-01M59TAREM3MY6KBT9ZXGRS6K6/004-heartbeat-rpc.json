@@ -1,0 +1,15 @@
+{
+  "method": "heartbeat",
+  "request": {
+    "token": {
+      "credential_hash": "sha256:67ff088088d137c83e73cd40574fb921b2a178e95ca0f1950cc10c18580a5111"
+    }
+  },
+  "response": {
+    "result": {
+      "agent_id": "01M59TARGPPCTKWFBX4MY4QC8R",
+      "last_seen": "2026-10-19T10:11:49.939Z",
+      "state": "active"
+    }
+  }
+}

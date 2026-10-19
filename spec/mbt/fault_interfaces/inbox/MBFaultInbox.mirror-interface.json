@@ -1,0 +1,117 @@
+{
+  "actions": [
+    {
+      "id": "ExpireInbox",
+      "inputs": [],
+      "wireAction": "expire-inbox",
+      "wireAliases": []
+    },
+    {
+      "id": "InboxAck",
+      "inputs": [
+        {
+          "expectedType": {
+            "kind": "int"
+          },
+          "from": {
+            "path": [
+              {
+                "field": "parameters"
+              },
+              {
+                "field": "value"
+              }
+            ],
+            "root": "stepParameters"
+          },
+          "id": "Value"
+        }
+      ],
+      "wireAction": "inbox-ack",
+      "wireAliases": []
+    },
+    {
+      "id": "InboxSend",
+      "inputs": [],
+      "wireAction": "inbox-send",
+      "wireAliases": []
+    },
+    {
+      "id": "InboxWait",
+      "inputs": [],
+      "wireAction": "inbox-wait",
+      "wireAliases": []
+    }
+  ],
+  "initializers": [
+    {
+      "id": "Initialize",
+      "inputs": [],
+      "wireAction": "init",
+      "wireAliases": []
+    }
+  ],
+  "interfaceVersion": "1.0.0",
+  "model": {
+    "module": "MBFaultInbox",
+    "source": "spec/MBFaultInbox.tla"
+  },
+  "observations": [
+    {
+      "expectedType": {
+        "fields": [
+          {
+            "type": {
+              "kind": "int"
+            },
+            "wireName": "ack"
+          },
+          {
+            "type": {
+              "kind": "int"
+            },
+            "wireName": "cursor"
+          },
+          {
+            "type": {
+              "kind": "int"
+            },
+            "wireName": "head"
+          },
+          {
+            "type": {
+              "element": {
+                "kind": "int"
+              },
+              "kind": "seq"
+            },
+            "wireName": "messages"
+          },
+          {
+            "type": {
+              "kind": "int"
+            },
+            "wireName": "pending"
+          }
+        ],
+        "kind": "record"
+      },
+      "id": "Observation",
+      "provenance": "implementation",
+      "wireName": "observation"
+    },
+    {
+      "expectedType": {
+        "kind": "str"
+      },
+      "id": "Result",
+      "provenance": "implementation",
+      "wireName": "result"
+    }
+  ],
+  "schema": "mirrors.model-interface/v1",
+  "wire": {
+    "actionVariable": "action_taken",
+    "parameterVariable": "parameters"
+  }
+}

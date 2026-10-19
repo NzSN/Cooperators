@@ -1,0 +1,77 @@
+{
+  "observation": {
+    "active": {
+      "#set": [
+        "launch1",
+        "launch2"
+      ]
+    },
+    "connected": {
+      "#set": [
+        "launch1",
+        "launch2"
+      ]
+    },
+    "currentTokens": {
+      "#map": [
+        [
+          "launch1",
+          "token3"
+        ],
+        [
+          "launch2",
+          "token2"
+        ]
+      ]
+    },
+    "ids": {
+      "#map": [
+        [
+          "launch1",
+          "id1"
+        ],
+        [
+          "launch2",
+          "id2"
+        ]
+      ]
+    },
+    "kinds": {
+      "#map": [
+        [
+          "launch1",
+          "codex"
+        ],
+        [
+          "launch2",
+          "codex"
+        ]
+      ]
+    },
+    "labels": {
+      "#map": [
+        [
+          "launch1",
+          "codex"
+        ],
+        [
+          "launch2",
+          "codex"
+        ]
+      ]
+    },
+    "replies": {
+      "#map": [
+        [
+          "launch1",
+          "id1"
+        ],
+        [
+          "launch2",
+          "id2"
+        ]
+      ]
+    }
+  },
+  "result": "ok"
+}

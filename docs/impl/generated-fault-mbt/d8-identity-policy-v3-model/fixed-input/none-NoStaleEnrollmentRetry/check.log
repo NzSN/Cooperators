@@ -1,0 +1,33 @@
+Picked up JAVA_TOOL_OPTIONS: "-Djava.io.tmpdir=/tmp/coop-fault-detection-2dmglnx0/none-NoStaleEnrollmentRetry/jvm-tmp"
+TLC2 Version 2.19 of 08 August 2024 (rev: 5a47802)
+Running depth-first search Model-Checking with fp 53 and seed -8946450384104416607 with 1 worker on 12 cores with 2660MB heap and 64MB offheap memory [pid: 579] (Linux 6.18.54.1-microsoft-standard-WSL2 amd64, Ubuntu 25.0.4.1 x86_64).
+Parsing file /tmp/coop-fault-detection-2dmglnx0/none-NoStaleEnrollmentRetry/TraceProbe.tla
+Parsing file /tmp/coop-fault-detection-2dmglnx0/none-NoStaleEnrollmentRetry/MBFaults.tla
+Parsing file /tmp/coop-fault-detection-2dmglnx0/none-NoStaleEnrollmentRetry/jvm-tmp/TLC.tla
+Parsing file /tmp/coop-fault-detection-2dmglnx0/none-NoStaleEnrollmentRetry/jvm-tmp/Integers.tla
+Parsing file /tmp/coop-fault-detection-2dmglnx0/none-NoStaleEnrollmentRetry/jvm-tmp/Sequences.tla
+Parsing file /tmp/coop-fault-detection-2dmglnx0/none-NoStaleEnrollmentRetry/jvm-tmp/FiniteSets.tla
+Parsing file /tmp/coop-fault-detection-2dmglnx0/none-NoStaleEnrollmentRetry/jvm-tmp/Naturals.tla
+Parsing file /tmp/coop-fault-detection-2dmglnx0/none-NoStaleEnrollmentRetry/AgentInstances.tla
+Semantic processing of module Naturals
+Semantic processing of module Integers
+Semantic processing of module Sequences
+Semantic processing of module FiniteSets
+Semantic processing of module AgentInstances
+Semantic processing of module MBFaults
+Semantic processing of module TLC
+Semantic processing of module TraceProbe
+Starting... (2026-10-19 18:04:02)
+Finished computing initial states: 1 states generated, with 1 of them distinct.
+Starting level 2: 1 states generated, 1 distinct states found.
+Starting level 3: 2 states generated, 2 distinct states found.
+Starting level 4: 4 states generated, 3 distinct states found.
+Starting level 5: 7 states generated, 4 distinct states found.
+Starting level 6: 11 states generated, 5 distinct states found.
+Model checking completed. No error has been found.
+  Estimates of the probability that TLC did not check all reachable states
+  because two distinct states had the same fingerprint:
+  calculated (optimistic):  val = 3.0E-18
+  based on the actual fingerprints:  val = 5.0E-9
+16 states generated, 5 distinct states found.
+Finished in 05s at (2026-10-19 18:04:03)

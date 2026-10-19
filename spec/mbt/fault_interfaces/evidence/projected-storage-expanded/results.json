@@ -1,0 +1,68 @@
+{
+  "bridgeManifestSha256": "867f853a666ec5e5d646b7827b4fb51977a26ab76b356f00d0242842e5e67435",
+  "cases": [
+    {
+      "case": "none-NoAcknowledgedRecovery",
+      "configSha256": "1144bad5a0f1482a15a927a3d1933425fa3437c7ae0ac3d660a498b36d01a151",
+      "fault": "none",
+      "logSha256": "0f896941779da26c904972e75c3eb65bd28586ca0e82d9b9b44ccb6e39cd1354",
+      "probeSha256": "ea77abebf49e4ba27c605339e52d7bf0fe98cdc1fd1323fca2ff6b14c30c9564",
+      "trace": "NoAcknowledgedRecovery"
+    },
+    {
+      "case": "none-NoPartialRecovery",
+      "configSha256": "1144bad5a0f1482a15a927a3d1933425fa3437c7ae0ac3d660a498b36d01a151",
+      "fault": "none",
+      "logSha256": "0e1ebd04592f83ef61355949922e35d99a68004571bcebad2083cab28631c75b",
+      "probeSha256": "bd2e7f91ca7976375b93495ccbcf6b5384ea102d292078375f0ca517ed2645c7",
+      "trace": "NoPartialRecovery"
+    },
+    {
+      "case": "none-NoStorageRecovery",
+      "configSha256": "1144bad5a0f1482a15a927a3d1933425fa3437c7ae0ac3d660a498b36d01a151",
+      "fault": "none",
+      "logSha256": "daa0dbf68f2b82ae512ef6fdabd3876d67f48333b335a46e08eec8b166066cf3",
+      "probeSha256": "4b74c4b060e03f7d37f9b605e459cfcfdb03f1ad0411966c725d0f23c863b327",
+      "trace": "NoStorageRecovery"
+    },
+    {
+      "case": "continue-after-io-NoStorageRecovery",
+      "configSha256": "d404932bbf781484ec098d6f893a85fc8a0bc06e0be329fd3bf1f4f5f74411f2",
+      "fault": "continue-after-io",
+      "logSha256": "c1107422bbe437594f9756bc0b10c596df173bc40a392a4b28fd5c438b2071e1",
+      "probeSha256": "4b74c4b060e03f7d37f9b605e459cfcfdb03f1ad0411966c725d0f23c863b327",
+      "trace": "NoStorageRecovery"
+    },
+    {
+      "case": "ack-before-sync-NoStorageRecovery",
+      "configSha256": "da8416454b9de68892a978e33bf403cf41edc16ecb02cc845c7d9f297139e595",
+      "fault": "ack-before-sync",
+      "logSha256": "8b8e87676d4bd8497e65cf64468314b211295a47c02054456b7b259b099fc6a5",
+      "probeSha256": "4b74c4b060e03f7d37f9b605e459cfcfdb03f1ad0411966c725d0f23c863b327",
+      "trace": "NoStorageRecovery"
+    },
+    {
+      "case": "lose-ack-NoAcknowledgedRecovery",
+      "configSha256": "84303fa816b4bc0c219bf02cded71d16ba31157845f3837bca408471728588c6",
+      "fault": "lose-ack",
+      "logSha256": "5bff1c0bea66c8f9e8632d471bafdef8a7724c33c3a744d9d3482a078c4350b0",
+      "probeSha256": "ea77abebf49e4ba27c605339e52d7bf0fe98cdc1fd1323fca2ff6b14c30c9564",
+      "trace": "NoAcknowledgedRecovery"
+    },
+    {
+      "case": "wrong-receipt-NoAcknowledgedRecovery",
+      "configSha256": "3c6165434f3cb44d66b7ef75fbfb3861b089a68d1ecbd8d016d1ff6d06987a52",
+      "fault": "wrong-receipt",
+      "logSha256": "0bf44e67091c80f6726ce77ce8d0b4ff5f62e48ae6938cfcc5f5f9da90f119d1",
+      "probeSha256": "ea77abebf49e4ba27c605339e52d7bf0fe98cdc1fd1323fca2ff6b14c30c9564",
+      "trace": "NoAcknowledgedRecovery"
+    }
+  ],
+  "profiles": [
+    "storage"
+  ],
+  "proofBoundary": "Bounded fixed-input checks against canonical MBFaults.Next; no implementation runtime execution.",
+  "registrySha256": "988b77892ff9899daba2789ef258a863b9b9f3619257343674d8e76b7b739301",
+  "schema": "cooperators.generated-interface-projection-check/v1",
+  "sourceSha256": "117e081f6f540f628862c7c77dbfe1f41705a732abeee91c68a4721096c3222a"
+}

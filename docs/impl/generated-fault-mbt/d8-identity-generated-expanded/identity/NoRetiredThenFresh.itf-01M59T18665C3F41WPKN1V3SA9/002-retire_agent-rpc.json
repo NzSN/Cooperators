@@ -1,0 +1,18 @@
+{
+  "method": "retire_agent",
+  "request": {
+    "token": {
+      "credential_hash": "sha256:4a8d71aa2bd5d20cc6fdd6f760d5d69bfa0947cdd1fc5b5fb2bb7e7cf8077eb1"
+    }
+  },
+  "response": {
+    "result": {
+      "agent_id": "01M59T189DY6A5E1AABWRT6XT5",
+      "capabilities": [],
+      "display_name": "codex",
+      "kind": "codex",
+      "name": "instance-01M59T189DY6A5E1AABWRT6XT5",
+      "retired": true
+    }
+  }
+}

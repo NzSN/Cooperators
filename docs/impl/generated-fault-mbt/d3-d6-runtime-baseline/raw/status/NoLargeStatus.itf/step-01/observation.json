@@ -1,0 +1,12 @@
+{
+  "observation": {
+    "records": [
+      {
+        "bytes": 3,
+        "id": 1
+      }
+    ],
+    "reported": -1
+  },
+  "result": "ok"
+}

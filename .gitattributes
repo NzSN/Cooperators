@@ -1,0 +1,5 @@
+# Keep checked source and hash-bound evidence stable across checkout platforms.
+* text=auto eol=lf
+/spec/** -text
+/docs/impl/generated-fault-mbt/** -text
+/.agents/chatdocs/** -text

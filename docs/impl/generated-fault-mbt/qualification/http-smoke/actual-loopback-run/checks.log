@@ -1,0 +1,20 @@
+PASS running executable matches selected binary
+PASS UDS status identifies own daemon PID
+PASS actual HTTP health reports listener true
+PASS missing bearer /mcp rejected 401
+PASS missing bearer /metrics rejected 401
+PASS invalid bearer /mcp rejected 401
+PASS invalid bearer /metrics rejected 401
+PASS bearer MCP initialize over TCP
+PASS MCP initialized notification accepted
+PASS TCP tools/list exposes all 23 source catalog tools
+PASS HTTP instance metadata matches actual UDS enrollment
+PASS TCP heartbeat reports enrolled active instance
+PASS bearer metrics served by actual HTTP listener
+PASS TCP retirement returns same retired instance
+PASS retired bearer /mcp rejected 401
+PASS retired bearer /metrics rejected 401
+PASS UDS also rejects retired credential
+PASS HTTP listener remains healthy after retirement
+PASS retirement persisted in actual registry
+Actual TCP HTTP smoke: 19 checks; evidence docs/impl/generated-fault-mbt/qualification/http-smoke/actual-loopback-run

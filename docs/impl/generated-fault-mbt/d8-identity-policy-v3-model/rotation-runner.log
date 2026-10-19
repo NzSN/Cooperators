@@ -1,0 +1,9 @@
+tlc evidence: /home/nzsn/Repos/Cooperators/docs/impl/generated-fault-mbt/d8-identity-policy-v3-model/profiles/rotation
+PASS safe-rotation; 4617 distinct states (/home/nzsn/Repos/Cooperators/docs/impl/generated-fault-mbt/d8-identity-policy-v3-model/profiles/rotation/safe-rotation.log)
+PASS fault-no-rotation; 205 distinct states (/home/nzsn/Repos/Cooperators/docs/impl/generated-fault-mbt/d8-identity-policy-v3-model/profiles/rotation/fault-no-rotation.log)
+PASS fault-last-segment; 376 distinct states (/home/nzsn/Repos/Cooperators/docs/impl/generated-fault-mbt/d8-identity-policy-v3-model/profiles/rotation/fault-last-segment.log)
+PASS fault-rotation-loss; 111 distinct states (/home/nzsn/Repos/Cooperators/docs/impl/generated-fault-mbt/d8-identity-policy-v3-model/profiles/rotation/fault-rotation-loss.log)
+PASS witness-NoRotatedCursor; 3037 distinct states (/home/nzsn/Repos/Cooperators/docs/impl/generated-fault-mbt/d8-identity-policy-v3-model/profiles/rotation/witness-NoRotatedCursor.log)
+PASS witness-NoRotationCrashRecovery; 3045 distinct states (/home/nzsn/Repos/Cooperators/docs/impl/generated-fault-mbt/d8-identity-policy-v3-model/profiles/rotation/witness-NoRotationCrashRecovery.log)
+PASS witness-NoOversizedRotation; 377 distinct states (/home/nzsn/Repos/Cooperators/docs/impl/generated-fault-mbt/d8-identity-policy-v3-model/profiles/rotation/witness-NoOversizedRotation.log)
+7/7 checks passed

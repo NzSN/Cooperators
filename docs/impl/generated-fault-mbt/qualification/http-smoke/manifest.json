@@ -1,0 +1,23 @@
+{
+  "checks": 19,
+  "childNoLongerRunning": true,
+  "files": {
+    "README.md": "b8d0190079e0db4d7defe1cee1f8dce356021feb04f27b8e20ff137761303de8",
+    "actual-loopback-run/checks.log": "3e128258807a3fe43797f0139a31ed02a249ef15ba77f002490872a6e4888a97",
+    "actual-loopback-run/daemon.stderr.log": "4b0b3c95e7828ab2973d43d0721925e52d840d8a10c34428f5369b11705a5ebc",
+    "actual-loopback-run/daemon.stdout.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "actual-loopback-run/raw-root/agents/01M59TF7QH20FCBA2SY183VF7N/inbox.jsonl": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "actual-loopback-run/raw-root/channels/#presence.jsonl": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "actual-loopback-run/raw-root/registry.json": "320795f19371cabe2b503188f8819b6f31fba54540aa1dc7248410bbb4cb8f57",
+    "actual-loopback-run/raw-root/run/owner.lock": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "actual-loopback-run/results.json": "438a1efae7e9bd5f57fa3d0cb07180582266d7b90430e670042d047e35421d1e",
+    "actual-loopback-run/wire-redacted.jsonl": "3856d102daa8fc8d17ee3e51dd782bd7e0713f24c57eb0968292914c849d7562",
+    "http_smoke.py": "407423afbfc46e5df68d6a610ce67dec1514a710a15df388d9c6b086c908da2a"
+  },
+  "matchesFrozenNormalBinary": true,
+  "passed": true,
+  "qualificationFreezeSha256": "697079cc8405ef2463a12a409026075fe154f649dd9623ae21ad6854b42f5f1b",
+  "rawRootCopyVerified": true,
+  "runningExecutableSha256": "38d17d79c3c2d5ac72fbd189e13bb9f61064f4255a34d8578ce7460553589ee6",
+  "schema": "cooperators.actual-http-smoke-artifacts/v1"
+}

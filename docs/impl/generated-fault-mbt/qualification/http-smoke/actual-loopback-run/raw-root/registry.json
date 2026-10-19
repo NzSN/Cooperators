@@ -1,0 +1,18 @@
+{
+  "v": 1,
+  "agents": {
+    "instance-01M59TF7QH20FCBA2SY183VF7N": {
+      "agent_id": "01M59TF7QH20FCBA2SY183VF7N",
+      "token_hash": "sha256:262a049dd102a074ad4db94f9dfbdf1bde30ce9607edcb70ff37d3daefb73c1a",
+      "kind": "codex",
+      "capabilities": [],
+      "registered_at": "2026-10-19T10:14:16.561Z",
+      "display_name": "http-smoke",
+      "launch_key_hash": "sha256:262a049dd102a074ad4db94f9dfbdf1bde30ce9607edcb70ff37d3daefb73c1a",
+      "retired": true
+    }
+  },
+  "revoked_token_hashes": [
+    "sha256:262a049dd102a074ad4db94f9dfbdf1bde30ce9607edcb70ff37d3daefb73c1a"
+  ]
+}

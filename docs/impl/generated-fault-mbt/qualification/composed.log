@@ -1,0 +1,34 @@
+tlc evidence: /home/nzsn/Repos/Cooperators/docs/impl/generated-fault-mbt/qualification/composed
+PASS safe-messaging; 2900 distinct states (/home/nzsn/Repos/Cooperators/docs/impl/generated-fault-mbt/qualification/composed/safe-messaging.log)
+PASS fault-sender-spoof; 1027 distinct states (/home/nzsn/Repos/Cooperators/docs/impl/generated-fault-mbt/qualification/composed/fault-sender-spoof.log)
+PASS fault-foreign-ack; 6189 distinct states (/home/nzsn/Repos/Cooperators/docs/impl/generated-fault-mbt/qualification/composed/fault-foreign-ack.log)
+PASS fault-kind-dedupe; 4869 distinct states (/home/nzsn/Repos/Cooperators/docs/impl/generated-fault-mbt/qualification/composed/fault-kind-dedupe.log)
+PASS fault-crash-forgets-identity; 5349 distinct states (/home/nzsn/Repos/Cooperators/docs/impl/generated-fault-mbt/qualification/composed/fault-crash-forgets-identity.log)
+PASS fault-bad-ack; 1147 distinct states (/home/nzsn/Repos/Cooperators/docs/impl/generated-fault-mbt/qualification/composed/fault-bad-ack.log)
+PASS fault-identity-rebind; 1147 distinct states (/home/nzsn/Repos/Cooperators/docs/impl/generated-fault-mbt/qualification/composed/fault-identity-rebind.log)
+PASS witness-NoSameKindExchange; 275 distinct states (/home/nzsn/Repos/Cooperators/docs/impl/generated-fault-mbt/qualification/composed/witness-NoSameKindExchange.log)
+PASS witness-NoCrashAndResume; 2894 distinct states (/home/nzsn/Repos/Cooperators/docs/impl/generated-fault-mbt/qualification/composed/witness-NoCrashAndResume.log)
+PASS safe-queue; 2208 distinct states (/home/nzsn/Repos/Cooperators/docs/impl/generated-fault-mbt/qualification/composed/safe-queue.log)
+PASS fault-missing-auth; 14 distinct states (/home/nzsn/Repos/Cooperators/docs/impl/generated-fault-mbt/qualification/composed/fault-missing-auth.log)
+PASS fault-revoked-token; 940 distinct states (/home/nzsn/Repos/Cooperators/docs/impl/generated-fault-mbt/qualification/composed/fault-revoked-token.log)
+PASS fault-foreign-task; 4849 distinct states (/home/nzsn/Repos/Cooperators/docs/impl/generated-fault-mbt/qualification/composed/fault-foreign-task.log)
+PASS fault-stale-fence; 1036 distinct states (/home/nzsn/Repos/Cooperators/docs/impl/generated-fault-mbt/qualification/composed/fault-stale-fence.log)
+PASS witness-NoForeignTaskRejection; 287 distinct states (/home/nzsn/Repos/Cooperators/docs/impl/generated-fault-mbt/qualification/composed/witness-NoForeignTaskRejection.log)
+PASS safe-documents; 3538 distinct states (/home/nzsn/Repos/Cooperators/docs/impl/generated-fault-mbt/qualification/composed/safe-documents.log)
+PASS fault-foreign-doc; 21225 distinct states (/home/nzsn/Repos/Cooperators/docs/impl/generated-fault-mbt/qualification/composed/fault-foreign-doc.log)
+PASS fault-cas-bypass; 1333 distinct states (/home/nzsn/Repos/Cooperators/docs/impl/generated-fault-mbt/qualification/composed/fault-cas-bypass.log)
+PASS witness-NoForeignDocRejection; 1117 distinct states (/home/nzsn/Repos/Cooperators/docs/impl/generated-fault-mbt/qualification/composed/witness-NoForeignDocRejection.log)
+PASS witness-NoRotatedDocWrite; 3538 distinct states (/home/nzsn/Repos/Cooperators/docs/impl/generated-fault-mbt/qualification/composed/witness-NoRotatedDocWrite.log)
+FAIL safe-combined (/home/nzsn/Repos/Cooperators/docs/impl/generated-fault-mbt/qualification/composed/safe-combined.log)
+TLC2 Version 2.19 of 08 August 2024 (rev: 5a47802)
+Running depth-first search Model-Checking with fp 59 and seed 3263959451030095977 with 1 worker on 12 cores with 2660MB heap and 64MB offheap memory [pid: 384347] (Linux 6.18.54.1-microsoft-standard-WSL2 amd64, Ubuntu 25.0.4.1 x86_64).
+Parsing file /home/nzsn/Repos/Cooperators/docs/impl/generated-fault-mbt/qualification/composed/CooperatorsInstances.tla
+Parsing file /tmp/Integers.tla
+
+Fatal errors while parsing TLA+ spec in file CooperatorsInstances
+
+java.lang.NullPointerException: Cannot invoke "String.length()" because "str" is null
+Starting... (2026-10-19 18:00:22)
+Error: Parsing or semantic analysis failed. Module-Table lookup failure for module name CooperatorsInstances derived from CooperatorsInstances file name.
+Finished in 02s at (2026-10-19 18:00:22)
+

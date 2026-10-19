@@ -1,0 +1,34 @@
+Picked up JAVA_TOOL_OPTIONS: "-Djava.io.tmpdir=/tmp/coop-fault-detection-2dmglnx0/none-NoProjectionCrashRetry/jvm-tmp"
+TLC2 Version 2.19 of 08 August 2024 (rev: 5a47802)
+Running depth-first search Model-Checking with fp 92 and seed 9033270622183565896 with 1 worker on 12 cores with 2660MB heap and 64MB offheap memory [pid: 231] (Linux 6.18.54.1-microsoft-standard-WSL2 amd64, Ubuntu 25.0.4.1 x86_64).
+Parsing file /tmp/coop-fault-detection-2dmglnx0/none-NoProjectionCrashRetry/TraceProbe.tla
+Parsing file /tmp/coop-fault-detection-2dmglnx0/none-NoProjectionCrashRetry/MBFaults.tla
+Parsing file /tmp/coop-fault-detection-2dmglnx0/none-NoProjectionCrashRetry/jvm-tmp/TLC.tla
+Parsing file /tmp/coop-fault-detection-2dmglnx0/none-NoProjectionCrashRetry/jvm-tmp/Integers.tla
+Parsing file /tmp/coop-fault-detection-2dmglnx0/none-NoProjectionCrashRetry/jvm-tmp/Sequences.tla
+Parsing file /tmp/coop-fault-detection-2dmglnx0/none-NoProjectionCrashRetry/jvm-tmp/FiniteSets.tla
+Parsing file /tmp/coop-fault-detection-2dmglnx0/none-NoProjectionCrashRetry/jvm-tmp/Naturals.tla
+Parsing file /tmp/coop-fault-detection-2dmglnx0/none-NoProjectionCrashRetry/AgentInstances.tla
+Semantic processing of module Naturals
+Semantic processing of module Integers
+Semantic processing of module Sequences
+Semantic processing of module FiniteSets
+Semantic processing of module AgentInstances
+Semantic processing of module MBFaults
+Semantic processing of module TLC
+Semantic processing of module TraceProbe
+Starting... (2026-10-19 18:03:48)
+Finished computing initial states: 1 states generated, with 1 of them distinct.
+Starting level 2: 1 states generated, 1 distinct states found.
+Starting level 3: 2 states generated, 2 distinct states found.
+Starting level 4: 4 states generated, 3 distinct states found.
+Starting level 5: 7 states generated, 4 distinct states found.
+Starting level 6: 11 states generated, 5 distinct states found.
+Starting level 7: 16 states generated, 6 distinct states found.
+Model checking completed. No error has been found.
+  Estimates of the probability that TLC did not check all reachable states
+  because two distinct states had the same fingerprint:
+  calculated (optimistic):  val = 5.2E-18
+  based on the actual fingerprints:  val = 1.2E-9
+22 states generated, 6 distinct states found.
+Finished in 04s at (2026-10-19 18:03:48)

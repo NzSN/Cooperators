@@ -149,6 +149,15 @@ fn envelope_line_bytes(envelope: &Envelope) -> u64 {
     serde_json::to_vec(envelope).map_or(0, |bytes| bytes.len() as u64 + 1)
 }
 
+fn inbox_now(root: &Path) -> u64 {
+    #[cfg(feature = "mbt-injection")]
+    if let Some(now) = crate::faults::now_millis(root) {
+        return now;
+    }
+    let _ = root;
+    id::unix_millis()
+}
+
 impl Inbox {
     fn inbox_path(root: &Path, agent_id: &str) -> PathBuf {
         root.join("agents").join(agent_id).join("inbox.jsonl")
@@ -316,6 +325,16 @@ pub fn parse_cursor(cursor: &str) -> Result<u64, BrokerError> {
 }
 
 impl DaemonState {
+    /// Read-only access to the actual backlog counters for generated MBT ports.
+    #[cfg(feature = "mbt-injection")]
+    #[doc(hidden)]
+    pub async fn debug_inbox_backlog(&self, agent_id: &str) -> Result<(usize, u64), BrokerError> {
+        let inboxes = self.inboxes.lock().await;
+        let inbox = inboxes
+            .get(agent_id)
+            .ok_or_else(|| BrokerError::internal("inbox not loaded"))?;
+        Ok((inbox.pending_messages, inbox.pending_bytes))
+    }
     /// Ensures an inbox is open, creating the directory and log if needed.
     pub(crate) async fn ensure_inbox(&self, agent_id: &str) -> Result<(), BrokerError> {
         let mut inboxes = self.inboxes.lock().await;
@@ -421,7 +440,7 @@ impl DaemonState {
         envelope.reply_to = request.reply_to.clone();
         envelope.idempotency_key = request.idempotency_key.clone();
 
-        let now_ms = id::unix_millis();
+        let now_ms = inbox_now(&self.root);
         let expires_at_ms = request.ttl.map(|ttl| {
             let millis = u64::try_from(ttl.as_millis()).unwrap_or(u64::MAX);
             now_ms.saturating_add(millis)
@@ -540,8 +559,9 @@ impl DaemonState {
                     initialized = true;
                 }
 
-                let now_ms = id::unix_millis();
+                let now_ms = inbox_now(&self.root);
                 let mut messages = Vec::new();
+                let mut scanned_seq = start;
                 for record in &inbox.records {
                     if record.seq <= start {
                         continue;
@@ -549,17 +569,21 @@ impl DaemonState {
                     if messages.len() >= batch_limit {
                         break;
                     }
+                    // Expired records are still durable backlog until ack.
+                    // Expose the scanned prefix so an expired-only inbox can
+                    // be acknowledged without skipping an unreturned message.
+                    scanned_seq = record.seq;
                     if inbox.is_expired(&record.id, now_ms) {
                         continue;
                     }
                     messages.push(record.clone());
                 }
-                let next_seq = messages.last().map_or(start, |message| message.seq);
+                let next_seq = scanned_seq;
                 let notified = Arc::clone(&inbox.notify).notified_owned();
                 (messages, next_seq, inbox.acked_seq, notified)
             };
 
-            if !messages.is_empty() {
+            if !messages.is_empty() || next_seq > start {
                 return Ok(WaitBatch {
                     messages,
                     next_cursor: next_seq.to_string(),
@@ -638,7 +662,11 @@ impl DaemonState {
         validate_channel_name(channel)?;
         let mut logs = self.channel_logs.lock().await;
         if !logs.contains_key(channel) {
-            let log = crate::channels::open_channel(&self.root, channel)?;
+            let log = crate::channels::open_channel_rotating(
+                &self.root,
+                channel,
+                self.config.log_rotation_bytes,
+            )?;
             logs.insert(channel.to_string(), log);
         }
         let log = logs

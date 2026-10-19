@@ -1,0 +1,73 @@
+{
+  "report_date": "2026-10-19",
+  "archived_at_utc": "2026-10-19T08:49:07.663357+00:00",
+  "head": "ccca77295277b10dad5234bf8ae3a916ad9a0a1a",
+  "correction": "Existing port traits and bindings are compiler generated; concrete trait implementations and Rust injection hooks are handwritten. Standalone Python/NDJSON fault path is a prototype outside that integration.",
+  "compiler_integration_for_mbfaults_performed": false,
+  "models_or_rust_tests_rerun": false,
+  "source_hashes": [
+    {
+      "path": "spec/mbt/README.md",
+      "sha256": "53bd928456ebcdf3638c02835cf5b7cd3f4aaeca5fd293037d3fd28383da4b5f"
+    },
+    {
+      "path": "spec/mbt/generated/MBCooperatorsMirror.generated.rs",
+      "sha256": "863a77725a8d0a73952104e629f0202747cc26eaec5f63c81dfe11e15ef83e9a"
+    },
+    {
+      "path": "spec/mbt/writers/generated/MBWritersMirror.generated.rs",
+      "sha256": "d62d5af21ad215568d8d109fa2e4955cec75a9345b500c812981158b0d750bea"
+    },
+    {
+      "path": "spec/mbt/generated/.model-interface-generated.json",
+      "sha256": "3f41ea63a9782a28eefedb89dd271b63a574d89e09cfe211b803c498eefb72a3"
+    },
+    {
+      "path": "spec/mbt/writers/generated/.model-interface-generated.json",
+      "sha256": "e52681211dd2680ebb3f8943c66e588f63a14991cb2ec4a2cae9d8ca9eaabda1"
+    },
+    {
+      "path": "spec/mbt/src/main.rs",
+      "sha256": "ea41ea5d0ef73527f63948ba069e04367dfcf77c7bf8fe18455604164634bac7"
+    },
+    {
+      "path": "spec/mbt/src/writers.rs",
+      "sha256": "dec514a583ca3d10c01ad7052dadd171f8576e0184913ff014078b8ee7164d83"
+    },
+    {
+      "path": "spec/mbt/Cooperators.mirror-interface.json",
+      "sha256": "b44ed402d135da442114e66b656675a3a06259b60870876c421c23fe44e3a35b"
+    },
+    {
+      "path": "spec/mbt/writers/CooperatorsWriters.mirror-interface.json",
+      "sha256": "f7d00c199b65f48d1260b82b8dbcbc2c6f2b27187622dc37373cf6ba29103d9f"
+    },
+    {
+      "path": "spec/mbt/faults/README.md",
+      "sha256": "f1dfc9fa55208006becbaf7cb331c1c0378fd381da7d86312598a5a41dde7ea3"
+    },
+    {
+      "path": "spec/mbt/faults/contract.json",
+      "sha256": "317423034b88d00bf217343ef4611600f57b75ce06d794cb82739c66f53f0f13"
+    },
+    {
+      "path": "spec/mbt/replay_faults.py",
+      "sha256": "ad708c45adc3d8c633a15c70534143d031b2a0142693d25278e5615725910e4f"
+    }
+  ],
+  "base_index_sha256": "d029a3300a5e7e7f7d19ecc02bf765c83550d67d640874671502ba6bf61d1845",
+  "preserved_archive_files": {
+    "2026-10-19-mbt-defect-coverage-provenance.json": "49a1939c9883f50ed44df2a41d2783857a2752d544869d7157c8f246f3f3a037",
+    "2026-10-19-fault-port-storage-recovery.itf.json": "b79b0ae030f8ae8705cad92e09ee11c4c4ea0e30f5dc39506e0e6bf448494e2e",
+    "index.html": "d029a3300a5e7e7f7d19ecc02bf765c83550d67d640874671502ba6bf61d1845",
+    "2026-10-19-mbt-defect-coverage.html": "7431bb2cc9f05ba959c58d977d4522868f3ef6261582e2b1ae0185fc35319968",
+    "2026-10-19-fault-port-and-implementation-fixes-provenance.json": "0fff8d99e1466285b33ee05f2b766819ed86dfc5255b0a0756b688dd31943e5b",
+    "2026-10-19-mbt-defect-coverage-evidence.log": "736486e3ac8ed5b92bc2680f3b8607535d3b91875b1dca991d794ef6012f0ddb",
+    "2026-10-19-fault-port-and-implementation-fixes.html": "895225a1cf215afb6aed02249642aebe621a80fbec827eef2558b4b8a6849a67"
+  },
+  "presentation": {
+    "format": "HTML only",
+    "visual_inspection": false,
+    "external_resources": false
+  }
+}

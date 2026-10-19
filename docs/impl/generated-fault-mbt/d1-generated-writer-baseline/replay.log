@@ -1,0 +1,17 @@
+scaffolded reviewable proposal /tmp/coop-fault-interface-tazx_0ax/MBFaultWriter.mirror-interface.scaffold.json 9018e5fa360fad3e4c2ba32bd5b21a1e93e861dc0c567cb5f49421d7ac8f89a5
+model-interface check clean
+{"actions":[{"count":4,"id":"Initialize"},{"count":7,"id":"Start"},{"count":1,"id":"Stop"},{"count":1,"id":"TearTail"},{"count":3,"id":"WriterAppend"}],"schema":"mirrors.model-interface-coverage/v1","semanticDigest":"85e0bc7092f8b11bda66d2638fef9d40bfed7f429a971b4cc410e39949e1357b","states":16,"traces":4,"unseenActions":[]}
+Generated fault interface bridge and selected compiler checks clean
+writer fault fixture: /tmp/cwbase/writer-OPr4ad
+retained writer fault fixture: /tmp/cwbase/writer-OPr4ad
+FAIL fault-writer /home/nzsn/Repos/Cooperators/spec/mbt/fault_interfaces/writer/traces/NoRejectedRepair.itf.json: step mismatch on action "start": expected {"observation":{"owners":["p1"],"records":[1],"rejected":["p2"],"torn":true},"result":"busy"}, got {"observation":{"owners":["p1"],"records":[1,99],"rejected":["p2"],"torn":false},"result":"busy"}
+writer fault fixture: /tmp/cwbase/writer-tnB9In
+retained writer fault fixture: /tmp/cwbase/writer-tnB9In
+FAIL fault-writer /home/nzsn/Repos/Cooperators/spec/mbt/fault_interfaces/writer/traces/NoUnownedWrite.itf.json: step mismatch on action "writer-append": expected {"observation":{"owners":["p2"],"records":[],"rejected":[],"torn":false},"result":"not-owner"}, got {"observation":{"owners":["p2"],"records":[1],"rejected":[],"torn":false},"result":"ok"}
+writer fault fixture: /tmp/cwbase/writer-baGn6b
+retained writer fault fixture: /tmp/cwbase/writer-baGn6b
+PASS fault-writer /home/nzsn/Repos/Cooperators/spec/mbt/fault_interfaces/writer/traces/NoWriterHandoff.itf.json
+writer fault fixture: /tmp/cwbase/writer-RTOSa4
+retained writer fault fixture: /tmp/cwbase/writer-RTOSa4
+FAIL fault-writer /home/nzsn/Repos/Cooperators/spec/mbt/fault_interfaces/writer/traces/NoWriterRejection.itf.json: step mismatch on action "start": expected {"observation":{"owners":["p2"],"records":[],"rejected":["p1"],"torn":false},"result":"busy"}, got {"observation":{"owners":["p1","p2"],"records":[],"rejected":[],"torn":false},"result":"ok"}
+fault MBT: 4 traces, 3 failed

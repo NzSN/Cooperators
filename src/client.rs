@@ -4,6 +4,7 @@
 //! Long-polling callers use [`call_with_timeout`] (root-relative) or
 //! [`call_at`] (explicit socket) with a deadline that covers the wait.
 
+use std::io;
 use std::path::Path;
 use std::time::Duration;
 
@@ -102,9 +103,10 @@ pub async fn call_at(
     match tokio::time::timeout(deadline, reader.read_line(&mut line)).await {
         Err(_) => Err(ClientError::Timeout),
         Ok(Err(error)) => Err(ClientError::Unreachable(error)),
-        Ok(Ok(0)) => Err(ClientError::Protocol(
-            "daemon closed the connection without a response".into(),
-        )),
+        Ok(Ok(0)) => Err(ClientError::Unreachable(io::Error::new(
+            io::ErrorKind::UnexpectedEof,
+            "daemon closed the connection without a response",
+        ))),
         Ok(Ok(_)) => {
             let response: RpcResponse =
                 serde_json::from_str(line.trim_end_matches(['\r', '\n']))

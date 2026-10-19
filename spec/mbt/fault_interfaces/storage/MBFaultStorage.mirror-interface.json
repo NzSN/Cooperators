@@ -1,0 +1,171 @@
+{
+  "actions": [
+    {
+      "id": "AppendBytes",
+      "inputs": [
+        {
+          "expectedType": {
+            "kind": "str"
+          },
+          "from": {
+            "path": [
+              {
+                "field": "parameters"
+              },
+              {
+                "field": "mode"
+              }
+            ],
+            "root": "stepParameters"
+          },
+          "id": "Mode"
+        },
+        {
+          "expectedType": {
+            "kind": "int"
+          },
+          "from": {
+            "path": [
+              {
+                "field": "parameters"
+              },
+              {
+                "field": "value"
+              }
+            ],
+            "root": "stepParameters"
+          },
+          "id": "Value"
+        }
+      ],
+      "wireAction": "append-bytes",
+      "wireAliases": []
+    },
+    {
+      "id": "InspectStorage",
+      "inputs": [],
+      "wireAction": "inspect-storage",
+      "wireAliases": []
+    },
+    {
+      "id": "RecoverStorage",
+      "inputs": [
+        {
+          "expectedType": {
+            "kind": "int"
+          },
+          "from": {
+            "path": [
+              {
+                "field": "parameters"
+              },
+              {
+                "field": "value"
+              }
+            ],
+            "root": "stepParameters"
+          },
+          "id": "Value"
+        }
+      ],
+      "wireAction": "recover-storage",
+      "wireAliases": []
+    },
+    {
+      "id": "SyncFail",
+      "inputs": [],
+      "wireAction": "sync-fail",
+      "wireAliases": []
+    },
+    {
+      "id": "SyncOk",
+      "inputs": [],
+      "wireAction": "sync-ok",
+      "wireAliases": []
+    }
+  ],
+  "initializers": [
+    {
+      "id": "Initialize",
+      "inputs": [],
+      "wireAction": "init",
+      "wireAliases": []
+    }
+  ],
+  "interfaceVersion": "1.0.0",
+  "model": {
+    "module": "MBFaultStorage",
+    "source": "spec/MBFaultStorage.tla"
+  },
+  "observations": [
+    {
+      "expectedType": {
+        "fields": [
+          {
+            "type": {
+              "element": {
+                "fields": [
+                  {
+                    "type": {
+                      "kind": "int"
+                    },
+                    "wireName": "id"
+                  },
+                  {
+                    "type": {
+                      "kind": "int"
+                    },
+                    "wireName": "seq"
+                  }
+                ],
+                "kind": "record"
+              },
+              "kind": "seq"
+            },
+            "wireName": "receipts"
+          },
+          {
+            "type": {
+              "element": {
+                "fields": [
+                  {
+                    "type": {
+                      "kind": "int"
+                    },
+                    "wireName": "id"
+                  },
+                  {
+                    "type": {
+                      "kind": "int"
+                    },
+                    "wireName": "seq"
+                  }
+                ],
+                "kind": "record"
+              },
+              "kind": "seq"
+            },
+            "wireName": "records"
+          }
+        ],
+        "kind": "record"
+      },
+      "id": "Observation",
+      "provenance": "implementation",
+      "wireName": "observation"
+    },
+    {
+      "expectedType": {
+        "kind": "str"
+      },
+      "id": "Result",
+      "provenance": "implementation",
+      "wireName": "result"
+    }
+  ],
+  "schema": "mirrors.model-interface/v1",
+  "wire": {
+    "actionVariable": "action_taken",
+    "parameterVariable": "parameters"
+  }
+}

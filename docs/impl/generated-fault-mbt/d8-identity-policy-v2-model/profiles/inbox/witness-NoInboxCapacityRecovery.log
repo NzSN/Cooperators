@@ -1,0 +1,187 @@
+TLC2 Version 2.19 of 08 August 2024 (rev: 5a47802)
+Running depth-first search Model-Checking with fp 108 and seed 5031189361699643713 with 1 worker on 12 cores with 2660MB heap and 64MB offheap memory [pid: 303] (Linux 6.18.54.1-microsoft-standard-WSL2 amd64, Ubuntu 25.0.4.1 x86_64).
+Parsing file /home/nzsn/Repos/Cooperators/docs/impl/generated-fault-mbt/d8-identity-policy-v2-model/profiles/inbox/MBFaults.tla
+Parsing file /tmp/Integers.tla
+Parsing file /tmp/Sequences.tla
+Parsing file /tmp/FiniteSets.tla
+Parsing file /tmp/Naturals.tla
+Parsing file /home/nzsn/Repos/Cooperators/docs/impl/generated-fault-mbt/d8-identity-policy-v2-model/profiles/inbox/AgentInstances.tla
+Semantic processing of module Naturals
+Semantic processing of module Integers
+Semantic processing of module Sequences
+Semantic processing of module FiniteSets
+Semantic processing of module AgentInstances
+Semantic processing of module MBFaults
+Starting... (2026-10-19 17:59:39)
+Finished computing initial states: 1 states generated, with 1 of them distinct.
+Starting level 2: 1 states generated, 1 distinct states found.
+Starting level 3: 3 states generated, 3 distinct states found.
+Starting level 4: 11 states generated, 9 distinct states found.
+Starting level 5: 37 states generated, 23 distinct states found.
+Starting level 6: 106 states generated, 52 distinct states found.
+Starting level 7: 265 states generated, 102 distinct states found.
+Starting level 8: 576 states generated, 177 distinct states found.
+Error: Invariant NoInboxCapacityRecovery is violated.
+Error: The behavior up to this point is:
+State 1:
+/\ enrollmentHistory = [ rejected |-> {},
+  firstToken |-> [launch1 |-> "-token", launch2 |-> "-token"],
+  retried |-> {},
+  retired |-> {},
+  freshAfterRetire |-> FALSE,
+  safe |-> TRUE ]
+/\ s = [ sent |-> 0,
+  ack |-> 0,
+  cursor |-> 0,
+  delivered |-> <<>>,
+  expired |-> {},
+  waited |-> FALSE,
+  blocked |-> FALSE ]
+/\ action_taken = "init"
+/\ parameters = [actor |-> "-", value |-> 0, mode |-> "-", scenario |-> "inbox"]
+/\ result = "none"
+/\ steps = 0
+/\ observation = [head |-> 0, ack |-> 0, cursor |-> 0, messages |-> <<>>, pending |-> 0]
+
+State 2:
+/\ enrollmentHistory = [ rejected |-> {},
+  firstToken |-> [launch1 |-> "-token", launch2 |-> "-token"],
+  retried |-> {},
+  retired |-> {},
+  freshAfterRetire |-> FALSE,
+  safe |-> TRUE ]
+/\ s = [ sent |-> 1,
+  ack |-> 0,
+  cursor |-> 0,
+  delivered |-> <<>>,
+  expired |-> {},
+  waited |-> FALSE,
+  blocked |-> FALSE ]
+/\ action_taken = "inbox-send"
+/\ parameters = [actor |-> "-", value |-> 0, mode |-> "expiring", scenario |-> "inbox"]
+/\ result = "ok"
+/\ steps = 1
+/\ observation = [head |-> 1, ack |-> 0, cursor |-> 0, messages |-> <<>>, pending |-> 1]
+
+State 3:
+/\ enrollmentHistory = [ rejected |-> {},
+  firstToken |-> [launch1 |-> "-token", launch2 |-> "-token"],
+  retried |-> {},
+  retired |-> {},
+  freshAfterRetire |-> FALSE,
+  safe |-> TRUE ]
+/\ s = [ sent |-> 2,
+  ack |-> 0,
+  cursor |-> 0,
+  delivered |-> <<>>,
+  expired |-> {},
+  waited |-> FALSE,
+  blocked |-> FALSE ]
+/\ action_taken = "inbox-send"
+/\ parameters = [actor |-> "-", value |-> 0, mode |-> "expiring", scenario |-> "inbox"]
+/\ result = "ok"
+/\ steps = 2
+/\ observation = [head |-> 2, ack |-> 0, cursor |-> 0, messages |-> <<>>, pending |-> 2]
+
+State 4:
+/\ enrollmentHistory = [ rejected |-> {},
+  firstToken |-> [launch1 |-> "-token", launch2 |-> "-token"],
+  retried |-> {},
+  retired |-> {},
+  freshAfterRetire |-> FALSE,
+  safe |-> TRUE ]
+/\ s = [ sent |-> 2,
+  ack |-> 0,
+  cursor |-> 0,
+  delivered |-> <<>>,
+  expired |-> 1..2,
+  waited |-> FALSE,
+  blocked |-> FALSE ]
+/\ action_taken = "expire-inbox"
+/\ parameters = [actor |-> "-", value |-> 0, mode |-> "controlled-clock", scenario |-> "inbox"]
+/\ result = "ok"
+/\ steps = 3
+/\ observation = [head |-> 2, ack |-> 0, cursor |-> 0, messages |-> <<>>, pending |-> 2]
+
+State 5:
+/\ enrollmentHistory = [ rejected |-> {},
+  firstToken |-> [launch1 |-> "-token", launch2 |-> "-token"],
+  retried |-> {},
+  retired |-> {},
+  freshAfterRetire |-> FALSE,
+  safe |-> TRUE ]
+/\ s = [ sent |-> 2,
+  ack |-> 0,
+  cursor |-> 0,
+  delivered |-> <<>>,
+  expired |-> 1..2,
+  waited |-> FALSE,
+  blocked |-> TRUE ]
+/\ action_taken = "inbox-send"
+/\ parameters = [actor |-> "-", value |-> 0, mode |-> "expiring", scenario |-> "inbox"]
+/\ result = "full"
+/\ steps = 4
+/\ observation = [head |-> 2, ack |-> 0, cursor |-> 0, messages |-> <<>>, pending |-> 2]
+
+State 6:
+/\ enrollmentHistory = [ rejected |-> {},
+  firstToken |-> [launch1 |-> "-token", launch2 |-> "-token"],
+  retried |-> {},
+  retired |-> {},
+  freshAfterRetire |-> FALSE,
+  safe |-> TRUE ]
+/\ s = [ sent |-> 2,
+  ack |-> 0,
+  cursor |-> 2,
+  delivered |-> <<>>,
+  expired |-> 1..2,
+  waited |-> TRUE,
+  blocked |-> TRUE ]
+/\ action_taken = "inbox-wait"
+/\ parameters = [actor |-> "-", value |-> 0, mode |-> "batch-one", scenario |-> "inbox"]
+/\ result = "ok"
+/\ steps = 5
+/\ observation = [head |-> 2, ack |-> 0, cursor |-> 2, messages |-> <<>>, pending |-> 2]
+
+State 7:
+/\ enrollmentHistory = [ rejected |-> {},
+  firstToken |-> [launch1 |-> "-token", launch2 |-> "-token"],
+  retried |-> {},
+  retired |-> {},
+  freshAfterRetire |-> FALSE,
+  safe |-> TRUE ]
+/\ s = [ sent |-> 2,
+  ack |-> 2,
+  cursor |-> 2,
+  delivered |-> <<>>,
+  expired |-> 1..2,
+  waited |-> FALSE,
+  blocked |-> TRUE ]
+/\ action_taken = "inbox-ack"
+/\ parameters = [actor |-> "-", value |-> 2, mode |-> "returned-cursor", scenario |-> "inbox"]
+/\ result = "ok"
+/\ steps = 6
+/\ observation = [head |-> 2, ack |-> 2, cursor |-> 2, messages |-> <<>>, pending |-> 0]
+
+State 8:
+/\ enrollmentHistory = [ rejected |-> {},
+  firstToken |-> [launch1 |-> "-token", launch2 |-> "-token"],
+  retried |-> {},
+  retired |-> {},
+  freshAfterRetire |-> FALSE,
+  safe |-> TRUE ]
+/\ s = [ sent |-> 3,
+  ack |-> 2,
+  cursor |-> 2,
+  delivered |-> <<>>,
+  expired |-> 1..2,
+  waited |-> FALSE,
+  blocked |-> TRUE ]
+/\ action_taken = "inbox-send"
+/\ parameters = [actor |-> "-", value |-> 0, mode |-> "expiring", scenario |-> "inbox"]
+/\ result = "ok"
+/\ steps = 7
+/\ observation = [head |-> 3, ack |-> 2, cursor |-> 2, messages |-> <<>>, pending |-> 1]
+
+1106 states generated, 281 distinct states found.
+Finished in 06s at (2026-10-19 17:59:41)

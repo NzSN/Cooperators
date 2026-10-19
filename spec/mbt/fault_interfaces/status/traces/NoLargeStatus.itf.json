@@ -1,0 +1,110 @@
+{
+  "#meta": {
+    "format": "ITF",
+    "goal": "NoLargeStatus",
+    "interfaceView": "MBFaultStatus",
+    "projection": "Observation only; internal state and ghost receipts omitted",
+    "scenario": "status",
+    "source": "TLC MBFaults coverage counterexample",
+    "transitionBound": 4,
+    "varTypes": {
+      "action_taken": "Str",
+      "observation": "{records: Seq({id: Int, bytes: Int}), reported: Int}",
+      "parameters": "{actor: Str, mode: Str, scenario: Str, value: Int}",
+      "result": "Str"
+    }
+  },
+  "param_vars": [
+    "parameters"
+  ],
+  "params": [],
+  "states": [
+    {
+      "#meta": {
+        "index": 0
+      },
+      "action_taken": "init",
+      "observation": {
+        "records": [],
+        "reported": {
+          "#bigint": "-1"
+        }
+      },
+      "parameters": {
+        "actor": "-",
+        "mode": "-",
+        "scenario": "status",
+        "value": {
+          "#bigint": "0"
+        }
+      },
+      "result": "none"
+    },
+    {
+      "#meta": {
+        "index": 1
+      },
+      "action_taken": "append-status",
+      "observation": {
+        "records": [
+          {
+            "bytes": {
+              "#bigint": "3"
+            },
+            "id": {
+              "#bigint": "1"
+            }
+          }
+        ],
+        "reported": {
+          "#bigint": "-1"
+        }
+      },
+      "parameters": {
+        "actor": "-",
+        "mode": "encoded-record-units",
+        "scenario": "status",
+        "value": {
+          "#bigint": "3"
+        }
+      },
+      "result": "ok"
+    },
+    {
+      "#meta": {
+        "index": 2
+      },
+      "action_taken": "sample-status",
+      "observation": {
+        "records": [
+          {
+            "bytes": {
+              "#bigint": "3"
+            },
+            "id": {
+              "#bigint": "1"
+            }
+          }
+        ],
+        "reported": {
+          "#bigint": "1"
+        }
+      },
+      "parameters": {
+        "actor": "-",
+        "mode": "read-only",
+        "scenario": "status",
+        "value": {
+          "#bigint": "0"
+        }
+      },
+      "result": "ok"
+    }
+  ],
+  "vars": [
+    "observation",
+    "result",
+    "parameters",
+    "action_taken"
+  ]
+}
