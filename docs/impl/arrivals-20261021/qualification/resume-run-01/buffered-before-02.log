@@ -1,0 +1,19 @@
+   Compiling cooperators v0.1.0 (/home/nzsn/Repos/Cooperators)
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 1.17s
+     Running tests/host_adapters.rs (target/debug/deps/host_adapters-d71256b1b94ccdb1)
+
+running 1 test
+
+thread 'buffered_frames_cannot_revive_a_closed_host' (14474) panicked at tests/host_adapters.rs:496:13:
+a closed host must not surface buffered approvals: codex buffered_invalid
+note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
+test buffered_frames_cannot_revive_a_closed_host ... FAILED
+
+failures:
+
+failures:
+    buffered_frames_cannot_revive_a_closed_host
+
+test result: FAILED. 0 passed; 1 failed; 0 ignored; 0 measured; 15 filtered out; finished in 0.04s
+
+error: test failed, to rerun pass `--test host_adapters`

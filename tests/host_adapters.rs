@@ -5,10 +5,7 @@ mod common;
 
 use std::collections::BTreeMap;
 use std::fs;
-use std::io::Write;
-use std::os::unix::fs::OpenOptionsExt;
 use std::path::{Path, PathBuf};
-use std::sync::atomic::{AtomicU64, Ordering};
 use std::time::Duration;
 
 use cooperators::host::adapters::{
@@ -20,7 +17,6 @@ use cooperators::host::{
 use serde_json::{json, Value};
 
 const SESSION: &str = "00000000-0000-4000-8000-000000000001";
-static FAKE_SEQUENCE: AtomicU64 = AtomicU64::new(0);
 
 fn binding(workspace: &Path, kind: &str) -> Binding {
     Binding {
@@ -49,21 +45,10 @@ fn wake(binding: &Binding, id: &str) -> Wake {
 }
 
 fn fake(root: &Path, kind: &str, mode: &str) -> (PathBuf, BTreeMap<String, String>) {
-    // Restarts share journals and history, but never rewrite an executable
-    // inode that an earlier process may still hold. Publish a fully synced,
-    // closed script before handing its unique path to the process adapter.
-    let sequence = FAKE_SEQUENCE.fetch_add(1, Ordering::Relaxed);
-    let executable = root.join(format!("fake-host-{}-{sequence}.py", std::process::id()));
-    let mut file = fs::OpenOptions::new()
-        .write(true)
-        .create_new(true)
-        .mode(0o700)
-        .open(&executable)
-        .expect("create unique fake host executable");
-    file.write_all(FAKE_HOST.as_bytes())
-        .expect("write fake host executable");
-    file.sync_all().expect("sync fake host executable");
-    drop(file);
+    // This immutable fixture exists before the test harness starts spawning.
+    // Concurrent forks cannot inherit a descriptor still writing its inode.
+    let executable =
+        Path::new(env!("CARGO_MANIFEST_DIR")).join("tests/fixtures/host_protocol_fake.py");
     (
         executable,
         BTreeMap::from([
@@ -153,10 +138,12 @@ async fn codex_bootstrap_creates_exact_thread_without_a_model_turn_and_reaps_chi
         .unwrap();
     assert_eq!(id, SESSION);
     let frames = requests(dir.path());
-    assert_eq!(frames.len(), 3);
+    assert_eq!(frames.len(), 4);
     assert_eq!(frames[0]["method"], "initialize");
     assert_eq!(frames[1]["method"], "initialized");
     assert_eq!(frames[2]["method"], "thread/start");
+    assert_eq!(frames[3]["method"], "thread/name/set");
+    assert_eq!(frames[3]["params"]["threadId"], SESSION);
     assert_eq!(
         frames[2]["params"]["cwd"],
         dir.path().canonicalize().unwrap().to_str().unwrap()
@@ -173,6 +160,29 @@ async fn codex_bootstrap_creates_exact_thread_without_a_model_turn_and_reaps_chi
             config.config_overrides[0]
         ])
     );
+    assert_reaped(dir.path());
+}
+
+#[tokio::test]
+async fn codex_bootstrap_materializes_empty_thread_before_resuming() {
+    let dir = common::TempDir::new("host-codex-empty-persistence");
+    let config = codex_config(dir.path(), "staged_thread");
+    let id = CodexAppServerAdapter::create_session(&config, dir.path())
+        .await
+        .unwrap();
+    let binding = binding(dir.path(), "codex");
+    assert_eq!(id, binding.exact_host_session_id);
+    let mut adapter = CodexAppServerAdapter::spawn(config, &binding)
+        .await
+        .unwrap();
+    assert_eq!(
+        adapter.session_state(&binding).await.unwrap(),
+        SessionState::Idle
+    );
+    adapter.shutdown().await.unwrap();
+    assert!(!requests(dir.path())
+        .iter()
+        .any(|frame| frame["method"] == "turn/start"));
     assert_reaped(dir.path());
 }
 
@@ -461,6 +471,63 @@ async fn codex_approval_survives_timeout_and_bounded_diagnostic_overflow() {
 }
 
 #[tokio::test]
+async fn buffered_frames_cannot_revive_a_closed_host() {
+    for (kind, mode) in [
+        ("codex", "buffered_invalid"),
+        ("codex", "buffered_close"),
+        ("claude", "buffered_invalid"),
+    ] {
+        let dir = common::TempDir::new("host-buffered-closed");
+        let binding = binding(dir.path(), kind);
+        let wake = wake(&binding, "wake-closed");
+        let mut adapter: Box<dyn HostAdapter> = if kind == "codex" {
+            Box::new(
+                CodexAppServerAdapter::spawn(codex_config(dir.path(), mode), &binding)
+                    .await
+                    .unwrap(),
+            )
+        } else {
+            Box::new(
+                ClaudeHostAdapter::spawn(claude_config(dir.path(), mode), &binding)
+                    .await
+                    .unwrap(),
+            )
+        };
+        assert!(matches!(
+            adapter.submit_wake(&binding, &wake).await.unwrap(),
+            Submission::Unknown { .. }
+        ));
+        for _ in 0..3 {
+            assert_eq!(
+                adapter.session_state(&binding).await.unwrap(),
+                SessionState::Offline,
+                "{kind} {mode}"
+            );
+            assert!(
+                adapter
+                    .drain_events()
+                    .iter()
+                    .all(|event| !matches!(event, HostEvent::Approval { .. })),
+                "a closed host must not surface buffered approvals: {kind} {mode}"
+            );
+        }
+        assert!(matches!(
+            adapter.submit_wake(&binding, &wake).await.unwrap(),
+            Submission::Unknown { .. }
+        ));
+        adapter.shutdown().await.unwrap();
+        assert_reaped(dir.path());
+        assert_eq!(
+            requests(dir.path())
+                .iter()
+                .filter(|frame| frame["method"] == "turn/start" || frame["type"] == "user")
+                .count(),
+            1
+        );
+    }
+}
+
+#[tokio::test]
 async fn oversized_or_invalid_runtime_frames_stop_further_submissions() {
     for kind in ["codex", "claude"] {
         for mode in ["oversized", "runtime_scalar", "missing_session"] {
@@ -741,132 +808,3 @@ async fn claude_wrong_session_and_stale_generation_never_get_a_second_wake() {
         1
     );
 }
-
-const FAKE_HOST: &str = r##"#!/usr/bin/env python3
-import json, os, pathlib, sys
-
-root = pathlib.Path(os.environ['COOP_FAKE_ROOT'])
-kind = os.environ['COOP_FAKE_KIND']
-mode = os.environ['COOP_FAKE_MODE']
-session = os.environ['COOP_FAKE_SESSION']
-(root / 'launch.json').write_text(json.dumps({'args': sys.argv[1:], 'pid': os.getpid(), 'cwd': os.getcwd()}))
-history_path = root / 'history.json'
-history = json.loads(history_path.read_text()) if history_path.exists() else []
-state = 'active' if mode == 'busy' else 'idle'
-last = None
-count = len(history)
-
-def emit(value):
-    print(json.dumps(value), flush=True)
-
-def response(request, result):
-    emit({'id': request['id'], 'result': result})
-
-def thread():
-    return {'id': 'wrong' if mode == 'wrong_thread' else session,
-            'cwd': '/' if mode == 'wrong_workspace' else os.getcwd(),
-            'status': {'type': 'idle' if (root / 'idle').exists() else state,
-                       'activeFlags': ['waitingOnApproval'] if state == 'approval' else []}}
-
-def claude_echo():
-    emit({'type': 'user', 'session_id': session, 'uuid': 'echo-' + str(count),
-          'message': last['message']})
-
-for line in sys.stdin:
-    request = json.loads(line)
-    with (root / 'requests.jsonl').open('a') as output:
-        output.write(json.dumps(request) + '\n')
-    if kind == 'codex':
-        method = request.get('method')
-        if method == 'initialize':
-            if mode == 'malformed':
-                print('invalid-json', flush=True)
-            elif mode == 'scalar':
-                emit(17)
-            else:
-                response(request, {'userAgent': 'fake-codex/0.163.0'})
-        elif method == 'initialized':
-            pass
-        elif method == 'thread/start':
-            assert request['params']['cwd'] == os.getcwd()
-            value = thread()
-            if mode == 'missing_thread':
-                del value['id']
-            response(request, {'thread': value})
-        elif method == 'thread/resume':
-            assert request['params']['threadId'] == session
-            response(request, {'thread': thread()})
-        elif method == 'thread/read':
-            assert request['params']['threadId'] == session
-            if mode == 'noisy_approval':
-                state = 'approval'
-                emit({'id': 'approval-' + str(count), 'method': 'item/commandExecution/requestApproval',
-                      'params': {'threadId': session, 'turnId': 'turn-noisy', 'command': 'gated command'}})
-                for i in range(300):
-                    emit({'method':'diagnostic', 'params':{'threadId':session, 'value':i}})
-                emit({'method':'diagnostic', 'params':{'threadId':session, 'value':'x' * 100000}})
-                mode = 'approval'
-            value = thread()
-            if state == 'approval':
-                value['status']['type'] = 'active'
-            response(request, {'thread': value})
-        elif method == 'turn/start':
-            assert request['params']['threadId'] == session
-            if mode == 'oversized':
-                print('x' * (4 * 1024 * 1024 + 1), flush=True)
-                continue
-            if mode == 'runtime_scalar':
-                emit(17)
-                continue
-            count += 1
-            turn_id = 'turn-' + str(count)
-            history.append({'turnId': turn_id, 'item': {'type': 'userMessage', 'content': request['params']['input']}})
-            history_path.write_text(json.dumps(history))
-            state = 'active'
-            if mode not in ['lost', 'approval_lost']:
-                response(request, {'turn': {'id': turn_id, 'status': 'inProgress', 'items': []}})
-            if mode in ['approval', 'approval_lost']:
-                state = 'approval'
-                emit({'id': 'approval-' + str(count), 'method': 'item/commandExecution/requestApproval',
-                      'params': {'threadId': session, 'turnId': turn_id, 'command': 'gated command'}})
-        elif method == 'thread/items/list':
-            assert request['params']['threadId'] == session
-            response(request, {'data': list(reversed(history)), 'nextCursor': None})
-        elif method is None and 'result' in request:
-            assert request['id'] == 'approval-' + str(count)
-            assert request['result']['decision'] in ['accept', 'decline', 'cancel']
-            state = 'idle'
-            emit({'method':'turn/completed', 'params': {'threadId':session, 'turn':{'id':'turn-' + str(count), 'status':'completed'}}})
-        else:
-            raise AssertionError(request)
-    else:
-        if request['type'] == 'user':
-            assert request['session_id'] == session
-            count += 1
-            last = request
-            if mode == 'oversized':
-                print('x' * (4 * 1024 * 1024 + 1), flush=True)
-                continue
-            if mode == 'runtime_scalar':
-                emit(17)
-                continue
-            if mode == 'missing_session':
-                emit({'type':'result', 'subtype':'success'})
-                continue
-            if mode == 'silent':
-                continue
-            emit({'type':'system', 'subtype':'init', 'session_id': 'wrong' if mode == 'wrong_session' else session})
-            if mode != 'approval_before_echo':
-                claude_echo()
-            emit({'type':'control_request', 'request_id':'approval-' + str(count),
-                  'request':{'subtype':'can_use_tool', 'tool_name':'Bash', 'input':{'command':'gated command'}}})
-        elif request['type'] == 'control_response':
-            assert request['response']['subtype'] == 'success'
-            assert request['response']['request_id'] == 'approval-' + str(count)
-            assert request['response']['response']['behavior'] in ['allow','deny']
-            if mode == 'approval_before_echo':
-                claude_echo()
-            emit({'type':'result', 'subtype':'success', 'session_id':session, 'uuid':'result-' + str(count)})
-        else:
-            raise AssertionError(request)
-"##;

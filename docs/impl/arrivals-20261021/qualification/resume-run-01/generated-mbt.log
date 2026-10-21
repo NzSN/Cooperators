@@ -1,0 +1,330 @@
+   Compiling proc-macro2 v1.0.107
+   Compiling quote v1.0.47
+   Compiling unicode-ident v1.0.26
+   Compiling libc v0.2.189
+   Compiling cfg-if v1.0.5
+   Compiling pin-project-lite v0.2.17
+   Compiling futures-core v0.3.34
+   Compiling bytes v1.12.1
+   Compiling itoa v1.0.18
+   Compiling serde_core v1.0.228
+   Compiling autocfg v1.5.1
+   Compiling parking_lot_core v0.9.12
+   Compiling smallvec v1.15.2
+   Compiling scopeguard v1.2.0
+   Compiling version_check v0.9.5
+   Compiling memchr v2.8.3
+   Compiling futures-sink v0.3.34
+   Compiling find-msvc-tools v0.1.13
+   Compiling shlex v2.0.1
+   Compiling once_cell v1.21.4
+   Compiling zmij v1.0.23
+   Compiling rand_core v0.10.1
+   Compiling serde v1.0.228
+   Compiling getrandom v0.4.3
+   Compiling lock_api v0.4.14
+   Compiling typenum v1.20.1
+   Compiling futures-io v0.3.34
+   Compiling futures-channel v0.3.34
+   Compiling slab v0.4.12
+   Compiling futures-task v0.3.34
+   Compiling cc v1.4.7
+   Compiling serde_json v1.0.149
+   Compiling zeroize v1.9.0
+   Compiling utf8parse v0.2.2
+   Compiling ref-cast v1.0.25
+   Compiling generic-array v0.14.7
+   Compiling httparse v1.10.1
+   Compiling anstyle-query v1.1.5
+   Compiling untrusted v0.9.0
+   Compiling anstyle v1.0.14
+   Compiling rustls-pki-types v1.15.1
+   Compiling anstyle-parse v1.0.0
+   Compiling is_terminal_polyfill v1.70.2
+   Compiling thiserror v2.0.21
+   Compiling cpufeatures v0.3.0
+   Compiling colorchoice v1.0.4
+   Compiling tracing-core v0.1.36
+   Compiling num-traits v0.2.19
+   Compiling chacha20 v0.10.2
+   Compiling cpufeatures v0.2.17
+   Compiling rmcp v3.2.0
+   Compiling thiserror v1.0.69
+   Compiling clap_lex v1.0.0
+   Compiling rustix v1.1.4
+   Compiling hashbrown v0.17.1
+   Compiling httpdate v1.0.3
+   Compiling equivalent v1.0.2
+   Compiling rustls v0.23.45
+   Compiling http v1.5.0
+   Compiling anstream v1.0.0
+   Compiling atomic-waker v1.1.2
+   Compiling strsim v0.11.1
+   Compiling dyn-clone v1.0.20
+   Compiling heck v0.5.0
+   Compiling bitflags v2.13.2
+   Compiling base64 v0.23.0
+   Compiling tower-service v0.3.3
+   Compiling linux-raw-sys v0.12.1
+   Compiling subtle v2.6.1
+   Compiling pastey v0.2.1
+   Compiling rustls-pemfile v2.2.0
+   Compiling fastrand v2.5.0
+   Compiling clap_builder v4.6.6
+   Compiling syn v2.0.119
+   Compiling syn v3.0.6
+   Compiling ring v0.17.14
+   Compiling http-body v1.0.1
+   Compiling http-body-util v0.1.3
+   Compiling num-integer v0.1.47
+   Compiling errno v0.3.14
+   Compiling socket2 v0.6.3
+   Compiling mio v1.2.0
+   Compiling getrandom v0.2.17
+   Compiling signal-hook-registry v1.4.8
+   Compiling crypto-common v0.1.7
+   Compiling block-buffer v0.10.4
+   Compiling uuid v1.26.1
+   Compiling rand v0.10.2
+   Compiling digest v0.10.7
+   Compiling parking_lot v0.12.5
+   Compiling num-bigint v0.4.8
+   Compiling sha2 v0.10.9
+   Compiling indexmap v2.14.2
+   Compiling tempfile v3.27.0
+   Compiling futures-macro v0.3.34
+   Compiling thiserror-impl v2.0.21
+   Compiling clap_derive v4.6.4
+   Compiling serde_derive_internals v0.29.1
+   Compiling futures-util v0.3.34
+   Compiling tokio-macros v2.7.0
+   Compiling serde_derive v1.0.228
+   Compiling ref-cast-impl v1.0.25
+   Compiling tracing-attributes v0.1.31
+   Compiling async-trait v0.1.89
+   Compiling thiserror-impl v1.0.69
+   Compiling schemars_derive v1.2.1
+   Compiling clap v4.6.6
+   Compiling tokio v1.53.1
+   Compiling tracing v0.1.44
+   Compiling rustls-webpki v0.103.15
+   Compiling futures-executor v0.3.34
+   Compiling sse-stream v0.2.5
+   Compiling futures v0.3.34
+   Compiling chrono v0.4.45
+   Compiling schemars v1.2.1
+   Compiling mirrorrust v1.0.0 (/home/nzsn/Repos/MirrorRust)
+   Compiling tokio-stream v0.1.19
+   Compiling tokio-util v0.7.18
+   Compiling hyper v1.12.0
+   Compiling hyper-util v0.1.20
+   Compiling cooperators v0.1.0 (/home/nzsn/Repos/Cooperators)
+   Compiling cooperators-mbt v0.1.0 (/home/nzsn/Repos/Cooperators/spec/mbt)
+warning: unused variable: `initial`
+   --> src/../fault_interfaces/identity/generated/MBFaultIdentityMirror.generated.rs:266:17
+    |
+266 | ...   let initial = Value::Record(params.iter().filter(|(k,_)| !k.starts_with('#') && *k != "action_taken" && *k != "parameters").m...
+    |           ^^^^^^^ help: if this is intentional, prefix it with an underscore: `_initial`
+    |
+    = note: `#[warn(unused_variables)]` (part of `#[warn(unused)]`) on by default
+
+warning: unused variable: `initial`
+   --> src/../fault_interfaces/rotation/generated/MBFaultRotationMirror.generated.rs:284:17
+    |
+284 | ...   let initial = Value::Record(params.iter().filter(|(k,_)| !k.starts_with('#') && *k != "action_taken" && *k != "parameters").m...
+    |           ^^^^^^^ help: if this is intentional, prefix it with an underscore: `_initial`
+
+warning: unused variable: `initial`
+   --> src/../fault_interfaces/deadletter/generated/MBFaultDeadLetterMirror.generated.rs:223:17
+    |
+223 | ...   let initial = Value::Record(params.iter().filter(|(k,_)| !k.starts_with('#') && *k != "action_taken" && *k != "parameters").m...
+    |           ^^^^^^^ help: if this is intentional, prefix it with an underscore: `_initial`
+
+warning: unused variable: `payload`
+   --> src/../fault_interfaces/deadletter/generated/MBFaultDeadLetterMirror.generated.rs:224:17
+    |
+224 |             let payload = Value::Record(params.clone());
+    |                 ^^^^^^^ help: if this is intentional, prefix it with an underscore: `_payload`
+
+warning: unused variable: `initial`
+   --> src/../fault_interfaces/document/generated/MBFaultDocumentMirror.generated.rs:223:17
+    |
+223 | ...   let initial = Value::Record(params.iter().filter(|(k,_)| !k.starts_with('#') && *k != "action_taken" && *k != "parameters").m...
+    |           ^^^^^^^ help: if this is intentional, prefix it with an underscore: `_initial`
+
+warning: unused variable: `payload`
+   --> src/../fault_interfaces/document/generated/MBFaultDocumentMirror.generated.rs:224:17
+    |
+224 |             let payload = Value::Record(params.clone());
+    |                 ^^^^^^^ help: if this is intentional, prefix it with an underscore: `_payload`
+
+warning: unused variable: `initial`
+   --> src/../fault_interfaces/inbox/generated/MBFaultInboxMirror.generated.rs:232:17
+    |
+232 | ...   let initial = Value::Record(params.iter().filter(|(k,_)| !k.starts_with('#') && *k != "action_taken" && *k != "parameters").m...
+    |           ^^^^^^^ help: if this is intentional, prefix it with an underscore: `_initial`
+
+warning: unused variable: `initial`
+   --> src/../fault_interfaces/status/generated/MBFaultStatusMirror.generated.rs:243:17
+    |
+243 | ...   let initial = Value::Record(params.iter().filter(|(k,_)| !k.starts_with('#') && *k != "action_taken" && *k != "parameters").m...
+    |           ^^^^^^^ help: if this is intentional, prefix it with an underscore: `_initial`
+
+warning: unused variable: `initial`
+   --> src/../fault_interfaces/storage/generated/MBFaultStorageMirror.generated.rs:274:17
+    |
+274 | ...   let initial = Value::Record(params.iter().filter(|(k,_)| !k.starts_with('#') && *k != "action_taken" && *k != "parameters").m...
+    |           ^^^^^^^ help: if this is intentional, prefix it with an underscore: `_initial`
+
+warning: unused variable: `initial`
+   --> src/../fault_interfaces/writer/generated/MBFaultWriterMirror.generated.rs:240:17
+    |
+240 | ...   let initial = Value::Record(params.iter().filter(|(k,_)| !k.starts_with('#') && *k != "action_taken" && *k != "parameters").m...
+    |           ^^^^^^^ help: if this is intentional, prefix it with an underscore: `_initial`
+
+warning: unused variable: `initial`
+   --> src/../writers/generated/MBWritersMirror.generated.rs:223:17
+    |
+223 | ...   let initial = Value::Record(params.iter().filter(|(k,_)| !k.starts_with('#') && *k != "action_taken" && *k != "parameters").m...
+    |           ^^^^^^^ help: if this is intentional, prefix it with an underscore: `_initial`
+
+warning: unused variable: `initial`
+   --> src/../generated/MBCooperatorsMirror.generated.rs:291:17
+    |
+291 | ...   let initial = Value::Record(params.iter().filter(|(k,_)| !k.starts_with('#') && *k != "action_taken" && *k != "parameters").m...
+    |           ^^^^^^^ help: if this is intentional, prefix it with an underscore: `_initial`
+
+warning: constant `ADAPTER_ID` is never used
+  --> src/main.rs:47:7
+   |
+47 | const ADAPTER_ID: &str = "cooperators.mbc/v1";
+   |       ^^^^^^^^^^
+   |
+   = note: `#[warn(dead_code)]` (part of `#[warn(unused)]`) on by default
+
+warning: constant `TARGET_PROFILE` is never used
+  --> src/main.rs:48:7
+   |
+48 | const TARGET_PROFILE: &str = "mirrorrust-v2";
+   |       ^^^^^^^^^^^^^^
+
+warning: `cooperators-mbt` (bin "cooperators-mbt") generated 14 warnings (run `cargo fix --bin "cooperators-mbt" -p cooperators-mbt` to apply 12 suggestions)
+    Finished `dev` profile [unoptimized + debuginfo] target(s) in 46.23s
+     Running `spec/mbt/target/debug/cooperators-mbt --skip-gen --suite all`
+PASS /home/nzsn/Repos/Cooperators/spec/mbt/traces/NoAck__violation.itf.json
+PASS /home/nzsn/Repos/Cooperators/spec/mbt/traces/NoAck__violation1.itf.json
+PASS /home/nzsn/Repos/Cooperators/spec/mbt/traces/NoAck__violation2.itf.json
+PASS /home/nzsn/Repos/Cooperators/spec/mbt/traces/NoComplete__violation.itf.json
+PASS /home/nzsn/Repos/Cooperators/spec/mbt/traces/NoComplete__violation1.itf.json
+PASS /home/nzsn/Repos/Cooperators/spec/mbt/traces/NoComplete__violation2.itf.json
+PASS /home/nzsn/Repos/Cooperators/spec/mbt/traces/NoCrash__violation.itf.json
+PASS /home/nzsn/Repos/Cooperators/spec/mbt/traces/NoCrash__violation1.itf.json
+PASS /home/nzsn/Repos/Cooperators/spec/mbt/traces/NoCrash__violation2.itf.json
+PASS /home/nzsn/Repos/Cooperators/spec/mbt/traces/NoDead__violation.itf.json
+PASS /home/nzsn/Repos/Cooperators/spec/mbt/traces/NoDead__violation1.itf.json
+PASS /home/nzsn/Repos/Cooperators/spec/mbt/traces/NoDead__violation2.itf.json
+PASS /home/nzsn/Repos/Cooperators/spec/mbt/traces/NoExpire__violation.itf.json
+PASS /home/nzsn/Repos/Cooperators/spec/mbt/traces/NoExpire__violation1.itf.json
+PASS /home/nzsn/Repos/Cooperators/spec/mbt/traces/NoExpire__violation2.itf.json
+PASS /home/nzsn/Repos/Cooperators/spec/mbt/traces/NoFail__violation.itf.json
+PASS /home/nzsn/Repos/Cooperators/spec/mbt/traces/NoFail__violation1.itf.json
+PASS /home/nzsn/Repos/Cooperators/spec/mbt/traces/NoFail__violation2.itf.json
+PASS /home/nzsn/Repos/Cooperators/spec/mbt/traces/NoRelease__violation.itf.json
+PASS /home/nzsn/Repos/Cooperators/spec/mbt/traces/NoRelease__violation1.itf.json
+PASS /home/nzsn/Repos/Cooperators/spec/mbt/traces/NoRelease__violation2.itf.json
+PASS /home/nzsn/Repos/Cooperators/spec/mbt/traces/TraceComplete__violation.itf.json
+PASS /home/nzsn/Repos/Cooperators/spec/mbt/traces/TraceComplete__violation1.itf.json
+PASS /home/nzsn/Repos/Cooperators/spec/mbt/traces/TraceComplete__violation10.itf.json
+PASS /home/nzsn/Repos/Cooperators/spec/mbt/traces/TraceComplete__violation11.itf.json
+PASS /home/nzsn/Repos/Cooperators/spec/mbt/traces/TraceComplete__violation12.itf.json
+PASS /home/nzsn/Repos/Cooperators/spec/mbt/traces/TraceComplete__violation2.itf.json
+PASS /home/nzsn/Repos/Cooperators/spec/mbt/traces/TraceComplete__violation3.itf.json
+PASS /home/nzsn/Repos/Cooperators/spec/mbt/traces/TraceComplete__violation4.itf.json
+PASS /home/nzsn/Repos/Cooperators/spec/mbt/traces/TraceComplete__violation5.itf.json
+PASS /home/nzsn/Repos/Cooperators/spec/mbt/traces/TraceComplete__violation6.itf.json
+PASS /home/nzsn/Repos/Cooperators/spec/mbt/traces/TraceComplete__violation7.itf.json
+PASS /home/nzsn/Repos/Cooperators/spec/mbt/traces/TraceComplete__violation8.itf.json
+PASS /home/nzsn/Repos/Cooperators/spec/mbt/traces/TraceComplete__violation9.itf.json
+PASS /home/nzsn/Repos/Cooperators/spec/mbt/writers/traces/NoCompeteW1.itf.json
+PASS /home/nzsn/Repos/Cooperators/spec/mbt/writers/traces/NoCompeteW2.itf.json
+PASS /home/nzsn/Repos/Cooperators/spec/mbt/writers/traces/NoHandoff.itf.json
+PASS /home/nzsn/Repos/Cooperators/spec/mbt/writers/traces/NoIndependentRoots.itf.json
+PASS /home/nzsn/Repos/Cooperators/spec/mbt/writers/traces/NoRejectedRecovery.itf.json
+mbt: 39 traces, 0 failed
+scaffolded reviewable proposal /tmp/coop-fault-interface-una41f7d/MBFaultStorage.mirror-interface.scaffold.json 792436bf2f4ba6548c211c4225c3b49d9ac7ca7978531fc2132e762b3a47ce63
+model-interface check clean
+{"actions":[{"count":9,"id":"AppendBytes"},{"count":3,"id":"Initialize"},{"count":3,"id":"InspectStorage"},{"count":3,"id":"RecoverStorage"},{"count":1,"id":"SyncFail"},{"count":4,"id":"SyncOk"}],"schema":"mirrors.model-interface-coverage/v1","semanticDigest":"396ddbafc8cb224ae03c7b5cd4b82f26b8bb47151ec1975a93a661935a548ab7","states":23,"traces":3,"unseenActions":[]}
+scaffolded reviewable proposal /tmp/coop-fault-interface-yytoz7i3/MBFaultWriter.mirror-interface.scaffold.json b594314ce5ade5869903071d3dd613e1c16ab21a952319366b5940b84f0aaf25
+model-interface check clean
+{"actions":[{"count":4,"id":"Initialize"},{"count":7,"id":"Start"},{"count":1,"id":"Stop"},{"count":1,"id":"TearTail"},{"count":3,"id":"WriterAppend"}],"schema":"mirrors.model-interface-coverage/v1","semanticDigest":"85e0bc7092f8b11bda66d2638fef9d40bfed7f429a971b4cc410e39949e1357b","states":16,"traces":4,"unseenActions":[]}
+scaffolded proposal /tmp/coop-fault-interface-k6p6gxne/MBFaultInbox.mirror-interface.scaffold.json
+model-interface check clean
+{"actions":[{"count":1,"id":"ExpireInbox"},{"count":1,"id":"InboxAck"},{"count":4,"id":"InboxSend"},{"count":1,"id":"InboxWait"},{"count":1,"id":"Initialize"}],"schema":"mirrors.model-interface-coverage/v1","semanticDigest":"9213850235d76e2c14aab792cb3729480de10c8ad76b1ca442ac58f10933b93c","states":8,"traces":1,"unseenActions":[]}
+scaffolded reviewable proposal /tmp/coop-fault-interface-ih6sflf4/MBFaultDeadLetter.mirror-interface.scaffold.json f9a98f817b3ad0f54d85b310deecb673bc9d2ee19707fe6c440fd084239eb617
+model-interface check clean
+{"actions":[{"count":2,"id":"CrashDead"},{"count":1,"id":"FailProjection"},{"count":1,"id":"FinishProjection"},{"count":2,"id":"Initialize"},{"count":2,"id":"MarkDead"},{"count":3,"id":"ProjectDead"},{"count":2,"id":"RecoverDead"}],"schema":"mirrors.model-interface-coverage/v1","semanticDigest":"805fe73dbb8e170151ba01719ab3a80fc745f59907e874827e4153284aadfef8","states":13,"traces":2,"unseenActions":[]}
+scaffolded reviewable proposal /tmp/coop-fault-interface-wtykuxj0/MBFaultDocument.mirror-interface.scaffold.json 30d22dc36e5fd786e61c524bc3abf33fa67ce3a5515d42edd68f5be290100403
+model-interface check clean
+{"actions":[{"count":1,"id":"AbortPublish"},{"count":4,"id":"BeginPublish"},{"count":2,"id":"CommitPublish"},{"count":1,"id":"CrashDoc"},{"count":2,"id":"Initialize"},{"count":2,"id":"ReadDoc"},{"count":1,"id":"RecoverDoc"}],"schema":"mirrors.model-interface-coverage/v1","semanticDigest":"50ae2604007125547988460eceb95dc4e1fb7cece7bfedcaa77d534724f3c041","states":13,"traces":2,"unseenActions":[]}
+scaffolded proposal /tmp/coop-fault-interface-n1gyd6ht/MBFaultStatus.mirror-interface.scaffold.json
+model-interface check clean
+{"actions":[{"count":1,"id":"AppendStatus"},{"count":1,"id":"Initialize"},{"count":1,"id":"SampleStatus"}],"schema":"mirrors.model-interface-coverage/v1","semanticDigest":"3dec8d1704584d3e3b87ea4f2b39f018ea00a3c45b0faa7824386c1c6cd3093f","states":3,"traces":1,"unseenActions":[]}
+scaffolded reviewable proposal /tmp/coop-fault-interface-flmq7iej/MBFaultRotation.mirror-interface.scaffold.json 71034be79609f9d83a8c1053127719ac3f55965ea79a163876112529a51be5f7
+model-interface check clean
+{"actions":[{"count":8,"id":"BeginRotatingAppend"},{"count":7,"id":"CommitRotatingAppend"},{"count":1,"id":"CrashRotation"},{"count":3,"id":"Initialize"},{"count":8,"id":"PrepareSegment"},{"count":3,"id":"ReadCursor"},{"count":1,"id":"RecoverRotation"},{"count":1,"id":"SaveCursor"}],"schema":"mirrors.model-interface-coverage/v1","semanticDigest":"2df1903fa928586921a109f61504990f4d25c17ad8fc57916ca2d822eec9c9ee","states":32,"traces":3,"unseenActions":[]}
+scaffolded reviewable proposal /tmp/coop-fault-interface-koud4bbp/MBFaultIdentity.mirror-interface.scaffold.json 1e5836a3cf63f2de4446c43b9bf1e6091dc52ebe14ff17b7d65b7bcb4734df1a
+model-interface check clean
+{"actions":[{"count":2,"id":"Authenticate"},{"count":1,"id":"Disconnect"},{"count":18,"id":"Enroll"},{"count":8,"id":"Initialize"},{"count":1,"id":"Reconnect"},{"count":3,"id":"Retire"},{"count":2,"id":"RotateToken"}],"schema":"mirrors.model-interface-coverage/v1","semanticDigest":"6239df76e649d0c746e16f2bef86ad3662d1b6dd29fb369ee20bc24479571755","states":35,"traces":8,"unseenActions":[]}
+Generated fault interface bridge and selected compiler checks clean
+writer fault fixture: /tmp/cooperators-resume-mbt/writer-uqm6Tt
+retained writer fault fixture: /tmp/cooperators-resume-mbt/writer-uqm6Tt
+PASS fault-writer /home/nzsn/Repos/Cooperators/spec/mbt/fault_interfaces/writer/traces/NoRejectedRepair.itf.json
+writer fault fixture: /tmp/cooperators-resume-mbt/writer-wub6xF
+retained writer fault fixture: /tmp/cooperators-resume-mbt/writer-wub6xF
+PASS fault-writer /home/nzsn/Repos/Cooperators/spec/mbt/fault_interfaces/writer/traces/NoUnownedWrite.itf.json
+writer fault fixture: /tmp/cooperators-resume-mbt/writer-BEC4Zb
+retained writer fault fixture: /tmp/cooperators-resume-mbt/writer-BEC4Zb
+PASS fault-writer /home/nzsn/Repos/Cooperators/spec/mbt/fault_interfaces/writer/traces/NoWriterHandoff.itf.json
+writer fault fixture: /tmp/cooperators-resume-mbt/writer-Imf9cF
+retained writer fault fixture: /tmp/cooperators-resume-mbt/writer-Imf9cF
+PASS fault-writer /home/nzsn/Repos/Cooperators/spec/mbt/fault_interfaces/writer/traces/NoWriterRejection.itf.json
+storage fixture: /tmp/cooperators-resume-mbt/storage-3VRFtT
+PASS fault-storage /home/nzsn/Repos/Cooperators/spec/mbt/fault_interfaces/storage/traces/NoAcknowledgedRecovery.itf.json
+storage fixture: /tmp/cooperators-resume-mbt/storage-lMO1md
+PASS fault-storage /home/nzsn/Repos/Cooperators/spec/mbt/fault_interfaces/storage/traces/NoPartialRecovery.itf.json
+storage fixture: /tmp/cooperators-resume-mbt/storage-vPLWHq
+PASS fault-storage /home/nzsn/Repos/Cooperators/spec/mbt/fault_interfaces/storage/traces/NoStorageRecovery.itf.json
+PASS fault-inbox /home/nzsn/Repos/Cooperators/spec/mbt/fault_interfaces/inbox/traces/NoInboxCapacityRecovery.itf.json
+PASS fault-deadletter /home/nzsn/Repos/Cooperators/spec/mbt/fault_interfaces/deadletter/traces/NoProjectionCrashRetry.itf.json
+PASS fault-deadletter /home/nzsn/Repos/Cooperators/spec/mbt/fault_interfaces/deadletter/traces/NoProjectionRecovery.itf.json
+PASS fault-document /home/nzsn/Repos/Cooperators/spec/mbt/fault_interfaces/document/traces/NoDocumentCrashRetry.itf.json
+PASS fault-document /home/nzsn/Repos/Cooperators/spec/mbt/fault_interfaces/document/traces/NoDocumentRetry.itf.json
+PASS fault-status /home/nzsn/Repos/Cooperators/spec/mbt/fault_interfaces/status/traces/NoLargeStatus.itf.json
+rotation fixture: /tmp/cooperators-resume-mbt/rotation/NoOversizedRotation.itf
+PASS fault-rotation /home/nzsn/Repos/Cooperators/spec/mbt/fault_interfaces/rotation/traces/NoOversizedRotation.itf.json
+rotation fixture: /tmp/cooperators-resume-mbt/rotation/NoRotatedCursor.itf
+PASS fault-rotation /home/nzsn/Repos/Cooperators/spec/mbt/fault_interfaces/rotation/traces/NoRotatedCursor.itf.json
+rotation fixture: /tmp/cooperators-resume-mbt/rotation/NoRotationCrashRecovery.itf
+PASS fault-rotation /home/nzsn/Repos/Cooperators/spec/mbt/fault_interfaces/rotation/traces/NoRotationCrashRecovery.itf.json
+rotation fixture: /tmp/cooperators-resume-mbt/rotation/boundary-after-seal
+PASS actual process crash boundary after-seal
+rotation fixture: /tmp/cooperators-resume-mbt/rotation/boundary-after-create
+PASS actual process crash boundary after-create
+PASS rotation crash boundaries
+identity evidence: /tmp/cooperators-resume-mbt/identity/NoEnrollmentRetry.itf-01M5FEEJ8488NGJ4B2JQRM8K31
+PASS fault-identity /home/nzsn/Repos/Cooperators/spec/mbt/fault_interfaces/identity/traces/NoEnrollmentRetry.itf.json
+identity evidence: /tmp/cooperators-resume-mbt/identity/NoRetiredAuthentication.itf-01M5FEEJCEM6XE9N1X756KTF9K
+PASS fault-identity /home/nzsn/Repos/Cooperators/spec/mbt/fault_interfaces/identity/traces/NoRetiredAuthentication.itf.json
+identity evidence: /tmp/cooperators-resume-mbt/identity/NoRetiredEnrollmentRetry.itf-01M5FEEJF4CGG5B9JP20AWPSZX
+PASS fault-identity /home/nzsn/Repos/Cooperators/spec/mbt/fault_interfaces/identity/traces/NoRetiredEnrollmentRetry.itf.json
+identity evidence: /tmp/cooperators-resume-mbt/identity/NoRetiredThenFresh.itf-01M5FEEJHKSAN9MDMZPNDNXR4M
+PASS fault-identity /home/nzsn/Repos/Cooperators/spec/mbt/fault_interfaces/identity/traces/NoRetiredThenFresh.itf.json
+identity evidence: /tmp/cooperators-resume-mbt/identity/NoRevokedAuthentication.itf-01M5FEEJM9TAB0GAMJ8W3VETJK
+PASS fault-identity /home/nzsn/Repos/Cooperators/spec/mbt/fault_interfaces/identity/traces/NoRevokedAuthentication.itf.json
+identity evidence: /tmp/cooperators-resume-mbt/identity/NoSameKindEnrollment.itf-01M5FEEJQ1FM6PVYT444CTEC2M
+PASS fault-identity /home/nzsn/Repos/Cooperators/spec/mbt/fault_interfaces/identity/traces/NoSameKindEnrollment.itf.json
+identity evidence: /tmp/cooperators-resume-mbt/identity/NoStableReconnect.itf-01M5FEEJSGAMC6TMRXBN7C6895
+PASS fault-identity /home/nzsn/Repos/Cooperators/spec/mbt/fault_interfaces/identity/traces/NoStableReconnect.itf.json
+identity evidence: /tmp/cooperators-resume-mbt/identity/NoStaleEnrollmentRetry.itf-01M5FEEJW3KR4BFSJ6D7PVH9BM
+PASS fault-identity /home/nzsn/Repos/Cooperators/spec/mbt/fault_interfaces/identity/traces/NoStaleEnrollmentRetry.itf.json
+fault MBT: 24 traces, 0 failures

@@ -39,8 +39,7 @@ use tokio::net::{UnixListener, UnixStream};
 use tokio::sync::{Mutex, RwLock};
 
 use crate::arrivals::{
-    self, ArrivalLimits, ArrivalService, SourceCoordinate,
-    SubscribeArrivalsRequest,
+    self, ArrivalLimits, ArrivalService, SourceCoordinate, SubscribeArrivalsRequest,
 };
 use crate::channels::ChannelLog;
 use crate::docs::{self, DocEvent, DocRuntime};

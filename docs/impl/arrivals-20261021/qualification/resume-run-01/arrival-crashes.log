@@ -1,0 +1,13 @@
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 0.21s
+     Running tests/arrival_crash.rs (target/debug/deps/arrival_crash-d4aa3050889c615e)
+
+running 6 tests
+test arrival_crash_child ... ok
+test process_kill_after_ack_success_preserves_default_and_historical_cursors ... ok
+test preupgrade_binary_refuses_v2_before_repairing_source_files ... ok
+test process_kill_before_ack_sync_preserves_prior_acknowledged_prefix ... ok
+test process_kill_before_feed_sync_recovers_complete_row_without_duplicate ... ok
+test process_kill_after_source_commit_before_feed_write_recovers_exact_arrival ... ok
+
+test result: ok. 6 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 3.32s
+

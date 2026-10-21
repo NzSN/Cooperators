@@ -1,9 +1,13 @@
 # Arrival notifications implementation
 
-Date: 2026-10-21. Status: implementation checkpoint; qualification in progress.
+Date: 2026-10-21. Status: broker qualification and scoped managed Codex
+acceptance passed; managed Claude qualification unavailable.
 
-Work is stopped for transfer to a new computer. The
-[handoff](HANDOFF.md) records the remaining adapter race and qualification gates.
+Work resumed after transfer to a new computer. The adapter race, staged Codex
+thread bootstrap, fixture executable race and MCP schema contract are repaired.
+The [resumed qualification](qualification/resume-run-01/README.md) records final
+source checks, real Codex results and bounded performance gates.
+The [handoff](HANDOFF.md) records remaining acceptance work.
 
 Implements [design 0004](../../design/0004-arrival-notifications-and-agent-activation.md)
 against source baseline `edcbc923`. Existing acceptance and throughput evidence
@@ -14,9 +18,9 @@ remain historical qualifications of their pinned builds.
 | N1 | Registry V2 guard, stable bus ID, source/arrival schema, migration and historical-hash compatibility | Implemented; preserved old executable refuses V2 before altering guarded source files |
 | N2 | Exact subscriptions, catch-up and document/queue routing including requeues | Implemented; 7 focused source tests passed with injection |
 | N3 | Separate durable feed/ACK, streaming recovery and bounded replay projection | Implemented; 9 service, 4 fault and 7 streaming tests passed; four actual SIGKILL controls passed |
-| N4 | Durable host bridge, binding, coalesced wakes, observation/resolution and continuation | Implemented; focused bridge/runtime and required real-UDS IPC gates passed; combined checkpoint gate pending |
-| N5 | Managed Codex App Server adapter and real session qualification | Adapter and CLI implemented; deterministic adapter tests passed; real model session pending |
-| N6 | Managed Claude host-mode adapter and real session qualification | Adapter and CLI implemented; deterministic adapter tests passed; real model session pending |
+| N4 | Durable host bridge, binding, coalesced wakes, observation/resolution and continuation | Complete normal/injection suites, required real sockets and bounded model gates passed |
+| N5 | Managed Codex App Server adapter and real session qualification | Real model passed document idle/busy, explicit approvals, observation/resolution and exact-binding restart; broader cases remain scoped |
+| N6 | Managed Claude host-mode adapter and real session qualification | Deterministic tests passed; real session unavailable because installed Claude has no authentication |
 
 Optional Claude Channels preview remains opt-in and does not gate the managed
 host paths. Every passing, failed or unavailable runtime gate will be recorded
@@ -37,9 +41,12 @@ configuration is selected for qualification.
   harness result is distinguished from a complete Cargo command when a
   concurrently missing CLI module interrupted an earlier build.
 
-These are scoped results. The source/host records have independent pins;
-native provider activation, the final complete broker suites, generated MBT,
-and performance measurements are not yet claimed as passed by this checkpoint.
+These original focused records have independent pins. The
+[resumed final record](qualification/resume-run-01/README.md) adds 181 normal
+and 230 injection tests, 128 arrival/bridge traces, 63 generated MBT traces,
+the rebuilt old-binary refusal control, real managed Codex document activation
+and bounded source/feed and controlled-host admission measurements. Claude,
+broader provider scenarios and full performance acceptance remain open.
 
 ## Qualification order
 

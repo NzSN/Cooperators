@@ -1,6 +1,7 @@
 # Arrival notifications and agent activation
 
-Date: 2026-10-21. Status: implementation in progress. Source baseline: `edcbc923`.
+Date: 2026-10-21. Status: implemented; broker and scoped managed Codex
+qualification passed; managed Claude acceptance unavailable. Source baseline: `edcbc923`.
 Progress and qualification: [implementation record](../impl/arrivals-20261021/README.md).
 
 ## Decision

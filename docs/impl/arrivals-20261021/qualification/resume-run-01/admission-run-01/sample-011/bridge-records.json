@@ -1,0 +1,142 @@
+[
+  {
+    "v": 1,
+    "seq": 1,
+    "prev_hash": "sha256:<REDACTED_CREDENTIAL_001><REDACTED_CREDENTIAL_001>",
+    "event": "bound",
+    "binding": {
+      "binding_id": "01M5FFJC459RPVZKY6D074BKAK",
+      "generation": 1,
+      "bus_id": "01M5FFJC097809XB3CTYFG7TCD",
+      "agent_id": "01M5FFJC3APFAYQ73XD6SGX2QF",
+      "adapter_kind": "codex_app_server",
+      "exact_host_session_id": "00000000-0000-4000-8000-000000000001",
+      "workspace": "/tmp/caq-c4tjlae_/workspace",
+      "capability_status": "configured"
+    }
+  },
+  {
+    "v": 1,
+    "seq": 2,
+    "prev_hash": "sha256:0d1f7314b0742a5aec846fef32a92d57929d248d0c73945ea094ac751245103f",
+    "event": "lifecycle",
+    "state": "idle",
+    "at_ms": 1792594751757
+  },
+  {
+    "v": 1,
+    "seq": 3,
+    "prev_hash": "sha256:42fe5df3c0d9769a4c664e48d9c446d1728be63927899b1478a26cd706804dd0",
+    "event": "received",
+    "notices": [
+      {
+        "v": 1,
+        "seq": 1,
+        "prev_hash": "sha256:<REDACTED_CREDENTIAL_001><REDACTED_CREDENTIAL_001>",
+        "delivery_id": "sha256:8ffe0b5a53ead2d61233fe35c8eae7a62b3248d794d325c01a219d28210a59b8",
+        "recipient_agent_id": "01M5FFJC3APFAYQ73XD6SGX2QF",
+        "kind": "doc.published",
+        "obligation": {
+          "id": "sha256:ca42f4cd4c889d571c1def2291e109cf9749724c27ba1c9db5de5d974b139efc",
+          "journal_type": "document",
+          "journal_name": "qualification",
+          "seq": 1,
+          "hash": "sha256:67dcfea4e7176ee6d7a6afe5df226fc59361c8942b15655921a58b632d32f9f1",
+          "item_index": 0
+        },
+        "source": {
+          "stream": "document",
+          "name": "qualification",
+          "seq": 1,
+          "hash": "sha256:67dcfea4e7176ee6d7a6afe5df226fc59361c8942b15655921a58b632d32f9f1"
+        },
+        "resource": {
+          "type": "document",
+          "name": "qualification",
+          "version": 1
+        },
+        "subscription_ids": [
+          "01M5FFJC82EZBZY37VAMA8M9MQ"
+        ]
+      }
+    ],
+    "cursor": "arrival:01M5FFJC097809XB3CTYFG7TCD:01M5FFJC3APFAYQ73XD6SGX2QF:1",
+    "at_ms": 1792594751810
+  },
+  {
+    "v": 1,
+    "seq": 4,
+    "prev_hash": "sha256:13f05bb4b777d90c10ae63ca109ff476bb1f35f4183ff401577cfc79c4fdb734",
+    "event": "wake_created",
+    "wake": {
+      "wake_id": "01M5FFJCEP3WKM21GYBNCXGZAA",
+      "binding_id": "01M5FFJC459RPVZKY6D074BKAK",
+      "generation": 1,
+      "bus_id": "01M5FFJC097809XB3CTYFG7TCD",
+      "agent_id": "01M5FFJC3APFAYQ73XD6SGX2QF",
+      "notices": [
+        {
+          "v": 1,
+          "seq": 1,
+          "prev_hash": "sha256:<REDACTED_CREDENTIAL_001><REDACTED_CREDENTIAL_001>",
+          "delivery_id": "sha256:8ffe0b5a53ead2d61233fe35c8eae7a62b3248d794d325c01a219d28210a59b8",
+          "recipient_agent_id": "01M5FFJC3APFAYQ73XD6SGX2QF",
+          "kind": "doc.published",
+          "obligation": {
+            "id": "sha256:ca42f4cd4c889d571c1def2291e109cf9749724c27ba1c9db5de5d974b139efc",
+            "journal_type": "document",
+            "journal_name": "qualification",
+            "seq": 1,
+            "hash": "sha256:67dcfea4e7176ee6d7a6afe5df226fc59361c8942b15655921a58b632d32f9f1",
+            "item_index": 0
+          },
+          "source": {
+            "stream": "document",
+            "name": "qualification",
+            "seq": 1,
+            "hash": "sha256:67dcfea4e7176ee6d7a6afe5df226fc59361c8942b15655921a58b632d32f9f1"
+          },
+          "resource": {
+            "type": "document",
+            "name": "qualification",
+            "version": 1
+          },
+          "subscription_ids": [
+            "01M5FFJC82EZBZY37VAMA8M9MQ"
+          ]
+        }
+      ],
+      "observation_nonce": "a325a9d01810d91561006104a436cfa4",
+      "created_at_ms": 1792594751957
+    }
+  },
+  {
+    "v": 1,
+    "seq": 5,
+    "prev_hash": "sha256:e06ab26fc826b2d2ba015974561b1e210e4cd2b2f5544a4122e54c92dfff4e49",
+    "event": "attempt_started",
+    "wake_id": "01M5FFJCEP3WKM21GYBNCXGZAA",
+    "at_ms": 1792594751957,
+    "deadline_ms": 1792594781957
+  },
+  {
+    "v": 1,
+    "seq": 6,
+    "prev_hash": "sha256:f387e08a06a984c66fef319a1a0e0e05026124845e1c79aa068ddb465ee046ca",
+    "event": "submission_recorded",
+    "wake_id": "01M5FFJCEP3WKM21GYBNCXGZAA",
+    "submission": {
+      "status": "accepted",
+      "turn_id": "turn-1"
+    },
+    "retry_at_ms": 1792594752957
+  },
+  {
+    "v": 1,
+    "seq": 7,
+    "prev_hash": "sha256:622e28819f0a32499f6e53f213132af67b1a56faeb2ed3c0c6ba354c0708fb6a",
+    "event": "lifecycle",
+    "state": "busy",
+    "at_ms": 1792594751957
+  }
+]

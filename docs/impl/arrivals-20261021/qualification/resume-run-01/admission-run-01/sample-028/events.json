@@ -1,0 +1,80 @@
+[
+  {
+    "binding": {
+      "adapter_kind": "codex_app_server",
+      "agent_id": "01M5FFJK0SBGPRM7YX0JFKN3BT",
+      "binding_id": "01M5FFJK14R31ESXRNS91WAFBM",
+      "bus_id": "01M5FFJJZDJ2Q6TXFAWKXPJQXR",
+      "capability_status": "configured",
+      "exact_host_session_id": "00000000-0000-4000-8000-000000000001",
+      "generation": 1,
+      "workspace": "/tmp/caq-n52c4kwq/workspace"
+    },
+    "config": "/tmp/caq-n52c4kwq/state/resume.json",
+    "type": "host_configured",
+    "observed_monotonic_s": 3399.36161407
+  },
+  {
+    "config": "/tmp/caq-n52c4kwq/state/resume.json",
+    "status": {
+      "activation_attempts": 0,
+      "active_wake_id": null,
+      "binding": {
+        "adapter_kind": "codex_app_server",
+        "agent_id": "01M5FFJK0SBGPRM7YX0JFKN3BT",
+        "binding_id": "01M5FFJK14R31ESXRNS91WAFBM",
+        "bus_id": "01M5FFJJZDJ2Q6TXFAWKXPJQXR",
+        "capability_status": "configured",
+        "exact_host_session_id": "00000000-0000-4000-8000-000000000001",
+        "generation": 1,
+        "workspace": "/tmp/caq-n52c4kwq/workspace"
+      },
+      "error": null,
+      "in_flight_claims": 0,
+      "last_successful_probe_ms": null,
+      "lifecycle": "unknown",
+      "pending_bytes": 0,
+      "pending_notices": 0,
+      "readiness": "configured",
+      "received_cursor": null,
+      "received_seq": 0
+    },
+    "type": "host_ready",
+    "observed_monotonic_s": 3399.407144936
+  },
+  {
+    "event": {
+      "state": "idle",
+      "type": "state"
+    },
+    "type": "host_event",
+    "observed_monotonic_s": 3399.417954243
+  },
+  {
+    "status": {
+      "activation_attempts": 0,
+      "active_wake_id": null,
+      "binding": {
+        "adapter_kind": "codex_app_server",
+        "agent_id": "01M5FFJK0SBGPRM7YX0JFKN3BT",
+        "binding_id": "01M5FFJK14R31ESXRNS91WAFBM",
+        "bus_id": "01M5FFJJZDJ2Q6TXFAWKXPJQXR",
+        "capability_status": "configured",
+        "exact_host_session_id": "00000000-0000-4000-8000-000000000001",
+        "generation": 1,
+        "workspace": "/tmp/caq-n52c4kwq/workspace"
+      },
+      "error": null,
+      "in_flight_claims": 0,
+      "last_successful_probe_ms": null,
+      "lifecycle": "idle",
+      "pending_bytes": 0,
+      "pending_notices": 0,
+      "readiness": "configured",
+      "received_cursor": null,
+      "received_seq": 0
+    },
+    "type": "status",
+    "observed_monotonic_s": 3399.41847184
+  }
+]

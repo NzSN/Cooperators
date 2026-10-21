@@ -1,0 +1,22 @@
+[
+  {
+    "binding": {
+      "adapter_kind": "codex_app_server",
+      "agent_id": "01M5FEG96HWCQMYNNZ3N4VFSJ0",
+      "binding_id": "01M5FEG96YX55CVYGF2MQDKQ95",
+      "bus_id": "01M5FEG957VJ2STEKTFRH5FXZY",
+      "capability_status": "configured",
+      "exact_host_session_id": "01a15ee8-27c4-7ee1-9e3c-b7f0303c5cfa",
+      "generation": 1,
+      "workspace": "/tmp/caq-c7_prxey/workspace"
+    },
+    "config": "/tmp/caq-c7_prxey/state/resume.json",
+    "type": "host_configured",
+    "observed_monotonic_s": 2329.894570419
+  },
+  {
+    "error": "internal error: app-server thread/resume failed: {\"code\":-32600,\"message\":\"no rollout found for thread id 01a15ee8-27c4-7ee1-9e3c-b7f0303c5cfa\"}",
+    "type": "host_error",
+    "observed_monotonic_s": 2330.419707194
+  }
+]

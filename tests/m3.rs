@@ -904,6 +904,19 @@ async fn tools_list_exposes_every_method_with_matching_schemas() {
         ("coop_read_doc", &["name"], &["name", "version"]),
         ("coop_list_docs", &[], &["prefix"]),
         ("coop_get_status", &[], &[]),
+        (
+            "coop_subscribe_arrivals",
+            &["client_key", "resource", "event_kinds"],
+            &["client_key", "resource", "event_kinds", "catch_up"],
+        ),
+        (
+            "coop_unsubscribe_arrivals",
+            &["subscription_id"],
+            &["subscription_id"],
+        ),
+        ("coop_list_arrival_subscriptions", &[], &[]),
+        ("coop_wait_arrivals", &[], &["cursor", "timeout_s", "limit"]),
+        ("coop_ack_arrivals", &["cursor"], &["cursor"]),
     ];
     assert_eq!(contract.len(), catalog.len());
 

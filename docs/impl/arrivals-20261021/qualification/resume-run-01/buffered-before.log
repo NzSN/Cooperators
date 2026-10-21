@@ -1,0 +1,17 @@
+   Compiling cooperators v0.1.0 (/home/nzsn/Repos/Cooperators)
+error[E0277]: `Vec<HostEvent>` is not a future
+   --> tests/host_adapters.rs:498:18
+    |
+498 |                 .await
+    |                  ^^^^^ `Vec<HostEvent>` is not a future
+    |
+    = help: the trait `Future` is not implemented for `Vec<HostEvent>`
+    = note: Vec<HostEvent> must be a future or must implement `IntoFuture` to be awaited
+    = note: required for `Vec<HostEvent>` to implement `IntoFuture`
+help: remove the `.await`
+    |
+498 -                 .await
+    |
+
+For more information about this error, try `rustc --explain E0277`.
+error: could not compile `cooperators` (test "host_adapters") due to 1 previous error

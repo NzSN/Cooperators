@@ -93,7 +93,13 @@ binds one identity to an exact provider session, and handles observations,
 resolutions, continuations and per-request approvals through private IPC.
 
 Managed Codex App Server and Claude duplex host-mode adapters and launcher are
-implemented. Deterministic protocol tests and scoped crash/fault gates have
-passed; real provider-session activation and the final aggregate qualification
-remain open. See the [implementation record](docs/impl/arrivals-20261021/README.md)
-for the accepted scope, results and remaining gates.
+implemented. After machine transfer, closed-stream buffering, staged Codex
+thread persistence, fixture executable races and the MCP schema contract were
+repaired. Final required-socket suites passed 181 normal / 230 injection tests,
+including 128 arrival/bridge traces; generated MBT passed 63 traces. Real Codex
+passed document activation, explicit approvals, resolution and exact-binding
+restart. Bounded source/feed and controlled-host admission p95 were 7.634 ms
+and 239.233 ms. Real Claude is unavailable because installed 2.1.185 has no
+authentication. Broader provider and performance acceptance remains open.
+See the [resumed record](docs/impl/arrivals-20261021/qualification/resume-run-01/README.md)
+and [handoff](docs/impl/arrivals-20261021/HANDOFF.md) for scope and next work.

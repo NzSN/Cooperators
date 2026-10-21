@@ -1,0 +1,24 @@
+{
+  "passed": true,
+  "binding_preserved_across_restart": true,
+  "unique_wakes": 3,
+  "verified_document_versions": [
+    1,
+    2,
+    3
+  ],
+  "resolved_deliveries": 3,
+  "idempotent_duplicate_resolutions": 1,
+  "approved_shell_commands_completed": 1,
+  "native_mcp_tool_counts": {
+    "coop_confirm_activation": 3,
+    "coop_read_doc": 3,
+    "coop_resolve_arrivals": 4
+  },
+  "evidence_sha256": {
+    "events.json": "4c7f189098aa23780f47b09f3561e7d49b9e47b0df69019b4d632c3bca760ea7",
+    "summary.json": "988454862b73e45da54f1bee95c0e586b4fc3cd099d5f183db8e719d3785eed4"
+  },
+  "audit_script_sha256": "d372ee8c9d388a3db581fae2c9ce7b9465f7190a1c00e5c5c8ae633a9fb92d3c",
+  "boundary": "Protocol/result and controller-state audit; disposable live broker files were removed after the run"
+}

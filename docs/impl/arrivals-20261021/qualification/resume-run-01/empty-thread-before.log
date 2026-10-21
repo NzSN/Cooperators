@@ -1,0 +1,19 @@
+   Compiling cooperators v0.1.0 (/home/nzsn/Repos/Cooperators)
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 1.11s
+     Running tests/host_adapters.rs (target/debug/deps/host_adapters-d71256b1b94ccdb1)
+
+running 1 test
+
+thread 'codex_bootstrap_materializes_empty_thread_before_resuming' (65519) panicked at tests/host_adapters.rs:188:76:
+called `Result::unwrap()` on an `Err` value: Internal("app-server thread/resume failed: {\"code\":-32600,\"message\":\"no rollout found for thread id 00000000-0000-4000-8000-000000000001\"}")
+note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
+test codex_bootstrap_materializes_empty_thread_before_resuming ... FAILED
+
+failures:
+
+failures:
+    codex_bootstrap_materializes_empty_thread_before_resuming
+
+test result: FAILED. 0 passed; 1 failed; 0 ignored; 0 measured; 16 filtered out; finished in 0.06s
+
+error: test failed, to rerun pass `--test host_adapters`

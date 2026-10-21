@@ -16,7 +16,8 @@ gains, and remaining performance target misses.
 The [arrival notification and agent activation design](docs/design/0004-arrival-notifications-and-agent-activation.md)
 is implemented behind an explicit root upgrade. Its
 [implementation record](docs/impl/arrivals-20261021/README.md) distinguishes
-broker/bridge checks from pending real provider-session qualification.
+passing broker/bridge checks and scoped real Codex acceptance from unavailable
+Claude qualification and remaining performance scope.
 
 ## What v1 provides
 

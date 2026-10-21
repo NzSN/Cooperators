@@ -1,0 +1,2067 @@
+[
+  {
+    "binding": {
+      "adapter_kind": "codex_app_server",
+      "agent_id": "01M5FEZJYFY768FJF0Z565EE6Z",
+      "binding_id": "01M5FEZJYSSNZ6N50Q3Y3RX50T",
+      "bus_id": "01M5FEZJWTCCWGBB2365Y6PFB2",
+      "capability_status": "configured",
+      "exact_host_session_id": "01a15eef-cc88-7da1-bd30-4cf1c14639ec",
+      "generation": 1,
+      "workspace": "/tmp/caq-u2mlivs7/workspace"
+    },
+    "config": "/tmp/caq-u2mlivs7/state/resume.json",
+    "type": "host_configured",
+    "observed_monotonic_s": 2808.79480497
+  },
+  {
+    "config": "/tmp/caq-u2mlivs7/state/resume.json",
+    "status": {
+      "activation_attempts": 0,
+      "active_wake_id": null,
+      "binding": {
+        "adapter_kind": "codex_app_server",
+        "agent_id": "01M5FEZJYFY768FJF0Z565EE6Z",
+        "binding_id": "01M5FEZJYSSNZ6N50Q3Y3RX50T",
+        "bus_id": "01M5FEZJWTCCWGBB2365Y6PFB2",
+        "capability_status": "configured",
+        "exact_host_session_id": "01a15eef-cc88-7da1-bd30-4cf1c14639ec",
+        "generation": 1,
+        "workspace": "/tmp/caq-u2mlivs7/workspace"
+      },
+      "error": null,
+      "in_flight_claims": 0,
+      "last_successful_probe_ms": null,
+      "lifecycle": "unknown",
+      "pending_bytes": 0,
+      "pending_notices": 0,
+      "readiness": "configured",
+      "received_cursor": null,
+      "received_seq": 0
+    },
+    "type": "host_ready",
+    "observed_monotonic_s": 2809.430103262
+  },
+  {
+    "event": {
+      "type": "notification",
+      "value": {
+        "emittedAtMs": 1792594137230,
+        "method": "remoteControl/status/changed",
+        "params": {
+          "environmentId": null,
+          "installationId": "494968a2-f871-4c50-bde8-a687a4a80a35",
+          "serverName": "L",
+          "status": "disabled"
+        }
+      }
+    },
+    "type": "host_event",
+    "observed_monotonic_s": 2809.441608588
+  },
+  {
+    "event": {
+      "type": "notification",
+      "value": {
+        "emittedAtMs": 1792594137665,
+        "method": "mcpServer/startupStatus/updated",
+        "params": {
+          "error": null,
+          "failureReason": null,
+          "name": "cooperators",
+          "status": "starting",
+          "threadId": "01a15eef-cc88-7da1-bd30-4cf1c14639ec"
+        }
+      }
+    },
+    "type": "host_event",
+    "observed_monotonic_s": 2809.442153163
+  },
+  {
+    "event": {
+      "type": "notification",
+      "value": {
+        "emittedAtMs": 1792594137666,
+        "method": "mcpServer/startupStatus/updated",
+        "params": {
+          "error": null,
+          "failureReason": null,
+          "name": "codex_apps",
+          "status": "starting",
+          "threadId": "01a15eef-cc88-7da1-bd30-4cf1c14639ec"
+        }
+      }
+    },
+    "type": "host_event",
+    "observed_monotonic_s": 2809.442444411
+  },
+  {
+    "event": {
+      "type": "notification",
+      "value": {
+        "emittedAtMs": 1792594137666,
+        "method": "mcpServer/startupStatus/updated",
+        "params": {
+          "error": null,
+          "failureReason": null,
+          "name": "cooperators",
+          "status": "ready",
+          "threadId": "01a15eef-cc88-7da1-bd30-4cf1c14639ec"
+        }
+      }
+    },
+    "type": "host_event",
+    "observed_monotonic_s": 2809.442776194
+  },
+  {
+    "event": {
+      "state": "idle",
+      "type": "state"
+    },
+    "type": "host_event",
+    "observed_monotonic_s": 2809.442993303
+  },
+  {
+    "event": {
+      "type": "notification",
+      "value": {
+        "emittedAtMs": 1792594137672,
+        "method": "thread/goal/cleared",
+        "params": {
+          "threadId": "01a15eef-cc88-7da1-bd30-4cf1c14639ec"
+        }
+      }
+    },
+    "type": "host_event",
+    "observed_monotonic_s": 2809.443428805
+  },
+  {
+    "status": {
+      "activation_attempts": 0,
+      "active_wake_id": null,
+      "binding": {
+        "adapter_kind": "codex_app_server",
+        "agent_id": "01M5FEZJYFY768FJF0Z565EE6Z",
+        "binding_id": "01M5FEZJYSSNZ6N50Q3Y3RX50T",
+        "bus_id": "01M5FEZJWTCCWGBB2365Y6PFB2",
+        "capability_status": "configured",
+        "exact_host_session_id": "01a15eef-cc88-7da1-bd30-4cf1c14639ec",
+        "generation": 1,
+        "workspace": "/tmp/caq-u2mlivs7/workspace"
+      },
+      "error": null,
+      "in_flight_claims": 0,
+      "last_successful_probe_ms": null,
+      "lifecycle": "idle",
+      "pending_bytes": 0,
+      "pending_notices": 0,
+      "readiness": "configured",
+      "received_cursor": null,
+      "received_seq": 0
+    },
+    "type": "status",
+    "observed_monotonic_s": 2809.443651341
+  },
+  {
+    "event": {
+      "state": "busy",
+      "type": "state"
+    },
+    "type": "host_event",
+    "observed_monotonic_s": 2809.653932383
+  },
+  {
+    "status": {
+      "activation_attempts": 1,
+      "active_wake_id": "01M5FEZMS4ZYK84Q9CVRMZJCGK",
+      "binding": {
+        "adapter_kind": "codex_app_server",
+        "agent_id": "01M5FEZJYFY768FJF0Z565EE6Z",
+        "binding_id": "01M5FEZJYSSNZ6N50Q3Y3RX50T",
+        "bus_id": "01M5FEZJWTCCWGBB2365Y6PFB2",
+        "capability_status": "configured",
+        "exact_host_session_id": "01a15eef-cc88-7da1-bd30-4cf1c14639ec",
+        "generation": 1,
+        "workspace": "/tmp/caq-u2mlivs7/workspace"
+      },
+      "error": null,
+      "in_flight_claims": 0,
+      "last_successful_probe_ms": null,
+      "lifecycle": "busy",
+      "pending_bytes": 776,
+      "pending_notices": 1,
+      "readiness": "configured",
+      "received_cursor": "arrival:01M5FEZJWTCCWGBB2365Y6PFB2:01M5FEZJYFY768FJF0Z565EE6Z:1",
+      "received_seq": 1
+    },
+    "type": "status",
+    "observed_monotonic_s": 2809.654501258
+  },
+  {
+    "status": {
+      "activation_attempts": 1,
+      "active_wake_id": "01M5FEZMS4ZYK84Q9CVRMZJCGK",
+      "binding": {
+        "adapter_kind": "codex_app_server",
+        "agent_id": "01M5FEZJYFY768FJF0Z565EE6Z",
+        "binding_id": "01M5FEZJYSSNZ6N50Q3Y3RX50T",
+        "bus_id": "01M5FEZJWTCCWGBB2365Y6PFB2",
+        "capability_status": "configured",
+        "exact_host_session_id": "01a15eef-cc88-7da1-bd30-4cf1c14639ec",
+        "generation": 1,
+        "workspace": "/tmp/caq-u2mlivs7/workspace"
+      },
+      "error": null,
+      "in_flight_claims": 0,
+      "last_successful_probe_ms": null,
+      "lifecycle": "busy",
+      "pending_bytes": 1550,
+      "pending_notices": 2,
+      "readiness": "configured",
+      "received_cursor": "arrival:01M5FEZJWTCCWGBB2365Y6PFB2:01M5FEZJYFY768FJF0Z565EE6Z:2",
+      "received_seq": 2
+    },
+    "type": "status",
+    "observed_monotonic_s": 2809.835841882
+  },
+  {
+    "event": {
+      "type": "notification",
+      "value": {
+        "emittedAtMs": 1792594138451,
+        "method": "account/updated",
+        "params": {
+          "authMode": "chatgpt",
+          "planType": "pro"
+        }
+      }
+    },
+    "type": "host_event",
+    "observed_monotonic_s": 2810.236034603
+  },
+  {
+    "event": {
+      "type": "notification",
+      "value": {
+        "emittedAtMs": 1792594141763,
+        "method": "item/started",
+        "params": {
+          "item": {
+            "clientId": null,
+            "content": [
+              {
+                "text": "Cooperators arrival wake. Handle these references in this exact session. Confirm observation with coop_confirm_activation(binding_id, generation, nonce, wake_id). Read documents with coop_read_doc(name, version); claim queue work with coop_claim_task. Resolve supplied delivery IDs with coop_resolve_arrivals; continuation=true when queue work remains. Repeated wake references do not authorize repeated task effects.\n{\"wake_id\":\"01M5FEZMS4ZYK84Q9CVRMZJCGK\",\"binding_id\":\"01M5FEZJYSSNZ6N50Q3Y3RX50T\",\"generation\":1,\"bus_id\":\"01M5FEZJWTCCWGBB2365Y6PFB2\",\"agent_id\":\"01M5FEZJYFY768FJF0Z565EE6Z\",\"notices\":[{\"v\":1,\"seq\":1,\"prev_hash\":\"sha256:<REDACTED_CREDENTIAL_001><REDACTED_CREDENTIAL_001>\",\"delivery_id\":\"sha256:a29cd6bdf13a78b55f0e5cbd00e5fea865706de3b842209e4c6def433873c9c3\",\"recipient_agent_id\":\"01M5FEZJYFY768FJF0Z565EE6Z\",\"kind\":\"doc.published\",\"obligation\":{\"id\":\"sha256:2e958a0943d44dc640c141460ec8aa8fb93c30bd87955e20255ec229175e4a66\",\"journal_type\":\"document\",\"journal_name\":\"qualification\",\"seq\":1,\"hash\":\"sha256:26e07e1ccb5eac46d4d958716040bcbaa7d6e7f4d58d086c9e1321511340f83f\",\"item_index\":0},\"source\":{\"stream\":\"document\",\"name\":\"qualification\",\"seq\":1,\"hash\":\"sha256:26e07e1ccb5eac46d4d958716040bcbaa7d6e7f4d58d086c9e1321511340f83f\"},\"resource\":{\"type\":\"document\",\"name\":\"qualification\",\"version\":1},\"subscription_ids\":[\"01M5FEZMJGEYGZFYN5B3AAGB8P\"]}],\"observation_nonce\":\"e0d072b6a25169b8287a9cf40c565ac1\",\"created_at_ms\":1792594137888}",
+                "text_elements": [],
+                "type": "text"
+              }
+            ],
+            "id": "01a15eef-e229-7753-ab82-4a7b899132ae",
+            "type": "userMessage"
+          },
+          "startedAtMs": 1792594141761,
+          "threadId": "01a15eef-cc88-7da1-bd30-4cf1c14639ec",
+          "turnId": "01a15eef-d32d-7c30-b7ba-eec5bf178299"
+        }
+      }
+    },
+    "type": "host_event",
+    "observed_monotonic_s": 2813.668888212
+  },
+  {
+    "event": {
+      "type": "notification",
+      "value": {
+        "emittedAtMs": 1792594141784,
+        "method": "item/completed",
+        "params": {
+          "completedAtMs": 1792594141761,
+          "item": {
+            "clientId": null,
+            "content": [
+              {
+                "text": "Cooperators arrival wake. Handle these references in this exact session. Confirm observation with coop_confirm_activation(binding_id, generation, nonce, wake_id). Read documents with coop_read_doc(name, version); claim queue work with coop_claim_task. Resolve supplied delivery IDs with coop_resolve_arrivals; continuation=true when queue work remains. Repeated wake references do not authorize repeated task effects.\n{\"wake_id\":\"01M5FEZMS4ZYK84Q9CVRMZJCGK\",\"binding_id\":\"01M5FEZJYSSNZ6N50Q3Y3RX50T\",\"generation\":1,\"bus_id\":\"01M5FEZJWTCCWGBB2365Y6PFB2\",\"agent_id\":\"01M5FEZJYFY768FJF0Z565EE6Z\",\"notices\":[{\"v\":1,\"seq\":1,\"prev_hash\":\"sha256:<REDACTED_CREDENTIAL_001><REDACTED_CREDENTIAL_001>\",\"delivery_id\":\"sha256:a29cd6bdf13a78b55f0e5cbd00e5fea865706de3b842209e4c6def433873c9c3\",\"recipient_agent_id\":\"01M5FEZJYFY768FJF0Z565EE6Z\",\"kind\":\"doc.published\",\"obligation\":{\"id\":\"sha256:2e958a0943d44dc640c141460ec8aa8fb93c30bd87955e20255ec229175e4a66\",\"journal_type\":\"document\",\"journal_name\":\"qualification\",\"seq\":1,\"hash\":\"sha256:26e07e1ccb5eac46d4d958716040bcbaa7d6e7f4d58d086c9e1321511340f83f\",\"item_index\":0},\"source\":{\"stream\":\"document\",\"name\":\"qualification\",\"seq\":1,\"hash\":\"sha256:26e07e1ccb5eac46d4d958716040bcbaa7d6e7f4d58d086c9e1321511340f83f\"},\"resource\":{\"type\":\"document\",\"name\":\"qualification\",\"version\":1},\"subscription_ids\":[\"01M5FEZMJGEYGZFYN5B3AAGB8P\"]}],\"observation_nonce\":\"e0d072b6a25169b8287a9cf40c565ac1\",\"created_at_ms\":1792594137888}",
+                "text_elements": [],
+                "type": "text"
+              }
+            ],
+            "id": "01a15eef-e229-7753-ab82-4a7b899132ae",
+            "type": "userMessage"
+          },
+          "threadId": "01a15eef-cc88-7da1-bd30-4cf1c14639ec",
+          "turnId": "01a15eef-d32d-7c30-b7ba-eec5bf178299"
+        }
+      }
+    },
+    "type": "host_event",
+    "observed_monotonic_s": 2813.67081229
+  },
+  {
+    "event": {
+      "type": "notification",
+      "value": {
+        "emittedAtMs": 1792594143650,
+        "method": "item/started",
+        "params": {
+          "item": {
+            "delivery": null,
+            "id": "msg_0867927fd926bc35016ad8d0e189c081988a57eeb9990cff51",
+            "memoryCitation": null,
+            "phase": "commentary",
+            "questions": null,
+            "text": "",
+            "type": "agentMessage"
+          },
+          "startedAtMs": 1792594143649,
+          "threadId": "01a15eef-cc88-7da1-bd30-4cf1c14639ec",
+          "turnId": "01a15eef-d32d-7c30-b7ba-eec5bf178299"
+        }
+      }
+    },
+    "type": "host_event",
+    "observed_monotonic_s": 2815.437781688
+  },
+  {
+    "event": {
+      "type": "notification",
+      "value": {
+        "emittedAtMs": 1792594143650,
+        "method": "item/agentMessage/delta",
+        "params": {
+          "delta": "I",
+          "itemId": "msg_0867927fd926bc35016ad8d0e189c081988a57eeb9990cff51",
+          "threadId": "01a15eef-cc88-7da1-bd30-4cf1c14639ec",
+          "turnId": "01a15eef-d32d-7c30-b7ba-eec5bf178299"
+        }
+      }
+    },
+    "type": "host_event",
+    "observed_monotonic_s": 2815.438515244
+  },
+  {
+    "event": {
+      "type": "notification",
+      "value": {
+        "emittedAtMs": 1792594143650,
+        "method": "item/agentMessage/delta",
+        "params": {
+          "delta": "\u2019ll",
+          "itemId": "msg_0867927fd926bc35016ad8d0e189c081988a57eeb9990cff51",
+          "threadId": "01a15eef-cc88-7da1-bd30-4cf1c14639ec",
+          "turnId": "01a15eef-d32d-7c30-b7ba-eec5bf178299"
+        }
+      }
+    },
+    "type": "host_event",
+    "observed_monotonic_s": 2815.439040879
+  },
+  {
+    "event": {
+      "type": "notification",
+      "value": {
+        "emittedAtMs": 1792594143650,
+        "method": "item/agentMessage/delta",
+        "params": {
+          "delta": " confirm",
+          "itemId": "msg_0867927fd926bc35016ad8d0e189c081988a57eeb9990cff51",
+          "threadId": "01a15eef-cc88-7da1-bd30-4cf1c14639ec",
+          "turnId": "01a15eef-d32d-7c30-b7ba-eec5bf178299"
+        }
+      }
+    },
+    "type": "host_event",
+    "observed_monotonic_s": 2815.439549877
+  },
+  {
+    "event": {
+      "type": "notification",
+      "value": {
+        "emittedAtMs": 1792594143650,
+        "method": "item/agentMessage/delta",
+        "params": {
+          "delta": " this",
+          "itemId": "msg_0867927fd926bc35016ad8d0e189c081988a57eeb9990cff51",
+          "threadId": "01a15eef-cc88-7da1-bd30-4cf1c14639ec",
+          "turnId": "01a15eef-d32d-7c30-b7ba-eec5bf178299"
+        }
+      }
+    },
+    "type": "host_event",
+    "observed_monotonic_s": 2815.439968924
+  },
+  {
+    "event": {
+      "type": "notification",
+      "value": {
+        "emittedAtMs": 1792594143650,
+        "method": "item/agentMessage/delta",
+        "params": {
+          "delta": " wake",
+          "itemId": "msg_0867927fd926bc35016ad8d0e189c081988a57eeb9990cff51",
+          "threadId": "01a15eef-cc88-7da1-bd30-4cf1c14639ec",
+          "turnId": "01a15eef-d32d-7c30-b7ba-eec5bf178299"
+        }
+      }
+    },
+    "type": "host_event",
+    "observed_monotonic_s": 2815.440410689
+  },
+  {
+    "event": {
+      "type": "notification",
+      "value": {
+        "emittedAtMs": 1792594143840,
+        "method": "item/agentMessage/delta",
+        "params": {
+          "delta": ",",
+          "itemId": "msg_0867927fd926bc35016ad8d0e189c081988a57eeb9990cff51",
+          "threadId": "01a15eef-cc88-7da1-bd30-4cf1c14639ec",
+          "turnId": "01a15eef-d32d-7c30-b7ba-eec5bf178299"
+        }
+      }
+    },
+    "type": "host_event",
+    "observed_monotonic_s": 2815.637988201
+  },
+  {
+    "event": {
+      "type": "notification",
+      "value": {
+        "emittedAtMs": 1792594143840,
+        "method": "item/agentMessage/delta",
+        "params": {
+          "delta": " read",
+          "itemId": "msg_0867927fd926bc35016ad8d0e189c081988a57eeb9990cff51",
+          "threadId": "01a15eef-cc88-7da1-bd30-4cf1c14639ec",
+          "turnId": "01a15eef-d32d-7c30-b7ba-eec5bf178299"
+        }
+      }
+    },
+    "type": "host_event",
+    "observed_monotonic_s": 2815.639074534
+  },
+  {
+    "event": {
+      "type": "notification",
+      "value": {
+        "emittedAtMs": 1792594143840,
+        "method": "item/agentMessage/delta",
+        "params": {
+          "delta": " the",
+          "itemId": "msg_0867927fd926bc35016ad8d0e189c081988a57eeb9990cff51",
+          "threadId": "01a15eef-cc88-7da1-bd30-4cf1c14639ec",
+          "turnId": "01a15eef-d32d-7c30-b7ba-eec5bf178299"
+        }
+      }
+    },
+    "type": "host_event",
+    "observed_monotonic_s": 2815.63951664
+  },
+  {
+    "event": {
+      "type": "notification",
+      "value": {
+        "emittedAtMs": 1792594143840,
+        "method": "item/agentMessage/delta",
+        "params": {
+          "delta": " qualification",
+          "itemId": "msg_0867927fd926bc35016ad8d0e189c081988a57eeb9990cff51",
+          "threadId": "01a15eef-cc88-7da1-bd30-4cf1c14639ec",
+          "turnId": "01a15eef-d32d-7c30-b7ba-eec5bf178299"
+        }
+      }
+    },
+    "type": "host_event",
+    "observed_monotonic_s": 2815.640094733
+  },
+  {
+    "event": {
+      "type": "notification",
+      "value": {
+        "emittedAtMs": 1792594143840,
+        "method": "item/agentMessage/delta",
+        "params": {
+          "delta": " document",
+          "itemId": "msg_0867927fd926bc35016ad8d0e189c081988a57eeb9990cff51",
+          "threadId": "01a15eef-cc88-7da1-bd30-4cf1c14639ec",
+          "turnId": "01a15eef-d32d-7c30-b7ba-eec5bf178299"
+        }
+      }
+    },
+    "type": "host_event",
+    "observed_monotonic_s": 2815.6407549
+  },
+  {
+    "event": {
+      "type": "notification",
+      "value": {
+        "emittedAtMs": 1792594143840,
+        "method": "item/agentMessage/delta",
+        "params": {
+          "delta": ",",
+          "itemId": "msg_0867927fd926bc35016ad8d0e189c081988a57eeb9990cff51",
+          "threadId": "01a15eef-cc88-7da1-bd30-4cf1c14639ec",
+          "turnId": "01a15eef-d32d-7c30-b7ba-eec5bf178299"
+        }
+      }
+    },
+    "type": "host_event",
+    "observed_monotonic_s": 2815.641336694
+  },
+  {
+    "event": {
+      "type": "notification",
+      "value": {
+        "emittedAtMs": 1792594143840,
+        "method": "item/agentMessage/delta",
+        "params": {
+          "delta": " and",
+          "itemId": "msg_0867927fd926bc35016ad8d0e189c081988a57eeb9990cff51",
+          "threadId": "01a15eef-cc88-7da1-bd30-4cf1c14639ec",
+          "turnId": "01a15eef-d32d-7c30-b7ba-eec5bf178299"
+        }
+      }
+    },
+    "type": "host_event",
+    "observed_monotonic_s": 2815.641808054
+  },
+  {
+    "event": {
+      "type": "notification",
+      "value": {
+        "emittedAtMs": 1792594143840,
+        "method": "item/agentMessage/delta",
+        "params": {
+          "delta": " resolve",
+          "itemId": "msg_0867927fd926bc35016ad8d0e189c081988a57eeb9990cff51",
+          "threadId": "01a15eef-cc88-7da1-bd30-4cf1c14639ec",
+          "turnId": "01a15eef-d32d-7c30-b7ba-eec5bf178299"
+        }
+      }
+    },
+    "type": "host_event",
+    "observed_monotonic_s": 2815.642353727
+  },
+  {
+    "event": {
+      "type": "notification",
+      "value": {
+        "emittedAtMs": 1792594143947,
+        "method": "item/agentMessage/delta",
+        "params": {
+          "delta": " the",
+          "itemId": "msg_0867927fd926bc35016ad8d0e189c081988a57eeb9990cff51",
+          "threadId": "01a15eef-cc88-7da1-bd30-4cf1c14639ec",
+          "turnId": "01a15eef-d32d-7c30-b7ba-eec5bf178299"
+        }
+      }
+    },
+    "type": "host_event",
+    "observed_monotonic_s": 2815.838301982
+  },
+  {
+    "event": {
+      "type": "notification",
+      "value": {
+        "emittedAtMs": 1792594143947,
+        "method": "item/agentMessage/delta",
+        "params": {
+          "delta": " supplied",
+          "itemId": "msg_0867927fd926bc35016ad8d0e189c081988a57eeb9990cff51",
+          "threadId": "01a15eef-cc88-7da1-bd30-4cf1c14639ec",
+          "turnId": "01a15eef-d32d-7c30-b7ba-eec5bf178299"
+        }
+      }
+    },
+    "type": "host_event",
+    "observed_monotonic_s": 2815.840490237
+  },
+  {
+    "event": {
+      "type": "notification",
+      "value": {
+        "emittedAtMs": 1792594143947,
+        "method": "item/agentMessage/delta",
+        "params": {
+          "delta": " delivery",
+          "itemId": "msg_0867927fd926bc35016ad8d0e189c081988a57eeb9990cff51",
+          "threadId": "01a15eef-cc88-7da1-bd30-4cf1c14639ec",
+          "turnId": "01a15eef-d32d-7c30-b7ba-eec5bf178299"
+        }
+      }
+    },
+    "type": "host_event",
+    "observed_monotonic_s": 2815.841565197
+  },
+  {
+    "event": {
+      "type": "notification",
+      "value": {
+        "emittedAtMs": 1792594143947,
+        "method": "item/agentMessage/delta",
+        "params": {
+          "delta": " after",
+          "itemId": "msg_0867927fd926bc35016ad8d0e189c081988a57eeb9990cff51",
+          "threadId": "01a15eef-cc88-7da1-bd30-4cf1c14639ec",
+          "turnId": "01a15eef-d32d-7c30-b7ba-eec5bf178299"
+        }
+      }
+    },
+    "type": "host_event",
+    "observed_monotonic_s": 2815.842400679
+  },
+  {
+    "event": {
+      "type": "notification",
+      "value": {
+        "emittedAtMs": 1792594144047,
+        "method": "item/agentMessage/delta",
+        "params": {
+          "delta": " handling",
+          "itemId": "msg_0867927fd926bc35016ad8d0e189c081988a57eeb9990cff51",
+          "threadId": "01a15eef-cc88-7da1-bd30-4cf1c14639ec",
+          "turnId": "01a15eef-d32d-7c30-b7ba-eec5bf178299"
+        }
+      }
+    },
+    "type": "host_event",
+    "observed_monotonic_s": 2815.843056805
+  },
+  {
+    "event": {
+      "type": "notification",
+      "value": {
+        "emittedAtMs": 1792594144047,
+        "method": "item/agentMessage/delta",
+        "params": {
+          "delta": " any",
+          "itemId": "msg_0867927fd926bc35016ad8d0e189c081988a57eeb9990cff51",
+          "threadId": "01a15eef-cc88-7da1-bd30-4cf1c14639ec",
+          "turnId": "01a15eef-d32d-7c30-b7ba-eec5bf178299"
+        }
+      }
+    },
+    "type": "host_event",
+    "observed_monotonic_s": 2815.843702081
+  },
+  {
+    "event": {
+      "type": "notification",
+      "value": {
+        "emittedAtMs": 1792594144047,
+        "method": "item/agentMessage/delta",
+        "params": {
+          "delta": " required",
+          "itemId": "msg_0867927fd926bc35016ad8d0e189c081988a57eeb9990cff51",
+          "threadId": "01a15eef-cc88-7da1-bd30-4cf1c14639ec",
+          "turnId": "01a15eef-d32d-7c30-b7ba-eec5bf178299"
+        }
+      }
+    },
+    "type": "host_event",
+    "observed_monotonic_s": 2815.844897188
+  },
+  {
+    "event": {
+      "type": "notification",
+      "value": {
+        "emittedAtMs": 1792594144047,
+        "method": "item/agentMessage/delta",
+        "params": {
+          "delta": " work",
+          "itemId": "msg_0867927fd926bc35016ad8d0e189c081988a57eeb9990cff51",
+          "threadId": "01a15eef-cc88-7da1-bd30-4cf1c14639ec",
+          "turnId": "01a15eef-d32d-7c30-b7ba-eec5bf178299"
+        }
+      }
+    },
+    "type": "host_event",
+    "observed_monotonic_s": 2815.846596105
+  },
+  {
+    "event": {
+      "type": "notification",
+      "value": {
+        "emittedAtMs": 1792594144047,
+        "method": "item/agentMessage/delta",
+        "params": {
+          "delta": ".\n",
+          "itemId": "msg_0867927fd926bc35016ad8d0e189c081988a57eeb9990cff51",
+          "threadId": "01a15eef-cc88-7da1-bd30-4cf1c14639ec",
+          "turnId": "01a15eef-d32d-7c30-b7ba-eec5bf178299"
+        }
+      }
+    },
+    "type": "host_event",
+    "observed_monotonic_s": 2815.847755507
+  },
+  {
+    "event": {
+      "type": "notification",
+      "value": {
+        "emittedAtMs": 1792594144169,
+        "method": "item/completed",
+        "params": {
+          "completedAtMs": 1792594144166,
+          "item": {
+            "delivery": null,
+            "id": "msg_0867927fd926bc35016ad8d0e189c081988a57eeb9990cff51",
+            "memoryCitation": null,
+            "phase": "commentary",
+            "questions": null,
+            "text": "I\u2019ll confirm this wake, read the qualification document, and resolve the supplied delivery after handling any required work.\n",
+            "type": "agentMessage"
+          },
+          "threadId": "01a15eef-cc88-7da1-bd30-4cf1c14639ec",
+          "turnId": "01a15eef-d32d-7c30-b7ba-eec5bf178299"
+        }
+      }
+    },
+    "type": "host_event",
+    "observed_monotonic_s": 2816.036993557
+  },
+  {
+    "event": {
+      "type": "notification",
+      "value": {
+        "emittedAtMs": 1792594145195,
+        "method": "thread/tokenUsage/updated",
+        "params": {
+          "threadId": "01a15eef-cc88-7da1-bd30-4cf1c14639ec",
+          "tokenUsage": {
+            "last": {
+              "cacheWriteInputTokens": 0,
+              "cachedInputTokens": 7168,
+              "inputTokens": 21792,
+              "outputTokens": 72,
+              "reasoningOutputTokens": 0,
+              "totalTokens": 21864
+            },
+            "modelContextWindow": 828400,
+            "total": {
+              "cacheWriteInputTokens": 0,
+              "cachedInputTokens": 7168,
+              "inputTokens": 21792,
+              "outputTokens": 72,
+              "reasoningOutputTokens": 0,
+              "totalTokens": 21864
+            }
+          },
+          "turnId": "01a15eef-d32d-7c30-b7ba-eec5bf178299"
+        }
+      }
+    },
+    "type": "host_event",
+    "observed_monotonic_s": 2817.036681585
+  },
+  {
+    "event": {
+      "type": "notification",
+      "value": {
+        "emittedAtMs": 1792594145195,
+        "method": "account/rateLimits/updated",
+        "params": {
+          "rateLimits": {
+            "credits": {
+              "balance": "62500.0000000000",
+              "hasCredits": true,
+              "unlimited": false
+            },
+            "individualLimit": null,
+            "limitId": "codex",
+            "limitName": null,
+            "normalModelSlug": null,
+            "planType": "pro",
+            "primary": {
+              "resetsAt": 1793082792,
+              "usedPercent": 66,
+              "windowDurationMins": 10080
+            },
+            "rateLimitReachedType": null,
+            "secondary": null,
+            "spendControlReached": null
+          }
+        }
+      }
+    },
+    "type": "host_event",
+    "observed_monotonic_s": 2817.037829274
+  },
+  {
+    "event": {
+      "type": "notification",
+      "value": {
+        "emittedAtMs": 1792594145208,
+        "method": "mcpServer/startupStatus/updated",
+        "params": {
+          "error": null,
+          "failureReason": null,
+          "name": "codex_apps",
+          "status": "ready",
+          "threadId": "01a15eef-cc88-7da1-bd30-4cf1c14639ec"
+        }
+      }
+    },
+    "type": "host_event",
+    "observed_monotonic_s": 2817.03879719
+  },
+  {
+    "event": {
+      "type": "notification",
+      "value": {
+        "emittedAtMs": 1792594145208,
+        "method": "mcpServer/startupStatus/updated",
+        "params": {
+          "error": null,
+          "failureReason": null,
+          "name": "cooperators",
+          "status": "ready",
+          "threadId": "01a15eef-cc88-7da1-bd30-4cf1c14639ec"
+        }
+      }
+    },
+    "type": "host_event",
+    "observed_monotonic_s": 2817.040708486
+  },
+  {
+    "event": {
+      "type": "notification",
+      "value": {
+        "emittedAtMs": 1792594150217,
+        "method": "item/started",
+        "params": {
+          "item": {
+            "appContext": null,
+            "arguments": {
+              "binding_id": "01M5FEZJYSSNZ6N50Q3Y3RX50T",
+              "generation": 1,
+              "nonce": "e0d072b6a25169b8287a9cf40c565ac1",
+              "wake_id": "01M5FEZMS4ZYK84Q9CVRMZJCGK"
+            },
+            "durationMs": null,
+            "error": null,
+            "id": "exec-51db2c13-10b3-4e37-889c-99c9c64ad2b2",
+            "mcpAppUi": null,
+            "pluginId": null,
+            "readOnlyHint": null,
+            "result": null,
+            "server": "cooperators",
+            "status": "inProgress",
+            "tool": "coop_confirm_activation",
+            "type": "mcpToolCall"
+          },
+          "startedAtMs": 1792594150217,
+          "threadId": "01a15eef-cc88-7da1-bd30-4cf1c14639ec",
+          "turnId": "01a15eef-d32d-7c30-b7ba-eec5bf178299"
+        }
+      }
+    },
+    "type": "host_event",
+    "observed_monotonic_s": 2819.840410549
+  },
+  {
+    "event": {
+      "state": "waiting_for_permission",
+      "type": "state"
+    },
+    "type": "host_event",
+    "observed_monotonic_s": 2819.841461985
+  },
+  {
+    "event": {
+      "approval": {
+        "method": "mcpServer/elicitation/request",
+        "params": {
+          "_meta": {
+            "codex_approval_kind": "mcp_tool_call",
+            "persist": [
+              "session",
+              "always"
+            ],
+            "tool_description": "Confirm this binding's activation nonce without resolving its pending work.",
+            "tool_params": {
+              "binding_id": "01M5FEZJYSSNZ6N50Q3Y3RX50T",
+              "generation": 1,
+              "nonce": "e0d072b6a25169b8287a9cf40c565ac1",
+              "wake_id": "01M5FEZMS4ZYK84Q9CVRMZJCGK"
+            },
+            "tool_params_display": [
+              {
+                "display_name": "binding_id",
+                "name": "binding_id",
+                "value": "01M5FEZJYSSNZ6N50Q3Y3RX50T"
+              },
+              {
+                "display_name": "generation",
+                "name": "generation",
+                "value": 1
+              },
+              {
+                "display_name": "nonce",
+                "name": "nonce",
+                "value": "e0d072b6a25169b8287a9cf40c565ac1"
+              },
+              {
+                "display_name": "wake_id",
+                "name": "wake_id",
+                "value": "01M5FEZMS4ZYK84Q9CVRMZJCGK"
+              }
+            ]
+          },
+          "message": "Allow the cooperators MCP server to run tool \"coop_confirm_activation\"?",
+          "mode": "form",
+          "requestedSchema": {
+            "properties": {},
+            "type": "object"
+          },
+          "serverName": "cooperators",
+          "threadId": "01a15eef-cc88-7da1-bd30-4cf1c14639ec",
+          "turnId": "01a15eef-d32d-7c30-b7ba-eec5bf178299"
+        },
+        "request_id": 0
+      },
+      "type": "approval"
+    },
+    "type": "host_event",
+    "observed_monotonic_s": 2819.842209002
+  },
+  {
+    "event": {
+      "approval": {
+        "method": "mcpServer/elicitation/request",
+        "params": {
+          "_meta": {
+            "codex_approval_kind": "mcp_tool_call",
+            "persist": [
+              "session",
+              "always"
+            ],
+            "tool_description": "Confirm this binding's activation nonce without resolving its pending work.",
+            "tool_params": {
+              "binding_id": "01M5FEZJYSSNZ6N50Q3Y3RX50T",
+              "generation": 1,
+              "nonce": "e0d072b6a25169b8287a9cf40c565ac1",
+              "wake_id": "01M5FEZMS4ZYK84Q9CVRMZJCGK"
+            },
+            "tool_params_display": [
+              {
+                "display_name": "binding_id",
+                "name": "binding_id",
+                "value": "01M5FEZJYSSNZ6N50Q3Y3RX50T"
+              },
+              {
+                "display_name": "generation",
+                "name": "generation",
+                "value": 1
+              },
+              {
+                "display_name": "nonce",
+                "name": "nonce",
+                "value": "e0d072b6a25169b8287a9cf40c565ac1"
+              },
+              {
+                "display_name": "wake_id",
+                "name": "wake_id",
+                "value": "01M5FEZMS4ZYK84Q9CVRMZJCGK"
+              }
+            ]
+          },
+          "message": "Allow the cooperators MCP server to run tool \"coop_confirm_activation\"?",
+          "mode": "form",
+          "requestedSchema": {
+            "properties": {},
+            "type": "object"
+          },
+          "serverName": "cooperators",
+          "threadId": "01a15eef-cc88-7da1-bd30-4cf1c14639ec",
+          "turnId": "01a15eef-d32d-7c30-b7ba-eec5bf178299"
+        },
+        "request_id": 0
+      },
+      "type": "approval"
+    },
+    "type": "host_event",
+    "observed_monotonic_s": 2820.093263898
+  },
+  {
+    "status": {
+      "activation_attempts": 1,
+      "active_wake_id": "01M5FEZMS4ZYK84Q9CVRMZJCGK",
+      "binding": {
+        "adapter_kind": "codex_app_server",
+        "agent_id": "01M5FEZJYFY768FJF0Z565EE6Z",
+        "binding_id": "01M5FEZJYSSNZ6N50Q3Y3RX50T",
+        "bus_id": "01M5FEZJWTCCWGBB2365Y6PFB2",
+        "capability_status": "configured",
+        "exact_host_session_id": "01a15eef-cc88-7da1-bd30-4cf1c14639ec",
+        "generation": 1,
+        "workspace": "/tmp/caq-u2mlivs7/workspace"
+      },
+      "error": null,
+      "in_flight_claims": 0,
+      "last_successful_probe_ms": null,
+      "lifecycle": "waiting_for_permission",
+      "pending_bytes": 1550,
+      "pending_notices": 2,
+      "readiness": "waiting_for_permission",
+      "received_cursor": "arrival:01M5FEZJWTCCWGBB2365Y6PFB2:01M5FEZJYFY768FJF0Z565EE6Z:2",
+      "received_seq": 2
+    },
+    "type": "status",
+    "observed_monotonic_s": 2820.345091188
+  },
+  {
+    "event": {
+      "approval": {
+        "method": "mcpServer/elicitation/request",
+        "params": {
+          "_meta": {
+            "codex_approval_kind": "mcp_tool_call",
+            "persist": [
+              "session",
+              "always"
+            ],
+            "tool_description": "Confirm this binding's activation nonce without resolving its pending work.",
+            "tool_params": {
+              "binding_id": "01M5FEZJYSSNZ6N50Q3Y3RX50T",
+              "generation": 1,
+              "nonce": "e0d072b6a25169b8287a9cf40c565ac1",
+              "wake_id": "01M5FEZMS4ZYK84Q9CVRMZJCGK"
+            },
+            "tool_params_display": [
+              {
+                "display_name": "binding_id",
+                "name": "binding_id",
+                "value": "01M5FEZJYSSNZ6N50Q3Y3RX50T"
+              },
+              {
+                "display_name": "generation",
+                "name": "generation",
+                "value": 1
+              },
+              {
+                "display_name": "nonce",
+                "name": "nonce",
+                "value": "e0d072b6a25169b8287a9cf40c565ac1"
+              },
+              {
+                "display_name": "wake_id",
+                "name": "wake_id",
+                "value": "01M5FEZMS4ZYK84Q9CVRMZJCGK"
+              }
+            ]
+          },
+          "message": "Allow the cooperators MCP server to run tool \"coop_confirm_activation\"?",
+          "mode": "form",
+          "requestedSchema": {
+            "properties": {},
+            "type": "object"
+          },
+          "serverName": "cooperators",
+          "threadId": "01a15eef-cc88-7da1-bd30-4cf1c14639ec",
+          "turnId": "01a15eef-d32d-7c30-b7ba-eec5bf178299"
+        },
+        "request_id": 0
+      },
+      "type": "approval"
+    },
+    "type": "host_event",
+    "observed_monotonic_s": 2820.346835922
+  },
+  {
+    "event": {
+      "approval": {
+        "method": "mcpServer/elicitation/request",
+        "params": {
+          "_meta": {
+            "codex_approval_kind": "mcp_tool_call",
+            "persist": [
+              "session",
+              "always"
+            ],
+            "tool_description": "Confirm this binding's activation nonce without resolving its pending work.",
+            "tool_params": {
+              "binding_id": "01M5FEZJYSSNZ6N50Q3Y3RX50T",
+              "generation": 1,
+              "nonce": "e0d072b6a25169b8287a9cf40c565ac1",
+              "wake_id": "01M5FEZMS4ZYK84Q9CVRMZJCGK"
+            },
+            "tool_params_display": [
+              {
+                "display_name": "binding_id",
+                "name": "binding_id",
+                "value": "01M5FEZJYSSNZ6N50Q3Y3RX50T"
+              },
+              {
+                "display_name": "generation",
+                "name": "generation",
+                "value": 1
+              },
+              {
+                "display_name": "nonce",
+                "name": "nonce",
+                "value": "e0d072b6a25169b8287a9cf40c565ac1"
+              },
+              {
+                "display_name": "wake_id",
+                "name": "wake_id",
+                "value": "01M5FEZMS4ZYK84Q9CVRMZJCGK"
+              }
+            ]
+          },
+          "message": "Allow the cooperators MCP server to run tool \"coop_confirm_activation\"?",
+          "mode": "form",
+          "requestedSchema": {
+            "properties": {},
+            "type": "object"
+          },
+          "serverName": "cooperators",
+          "threadId": "01a15eef-cc88-7da1-bd30-4cf1c14639ec",
+          "turnId": "01a15eef-d32d-7c30-b7ba-eec5bf178299"
+        },
+        "request_id": 0
+      },
+      "type": "approval"
+    },
+    "type": "host_event",
+    "observed_monotonic_s": 2820.598730008
+  },
+  {
+    "request_id": 0,
+    "type": "approval_answered",
+    "observed_monotonic_s": 2820.851014409
+  },
+  {
+    "event": {
+      "state": "busy",
+      "type": "state"
+    },
+    "type": "host_event",
+    "observed_monotonic_s": 2820.852746252
+  },
+  {
+    "event": {
+      "state": "unknown",
+      "type": "state"
+    },
+    "type": "host_event",
+    "observed_monotonic_s": 2820.853682448
+  },
+  {
+    "event": {
+      "state": "busy",
+      "type": "state"
+    },
+    "type": "host_event",
+    "observed_monotonic_s": 2820.854833511
+  },
+  {
+    "event": {
+      "type": "notification",
+      "value": {
+        "emittedAtMs": 1792594150515,
+        "method": "item/completed",
+        "params": {
+          "completedAtMs": 1792594150511,
+          "item": {
+            "appContext": null,
+            "arguments": {
+              "binding_id": "01M5FEZJYSSNZ6N50Q3Y3RX50T",
+              "generation": 1,
+              "nonce": "e0d072b6a25169b8287a9cf40c565ac1",
+              "wake_id": "01M5FEZMS4ZYK84Q9CVRMZJCGK"
+            },
+            "durationMs": 6,
+            "error": null,
+            "id": "exec-51db2c13-10b3-4e37-889c-99c9c64ad2b2",
+            "mcpAppUi": null,
+            "pluginId": null,
+            "readOnlyHint": null,
+            "result": {
+              "_meta": null,
+              "content": [
+                {
+                  "text": "{\"binding_id\":\"01M5FEZJYSSNZ6N50Q3Y3RX50T\",\"generation\":1,\"observed_at_ms\":1792594150507,\"readiness\":\"verified\",\"wake_id\":\"01M5FEZMS4ZYK84Q9CVRMZJCGK\"}",
+                  "type": "text"
+                }
+              ],
+              "structuredContent": {
+                "binding_id": "01M5FEZJYSSNZ6N50Q3Y3RX50T",
+                "generation": 1,
+                "observed_at_ms": 1792594150507,
+                "readiness": "verified",
+                "wake_id": "01M5FEZMS4ZYK84Q9CVRMZJCGK"
+              }
+            },
+            "server": "cooperators",
+            "status": "completed",
+            "tool": "coop_confirm_activation",
+            "type": "mcpToolCall"
+          },
+          "threadId": "01a15eef-cc88-7da1-bd30-4cf1c14639ec",
+          "turnId": "01a15eef-d32d-7c30-b7ba-eec5bf178299"
+        }
+      }
+    },
+    "type": "host_event",
+    "observed_monotonic_s": 2820.855703128
+  },
+  {
+    "event": {
+      "type": "notification",
+      "value": {
+        "emittedAtMs": 1792594150521,
+        "method": "item/started",
+        "params": {
+          "item": {
+            "appContext": null,
+            "arguments": {
+              "name": "qualification",
+              "version": 1
+            },
+            "durationMs": null,
+            "error": null,
+            "id": "exec-ff3bd8c2-df5b-485a-80cd-3013533d5667",
+            "mcpAppUi": null,
+            "pluginId": null,
+            "readOnlyHint": null,
+            "result": null,
+            "server": "cooperators",
+            "status": "inProgress",
+            "tool": "coop_read_doc",
+            "type": "mcpToolCall"
+          },
+          "startedAtMs": 1792594150521,
+          "threadId": "01a15eef-cc88-7da1-bd30-4cf1c14639ec",
+          "turnId": "01a15eef-d32d-7c30-b7ba-eec5bf178299"
+        }
+      }
+    },
+    "type": "host_event",
+    "observed_monotonic_s": 2820.856734742
+  },
+  {
+    "event": {
+      "state": "waiting_for_permission",
+      "type": "state"
+    },
+    "type": "host_event",
+    "observed_monotonic_s": 2820.857700457
+  },
+  {
+    "event": {
+      "approval": {
+        "method": "mcpServer/elicitation/request",
+        "params": {
+          "_meta": {
+            "codex_approval_kind": "mcp_tool_call",
+            "persist": [
+              "session",
+              "always"
+            ],
+            "tool_description": "Read a document's head or a pinned historical version.",
+            "tool_params": {
+              "name": "qualification",
+              "version": 1
+            },
+            "tool_params_display": [
+              {
+                "display_name": "name",
+                "name": "name",
+                "value": "qualification"
+              },
+              {
+                "display_name": "version",
+                "name": "version",
+                "value": 1
+              }
+            ]
+          },
+          "message": "Allow the cooperators MCP server to run tool \"coop_read_doc\"?",
+          "mode": "form",
+          "requestedSchema": {
+            "properties": {},
+            "type": "object"
+          },
+          "serverName": "cooperators",
+          "threadId": "01a15eef-cc88-7da1-bd30-4cf1c14639ec",
+          "turnId": "01a15eef-d32d-7c30-b7ba-eec5bf178299"
+        },
+        "request_id": 1
+      },
+      "type": "approval"
+    },
+    "type": "host_event",
+    "observed_monotonic_s": 2820.859222694
+  },
+  {
+    "event": {
+      "approval": {
+        "method": "mcpServer/elicitation/request",
+        "params": {
+          "_meta": {
+            "codex_approval_kind": "mcp_tool_call",
+            "persist": [
+              "session",
+              "always"
+            ],
+            "tool_description": "Read a document's head or a pinned historical version.",
+            "tool_params": {
+              "name": "qualification",
+              "version": 1
+            },
+            "tool_params_display": [
+              {
+                "display_name": "name",
+                "name": "name",
+                "value": "qualification"
+              },
+              {
+                "display_name": "version",
+                "name": "version",
+                "value": 1
+              }
+            ]
+          },
+          "message": "Allow the cooperators MCP server to run tool \"coop_read_doc\"?",
+          "mode": "form",
+          "requestedSchema": {
+            "properties": {},
+            "type": "object"
+          },
+          "serverName": "cooperators",
+          "threadId": "01a15eef-cc88-7da1-bd30-4cf1c14639ec",
+          "turnId": "01a15eef-d32d-7c30-b7ba-eec5bf178299"
+        },
+        "request_id": 1
+      },
+      "type": "approval"
+    },
+    "type": "host_event",
+    "observed_monotonic_s": 2821.110504954
+  },
+  {
+    "status": {
+      "activation_attempts": 1,
+      "active_wake_id": "01M5FEZMS4ZYK84Q9CVRMZJCGK",
+      "binding": {
+        "adapter_kind": "codex_app_server",
+        "agent_id": "01M5FEZJYFY768FJF0Z565EE6Z",
+        "binding_id": "01M5FEZJYSSNZ6N50Q3Y3RX50T",
+        "bus_id": "01M5FEZJWTCCWGBB2365Y6PFB2",
+        "capability_status": "configured",
+        "exact_host_session_id": "01a15eef-cc88-7da1-bd30-4cf1c14639ec",
+        "generation": 1,
+        "workspace": "/tmp/caq-u2mlivs7/workspace"
+      },
+      "error": null,
+      "in_flight_claims": 0,
+      "last_successful_probe_ms": 1792594150507,
+      "lifecycle": "waiting_for_permission",
+      "pending_bytes": 1550,
+      "pending_notices": 2,
+      "readiness": "waiting_for_permission",
+      "received_cursor": "arrival:01M5FEZJWTCCWGBB2365Y6PFB2:01M5FEZJYFY768FJF0Z565EE6Z:2",
+      "received_seq": 2
+    },
+    "type": "status",
+    "observed_monotonic_s": 2821.362111944
+  },
+  {
+    "error": "invalid parameters: unknown or already answered host approval request",
+    "type": "operator_error",
+    "observed_monotonic_s": 2821.36342229
+  },
+  {
+    "event": {
+      "approval": {
+        "method": "mcpServer/elicitation/request",
+        "params": {
+          "_meta": {
+            "codex_approval_kind": "mcp_tool_call",
+            "persist": [
+              "session",
+              "always"
+            ],
+            "tool_description": "Read a document's head or a pinned historical version.",
+            "tool_params": {
+              "name": "qualification",
+              "version": 1
+            },
+            "tool_params_display": [
+              {
+                "display_name": "name",
+                "name": "name",
+                "value": "qualification"
+              },
+              {
+                "display_name": "version",
+                "name": "version",
+                "value": 1
+              }
+            ]
+          },
+          "message": "Allow the cooperators MCP server to run tool \"coop_read_doc\"?",
+          "mode": "form",
+          "requestedSchema": {
+            "properties": {},
+            "type": "object"
+          },
+          "serverName": "cooperators",
+          "threadId": "01a15eef-cc88-7da1-bd30-4cf1c14639ec",
+          "turnId": "01a15eef-d32d-7c30-b7ba-eec5bf178299"
+        },
+        "request_id": 1
+      },
+      "type": "approval"
+    },
+    "type": "host_event",
+    "observed_monotonic_s": 2821.364512447
+  },
+  {
+    "event": {
+      "approval": {
+        "method": "mcpServer/elicitation/request",
+        "params": {
+          "_meta": {
+            "codex_approval_kind": "mcp_tool_call",
+            "persist": [
+              "session",
+              "always"
+            ],
+            "tool_description": "Read a document's head or a pinned historical version.",
+            "tool_params": {
+              "name": "qualification",
+              "version": 1
+            },
+            "tool_params_display": [
+              {
+                "display_name": "name",
+                "name": "name",
+                "value": "qualification"
+              },
+              {
+                "display_name": "version",
+                "name": "version",
+                "value": 1
+              }
+            ]
+          },
+          "message": "Allow the cooperators MCP server to run tool \"coop_read_doc\"?",
+          "mode": "form",
+          "requestedSchema": {
+            "properties": {},
+            "type": "object"
+          },
+          "serverName": "cooperators",
+          "threadId": "01a15eef-cc88-7da1-bd30-4cf1c14639ec",
+          "turnId": "01a15eef-d32d-7c30-b7ba-eec5bf178299"
+        },
+        "request_id": 1
+      },
+      "type": "approval"
+    },
+    "type": "host_event",
+    "observed_monotonic_s": 2821.615911605
+  },
+  {
+    "error": "invalid parameters: unknown or already answered host approval request",
+    "type": "operator_error",
+    "observed_monotonic_s": 2821.868166916
+  },
+  {
+    "event": {
+      "approval": {
+        "method": "mcpServer/elicitation/request",
+        "params": {
+          "_meta": {
+            "codex_approval_kind": "mcp_tool_call",
+            "persist": [
+              "session",
+              "always"
+            ],
+            "tool_description": "Read a document's head or a pinned historical version.",
+            "tool_params": {
+              "name": "qualification",
+              "version": 1
+            },
+            "tool_params_display": [
+              {
+                "display_name": "name",
+                "name": "name",
+                "value": "qualification"
+              },
+              {
+                "display_name": "version",
+                "name": "version",
+                "value": 1
+              }
+            ]
+          },
+          "message": "Allow the cooperators MCP server to run tool \"coop_read_doc\"?",
+          "mode": "form",
+          "requestedSchema": {
+            "properties": {},
+            "type": "object"
+          },
+          "serverName": "cooperators",
+          "threadId": "01a15eef-cc88-7da1-bd30-4cf1c14639ec",
+          "turnId": "01a15eef-d32d-7c30-b7ba-eec5bf178299"
+        },
+        "request_id": 1
+      },
+      "type": "approval"
+    },
+    "type": "host_event",
+    "observed_monotonic_s": 2821.869539402
+  },
+  {
+    "event": {
+      "approval": {
+        "method": "mcpServer/elicitation/request",
+        "params": {
+          "_meta": {
+            "codex_approval_kind": "mcp_tool_call",
+            "persist": [
+              "session",
+              "always"
+            ],
+            "tool_description": "Read a document's head or a pinned historical version.",
+            "tool_params": {
+              "name": "qualification",
+              "version": 1
+            },
+            "tool_params_display": [
+              {
+                "display_name": "name",
+                "name": "name",
+                "value": "qualification"
+              },
+              {
+                "display_name": "version",
+                "name": "version",
+                "value": 1
+              }
+            ]
+          },
+          "message": "Allow the cooperators MCP server to run tool \"coop_read_doc\"?",
+          "mode": "form",
+          "requestedSchema": {
+            "properties": {},
+            "type": "object"
+          },
+          "serverName": "cooperators",
+          "threadId": "01a15eef-cc88-7da1-bd30-4cf1c14639ec",
+          "turnId": "01a15eef-d32d-7c30-b7ba-eec5bf178299"
+        },
+        "request_id": 1
+      },
+      "type": "approval"
+    },
+    "type": "host_event",
+    "observed_monotonic_s": 2822.121026523
+  },
+  {
+    "event": {
+      "approval": {
+        "method": "mcpServer/elicitation/request",
+        "params": {
+          "_meta": {
+            "codex_approval_kind": "mcp_tool_call",
+            "persist": [
+              "session",
+              "always"
+            ],
+            "tool_description": "Read a document's head or a pinned historical version.",
+            "tool_params": {
+              "name": "qualification",
+              "version": 1
+            },
+            "tool_params_display": [
+              {
+                "display_name": "name",
+                "name": "name",
+                "value": "qualification"
+              },
+              {
+                "display_name": "version",
+                "name": "version",
+                "value": 1
+              }
+            ]
+          },
+          "message": "Allow the cooperators MCP server to run tool \"coop_read_doc\"?",
+          "mode": "form",
+          "requestedSchema": {
+            "properties": {},
+            "type": "object"
+          },
+          "serverName": "cooperators",
+          "threadId": "01a15eef-cc88-7da1-bd30-4cf1c14639ec",
+          "turnId": "01a15eef-d32d-7c30-b7ba-eec5bf178299"
+        },
+        "request_id": 1
+      },
+      "type": "approval"
+    },
+    "type": "host_event",
+    "observed_monotonic_s": 2822.372745132
+  },
+  {
+    "event": {
+      "approval": {
+        "method": "mcpServer/elicitation/request",
+        "params": {
+          "_meta": {
+            "codex_approval_kind": "mcp_tool_call",
+            "persist": [
+              "session",
+              "always"
+            ],
+            "tool_description": "Read a document's head or a pinned historical version.",
+            "tool_params": {
+              "name": "qualification",
+              "version": 1
+            },
+            "tool_params_display": [
+              {
+                "display_name": "name",
+                "name": "name",
+                "value": "qualification"
+              },
+              {
+                "display_name": "version",
+                "name": "version",
+                "value": 1
+              }
+            ]
+          },
+          "message": "Allow the cooperators MCP server to run tool \"coop_read_doc\"?",
+          "mode": "form",
+          "requestedSchema": {
+            "properties": {},
+            "type": "object"
+          },
+          "serverName": "cooperators",
+          "threadId": "01a15eef-cc88-7da1-bd30-4cf1c14639ec",
+          "turnId": "01a15eef-d32d-7c30-b7ba-eec5bf178299"
+        },
+        "request_id": 1
+      },
+      "type": "approval"
+    },
+    "type": "host_event",
+    "observed_monotonic_s": 2822.624627311
+  },
+  {
+    "error": "invalid parameters: unknown or already answered host approval request",
+    "type": "operator_error",
+    "observed_monotonic_s": 2822.877584302
+  },
+  {
+    "event": {
+      "approval": {
+        "method": "mcpServer/elicitation/request",
+        "params": {
+          "_meta": {
+            "codex_approval_kind": "mcp_tool_call",
+            "persist": [
+              "session",
+              "always"
+            ],
+            "tool_description": "Read a document's head or a pinned historical version.",
+            "tool_params": {
+              "name": "qualification",
+              "version": 1
+            },
+            "tool_params_display": [
+              {
+                "display_name": "name",
+                "name": "name",
+                "value": "qualification"
+              },
+              {
+                "display_name": "version",
+                "name": "version",
+                "value": 1
+              }
+            ]
+          },
+          "message": "Allow the cooperators MCP server to run tool \"coop_read_doc\"?",
+          "mode": "form",
+          "requestedSchema": {
+            "properties": {},
+            "type": "object"
+          },
+          "serverName": "cooperators",
+          "threadId": "01a15eef-cc88-7da1-bd30-4cf1c14639ec",
+          "turnId": "01a15eef-d32d-7c30-b7ba-eec5bf178299"
+        },
+        "request_id": 1
+      },
+      "type": "approval"
+    },
+    "type": "host_event",
+    "observed_monotonic_s": 2822.880069347
+  },
+  {
+    "event": {
+      "approval": {
+        "method": "mcpServer/elicitation/request",
+        "params": {
+          "_meta": {
+            "codex_approval_kind": "mcp_tool_call",
+            "persist": [
+              "session",
+              "always"
+            ],
+            "tool_description": "Read a document's head or a pinned historical version.",
+            "tool_params": {
+              "name": "qualification",
+              "version": 1
+            },
+            "tool_params_display": [
+              {
+                "display_name": "name",
+                "name": "name",
+                "value": "qualification"
+              },
+              {
+                "display_name": "version",
+                "name": "version",
+                "value": 1
+              }
+            ]
+          },
+          "message": "Allow the cooperators MCP server to run tool \"coop_read_doc\"?",
+          "mode": "form",
+          "requestedSchema": {
+            "properties": {},
+            "type": "object"
+          },
+          "serverName": "cooperators",
+          "threadId": "01a15eef-cc88-7da1-bd30-4cf1c14639ec",
+          "turnId": "01a15eef-d32d-7c30-b7ba-eec5bf178299"
+        },
+        "request_id": 1
+      },
+      "type": "approval"
+    },
+    "type": "host_event",
+    "observed_monotonic_s": 2823.13212844
+  },
+  {
+    "request_id": 1,
+    "type": "approval_answered",
+    "observed_monotonic_s": 2823.38401853
+  },
+  {
+    "event": {
+      "state": "busy",
+      "type": "state"
+    },
+    "type": "host_event",
+    "observed_monotonic_s": 2823.385635981
+  },
+  {
+    "event": {
+      "state": "unknown",
+      "type": "state"
+    },
+    "type": "host_event",
+    "observed_monotonic_s": 2823.387257192
+  },
+  {
+    "event": {
+      "state": "busy",
+      "type": "state"
+    },
+    "type": "host_event",
+    "observed_monotonic_s": 2823.388903656
+  },
+  {
+    "event": {
+      "type": "notification",
+      "value": {
+        "emittedAtMs": 1792594151527,
+        "method": "item/completed",
+        "params": {
+          "completedAtMs": 1792594151524,
+          "item": {
+            "appContext": null,
+            "arguments": {
+              "name": "qualification",
+              "version": 1
+            },
+            "durationMs": 2,
+            "error": null,
+            "id": "exec-ff3bd8c2-df5b-485a-80cd-3013533d5667",
+            "mcpAppUi": null,
+            "pluginId": null,
+            "readOnlyHint": null,
+            "result": {
+              "_meta": null,
+              "content": [
+                {
+                  "text": "{\"blob\":null,\"body\":{\"mime\":\"text/plain\",\"text\":\"Controlled qualification document. Read this pinned version, confirm this wake, then resolve every supplied document notice as document_read with continuation=false. Do not change project files or perform unrelated work. Before resolution, run exactly this shell command with sandbox_permissions=require_escalated so its per-request approval reaches the operator; this is an authorized approval-routing test: touch /tmp/caq-u2mlivs7/approval-marker\"},\"claim\":null,\"fence\":0,\"head_version\":2,\"mime\":\"text/plain\",\"name\":\"qualification\",\"storage\":\"inline\",\"title\":\"\",\"updated_at\":\"2026-10-21T14:48:57.912Z\",\"version\":1,\"versions\":2}",
+                  "type": "text"
+                }
+              ],
+              "structuredContent": {
+                "blob": null,
+                "body": {
+                  "mime": "text/plain",
+                  "text": "Controlled qualification document. Read this pinned version, confirm this wake, then resolve every supplied document notice as document_read with continuation=false. Do not change project files or perform unrelated work. Before resolution, run exactly this shell command with sandbox_permissions=require_escalated so its per-request approval reaches the operator; this is an authorized approval-routing test: touch /tmp/caq-u2mlivs7/approval-marker"
+                },
+                "claim": null,
+                "fence": 0,
+                "head_version": 2,
+                "mime": "text/plain",
+                "name": "qualification",
+                "storage": "inline",
+                "title": "",
+                "updated_at": "2026-10-21T14:48:57.912Z",
+                "version": 1,
+                "versions": 2
+              }
+            },
+            "server": "cooperators",
+            "status": "completed",
+            "tool": "coop_read_doc",
+            "type": "mcpToolCall"
+          },
+          "threadId": "01a15eef-cc88-7da1-bd30-4cf1c14639ec",
+          "turnId": "01a15eef-d32d-7c30-b7ba-eec5bf178299"
+        }
+      }
+    },
+    "type": "host_event",
+    "observed_monotonic_s": 2823.390301295
+  },
+  {
+    "event": {
+      "type": "notification",
+      "value": {
+        "emittedAtMs": 1792594151539,
+        "method": "thread/tokenUsage/updated",
+        "params": {
+          "threadId": "01a15eef-cc88-7da1-bd30-4cf1c14639ec",
+          "tokenUsage": {
+            "last": {
+              "cacheWriteInputTokens": 0,
+              "cachedInputTokens": 21632,
+              "inputTokens": 22571,
+              "outputTokens": 117,
+              "reasoningOutputTokens": 0,
+              "totalTokens": 22688
+            },
+            "modelContextWindow": 828400,
+            "total": {
+              "cacheWriteInputTokens": 0,
+              "cachedInputTokens": 28800,
+              "inputTokens": 44363,
+              "outputTokens": 189,
+              "reasoningOutputTokens": 0,
+              "totalTokens": 44552
+            }
+          },
+          "turnId": "01a15eef-d32d-7c30-b7ba-eec5bf178299"
+        }
+      }
+    },
+    "type": "host_event",
+    "observed_monotonic_s": 2823.392072507
+  },
+  {
+    "event": {
+      "type": "notification",
+      "value": {
+        "emittedAtMs": 1792594151540,
+        "method": "account/rateLimits/updated",
+        "params": {
+          "rateLimits": {
+            "credits": {
+              "balance": "62500.0000000000",
+              "hasCredits": true,
+              "unlimited": false
+            },
+            "individualLimit": null,
+            "limitId": "codex",
+            "limitName": null,
+            "normalModelSlug": null,
+            "planType": "pro",
+            "primary": {
+              "resetsAt": 1793082792,
+              "usedPercent": 66,
+              "windowDurationMins": 10080
+            },
+            "rateLimitReachedType": null,
+            "secondary": null,
+            "spendControlReached": null
+          }
+        }
+      }
+    },
+    "type": "host_event",
+    "observed_monotonic_s": 2823.393676804
+  },
+  {
+    "status": {
+      "activation_attempts": 1,
+      "active_wake_id": "01M5FEZMS4ZYK84Q9CVRMZJCGK",
+      "binding": {
+        "adapter_kind": "codex_app_server",
+        "agent_id": "01M5FEZJYFY768FJF0Z565EE6Z",
+        "binding_id": "01M5FEZJYSSNZ6N50Q3Y3RX50T",
+        "bus_id": "01M5FEZJWTCCWGBB2365Y6PFB2",
+        "capability_status": "configured",
+        "exact_host_session_id": "01a15eef-cc88-7da1-bd30-4cf1c14639ec",
+        "generation": 1,
+        "workspace": "/tmp/caq-u2mlivs7/workspace"
+      },
+      "error": null,
+      "in_flight_claims": 0,
+      "last_successful_probe_ms": 1792594150507,
+      "lifecycle": "busy",
+      "pending_bytes": 1550,
+      "pending_notices": 2,
+      "readiness": "configured",
+      "received_cursor": "arrival:01M5FEZJWTCCWGBB2365Y6PFB2:01M5FEZJYFY768FJF0Z565EE6Z:2",
+      "received_seq": 2
+    },
+    "type": "status",
+    "observed_monotonic_s": 2823.395751886
+  },
+  {
+    "error": "invalid parameters: unknown or already answered host approval request",
+    "type": "operator_error",
+    "observed_monotonic_s": 2823.397228311
+  },
+  {
+    "error": "invalid parameters: unknown or already answered host approval request",
+    "type": "operator_error",
+    "observed_monotonic_s": 2823.398651066
+  },
+  {
+    "error": "invalid parameters: unknown or already answered host approval request",
+    "type": "operator_error",
+    "observed_monotonic_s": 2823.400134522
+  },
+  {
+    "error": "invalid parameters: unknown or already answered host approval request",
+    "type": "operator_error",
+    "observed_monotonic_s": 2823.401730204
+  },
+  {
+    "error": "invalid parameters: unknown or already answered host approval request",
+    "type": "operator_error",
+    "observed_monotonic_s": 2823.403475154
+  },
+  {
+    "error": "invalid parameters: unknown or already answered host approval request",
+    "type": "operator_error",
+    "observed_monotonic_s": 2823.405387108
+  },
+  {
+    "error": "invalid parameters: unknown or already answered host approval request",
+    "type": "operator_error",
+    "observed_monotonic_s": 2823.407419309
+  },
+  {
+    "error": "invalid parameters: unknown or already answered host approval request",
+    "type": "operator_error",
+    "observed_monotonic_s": 2823.409720666
+  },
+  {
+    "error": "invalid parameters: unknown or already answered host approval request",
+    "type": "operator_error",
+    "observed_monotonic_s": 2823.412372378
+  },
+  {
+    "event": {
+      "state": "waiting_for_permission",
+      "type": "state"
+    },
+    "type": "host_event",
+    "observed_monotonic_s": 2824.240184968
+  },
+  {
+    "event": {
+      "type": "notification",
+      "value": {
+        "emittedAtMs": 1792594154514,
+        "method": "item/started",
+        "params": {
+          "item": {
+            "aggregatedOutput": null,
+            "command": "/usr/bin/zsh -lc 'touch /tmp/caq-u2mlivs7/approval-marker'",
+            "commandActions": [
+              {
+                "command": "touch /tmp/caq-u2mlivs7/approval-marker",
+                "type": "unknown"
+              }
+            ],
+            "cwd": "/tmp/caq-u2mlivs7/workspace",
+            "durationMs": null,
+            "exitCode": null,
+            "id": "exec-fd6f9b6c-b012-4703-95ad-eb7b7740091f",
+            "pluginId": null,
+            "processId": null,
+            "scriptPath": null,
+            "source": "agent",
+            "status": "inProgress",
+            "type": "commandExecution"
+          },
+          "startedAtMs": 1792594154514,
+          "threadId": "01a15eef-cc88-7da1-bd30-4cf1c14639ec",
+          "turnId": "01a15eef-d32d-7c30-b7ba-eec5bf178299"
+        }
+      }
+    },
+    "type": "host_event",
+    "observed_monotonic_s": 2824.242303004
+  },
+  {
+    "event": {
+      "approval": {
+        "method": "item/commandExecution/requestApproval",
+        "params": {
+          "availableDecisions": [
+            "accept",
+            {
+              "acceptWithExecpolicyAmendment": {
+                "execpolicy_amendment": [
+                  "touch",
+                  "/tmp/caq-u2mlivs7/approval-marker"
+                ]
+              }
+            },
+            "cancel"
+          ],
+          "command": "/usr/bin/zsh -lc 'touch /tmp/caq-u2mlivs7/approval-marker'",
+          "commandActions": [
+            {
+              "command": "touch /tmp/caq-u2mlivs7/approval-marker",
+              "type": "unknown"
+            }
+          ],
+          "cwd": "/tmp/caq-u2mlivs7/workspace",
+          "environmentId": "local",
+          "itemId": "exec-fd6f9b6c-b012-4703-95ad-eb7b7740091f",
+          "kind": "command",
+          "proposedExecpolicyAmendment": [
+            "touch",
+            "/tmp/caq-u2mlivs7/approval-marker"
+          ],
+          "reason": "Allow the approval-routing test requested by qualification version 1 to create /tmp/caq-u2mlivs7/approval-marker?",
+          "startedAtMs": 1792594154512,
+          "threadId": "01a15eef-cc88-7da1-bd30-4cf1c14639ec",
+          "turnId": "01a15eef-d32d-7c30-b7ba-eec5bf178299"
+        },
+        "request_id": 2
+      },
+      "type": "approval"
+    },
+    "type": "host_event",
+    "observed_monotonic_s": 2824.244140086
+  }
+]

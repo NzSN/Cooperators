@@ -1,0 +1,7 @@
+[
+  {
+    "error": "internal error: host stdout closed",
+    "type": "host_error",
+    "observed_monotonic_s": 2219.846627619
+  }
+]

@@ -1,0 +1,18 @@
+{
+  "samples": 1,
+  "warmups": 10,
+  "source_to_feed_target_p95_ms": 100,
+  "provider_timeout_s": 180,
+  "provider_gates": [
+    "idle",
+    "busy",
+    "approval",
+    "resolution",
+    "exact-session restart"
+  ],
+  "percentiles": "nearest rank; warmups excluded",
+  "limitations": [
+    "One host, serial workload and one window per condition",
+    "Performance mode does not measure provider admission, model execution, bridge memory or representative large-history startup"
+  ]
+}

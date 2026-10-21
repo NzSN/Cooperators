@@ -1,0 +1,876 @@
+[
+  {
+    "binding": {
+      "adapter_kind": "codex_app_server",
+      "agent_id": "01M5FEXZZFFZ6XM7J5Q5PNZG92",
+      "binding_id": "01M5FEY00Z0BJHNBT23YAMBMEA",
+      "bus_id": "01M5FEXZWKM6EMT8W6EJEY1V50",
+      "capability_status": "configured",
+      "exact_host_session_id": "01a15eef-00ce-7680-8ce4-61d63766d243",
+      "generation": 1,
+      "workspace": "/tmp/caq-jnfdmfrv/workspace"
+    },
+    "config": "/tmp/caq-jnfdmfrv/state/resume.json",
+    "type": "host_configured",
+    "observed_monotonic_s": 2758.25432689
+  },
+  {
+    "config": "/tmp/caq-jnfdmfrv/state/resume.json",
+    "status": {
+      "activation_attempts": 0,
+      "active_wake_id": null,
+      "binding": {
+        "adapter_kind": "codex_app_server",
+        "agent_id": "01M5FEXZZFFZ6XM7J5Q5PNZG92",
+        "binding_id": "01M5FEY00Z0BJHNBT23YAMBMEA",
+        "bus_id": "01M5FEXZWKM6EMT8W6EJEY1V50",
+        "capability_status": "configured",
+        "exact_host_session_id": "01a15eef-00ce-7680-8ce4-61d63766d243",
+        "generation": 1,
+        "workspace": "/tmp/caq-jnfdmfrv/workspace"
+      },
+      "error": null,
+      "in_flight_claims": 0,
+      "last_successful_probe_ms": null,
+      "lifecycle": "unknown",
+      "pending_bytes": 0,
+      "pending_notices": 0,
+      "readiness": "configured",
+      "received_cursor": null,
+      "received_seq": 0
+    },
+    "type": "host_ready",
+    "observed_monotonic_s": 2758.832864509
+  },
+  {
+    "event": {
+      "type": "notification",
+      "value": {
+        "emittedAtMs": 1792594084957,
+        "method": "remoteControl/status/changed",
+        "params": {
+          "environmentId": null,
+          "installationId": "494968a2-f871-4c50-bde8-a687a4a80a35",
+          "serverName": "L",
+          "status": "disabled"
+        }
+      }
+    },
+    "type": "host_event",
+    "observed_monotonic_s": 2758.883170568
+  },
+  {
+    "event": {
+      "type": "notification",
+      "value": {
+        "emittedAtMs": 1792594085339,
+        "method": "mcpServer/startupStatus/updated",
+        "params": {
+          "error": null,
+          "failureReason": null,
+          "name": "cooperators",
+          "status": "starting",
+          "threadId": "01a15eef-00ce-7680-8ce4-61d63766d243"
+        }
+      }
+    },
+    "type": "host_event",
+    "observed_monotonic_s": 2758.883638492
+  },
+  {
+    "event": {
+      "type": "notification",
+      "value": {
+        "emittedAtMs": 1792594085339,
+        "method": "mcpServer/startupStatus/updated",
+        "params": {
+          "error": null,
+          "failureReason": null,
+          "name": "codex_apps",
+          "status": "starting",
+          "threadId": "01a15eef-00ce-7680-8ce4-61d63766d243"
+        }
+      }
+    },
+    "type": "host_event",
+    "observed_monotonic_s": 2758.883959265
+  },
+  {
+    "event": {
+      "type": "notification",
+      "value": {
+        "emittedAtMs": 1792594085339,
+        "method": "mcpServer/startupStatus/updated",
+        "params": {
+          "error": null,
+          "failureReason": null,
+          "name": "cooperators",
+          "status": "ready",
+          "threadId": "01a15eef-00ce-7680-8ce4-61d63766d243"
+        }
+      }
+    },
+    "type": "host_event",
+    "observed_monotonic_s": 2758.884226681
+  },
+  {
+    "event": {
+      "state": "idle",
+      "type": "state"
+    },
+    "type": "host_event",
+    "observed_monotonic_s": 2758.884486203
+  },
+  {
+    "event": {
+      "type": "notification",
+      "value": {
+        "emittedAtMs": 1792594085347,
+        "method": "thread/goal/cleared",
+        "params": {
+          "threadId": "01a15eef-00ce-7680-8ce4-61d63766d243"
+        }
+      }
+    },
+    "type": "host_event",
+    "observed_monotonic_s": 2758.884698326
+  },
+  {
+    "status": {
+      "activation_attempts": 0,
+      "active_wake_id": null,
+      "binding": {
+        "adapter_kind": "codex_app_server",
+        "agent_id": "01M5FEXZZFFZ6XM7J5Q5PNZG92",
+        "binding_id": "01M5FEY00Z0BJHNBT23YAMBMEA",
+        "bus_id": "01M5FEXZWKM6EMT8W6EJEY1V50",
+        "capability_status": "configured",
+        "exact_host_session_id": "01a15eef-00ce-7680-8ce4-61d63766d243",
+        "generation": 1,
+        "workspace": "/tmp/caq-jnfdmfrv/workspace"
+      },
+      "error": null,
+      "in_flight_claims": 0,
+      "last_successful_probe_ms": null,
+      "lifecycle": "idle",
+      "pending_bytes": 776,
+      "pending_notices": 1,
+      "readiness": "configured",
+      "received_cursor": "arrival:01M5FEXZWKM6EMT8W6EJEY1V50:01M5FEXZZFFZ6XM7J5Q5PNZG92:1",
+      "received_seq": 1
+    },
+    "type": "status",
+    "observed_monotonic_s": 2758.884898679
+  },
+  {
+    "event": {
+      "state": "busy",
+      "type": "state"
+    },
+    "type": "host_event",
+    "observed_monotonic_s": 2759.057034029
+  },
+  {
+    "status": {
+      "activation_attempts": 1,
+      "active_wake_id": "01M5FEY1NXNH9EM1DAVJCTHN1A",
+      "binding": {
+        "adapter_kind": "codex_app_server",
+        "agent_id": "01M5FEXZZFFZ6XM7J5Q5PNZG92",
+        "binding_id": "01M5FEY00Z0BJHNBT23YAMBMEA",
+        "bus_id": "01M5FEXZWKM6EMT8W6EJEY1V50",
+        "capability_status": "configured",
+        "exact_host_session_id": "01a15eef-00ce-7680-8ce4-61d63766d243",
+        "generation": 1,
+        "workspace": "/tmp/caq-jnfdmfrv/workspace"
+      },
+      "error": null,
+      "in_flight_claims": 0,
+      "last_successful_probe_ms": null,
+      "lifecycle": "busy",
+      "pending_bytes": 776,
+      "pending_notices": 1,
+      "readiness": "configured",
+      "received_cursor": "arrival:01M5FEXZWKM6EMT8W6EJEY1V50:01M5FEXZZFFZ6XM7J5Q5PNZG92:1",
+      "received_seq": 1
+    },
+    "type": "status",
+    "observed_monotonic_s": 2759.057611731
+  },
+  {
+    "status": {
+      "activation_attempts": 1,
+      "active_wake_id": "01M5FEY1NXNH9EM1DAVJCTHN1A",
+      "binding": {
+        "adapter_kind": "codex_app_server",
+        "agent_id": "01M5FEXZZFFZ6XM7J5Q5PNZG92",
+        "binding_id": "01M5FEY00Z0BJHNBT23YAMBMEA",
+        "bus_id": "01M5FEXZWKM6EMT8W6EJEY1V50",
+        "capability_status": "configured",
+        "exact_host_session_id": "01a15eef-00ce-7680-8ce4-61d63766d243",
+        "generation": 1,
+        "workspace": "/tmp/caq-jnfdmfrv/workspace"
+      },
+      "error": null,
+      "in_flight_claims": 0,
+      "last_successful_probe_ms": null,
+      "lifecycle": "busy",
+      "pending_bytes": 1550,
+      "pending_notices": 2,
+      "readiness": "configured",
+      "received_cursor": "arrival:01M5FEXZWKM6EMT8W6EJEY1V50:01M5FEXZZFFZ6XM7J5Q5PNZG92:2",
+      "received_seq": 2
+    },
+    "type": "status",
+    "observed_monotonic_s": 2759.237251911
+  },
+  {
+    "event": {
+      "type": "notification",
+      "value": {
+        "emittedAtMs": 1792594088371,
+        "method": "account/updated",
+        "params": {
+          "authMode": "chatgpt",
+          "planType": "pro"
+        }
+      }
+    },
+    "type": "host_event",
+    "observed_monotonic_s": 2762.042861207
+  },
+  {
+    "event": {
+      "type": "notification",
+      "value": {
+        "emittedAtMs": 1792594090425,
+        "method": "mcpServer/startupStatus/updated",
+        "params": {
+          "error": null,
+          "failureReason": null,
+          "name": "codex_apps",
+          "status": "ready",
+          "threadId": "01a15eef-00ce-7680-8ce4-61d63766d243"
+        }
+      }
+    },
+    "type": "host_event",
+    "observed_monotonic_s": 2764.036668674
+  },
+  {
+    "event": {
+      "type": "notification",
+      "value": {
+        "emittedAtMs": 1792594090425,
+        "method": "mcpServer/startupStatus/updated",
+        "params": {
+          "error": null,
+          "failureReason": null,
+          "name": "cooperators",
+          "status": "ready",
+          "threadId": "01a15eef-00ce-7680-8ce4-61d63766d243"
+        }
+      }
+    },
+    "type": "host_event",
+    "observed_monotonic_s": 2764.037226595
+  },
+  {
+    "event": {
+      "type": "notification",
+      "value": {
+        "emittedAtMs": 1792594091427,
+        "method": "item/started",
+        "params": {
+          "item": {
+            "clientId": null,
+            "content": [
+              {
+                "text": "Cooperators arrival wake. Handle these references in this exact session. Confirm observation with coop_confirm_activation(binding_id, generation, nonce, wake_id). Read documents with coop_read_doc(name, version); claim queue work with coop_claim_task. Resolve supplied delivery IDs with coop_resolve_arrivals; continuation=true when queue work remains. Repeated wake references do not authorize repeated task effects.\n{\"wake_id\":\"01M5FEY1NXNH9EM1DAVJCTHN1A\",\"binding_id\":\"01M5FEY00Z0BJHNBT23YAMBMEA\",\"generation\":1,\"bus_id\":\"01M5FEXZWKM6EMT8W6EJEY1V50\",\"agent_id\":\"01M5FEXZZFFZ6XM7J5Q5PNZG92\",\"notices\":[{\"v\":1,\"seq\":1,\"prev_hash\":\"sha256:<REDACTED_CREDENTIAL_001><REDACTED_CREDENTIAL_001>\",\"delivery_id\":\"sha256:67c39778ba22725ad034c0363761e61a9c5163f9e9f2f7619a13b977bf47426a\",\"recipient_agent_id\":\"01M5FEXZZFFZ6XM7J5Q5PNZG92\",\"kind\":\"doc.published\",\"obligation\":{\"id\":\"sha256:47e812032e0fc24566e9019df63a35313bcd5bb6e016e30f2a4df8aa483cc69c\",\"journal_type\":\"document\",\"journal_name\":\"qualification\",\"seq\":1,\"hash\":\"sha256:78361a6e4ed42d878f335f8f5459466f033381610762ff500504d86205b3cd46\",\"item_index\":0},\"source\":{\"stream\":\"document\",\"name\":\"qualification\",\"seq\":1,\"hash\":\"sha256:78361a6e4ed42d878f335f8f5459466f033381610762ff500504d86205b3cd46\"},\"resource\":{\"type\":\"document\",\"name\":\"qualification\",\"version\":1},\"subscription_ids\":[\"01M5FEY1FDVE2548TP97HHSB9R\"]}],\"observation_nonce\":\"e86a02c1ec5296ef974e50eb2d2e450c\",\"created_at_ms\":1792594085562}",
+                "text_elements": [],
+                "type": "text"
+              }
+            ],
+            "id": "01a15eef-1d9f-7cb1-b413-1c2643791485",
+            "type": "userMessage"
+          },
+          "startedAtMs": 1792594091426,
+          "threadId": "01a15eef-00ce-7680-8ce4-61d63766d243",
+          "turnId": "01a15eef-06c8-7951-a4c4-971777ddf129"
+        }
+      }
+    },
+    "type": "host_event",
+    "observed_monotonic_s": 2765.038304302
+  },
+  {
+    "event": {
+      "type": "notification",
+      "value": {
+        "emittedAtMs": 1792594091432,
+        "method": "item/completed",
+        "params": {
+          "completedAtMs": 1792594091426,
+          "item": {
+            "clientId": null,
+            "content": [
+              {
+                "text": "Cooperators arrival wake. Handle these references in this exact session. Confirm observation with coop_confirm_activation(binding_id, generation, nonce, wake_id). Read documents with coop_read_doc(name, version); claim queue work with coop_claim_task. Resolve supplied delivery IDs with coop_resolve_arrivals; continuation=true when queue work remains. Repeated wake references do not authorize repeated task effects.\n{\"wake_id\":\"01M5FEY1NXNH9EM1DAVJCTHN1A\",\"binding_id\":\"01M5FEY00Z0BJHNBT23YAMBMEA\",\"generation\":1,\"bus_id\":\"01M5FEXZWKM6EMT8W6EJEY1V50\",\"agent_id\":\"01M5FEXZZFFZ6XM7J5Q5PNZG92\",\"notices\":[{\"v\":1,\"seq\":1,\"prev_hash\":\"sha256:<REDACTED_CREDENTIAL_001><REDACTED_CREDENTIAL_001>\",\"delivery_id\":\"sha256:67c39778ba22725ad034c0363761e61a9c5163f9e9f2f7619a13b977bf47426a\",\"recipient_agent_id\":\"01M5FEXZZFFZ6XM7J5Q5PNZG92\",\"kind\":\"doc.published\",\"obligation\":{\"id\":\"sha256:47e812032e0fc24566e9019df63a35313bcd5bb6e016e30f2a4df8aa483cc69c\",\"journal_type\":\"document\",\"journal_name\":\"qualification\",\"seq\":1,\"hash\":\"sha256:78361a6e4ed42d878f335f8f5459466f033381610762ff500504d86205b3cd46\",\"item_index\":0},\"source\":{\"stream\":\"document\",\"name\":\"qualification\",\"seq\":1,\"hash\":\"sha256:78361a6e4ed42d878f335f8f5459466f033381610762ff500504d86205b3cd46\"},\"resource\":{\"type\":\"document\",\"name\":\"qualification\",\"version\":1},\"subscription_ids\":[\"01M5FEY1FDVE2548TP97HHSB9R\"]}],\"observation_nonce\":\"e86a02c1ec5296ef974e50eb2d2e450c\",\"created_at_ms\":1792594085562}",
+                "text_elements": [],
+                "type": "text"
+              }
+            ],
+            "id": "01a15eef-1d9f-7cb1-b413-1c2643791485",
+            "type": "userMessage"
+          },
+          "threadId": "01a15eef-00ce-7680-8ce4-61d63766d243",
+          "turnId": "01a15eef-06c8-7951-a4c4-971777ddf129"
+        }
+      }
+    },
+    "type": "host_event",
+    "observed_monotonic_s": 2765.038995666
+  },
+  {
+    "event": {
+      "type": "notification",
+      "value": {
+        "emittedAtMs": 1792594093202,
+        "method": "item/started",
+        "params": {
+          "item": {
+            "delivery": null,
+            "id": "msg_0fe6c58db6ac5722016ad8d0adce6881999180ac6a05b2ab1d",
+            "memoryCitation": null,
+            "phase": "commentary",
+            "questions": null,
+            "text": "",
+            "type": "agentMessage"
+          },
+          "startedAtMs": 1792594093202,
+          "threadId": "01a15eef-00ce-7680-8ce4-61d63766d243",
+          "turnId": "01a15eef-06c8-7951-a4c4-971777ddf129"
+        }
+      }
+    },
+    "type": "host_event",
+    "observed_monotonic_s": 2766.837448804
+  },
+  {
+    "event": {
+      "type": "notification",
+      "value": {
+        "emittedAtMs": 1792594093202,
+        "method": "item/agentMessage/delta",
+        "params": {
+          "delta": "I",
+          "itemId": "msg_0fe6c58db6ac5722016ad8d0adce6881999180ac6a05b2ab1d",
+          "threadId": "01a15eef-00ce-7680-8ce4-61d63766d243",
+          "turnId": "01a15eef-06c8-7951-a4c4-971777ddf129"
+        }
+      }
+    },
+    "type": "host_event",
+    "observed_monotonic_s": 2766.838139754
+  },
+  {
+    "event": {
+      "type": "notification",
+      "value": {
+        "emittedAtMs": 1792594093203,
+        "method": "item/agentMessage/delta",
+        "params": {
+          "delta": "\u2019ll",
+          "itemId": "msg_0fe6c58db6ac5722016ad8d0adce6881999180ac6a05b2ab1d",
+          "threadId": "01a15eef-00ce-7680-8ce4-61d63766d243",
+          "turnId": "01a15eef-06c8-7951-a4c4-971777ddf129"
+        }
+      }
+    },
+    "type": "host_event",
+    "observed_monotonic_s": 2766.838506416
+  },
+  {
+    "event": {
+      "type": "notification",
+      "value": {
+        "emittedAtMs": 1792594093203,
+        "method": "item/agentMessage/delta",
+        "params": {
+          "delta": " confirm",
+          "itemId": "msg_0fe6c58db6ac5722016ad8d0adce6881999180ac6a05b2ab1d",
+          "threadId": "01a15eef-00ce-7680-8ce4-61d63766d243",
+          "turnId": "01a15eef-06c8-7951-a4c4-971777ddf129"
+        }
+      }
+    },
+    "type": "host_event",
+    "observed_monotonic_s": 2766.838872959
+  },
+  {
+    "event": {
+      "type": "notification",
+      "value": {
+        "emittedAtMs": 1792594093203,
+        "method": "item/agentMessage/delta",
+        "params": {
+          "delta": " this",
+          "itemId": "msg_0fe6c58db6ac5722016ad8d0adce6881999180ac6a05b2ab1d",
+          "threadId": "01a15eef-00ce-7680-8ce4-61d63766d243",
+          "turnId": "01a15eef-06c8-7951-a4c4-971777ddf129"
+        }
+      }
+    },
+    "type": "host_event",
+    "observed_monotonic_s": 2766.839286992
+  },
+  {
+    "event": {
+      "type": "notification",
+      "value": {
+        "emittedAtMs": 1792594093420,
+        "method": "item/agentMessage/delta",
+        "params": {
+          "delta": " wake",
+          "itemId": "msg_0fe6c58db6ac5722016ad8d0adce6881999180ac6a05b2ab1d",
+          "threadId": "01a15eef-00ce-7680-8ce4-61d63766d243",
+          "turnId": "01a15eef-06c8-7951-a4c4-971777ddf129"
+        }
+      }
+    },
+    "type": "host_event",
+    "observed_monotonic_s": 2767.038445901
+  },
+  {
+    "event": {
+      "type": "notification",
+      "value": {
+        "emittedAtMs": 1792594093420,
+        "method": "item/agentMessage/delta",
+        "params": {
+          "delta": ",",
+          "itemId": "msg_0fe6c58db6ac5722016ad8d0adce6881999180ac6a05b2ab1d",
+          "threadId": "01a15eef-00ce-7680-8ce4-61d63766d243",
+          "turnId": "01a15eef-06c8-7951-a4c4-971777ddf129"
+        }
+      }
+    },
+    "type": "host_event",
+    "observed_monotonic_s": 2767.039181539
+  },
+  {
+    "event": {
+      "type": "notification",
+      "value": {
+        "emittedAtMs": 1792594093573,
+        "method": "item/agentMessage/delta",
+        "params": {
+          "delta": " read",
+          "itemId": "msg_0fe6c58db6ac5722016ad8d0adce6881999180ac6a05b2ab1d",
+          "threadId": "01a15eef-00ce-7680-8ce4-61d63766d243",
+          "turnId": "01a15eef-06c8-7951-a4c4-971777ddf129"
+        }
+      }
+    },
+    "type": "host_event",
+    "observed_monotonic_s": 2767.238051836
+  },
+  {
+    "event": {
+      "type": "notification",
+      "value": {
+        "emittedAtMs": 1792594093573,
+        "method": "item/agentMessage/delta",
+        "params": {
+          "delta": " the",
+          "itemId": "msg_0fe6c58db6ac5722016ad8d0adce6881999180ac6a05b2ab1d",
+          "threadId": "01a15eef-00ce-7680-8ce4-61d63766d243",
+          "turnId": "01a15eef-06c8-7951-a4c4-971777ddf129"
+        }
+      }
+    },
+    "type": "host_event",
+    "observed_monotonic_s": 2767.238983989
+  },
+  {
+    "event": {
+      "type": "notification",
+      "value": {
+        "emittedAtMs": 1792594093573,
+        "method": "item/agentMessage/delta",
+        "params": {
+          "delta": " qualification",
+          "itemId": "msg_0fe6c58db6ac5722016ad8d0adce6881999180ac6a05b2ab1d",
+          "threadId": "01a15eef-00ce-7680-8ce4-61d63766d243",
+          "turnId": "01a15eef-06c8-7951-a4c4-971777ddf129"
+        }
+      }
+    },
+    "type": "host_event",
+    "observed_monotonic_s": 2767.241280097
+  },
+  {
+    "event": {
+      "type": "notification",
+      "value": {
+        "emittedAtMs": 1792594093573,
+        "method": "item/agentMessage/delta",
+        "params": {
+          "delta": " document",
+          "itemId": "msg_0fe6c58db6ac5722016ad8d0adce6881999180ac6a05b2ab1d",
+          "threadId": "01a15eef-00ce-7680-8ce4-61d63766d243",
+          "turnId": "01a15eef-06c8-7951-a4c4-971777ddf129"
+        }
+      }
+    },
+    "type": "host_event",
+    "observed_monotonic_s": 2767.242661157
+  },
+  {
+    "event": {
+      "type": "notification",
+      "value": {
+        "emittedAtMs": 1792594093573,
+        "method": "item/agentMessage/delta",
+        "params": {
+          "delta": ",",
+          "itemId": "msg_0fe6c58db6ac5722016ad8d0adce6881999180ac6a05b2ab1d",
+          "threadId": "01a15eef-00ce-7680-8ce4-61d63766d243",
+          "turnId": "01a15eef-06c8-7951-a4c4-971777ddf129"
+        }
+      }
+    },
+    "type": "host_event",
+    "observed_monotonic_s": 2767.243175867
+  },
+  {
+    "event": {
+      "type": "notification",
+      "value": {
+        "emittedAtMs": 1792594093573,
+        "method": "item/agentMessage/delta",
+        "params": {
+          "delta": " and",
+          "itemId": "msg_0fe6c58db6ac5722016ad8d0adce6881999180ac6a05b2ab1d",
+          "threadId": "01a15eef-00ce-7680-8ce4-61d63766d243",
+          "turnId": "01a15eef-06c8-7951-a4c4-971777ddf129"
+        }
+      }
+    },
+    "type": "host_event",
+    "observed_monotonic_s": 2767.24374015
+  },
+  {
+    "event": {
+      "type": "notification",
+      "value": {
+        "emittedAtMs": 1792594093573,
+        "method": "item/agentMessage/delta",
+        "params": {
+          "delta": " handle",
+          "itemId": "msg_0fe6c58db6ac5722016ad8d0adce6881999180ac6a05b2ab1d",
+          "threadId": "01a15eef-00ce-7680-8ce4-61d63766d243",
+          "turnId": "01a15eef-06c8-7951-a4c4-971777ddf129"
+        }
+      }
+    },
+    "type": "host_event",
+    "observed_monotonic_s": 2767.244334939
+  },
+  {
+    "event": {
+      "type": "notification",
+      "value": {
+        "emittedAtMs": 1792594093573,
+        "method": "item/agentMessage/delta",
+        "params": {
+          "delta": " any",
+          "itemId": "msg_0fe6c58db6ac5722016ad8d0adce6881999180ac6a05b2ab1d",
+          "threadId": "01a15eef-00ce-7680-8ce4-61d63766d243",
+          "turnId": "01a15eef-06c8-7951-a4c4-971777ddf129"
+        }
+      }
+    },
+    "type": "host_event",
+    "observed_monotonic_s": 2767.244842073
+  },
+  {
+    "event": {
+      "type": "notification",
+      "value": {
+        "emittedAtMs": 1792594093893,
+        "method": "item/agentMessage/delta",
+        "params": {
+          "delta": " queue",
+          "itemId": "msg_0fe6c58db6ac5722016ad8d0adce6881999180ac6a05b2ab1d",
+          "threadId": "01a15eef-00ce-7680-8ce4-61d63766d243",
+          "turnId": "01a15eef-06c8-7951-a4c4-971777ddf129"
+        }
+      }
+    },
+    "type": "host_event",
+    "observed_monotonic_s": 2767.437457976
+  },
+  {
+    "event": {
+      "type": "notification",
+      "value": {
+        "emittedAtMs": 1792594093893,
+        "method": "item/agentMessage/delta",
+        "params": {
+          "delta": " work",
+          "itemId": "msg_0fe6c58db6ac5722016ad8d0adce6881999180ac6a05b2ab1d",
+          "threadId": "01a15eef-00ce-7680-8ce4-61d63766d243",
+          "turnId": "01a15eef-06c8-7951-a4c4-971777ddf129"
+        }
+      }
+    },
+    "type": "host_event",
+    "observed_monotonic_s": 2767.438455536
+  },
+  {
+    "event": {
+      "type": "notification",
+      "value": {
+        "emittedAtMs": 1792594093893,
+        "method": "item/agentMessage/delta",
+        "params": {
+          "delta": " it",
+          "itemId": "msg_0fe6c58db6ac5722016ad8d0adce6881999180ac6a05b2ab1d",
+          "threadId": "01a15eef-00ce-7680-8ce4-61d63766d243",
+          "turnId": "01a15eef-06c8-7951-a4c4-971777ddf129"
+        }
+      }
+    },
+    "type": "host_event",
+    "observed_monotonic_s": 2767.438961297
+  },
+  {
+    "event": {
+      "type": "notification",
+      "value": {
+        "emittedAtMs": 1792594093893,
+        "method": "item/agentMessage/delta",
+        "params": {
+          "delta": " requires",
+          "itemId": "msg_0fe6c58db6ac5722016ad8d0adce6881999180ac6a05b2ab1d",
+          "threadId": "01a15eef-00ce-7680-8ce4-61d63766d243",
+          "turnId": "01a15eef-06c8-7951-a4c4-971777ddf129"
+        }
+      }
+    },
+    "type": "host_event",
+    "observed_monotonic_s": 2767.43949231
+  },
+  {
+    "event": {
+      "type": "notification",
+      "value": {
+        "emittedAtMs": 1792594093929,
+        "method": "item/agentMessage/delta",
+        "params": {
+          "delta": ".",
+          "itemId": "msg_0fe6c58db6ac5722016ad8d0adce6881999180ac6a05b2ab1d",
+          "threadId": "01a15eef-00ce-7680-8ce4-61d63766d243",
+          "turnId": "01a15eef-06c8-7951-a4c4-971777ddf129"
+        }
+      }
+    },
+    "type": "host_event",
+    "observed_monotonic_s": 2767.4401153
+  },
+  {
+    "event": {
+      "type": "notification",
+      "value": {
+        "emittedAtMs": 1792594094106,
+        "method": "item/completed",
+        "params": {
+          "completedAtMs": 1792594094102,
+          "item": {
+            "delivery": null,
+            "id": "msg_0fe6c58db6ac5722016ad8d0adce6881999180ac6a05b2ab1d",
+            "memoryCitation": null,
+            "phase": "commentary",
+            "questions": null,
+            "text": "I\u2019ll confirm this wake, read the qualification document, and handle any queue work it requires.",
+            "type": "agentMessage"
+          },
+          "threadId": "01a15eef-00ce-7680-8ce4-61d63766d243",
+          "turnId": "01a15eef-06c8-7951-a4c4-971777ddf129"
+        }
+      }
+    },
+    "type": "host_event",
+    "observed_monotonic_s": 2767.638061185
+  },
+  {
+    "event": {
+      "type": "notification",
+      "value": {
+        "emittedAtMs": 1792594094814,
+        "method": "thread/tokenUsage/updated",
+        "params": {
+          "threadId": "01a15eef-00ce-7680-8ce4-61d63766d243",
+          "tokenUsage": {
+            "last": {
+              "cacheWriteInputTokens": 0,
+              "cachedInputTokens": 7168,
+              "inputTokens": 21782,
+              "outputTokens": 69,
+              "reasoningOutputTokens": 0,
+              "totalTokens": 21851
+            },
+            "modelContextWindow": 828400,
+            "total": {
+              "cacheWriteInputTokens": 0,
+              "cachedInputTokens": 7168,
+              "inputTokens": 21782,
+              "outputTokens": 69,
+              "reasoningOutputTokens": 0,
+              "totalTokens": 21851
+            }
+          },
+          "turnId": "01a15eef-06c8-7951-a4c4-971777ddf129"
+        }
+      }
+    },
+    "type": "host_event",
+    "observed_monotonic_s": 2768.437787051
+  },
+  {
+    "event": {
+      "type": "notification",
+      "value": {
+        "emittedAtMs": 1792594094814,
+        "method": "account/rateLimits/updated",
+        "params": {
+          "rateLimits": {
+            "credits": {
+              "balance": "62500.0000000000",
+              "hasCredits": true,
+              "unlimited": false
+            },
+            "individualLimit": null,
+            "limitId": "codex",
+            "limitName": null,
+            "normalModelSlug": null,
+            "planType": "pro",
+            "primary": {
+              "resetsAt": 1793082792,
+              "usedPercent": 66,
+              "windowDurationMins": 10080
+            },
+            "rateLimitReachedType": null,
+            "secondary": null,
+            "spendControlReached": null
+          }
+        }
+      }
+    },
+    "type": "host_event",
+    "observed_monotonic_s": 2768.438683354
+  },
+  {
+    "event": {
+      "type": "notification",
+      "value": {
+        "emittedAtMs": 1792594098224,
+        "method": "item/started",
+        "params": {
+          "item": {
+            "appContext": null,
+            "arguments": {
+              "binding_id": "01M5FEY00Z0BJHNBT23YAMBMEA",
+              "generation": 1,
+              "nonce": "e86a02c1ec5296ef974e50eb2d2e450c",
+              "wake_id": "01M5FEY1NXNH9EM1DAVJCTHN1A"
+            },
+            "durationMs": null,
+            "error": null,
+            "id": "exec-8a166010-9ffb-4cd3-a00f-89b9626b45a5",
+            "mcpAppUi": null,
+            "pluginId": null,
+            "readOnlyHint": null,
+            "result": null,
+            "server": "cooperators",
+            "status": "inProgress",
+            "tool": "coop_confirm_activation",
+            "type": "mcpToolCall"
+          },
+          "startedAtMs": 1792594098224,
+          "threadId": "01a15eef-00ce-7680-8ce4-61d63766d243",
+          "turnId": "01a15eef-06c8-7951-a4c4-971777ddf129"
+        }
+      }
+    },
+    "type": "host_event",
+    "observed_monotonic_s": 2771.852159166
+  },
+  {
+    "event": {
+      "state": "waiting_for_permission",
+      "type": "state"
+    },
+    "type": "host_event",
+    "observed_monotonic_s": 2771.853496506
+  },
+  {
+    "event": {
+      "approval": {
+        "method": "mcpServer/elicitation/request",
+        "params": {
+          "_meta": {
+            "codex_approval_kind": "mcp_tool_call",
+            "persist": [
+              "session",
+              "always"
+            ],
+            "tool_description": "Confirm this binding's activation nonce without resolving its pending work.",
+            "tool_params": {
+              "binding_id": "01M5FEY00Z0BJHNBT23YAMBMEA",
+              "generation": 1,
+              "nonce": "e86a02c1ec5296ef974e50eb2d2e450c",
+              "wake_id": "01M5FEY1NXNH9EM1DAVJCTHN1A"
+            },
+            "tool_params_display": [
+              {
+                "display_name": "binding_id",
+                "name": "binding_id",
+                "value": "01M5FEY00Z0BJHNBT23YAMBMEA"
+              },
+              {
+                "display_name": "generation",
+                "name": "generation",
+                "value": 1
+              },
+              {
+                "display_name": "nonce",
+                "name": "nonce",
+                "value": "e86a02c1ec5296ef974e50eb2d2e450c"
+              },
+              {
+                "display_name": "wake_id",
+                "name": "wake_id",
+                "value": "01M5FEY1NXNH9EM1DAVJCTHN1A"
+              }
+            ]
+          },
+          "message": "Allow the cooperators MCP server to run tool \"coop_confirm_activation\"?",
+          "mode": "form",
+          "requestedSchema": {
+            "properties": {},
+            "type": "object"
+          },
+          "serverName": "cooperators",
+          "threadId": "01a15eef-00ce-7680-8ce4-61d63766d243",
+          "turnId": "01a15eef-06c8-7951-a4c4-971777ddf129"
+        },
+        "request_id": 0
+      },
+      "type": "approval"
+    },
+    "type": "host_event",
+    "observed_monotonic_s": 2771.854192225
+  }
+]

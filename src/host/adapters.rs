@@ -174,6 +174,9 @@ impl DuplexProcess {
     }
 
     async fn next(&mut self, deadline: Instant) -> Result<Value, BrokerError> {
+        if self.closed {
+            return Err(BrokerError::internal("host process is offline"));
+        }
         let remaining = deadline.saturating_duration_since(Instant::now());
         match timeout(remaining, self.frames.recv()).await {
             Ok(Some(Ok(frame))) => Ok(frame),
@@ -194,6 +197,12 @@ impl DuplexProcess {
     }
 
     fn try_next(&mut self) -> Option<Result<Value, String>> {
+        // The reader may have queued valid-looking frames before a fatal
+        // protocol error closed this process. Closure fences that entire
+        // stream, including buffered approvals, echoes and status changes.
+        if self.closed {
+            return None;
+        }
         match self.frames.try_recv() {
             Ok(frame) => {
                 if frame.is_err() {
@@ -570,6 +579,18 @@ impl CodexAppServerAdapter {
                     "thread/start returned a different workspace",
                 ));
             }
+            // Fresh app-server threads may remain staged until the first
+            // durable metadata mutation or model turn. Naming this newly
+            // created thread materializes its rollout before bootstrap exits,
+            // so the managed connection can resume the exact ID without
+            // spending a model turn or touching an existing conversation.
+            bootstrap_rpc(
+                &mut process,
+                3,
+                "thread/name/set",
+                json!({"threadId":id,"name":"Cooperators managed session"}),
+            )
+            .await?;
             Ok(id.to_string())
         }
         .await;
@@ -681,7 +702,9 @@ impl CodexAppServerAdapter {
         }
         match method {
             "thread/status/changed" => self.inner.set_state(thread_state(&params["status"])),
-            "thread/closed" => self.inner.offline("bound app-server thread closed"),
+            "thread/closed" => {
+                return Err(BrokerError::internal("bound app-server thread closed"));
+            }
             "serverRequest/resolved" => {
                 self.inner
                     .approvals

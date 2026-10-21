@@ -55,7 +55,11 @@ required; `host shutdown` stops the owned controller and provider process.
 Provider-specific responses must use that adapter's protocol shape.
 
 The implementation's [qualification record](impl/arrivals-20261021/README.md)
-separates deterministic protocol checks from real provider-session checks.
+separates deterministic checks, passing real Codex document activation and
+unavailable real Claude qualification. On the resumed machine Claude 2.1.185
+reports no authentication; configure its intended provider or sign in before
+running the real managed-host gate. New Codex threads are named before the
+bootstrap process exits to persist their exact resumable ID without a model turn.
 Claude's current modern MCP discovery compatibility issue remains recorded in
 the [installed-client baseline](impl/acceptance-20261020/README.md); compatibility
 environment overrides, when needed, are explicit per-host `--env KEY=VALUE`
