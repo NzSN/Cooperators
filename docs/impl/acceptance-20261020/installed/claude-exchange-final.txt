@@ -1,0 +1,10 @@
+PASS
+
+- **Worker agent_id:** `01M5C99W92KK201JHBBQRX8W32` (`installed-claude`, routing `instance-01M5C99W92KK201JHBBQRX8W32`)
+- **Sender/requester agent_id:** `01M5C9CTZGC2SXY69YX6PRBQA4`
+- **Task_id:** `01M5C9DVQZZ14ZF7YP0HHKDF7R`
+- **Nonce:** `acceptance-2c7bd08a-752b-4ad5-9e82-1c70cc0e4bf9`
+- **Lease/fence:** `01M5C9G8HABNY2E3S83N9TM9HS` / `3`
+- **Task completion:** confirmed `status: completed`, outcome `{"nonce":...,"sum":42,"worker_agent_id":"01M5C99W92KK201JHBBQRX8W32"}`
+- **Reply receipt:** message id `01M5C9HGCVAT15VPNPQ09H2CBK`, kind `acceptance-result`, idempotency key matching nonce-result
+- **Acknowledgement:** request cursor `1` acked; Codex receipt (kind `acceptance-receipt`, `received:true`, `verified_answer:42`, same nonce/task_id) received at cursor `2` and acked.

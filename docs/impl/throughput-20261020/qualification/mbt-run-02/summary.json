@@ -1,0 +1,46 @@
+{
+  "actual_crash_controls": [
+    "after-seal",
+    "after-create"
+  ],
+  "binary_sha256": "eef594f487d0405f601cccf731b8903a6924dc88896c0daff462f44ab103160b",
+  "build": {
+    "argv": [
+      "cargo",
+      "build",
+      "--offline",
+      "--locked",
+      "--manifest-path",
+      "spec/mbt/Cargo.toml"
+    ],
+    "cwd": "/home/nzsn/Repos/Cooperators",
+    "elapsed_seconds": 15.643352508544922,
+    "exit_code": 0,
+    "finished_unix": 1792492029.0143902,
+    "started_unix": 1792492013.3710718
+  },
+  "changed_sources": [],
+  "compiler_and_provenance_gate_passed": true,
+  "credential_redaction": {
+    "credential_count": 5,
+    "remaining_plaintext_credential_files": []
+  },
+  "fault_failures": 0,
+  "fault_traces": 24,
+  "passed": true,
+  "protocol_and_writer_failures": 0,
+  "protocol_and_writer_traces": 39,
+  "replay": {
+    "argv": [
+      "/home/nzsn/Repos/Cooperators/spec/mbt/target/debug/cooperators-mbt",
+      "--skip-gen",
+      "--suite",
+      "all"
+    ],
+    "cwd": "/home/nzsn/Repos/Cooperators",
+    "elapsed_seconds": 9.886346578598022,
+    "exit_code": 0,
+    "finished_unix": 1792492039.1373038,
+    "started_unix": 1792492029.2509577
+  }
+}

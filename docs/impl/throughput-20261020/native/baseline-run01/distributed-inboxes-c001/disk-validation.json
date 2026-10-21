@@ -1,0 +1,27 @@
+{
+  "all_inbox_reads": [
+    {
+      "hash_chain_read_pass": true,
+      "receiver_id": "01M5CDVHZD00J24GBVFZ1WJ0HN",
+      "records_read": 5713,
+      "trailing_newline_missing": false,
+      "truncated_bytes": 0
+    }
+  ],
+  "contiguous_sequences": true,
+  "correctness_passed": true,
+  "durable_records": 5713,
+  "errors": [],
+  "exact_envelope_disk_delivery_match": true,
+  "hash_chains_verified": true,
+  "inbox_heads": {
+    "01M5CDVHZD00J24GBVFZ1WJ0HN": {
+      "hash": "sha256:bfde9de354f4ee10ff30030012df7bd2a9f3b9a38f66d02a8126012697d68b56",
+      "seq": 5713
+    }
+  },
+  "reader": "LogFile<Envelope>::read_segments and storage::hash_record; no repair/open",
+  "receipt_count": 5713,
+  "unique_receipts": true,
+  "verified_deliveries_and_acks": 5713
+}

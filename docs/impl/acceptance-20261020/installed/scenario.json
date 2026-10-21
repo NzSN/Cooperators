@@ -1,0 +1,10 @@
+{
+  "nonce": "acceptance-2c7bd08a-752b-4ad5-9e82-1c70cc0e4bf9",
+  "queue": "installed-acceptance-20261020",
+  "claude_agent_id": "01M5C99W92KK201JHBBQRX8W32",
+  "numbers": [
+    17,
+    25
+  ],
+  "expected_sum": 42
+}

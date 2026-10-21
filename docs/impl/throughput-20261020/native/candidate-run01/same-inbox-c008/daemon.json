@@ -1,0 +1,67 @@
+{
+  "agents": [
+    {
+      "agent_id": "01M5CDY92GRCXZX6FRDCGRFACN",
+      "display_name": "same-inbox-c008-0",
+      "name": "instance-01M5CDY92GRCXZX6FRDCGRFACN"
+    },
+    {
+      "agent_id": "01M5CDY92QB6KXJR99BWYE93B2",
+      "display_name": "same-inbox-c008-1",
+      "name": "instance-01M5CDY92QB6KXJR99BWYE93B2"
+    },
+    {
+      "agent_id": "01M5CDY92VX3WBSJ589M2XF5J8",
+      "display_name": "same-inbox-c008-2",
+      "name": "instance-01M5CDY92VX3WBSJ589M2XF5J8"
+    },
+    {
+      "agent_id": "01M5CDY92Z9Q0FX6EMDMA4XRD7",
+      "display_name": "same-inbox-c008-3",
+      "name": "instance-01M5CDY92Z9Q0FX6EMDMA4XRD7"
+    },
+    {
+      "agent_id": "01M5CDY93408DTY7R5AXYG1XAP",
+      "display_name": "same-inbox-c008-4",
+      "name": "instance-01M5CDY93408DTY7R5AXYG1XAP"
+    },
+    {
+      "agent_id": "01M5CDY93AA6YQRQCJV8AFWQX0",
+      "display_name": "same-inbox-c008-5",
+      "name": "instance-01M5CDY93AA6YQRQCJV8AFWQX0"
+    },
+    {
+      "agent_id": "01M5CDY93E6PJ0T7PRGBVJZJ0F",
+      "display_name": "same-inbox-c008-6",
+      "name": "instance-01M5CDY93E6PJ0T7PRGBVJZJ0F"
+    },
+    {
+      "agent_id": "01M5CDY93JN0W6YK05BQATA160",
+      "display_name": "same-inbox-c008-7",
+      "name": "instance-01M5CDY93JN0W6YK05BQATA160"
+    },
+    {
+      "agent_id": "01M5CDY93R8H467Z5AYGJ79WK1",
+      "display_name": "same-inbox-c008-8",
+      "name": "instance-01M5CDY93R8H467Z5AYGJ79WK1"
+    }
+  ],
+  "command": [
+    "/home/nzsn/Repos/Cooperators/target/release/coop",
+    "--root",
+    "/tmp/ctn-579178-1792492381227923679",
+    "daemon",
+    "run",
+    "--http-addr",
+    "off"
+  ],
+  "correctness_passed": true,
+  "errors": [],
+  "http": "off",
+  "label": "same-inbox-c008",
+  "pid": 579224,
+  "root": "/tmp/ctn-579178-1792492381227923679",
+  "running_executable_sha256": "32d5b650e8768407d297165eb350c295ab0b7aa0da14272fcee3948765383488",
+  "start_utc": "2026-10-20T10:33:01.228Z",
+  "stop": "SIGTERM; signal: 15 (SIGTERM)"
+}

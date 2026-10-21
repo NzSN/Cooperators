@@ -1,0 +1,4 @@
+READY
+- agent_id: `01M5C97YHW56PA84DXJMQQ6S7C`
+- routing name: `instance-01M5C97YHW56PA84DXJMQQ6S7C`
+- heartbeat: `active`

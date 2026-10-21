@@ -1,0 +1,508 @@
+{
+  "all_input_artifact_manifest_hashes_verified": true,
+  "baseline_binary_sha256": "c6d1047a8a4d9b0094274151c9658a101ed018ce07f82d66ed9fb512eb285321",
+  "baseline_controls": "docs/impl/acceptance-20261020/transport-scale/run-01/summary.json",
+  "candidate_binary_sha256": "32d5b650e8768407d297165eb350c295ab0b7aa0da14272fcee3948765383488",
+  "candidate_controls": [
+    {
+      "ack_ms": {
+        "count": 500,
+        "max": 0.549782,
+        "mean": 0.119212104,
+        "min": 0.074335,
+        "p50": 0.098387,
+        "p95": 0.2193,
+        "p99": 0.324568
+      },
+      "active_agents": 1,
+      "completed_message_cycles_per_second": 403.1741751213816,
+      "correctness_passed": true,
+      "cycle_ms": {
+        "count": 500,
+        "max": 10.762891,
+        "mean": 2.472569622,
+        "min": 1.744015,
+        "p50": 2.322274,
+        "p95": 3.402931,
+        "p99": 4.230589
+      },
+      "elapsed_seconds": 1.240158797,
+      "enrolled_agents": 1,
+      "idle_agents_with_long_poll": 0,
+      "label": "latency-uds",
+      "measured_messages": 500,
+      "send_ack_ms": {
+        "count": 500,
+        "max": 10.329168,
+        "mean": 2.1823450859999998,
+        "min": 1.557569,
+        "p50": 2.061114,
+        "p95": 3.00874,
+        "p99": 3.66702
+      },
+      "send_ack_p50_target_pass": true,
+      "transport": "uds",
+      "verified_deliveries_and_acks": 520,
+      "wait_after_send_ms": {
+        "count": 500,
+        "max": 0.519351,
+        "mean": 0.171012432,
+        "min": 0.093588,
+        "p50": 0.150945,
+        "p95": 0.300496,
+        "p99": 0.376268
+      },
+      "wait_after_send_p50_target_pass": true,
+      "warmup_messages": 20
+    },
+    {
+      "ack_ms": {
+        "count": 500,
+        "max": 1.132507,
+        "mean": 0.377520844,
+        "min": 0.227559,
+        "p50": 0.354069,
+        "p95": 0.573229,
+        "p99": 0.756549
+      },
+      "active_agents": 1,
+      "completed_message_cycles_per_second": 282.9922711895918,
+      "correctness_passed": true,
+      "cycle_ms": {
+        "count": 500,
+        "max": 14.11001,
+        "mean": 3.526708344,
+        "min": 2.509479,
+        "p50": 3.354285,
+        "p95": 4.605793,
+        "p99": 5.399831
+      },
+      "elapsed_seconds": 1.766832705,
+      "enrolled_agents": 1,
+      "idle_agents_with_long_poll": 0,
+      "label": "latency-http",
+      "measured_messages": 500,
+      "send_ack_ms": {
+        "count": 500,
+        "max": 13.11167,
+        "mean": 2.661220504,
+        "min": 1.929863,
+        "p50": 2.54058,
+        "p95": 3.516003,
+        "p99": 4.204643
+      },
+      "send_ack_p50_target_pass": true,
+      "transport": "http",
+      "verified_deliveries_and_acks": 520,
+      "wait_after_send_ms": {
+        "count": 500,
+        "max": 1.04239,
+        "mean": 0.487966996,
+        "min": 0.285873,
+        "p50": 0.469398,
+        "p95": 0.69343,
+        "p99": 0.90529
+      },
+      "wait_after_send_p50_target_pass": true,
+      "warmup_messages": 20
+    },
+    {
+      "active_agents": 1,
+      "append_target_5000_messages_per_second_pass": false,
+      "correctness_passed": true,
+      "elapsed_seconds": 10.001253568,
+      "label": "append-uds",
+      "measured_messages": 4713,
+      "messages_per_second": 471.2409267453942,
+      "send_ack_ms": {
+        "count": 4713,
+        "max": 18.955519,
+        "mean": 2.1157501436452364,
+        "min": 1.501479,
+        "p50": 1.994972,
+        "p95": 2.827296,
+        "p99": 3.628786
+      },
+      "transport": "uds",
+      "verified_measured_deliveries_and_acks": 4713,
+      "warmup_messages": 20
+    },
+    {
+      "ack_ms": {
+        "count": 1000,
+        "max": 0.332881,
+        "mean": 0.107580911,
+        "min": 0.074214,
+        "p50": 0.094163,
+        "p95": 0.188108,
+        "p99": 0.265333
+      },
+      "active_agents": 1,
+      "completed_message_cycles_per_second": 404.5665224519307,
+      "correctness_passed": true,
+      "cycle_ms": {
+        "count": 1000,
+        "max": 13.750687,
+        "mean": 2.465325183,
+        "min": 1.780804,
+        "p50": 2.342777,
+        "p95": 3.29562,
+        "p99": 3.900539
+      },
+      "elapsed_seconds": 2.471781387,
+      "enrolled_agents": 1,
+      "idle_agents_with_long_poll": 0,
+      "label": "scale-1-active",
+      "measured_messages": 1000,
+      "send_ack_ms": {
+        "count": 1000,
+        "max": 13.459278,
+        "mean": 2.20207886,
+        "min": 1.569492,
+        "p50": 2.082587,
+        "p95": 2.934549,
+        "p99": 3.561038
+      },
+      "send_ack_p50_target_pass": true,
+      "transport": "uds",
+      "verified_deliveries_and_acks": 1003,
+      "wait_after_send_ms": {
+        "count": 1000,
+        "max": 0.517884,
+        "mean": 0.155665412,
+        "min": 0.095498,
+        "p50": 0.145175,
+        "p95": 0.238662,
+        "p99": 0.342637
+      },
+      "wait_after_send_p50_target_pass": true,
+      "warmup_messages": 3
+    },
+    {
+      "ack_ms": {
+        "count": 1000,
+        "max": 0.408141,
+        "mean": 0.104735125,
+        "min": 0.073896,
+        "p50": 0.093177,
+        "p95": 0.168492,
+        "p99": 0.250722
+      },
+      "active_agents": 1,
+      "completed_message_cycles_per_second": 431.22196189682984,
+      "correctness_passed": true,
+      "cycle_ms": {
+        "count": 1000,
+        "max": 7.728984,
+        "mean": 2.312833425,
+        "min": 1.696822,
+        "p50": 2.220211,
+        "p95": 2.967447,
+        "p99": 3.711995
+      },
+      "elapsed_seconds": 2.318991351,
+      "enrolled_agents": 100,
+      "idle_agents_with_long_poll": 99,
+      "label": "scale-100-idle",
+      "measured_messages": 1000,
+      "send_ack_ms": {
+        "count": 1000,
+        "max": 7.440837,
+        "mean": 2.056882157,
+        "min": 1.523907,
+        "p50": 1.96792,
+        "p95": 2.665008,
+        "p99": 3.378336
+      },
+      "send_ack_p50_target_pass": true,
+      "transport": "uds",
+      "verified_deliveries_and_acks": 1003,
+      "wait_after_send_ms": {
+        "count": 1000,
+        "max": 0.43364,
+        "mean": 0.151216143,
+        "min": 0.093773,
+        "p50": 0.14264,
+        "p95": 0.234925,
+        "p99": 0.309867
+      },
+      "wait_after_send_p50_target_pass": true,
+      "warmup_messages": 3
+    },
+    {
+      "ack_ms": {
+        "count": 5000,
+        "max": 191.276563,
+        "mean": 30.4915371384,
+        "min": 0.172122,
+        "p50": 25.364827,
+        "p95": 78.201705,
+        "p99": 110.234025
+      },
+      "active_agents": 100,
+      "completed_message_cycles_per_second": 990.8408724752359,
+      "correctness_passed": true,
+      "cycle_ms": {
+        "count": 5000,
+        "max": 407.320464,
+        "mean": 96.8491298962,
+        "min": 4.122906,
+        "p50": 88.79263,
+        "p95": 182.548378,
+        "p99": 230.914764
+      },
+      "elapsed_seconds": 5.046218963,
+      "enrolled_agents": 100,
+      "idle_agents_with_long_poll": 0,
+      "label": "scale-100-active",
+      "measured_messages": 5000,
+      "send_ack_ms": {
+        "count": 5000,
+        "max": 187.385763,
+        "mean": 34.1640657572,
+        "min": 2.264616,
+        "p50": 27.015638,
+        "p95": 83.234969,
+        "p99": 116.71092
+      },
+      "send_ack_p50_target_pass": false,
+      "transport": "uds",
+      "verified_deliveries_and_acks": 5300,
+      "wait_after_send_ms": {
+        "count": 5000,
+        "max": 312.638824,
+        "mean": 32.1935270006,
+        "min": 0.137141,
+        "p50": 25.980891,
+        "p95": 83.194639,
+        "p99": 120.646245
+      },
+      "wait_after_send_p50_target_pass": false,
+      "warmup_messages": 300
+    }
+  ],
+  "completed_successful_conditions": 7,
+  "conditions": [
+    {
+      "baseline_acks_per_second": 266.9044279300645,
+      "baseline_send_ack_ms": {
+        "count": 2670,
+        "max": 22.313427,
+        "mean": 3.7322806157303368,
+        "min": 1.613888,
+        "p50": 3.306365,
+        "p95": 7.265645,
+        "p99": 9.717913
+      },
+      "candidate_acks_per_second": 465.4631573808891,
+      "candidate_p50_below_10_ms_target_pass": true,
+      "candidate_send_ack_ms": {
+        "count": 4655,
+        "max": 17.522205,
+        "mean": 2.1416190296455424,
+        "min": 1.488575,
+        "p50": 2.022785,
+        "p95": 2.844028,
+        "p99": 3.910533
+      },
+      "candidate_status": "COMPLETE",
+      "candidate_throughput_5000_per_second_target_pass": false,
+      "concurrent_senders": 1,
+      "profile": "same-inbox",
+      "throughput_ratio": 1.7439319421963722
+    },
+    {
+      "baseline_acks_per_second": 210.41092563664867,
+      "baseline_send_ack_ms": {
+        "count": 2112,
+        "max": 276.723824,
+        "mean": 37.933682924242426,
+        "min": 4.918828,
+        "p50": 35.063622,
+        "p95": 54.412946,
+        "p99": 78.213641
+      },
+      "candidate_acks_per_second": 1951.5568103950106,
+      "candidate_p50_below_10_ms_target_pass": true,
+      "candidate_send_ack_ms": {
+        "count": 19522,
+        "max": 26.452995,
+        "mean": 4.092687523511935,
+        "min": 2.345139,
+        "p50": 3.866299,
+        "p95": 5.827858,
+        "p99": 8.529011
+      },
+      "candidate_status": "COMPLETE",
+      "candidate_throughput_5000_per_second_target_pass": false,
+      "concurrent_senders": 8,
+      "profile": "same-inbox",
+      "throughput_ratio": 9.274978495009742
+    },
+    {
+      "baseline_acks_per_second": 195.039951970969,
+      "baseline_send_ack_ms": {
+        "count": 1982,
+        "max": 246.703186,
+        "mean": 162.77999699899092,
+        "min": 3.077925,
+        "p50": 162.377884,
+        "p95": 220.843835,
+        "p99": 235.350295
+      },
+      "candidate_acks_per_second": 3108.100177360351,
+      "candidate_p50_below_10_ms_target_pass": true,
+      "candidate_send_ack_ms": {
+        "count": 31109,
+        "max": 34.125897,
+        "mean": 10.280288512391913,
+        "min": 3.137761,
+        "p50": 9.635042,
+        "p95": 16.966298,
+        "p99": 21.599558
+      },
+      "candidate_status": "COMPLETE",
+      "candidate_throughput_5000_per_second_target_pass": false,
+      "concurrent_senders": 32,
+      "profile": "same-inbox",
+      "throughput_ratio": 15.93571032986606
+    },
+    {
+      "baseline_acks_per_second": 160.1870244739047,
+      "baseline_send_ack_ms": {
+        "count": 1677,
+        "max": 1451.700601,
+        "mean": 606.9164379254621,
+        "min": 5.585921,
+        "p50": 542.815924,
+        "p95": 1159.425171,
+        "p99": 1417.438357
+      },
+      "candidate_acks_per_second": null,
+      "candidate_p50_below_10_ms_target_pass": false,
+      "candidate_send_ack_ms": null,
+      "candidate_status": "FAILED_RUN",
+      "candidate_throughput_5000_per_second_target_pass": false,
+      "concurrent_senders": 100,
+      "failure": "UDS send_message: {'jsonrpc': '2.0', 'id': 180, 'error': {'code': -32003, 'message': 'inbox for \"instance-01M5CCTERJ0C3J5BHMJ5VDVWGD\" is full (pending 10000 messages, 4848155 bytes; limits 10000 messages, 67108864 bytes)', 'data': {'code': 'RESOURCE_EXHAUSTED'}}}",
+      "profile": "same-inbox",
+      "unavailable_metrics_reason": "Run failed; do not substitute diagnostic or best-case values"
+    },
+    {
+      "baseline_acks_per_second": 206.17227450918915,
+      "baseline_send_ack_ms": {
+        "count": 2062,
+        "max": 69.489053,
+        "mean": 4.834196146944714,
+        "min": 1.639792,
+        "p50": 3.964366,
+        "p95": 9.956319,
+        "p99": 12.422042
+      },
+      "candidate_acks_per_second": 469.1281340265844,
+      "candidate_p50_below_10_ms_target_pass": true,
+      "candidate_send_ack_ms": {
+        "count": 4692,
+        "max": 14.075578,
+        "mean": 2.125313046675192,
+        "min": 1.49145,
+        "p50": 2.007343,
+        "p95": 2.815634,
+        "p99": 3.641404
+      },
+      "candidate_status": "COMPLETE",
+      "candidate_throughput_5000_per_second_target_pass": false,
+      "concurrent_senders": 1,
+      "profile": "distributed-inboxes",
+      "throughput_ratio": 2.275418143120283
+    },
+    {
+      "baseline_acks_per_second": 191.93369139770311,
+      "baseline_send_ack_ms": {
+        "count": 1927,
+        "max": 129.755029,
+        "mean": 41.57330387285937,
+        "min": 8.18572,
+        "p50": 40.271804,
+        "p95": 58.632556,
+        "p99": 80.180508
+      },
+      "candidate_acks_per_second": 1887.165487384428,
+      "candidate_p50_below_10_ms_target_pass": true,
+      "candidate_send_ack_ms": {
+        "count": 18903,
+        "max": 42.685254,
+        "mean": 4.22928047537428,
+        "min": 1.706077,
+        "p50": 3.48495,
+        "p95": 8.27408,
+        "p99": 12.781925
+      },
+      "candidate_status": "COMPLETE",
+      "candidate_throughput_5000_per_second_target_pass": false,
+      "concurrent_senders": 8,
+      "profile": "distributed-inboxes",
+      "throughput_ratio": 9.83238259860307
+    },
+    {
+      "baseline_acks_per_second": 174.34373882368865,
+      "baseline_send_ack_ms": {
+        "count": 1789,
+        "max": 432.333293,
+        "mean": 181.32315192453885,
+        "min": 15.754818,
+        "p50": 172.0875,
+        "p95": 283.550737,
+        "p99": 419.099768
+      },
+      "candidate_acks_per_second": 1291.6253863477534,
+      "candidate_p50_below_10_ms_target_pass": false,
+      "candidate_send_ack_ms": {
+        "count": 12946,
+        "max": 139.039339,
+        "mean": 24.70771230673567,
+        "min": 3.362681,
+        "p50": 21.129044,
+        "p95": 51.53203,
+        "p99": 69.274189
+      },
+      "candidate_status": "COMPLETE",
+      "candidate_throughput_5000_per_second_target_pass": false,
+      "concurrent_senders": 32,
+      "profile": "distributed-inboxes",
+      "throughput_ratio": 7.408498837196303
+    },
+    {
+      "baseline_acks_per_second": 100.48058580742192,
+      "baseline_send_ack_ms": {
+        "count": 1071,
+        "max": 1446.751218,
+        "mean": 950.0507631045753,
+        "min": 6.610368,
+        "p50": 1015.495455,
+        "p95": 1199.049162,
+        "p99": 1254.088017
+      },
+      "candidate_acks_per_second": 1339.7216177263317,
+      "candidate_p50_below_10_ms_target_pass": false,
+      "candidate_send_ack_ms": {
+        "count": 13532,
+        "max": 449.902664,
+        "mean": 73.76638979877328,
+        "min": 3.772797,
+        "p50": 58.614782,
+        "p95": 188.175284,
+        "p99": 258.587223
+      },
+      "candidate_status": "COMPLETE",
+      "candidate_throughput_5000_per_second_target_pass": false,
+      "concurrent_senders": 100,
+      "profile": "distributed-inboxes",
+      "throughput_ratio": 13.333139003528522
+    }
+  ],
+  "failure": "Same-inbox C100 hit unchanged inbox capacity",
+  "limitations": "One sample per condition on one host; elapsed host conditions can vary. Python driver overhead is included. Explicit partial continuation does not repair the failed eight-condition gate.",
+  "original_eight_condition_gate": "FAILED",
+  "schema": "cooperators.partial-eight-condition-comparison/v1"
+}

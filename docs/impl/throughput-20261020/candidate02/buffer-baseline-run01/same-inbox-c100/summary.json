@@ -1,0 +1,35 @@
+{
+  "active_receiver_agents": 1,
+  "active_sender_agents": 100,
+  "correctness_passed": true,
+  "durable_acknowledgments_per_second": 570.7060277921345,
+  "elapsed_seconds": 10.180372586,
+  "enrolled_agents": 101,
+  "label": "same-inbox-c100",
+  "measured_messages": 5810,
+  "outstanding_sends_per_sender": 1,
+  "profile": "same-inbox",
+  "receiver_drain": [
+    {
+      "ack_calls": 3256,
+      "max_batch": 5,
+      "wait_calls": 3259
+    }
+  ],
+  "receiver_identity_shared_with_sender": false,
+  "requested_measurement_seconds": 10.0,
+  "send_ack_ms": {
+    "count": 5810,
+    "max": 241.11824,
+    "mean": 173.45207573666093,
+    "min": 3.711117,
+    "p50": 171.276724,
+    "p95": 207.359018,
+    "p99": 226.081208
+  },
+  "send_ack_p50_below_10_ms_target_pass": false,
+  "throughput_5000_per_second_target_pass": false,
+  "transport": "uds",
+  "verified_deliveries_and_acks": 6519,
+  "warmup_messages": 709
+}

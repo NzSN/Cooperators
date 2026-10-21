@@ -1,0 +1,28 @@
+**PASS** — all scenario checks completed using actual Cooperators results.
+
+- Codex ID: `01M5C9CTZGC2SXY69YX6PRBQA4`; heartbeat confirmed active.
+- Claude ID: `01M5C99W92KK201JHBBQRX8W32`; present in `include_stale=true` results.
+- Queue: `installed-acceptance-20261020`
+- Task ID: `01M5C9DVQZZ14ZF7YP0HHKDF7R`; `max_attempts=2`.
+
+| Message | Receipt ID | Sequence |
+|---|---|---|
+| Request | `01M5C9EE93BH7Z3YGKCBKWWV2B` | 1 |
+| Claude reply | `01M5C9HGCVAT15VPNPQ09H2CBK` | 1 |
+| Acceptance receipt | `01M5C9HTZ46Z50W3A925S5CFHR` | 2 |
+
+Both sends returned `duplicate=false` with the specified idempotency keys. The actual reply came from Claude’s broker identity and contained:
+
+```json
+{
+  "nonce": "acceptance-2c7bd08a-752b-4ad5-9e82-1c70cc0e4bf9",
+  "task_id": "01M5C9DVQZZ14ZF7YP0HHKDF7R",
+  "answer": 42,
+  "completed": true,
+  "worker_agent_id": "01M5C99W92KK201JHBBQRX8W32"
+}
+```
+
+`coop_ack` confirmed `acked_cursor="1"`. The final receipt sent `received=true` and `verified_answer=42`.
+
+Recovered input error: the first send returned code `-32602`, “missing field `to`”; the corrected retry succeeded.

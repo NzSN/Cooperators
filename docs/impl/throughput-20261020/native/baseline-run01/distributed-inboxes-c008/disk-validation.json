@@ -1,0 +1,104 @@
+{
+  "all_inbox_reads": [
+    {
+      "hash_chain_read_pass": true,
+      "receiver_id": "01M5CDVY2705AHNW7499SPAKSY",
+      "records_read": 704,
+      "trailing_newline_missing": false,
+      "truncated_bytes": 0
+    },
+    {
+      "hash_chain_read_pass": true,
+      "receiver_id": "01M5CDVY2GR3VYW1SJADZQENZJ",
+      "records_read": 703,
+      "trailing_newline_missing": false,
+      "truncated_bytes": 0
+    },
+    {
+      "hash_chain_read_pass": true,
+      "receiver_id": "01M5CDVY2PCPT3B3XKSWAX62ES",
+      "records_read": 704,
+      "trailing_newline_missing": false,
+      "truncated_bytes": 0
+    },
+    {
+      "hash_chain_read_pass": true,
+      "receiver_id": "01M5CDVY2W7K10P8319GMGMR68",
+      "records_read": 704,
+      "trailing_newline_missing": false,
+      "truncated_bytes": 0
+    },
+    {
+      "hash_chain_read_pass": true,
+      "receiver_id": "01M5CDVY36YEJWDMSVM3JRYZJ3",
+      "records_read": 704,
+      "trailing_newline_missing": false,
+      "truncated_bytes": 0
+    },
+    {
+      "hash_chain_read_pass": true,
+      "receiver_id": "01M5CDVY3C3DGV2MHZK736QBN6",
+      "records_read": 703,
+      "trailing_newline_missing": false,
+      "truncated_bytes": 0
+    },
+    {
+      "hash_chain_read_pass": true,
+      "receiver_id": "01M5CDVY3TYDWRXBG4V2KG7NA1",
+      "records_read": 704,
+      "trailing_newline_missing": false,
+      "truncated_bytes": 0
+    },
+    {
+      "hash_chain_read_pass": true,
+      "receiver_id": "01M5CDVY3ZG6DDNCWANSKDWJ9Q",
+      "records_read": 704,
+      "trailing_newline_missing": false,
+      "truncated_bytes": 0
+    }
+  ],
+  "contiguous_sequences": true,
+  "correctness_passed": true,
+  "durable_records": 5630,
+  "errors": [],
+  "exact_envelope_disk_delivery_match": true,
+  "hash_chains_verified": true,
+  "inbox_heads": {
+    "01M5CDVY2705AHNW7499SPAKSY": {
+      "hash": "sha256:4af5aadf32c794640f716dd6b782bc47a94df0fd9ff9f2a63855bcd22e4ecd77",
+      "seq": 704
+    },
+    "01M5CDVY2GR3VYW1SJADZQENZJ": {
+      "hash": "sha256:62a582cca309ecc49a2e27922f1bf95a23aba2df23ce001315c2115af6f3fc15",
+      "seq": 703
+    },
+    "01M5CDVY2PCPT3B3XKSWAX62ES": {
+      "hash": "sha256:2c431be9e7c1702d76fd01c8f187cd73080ce4f0181c369a0220edfb254f9098",
+      "seq": 704
+    },
+    "01M5CDVY2W7K10P8319GMGMR68": {
+      "hash": "sha256:509a1c8eadd4926c4b31a462bcb86586c19c232560afae898ed9ed2f15179647",
+      "seq": 704
+    },
+    "01M5CDVY36YEJWDMSVM3JRYZJ3": {
+      "hash": "sha256:00a0ec351647beef010cdd9e413018ffcd1a4ac4f35d49d9b06b2e911dbfae41",
+      "seq": 704
+    },
+    "01M5CDVY3C3DGV2MHZK736QBN6": {
+      "hash": "sha256:39361e1d3dc38dc348a9424706225d5d1c12238a4280cde8247bc1735b9b8f22",
+      "seq": 703
+    },
+    "01M5CDVY3TYDWRXBG4V2KG7NA1": {
+      "hash": "sha256:366cf322b86a45c3aa7c4a52e1d0c0b32fd3dcd84ede96ca469c716adca50694",
+      "seq": 704
+    },
+    "01M5CDVY3ZG6DDNCWANSKDWJ9Q": {
+      "hash": "sha256:9653056240efd7c0049c84e4db64d57eafa8ac5a99dfabd524f5f12fa3bb1546",
+      "seq": 704
+    }
+  },
+  "reader": "LogFile<Envelope>::read_segments and storage::hash_record; no repair/open",
+  "receipt_count": 5630,
+  "unique_receipts": true,
+  "verified_deliveries_and_acks": 5630
+}

@@ -1,0 +1,27 @@
+{
+  "agents": [
+    {
+      "agent_id": "01M5CE0C5D9ZR50KSN733AWR68",
+      "display_name": "distributed-inboxes-c001-0",
+      "name": "instance-01M5CE0C5D9ZR50KSN733AWR68"
+    }
+  ],
+  "command": [
+    "/home/nzsn/Repos/Cooperators/target/release/coop",
+    "--root",
+    "/tmp/ctn-579178-1792492449927550449",
+    "daemon",
+    "run",
+    "--http-addr",
+    "off"
+  ],
+  "correctness_passed": true,
+  "errors": [],
+  "http": "off",
+  "label": "distributed-inboxes-c001",
+  "pid": 579323,
+  "root": "/tmp/ctn-579178-1792492449927550449",
+  "running_executable_sha256": "32d5b650e8768407d297165eb350c295ab0b7aa0da14272fcee3948765383488",
+  "start_utc": "2026-10-20T10:34:09.927Z",
+  "stop": "SIGTERM; signal: 15 (SIGTERM)"
+}

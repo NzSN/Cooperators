@@ -303,6 +303,123 @@ impl<T: ChainRecord> LogFile<T> {
         result
     }
 
+    /// Appends records in slice order, returning only after they are durable.
+    ///
+    /// For a nonrotating log, all records are serialized before any writes and
+    /// one covering fsync commits the batch. The durable sequence/hash head is
+    /// published only after that sync succeeds. An error can leave a complete
+    /// or partial unacknowledged prefix on disk; I/O errors quarantine the
+    /// handle until actual reopen/replay reconciles those bytes.
+    ///
+    /// Rotating streams use [`Self::append`] for each record, preserving every
+    /// segment seal and directory durability boundary. They may commit a
+    /// prefix before returning an error and perform one sync per record.
+    /// An empty batch does no I/O, but still rejects a quarantined handle.
+    pub fn append_batch(&mut self, records: &mut [T]) -> Result<Vec<AppendReceipt>, LogError> {
+        if self.recovery_required {
+            return Err(LogError::RecoveryRequired);
+        }
+        if records.is_empty() {
+            return Ok(Vec::new());
+        }
+        if self.rotation_bytes.is_some() {
+            return records
+                .iter_mut()
+                .map(|record| self.append(record))
+                .collect();
+        }
+        let result = self.append_batch_inner(records);
+        if matches!(&result, Err(LogError::Io(_))) {
+            self.recovery_required = true;
+        }
+        result
+    }
+
+    fn append_batch_inner(&mut self, records: &mut [T]) -> Result<Vec<AppendReceipt>, LogError> {
+        let next_seq = self
+            .next_seq
+            .checked_add(records.len() as u64)
+            .ok_or_else(|| LogError::InvalidRecord("batch exhausts sequence numbers".into()))?;
+        let mut previous_hash = self.last_hash.clone();
+        let mut lines = Vec::with_capacity(records.len());
+        let mut receipts = Vec::with_capacity(records.len());
+        // Prepare the entire batch before touching disk. Serialization errors
+        // leave the current durable position intact and the handle reusable.
+        for (index, record) in records.iter_mut().enumerate() {
+            let seq = self.next_seq + index as u64;
+            record.set_seq(seq);
+            record.set_prev_hash(previous_hash);
+            let hash = hash_record(record)?;
+            let serialized = serde_json::to_vec(record).map_err(LogError::Serialize)?;
+            let mut line = Vec::with_capacity(serialized.len() + 2);
+            if index == 0 && self.needs_newline {
+                line.push(b'\n');
+            }
+            line.extend_from_slice(&serialized);
+            line.push(b'\n');
+            receipts.push(AppendReceipt {
+                seq,
+                hash: hash.clone(),
+                bytes_written: line.len() as u64,
+            });
+            previous_hash = hash;
+            lines.push(line);
+        }
+
+        self.file.seek(SeekFrom::End(0))?;
+        #[cfg(feature = "mbt-injection")]
+        let mut injections = Vec::new();
+        for (_receipt, line) in receipts.iter().zip(&lines) {
+            #[cfg(feature = "mbt-injection")]
+            {
+                crate::faults::reach(&self.path, crate::faults::FaultPoint::BeforeRotation)?;
+                crate::faults::reach(&self.path, crate::faults::FaultPoint::BeforeRecordWrite)?;
+            }
+            #[cfg(feature = "mbt-injection")]
+            let injection = crate::faults::take_append(&self.path);
+            #[cfg(feature = "mbt-injection")]
+            if let Some(injection) = &injection {
+                if let crate::faults::AppendFault::PartialWrite { bytes } = injection.fault() {
+                    let written = bytes.min(line.len() - 1);
+                    if let Err(error) = self.file.write_all(&line[..written]) {
+                        injection.io_failed(_receipt.seq, line.len());
+                        return Err(error.into());
+                    }
+                    injection.partial_written(_receipt.seq, line.len(), written);
+                    return Err(crate::faults::injected_error().into());
+                }
+            }
+            #[cfg(feature = "mbt-injection")]
+            if let Err(error) = self.file.write_all(line) {
+                if let Some(injection) = &injection {
+                    injection.io_failed(_receipt.seq, line.len());
+                }
+                return Err(error.into());
+            }
+            #[cfg(not(feature = "mbt-injection"))]
+            self.file.write_all(line)?;
+            #[cfg(feature = "mbt-injection")]
+            if let Some(injection) = injection {
+                // Keep the per-record pause/failure boundary. Successful
+                // injections observe the one covering sync below.
+                injection.before_sync(_receipt.seq, line.len())?;
+                injections.push((injection, _receipt.seq, line.len()));
+            }
+        }
+        let synced = self.file.sync_all();
+        #[cfg(feature = "mbt-injection")]
+        for (injection, seq, bytes) in injections {
+            injection.synced(seq, bytes, synced.is_ok());
+        }
+        synced?;
+
+        self.next_seq = next_seq;
+        self.last_hash = previous_hash;
+        self.needs_newline = false;
+        self.record_count += records.len() as u64;
+        Ok(receipts)
+    }
+
     fn append_inner(&mut self, record: &mut T) -> Result<AppendReceipt, LogError> {
         record.set_seq(self.next_seq);
         record.set_prev_hash(self.last_hash.clone());

@@ -1,0 +1,1336 @@
+{
+  "active_receiver_connections": 100,
+  "active_sender_agents": 100,
+  "all_receiver_inboxes_empty_with_verified_acked_heads": true,
+  "all_targets_and_correctness_pass": false,
+  "correctness_passed": true,
+  "durable_acknowledgments_per_second": 4608.132631664534,
+  "elapsed_seconds": 10.022280974,
+  "enrolled_agents": 100,
+  "errors": [],
+  "http": "off",
+  "label": "distributed-inboxes-c100",
+  "measured_messages": 46184,
+  "outstanding_sends_per_sender": 1,
+  "partial_sample_warning": null,
+  "phase_completed_without_errors": true,
+  "profile": "distributed-inboxes",
+  "receiver_drain": [
+    {
+      "ack_calls": 378,
+      "acked_head": 518,
+      "agent": {
+        "agent_id": "01M5CE1ZRTGG130MGFPV2G8K4C",
+        "display_name": "distributed-inboxes-c100-22",
+        "name": "instance-01M5CE1ZRTGG130MGFPV2G8K4C"
+      },
+      "delivered_records": 518,
+      "errors": [],
+      "max_batch": 2,
+      "wait_calls": 381
+    },
+    {
+      "ack_calls": 375,
+      "acked_head": 521,
+      "agent": {
+        "agent_id": "01M5CE1ZJYGFXCK9ET26M6PCQK",
+        "display_name": "distributed-inboxes-c100-0",
+        "name": "instance-01M5CE1ZJYGFXCK9ET26M6PCQK"
+      },
+      "delivered_records": 521,
+      "errors": [],
+      "max_batch": 2,
+      "wait_calls": 381
+    },
+    {
+      "ack_calls": 378,
+      "acked_head": 519,
+      "agent": {
+        "agent_id": "01M5CE1ZYERVXDSBT7RGZEHK8W",
+        "display_name": "distributed-inboxes-c100-55",
+        "name": "instance-01M5CE1ZYERVXDSBT7RGZEHK8W"
+      },
+      "delivered_records": 519,
+      "errors": [],
+      "max_batch": 2,
+      "wait_calls": 382
+    },
+    {
+      "ack_calls": 374,
+      "acked_head": 514,
+      "agent": {
+        "agent_id": "01M5CE203WRNCJE0S5XYCY3TX9",
+        "display_name": "distributed-inboxes-c100-84",
+        "name": "instance-01M5CE203WRNCJE0S5XYCY3TX9"
+      },
+      "delivered_records": 514,
+      "errors": [],
+      "max_batch": 2,
+      "wait_calls": 380
+    },
+    {
+      "ack_calls": 377,
+      "acked_head": 519,
+      "agent": {
+        "agent_id": "01M5CE1ZXWT2JRX2WDD1DQW8XF",
+        "display_name": "distributed-inboxes-c100-51",
+        "name": "instance-01M5CE1ZXWT2JRX2WDD1DQW8XF"
+      },
+      "delivered_records": 519,
+      "errors": [],
+      "max_batch": 3,
+      "wait_calls": 382
+    },
+    {
+      "ack_calls": 377,
+      "acked_head": 519,
+      "agent": {
+        "agent_id": "01M5CE2019AMAC8C3Q0C7TY7D0",
+        "display_name": "distributed-inboxes-c100-69",
+        "name": "instance-01M5CE2019AMAC8C3Q0C7TY7D0"
+      },
+      "delivered_records": 519,
+      "errors": [],
+      "max_batch": 2,
+      "wait_calls": 381
+    },
+    {
+      "ack_calls": 376,
+      "acked_head": 519,
+      "agent": {
+        "agent_id": "01M5CE1ZM49R3K0E61GCA824TY",
+        "display_name": "distributed-inboxes-c100-4",
+        "name": "instance-01M5CE1ZM49R3K0E61GCA824TY"
+      },
+      "delivered_records": 519,
+      "errors": [],
+      "max_batch": 3,
+      "wait_calls": 381
+    },
+    {
+      "ack_calls": 378,
+      "acked_head": 518,
+      "agent": {
+        "agent_id": "01M5CE1ZR25EW3N1Y8NTY07AJ0",
+        "display_name": "distributed-inboxes-c100-17",
+        "name": "instance-01M5CE1ZR25EW3N1Y8NTY07AJ0"
+      },
+      "delivered_records": 518,
+      "errors": [],
+      "max_batch": 2,
+      "wait_calls": 382
+    },
+    {
+      "ack_calls": 375,
+      "acked_head": 521,
+      "agent": {
+        "agent_id": "01M5CE1ZTKYXMMXG7BFV5EKDRE",
+        "display_name": "distributed-inboxes-c100-30",
+        "name": "instance-01M5CE1ZTKYXMMXG7BFV5EKDRE"
+      },
+      "delivered_records": 521,
+      "errors": [],
+      "max_batch": 3,
+      "wait_calls": 380
+    },
+    {
+      "ack_calls": 377,
+      "acked_head": 519,
+      "agent": {
+        "agent_id": "01M5CE1ZW0HKSBWC7J55FCGR9N",
+        "display_name": "distributed-inboxes-c100-39",
+        "name": "instance-01M5CE1ZW0HKSBWC7J55FCGR9N"
+      },
+      "delivered_records": 519,
+      "errors": [],
+      "max_batch": 2,
+      "wait_calls": 381
+    },
+    {
+      "ack_calls": 377,
+      "acked_head": 518,
+      "agent": {
+        "agent_id": "01M5CE2004RAJXFP831V002ST2",
+        "display_name": "distributed-inboxes-c100-63",
+        "name": "instance-01M5CE2004RAJXFP831V002ST2"
+      },
+      "delivered_records": 518,
+      "errors": [],
+      "max_batch": 2,
+      "wait_calls": 381
+    },
+    {
+      "ack_calls": 376,
+      "acked_head": 517,
+      "agent": {
+        "agent_id": "01M5CE1ZRYEVH3VRW7S3EQSCPD",
+        "display_name": "distributed-inboxes-c100-23",
+        "name": "instance-01M5CE1ZRYEVH3VRW7S3EQSCPD"
+      },
+      "delivered_records": 517,
+      "errors": [],
+      "max_batch": 3,
+      "wait_calls": 380
+    },
+    {
+      "ack_calls": 376,
+      "acked_head": 512,
+      "agent": {
+        "agent_id": "01M5CE206JWKPHY4E1AY8JYR68",
+        "display_name": "distributed-inboxes-c100-98",
+        "name": "instance-01M5CE206JWKPHY4E1AY8JYR68"
+      },
+      "delivered_records": 512,
+      "errors": [],
+      "max_batch": 2,
+      "wait_calls": 380
+    },
+    {
+      "ack_calls": 374,
+      "acked_head": 519,
+      "agent": {
+        "agent_id": "01M5CE1ZMZN75SCHV0QHPNGF7H",
+        "display_name": "distributed-inboxes-c100-6",
+        "name": "instance-01M5CE1ZMZN75SCHV0QHPNGF7H"
+      },
+      "delivered_records": 519,
+      "errors": [],
+      "max_batch": 2,
+      "wait_calls": 380
+    },
+    {
+      "ack_calls": 376,
+      "acked_head": 518,
+      "agent": {
+        "agent_id": "01M5CE1ZV7A5PCWZVD6WH3BZSA",
+        "display_name": "distributed-inboxes-c100-34",
+        "name": "instance-01M5CE1ZV7A5PCWZVD6WH3BZSA"
+      },
+      "delivered_records": 518,
+      "errors": [],
+      "max_batch": 2,
+      "wait_calls": 380
+    },
+    {
+      "ack_calls": 375,
+      "acked_head": 517,
+      "agent": {
+        "agent_id": "01M5CE2026KJYWY23FTYFM47HG",
+        "display_name": "distributed-inboxes-c100-74",
+        "name": "instance-01M5CE2026KJYWY23FTYFM47HG"
+      },
+      "delivered_records": 517,
+      "errors": [],
+      "max_batch": 2,
+      "wait_calls": 380
+    },
+    {
+      "ack_calls": 379,
+      "acked_head": 518,
+      "agent": {
+        "agent_id": "01M5CE203JD4DYTMC09F8ZX7N7",
+        "display_name": "distributed-inboxes-c100-82",
+        "name": "instance-01M5CE203JD4DYTMC09F8ZX7N7"
+      },
+      "delivered_records": 518,
+      "errors": [],
+      "max_batch": 2,
+      "wait_calls": 381
+    },
+    {
+      "ack_calls": 378,
+      "acked_head": 515,
+      "agent": {
+        "agent_id": "01M5CE204N4JAQ7PSBSTSD63XD",
+        "display_name": "distributed-inboxes-c100-88",
+        "name": "instance-01M5CE204N4JAQ7PSBSTSD63XD"
+      },
+      "delivered_records": 515,
+      "errors": [],
+      "max_batch": 2,
+      "wait_calls": 381
+    },
+    {
+      "ack_calls": 376,
+      "acked_head": 517,
+      "agent": {
+        "agent_id": "01M5CE203QMTGAWZ1ES8G64FPP",
+        "display_name": "distributed-inboxes-c100-83",
+        "name": "instance-01M5CE203QMTGAWZ1ES8G64FPP"
+      },
+      "delivered_records": 517,
+      "errors": [],
+      "max_batch": 2,
+      "wait_calls": 380
+    },
+    {
+      "ack_calls": 377,
+      "acked_head": 519,
+      "agent": {
+        "agent_id": "01M5CE205VSF3W8DK5S0PDRA9H",
+        "display_name": "distributed-inboxes-c100-94",
+        "name": "instance-01M5CE205VSF3W8DK5S0PDRA9H"
+      },
+      "delivered_records": 519,
+      "errors": [],
+      "max_batch": 2,
+      "wait_calls": 380
+    },
+    {
+      "ack_calls": 378,
+      "acked_head": 520,
+      "agent": {
+        "agent_id": "01M5CE1ZX8CFD2J96882N384Y7",
+        "display_name": "distributed-inboxes-c100-47",
+        "name": "instance-01M5CE1ZX8CFD2J96882N384Y7"
+      },
+      "delivered_records": 520,
+      "errors": [],
+      "max_batch": 3,
+      "wait_calls": 382
+    },
+    {
+      "ack_calls": 375,
+      "acked_head": 517,
+      "agent": {
+        "agent_id": "01M5CE1ZWS2AVF34A40EPE1SWA",
+        "display_name": "distributed-inboxes-c100-44",
+        "name": "instance-01M5CE1ZWS2AVF34A40EPE1SWA"
+      },
+      "delivered_records": 517,
+      "errors": [],
+      "max_batch": 3,
+      "wait_calls": 379
+    },
+    {
+      "ack_calls": 377,
+      "acked_head": 521,
+      "agent": {
+        "agent_id": "01M5CE1ZX359D8YR6PMXW45E2N",
+        "display_name": "distributed-inboxes-c100-46",
+        "name": "instance-01M5CE1ZX359D8YR6PMXW45E2N"
+      },
+      "delivered_records": 521,
+      "errors": [],
+      "max_batch": 2,
+      "wait_calls": 381
+    },
+    {
+      "ack_calls": 378,
+      "acked_head": 517,
+      "agent": {
+        "agent_id": "01M5CE1ZTR41PZF42C2XQ8Z71T",
+        "display_name": "distributed-inboxes-c100-31",
+        "name": "instance-01M5CE1ZTR41PZF42C2XQ8Z71T"
+      },
+      "delivered_records": 517,
+      "errors": [],
+      "max_batch": 2,
+      "wait_calls": 382
+    },
+    {
+      "ack_calls": 374,
+      "acked_head": 517,
+      "agent": {
+        "agent_id": "01M5CE1ZWEHQ58KEGG2XK0QEM5",
+        "display_name": "distributed-inboxes-c100-42",
+        "name": "instance-01M5CE1ZWEHQ58KEGG2XK0QEM5"
+      },
+      "delivered_records": 517,
+      "errors": [],
+      "max_batch": 3,
+      "wait_calls": 381
+    },
+    {
+      "ack_calls": 379,
+      "acked_head": 523,
+      "agent": {
+        "agent_id": "01M5CE1ZT9NPBC9SREATR9KW45",
+        "display_name": "distributed-inboxes-c100-28",
+        "name": "instance-01M5CE1ZT9NPBC9SREATR9KW45"
+      },
+      "delivered_records": 523,
+      "errors": [],
+      "max_batch": 2,
+      "wait_calls": 382
+    },
+    {
+      "ack_calls": 378,
+      "acked_head": 516,
+      "agent": {
+        "agent_id": "01M5CE1ZRHCX0XJH8GPRJPQRWV",
+        "display_name": "distributed-inboxes-c100-20",
+        "name": "instance-01M5CE1ZRHCX0XJH8GPRJPQRWV"
+      },
+      "delivered_records": 516,
+      "errors": [],
+      "max_batch": 2,
+      "wait_calls": 382
+    },
+    {
+      "ack_calls": 377,
+      "acked_head": 518,
+      "agent": {
+        "agent_id": "01M5CE1ZQFQ3VDW7MWED7VXW28",
+        "display_name": "distributed-inboxes-c100-13",
+        "name": "instance-01M5CE1ZQFQ3VDW7MWED7VXW28"
+      },
+      "delivered_records": 518,
+      "errors": [],
+      "max_batch": 2,
+      "wait_calls": 382
+    },
+    {
+      "ack_calls": 378,
+      "acked_head": 516,
+      "agent": {
+        "agent_id": "01M5CE1ZY091WHJ2Q9KMERXE6H",
+        "display_name": "distributed-inboxes-c100-52",
+        "name": "instance-01M5CE1ZY091WHJ2Q9KMERXE6H"
+      },
+      "delivered_records": 516,
+      "errors": [],
+      "max_batch": 2,
+      "wait_calls": 381
+    },
+    {
+      "ack_calls": 374,
+      "acked_head": 520,
+      "agent": {
+        "agent_id": "01M5CE202B6NGRQGX549JTBE3T",
+        "display_name": "distributed-inboxes-c100-75",
+        "name": "instance-01M5CE202B6NGRQGX549JTBE3T"
+      },
+      "delivered_records": 520,
+      "errors": [],
+      "max_batch": 2,
+      "wait_calls": 379
+    },
+    {
+      "ack_calls": 376,
+      "acked_head": 520,
+      "agent": {
+        "agent_id": "01M5CE1ZQMD3HG5GRVZ3DFET83",
+        "display_name": "distributed-inboxes-c100-14",
+        "name": "instance-01M5CE1ZQMD3HG5GRVZ3DFET83"
+      },
+      "delivered_records": 520,
+      "errors": [],
+      "max_batch": 2,
+      "wait_calls": 382
+    },
+    {
+      "ack_calls": 377,
+      "acked_head": 517,
+      "agent": {
+        "agent_id": "01M5CE1ZPBEM5PEK33H54TQD0T",
+        "display_name": "distributed-inboxes-c100-10",
+        "name": "instance-01M5CE1ZPBEM5PEK33H54TQD0T"
+      },
+      "delivered_records": 517,
+      "errors": [],
+      "max_batch": 2,
+      "wait_calls": 382
+    },
+    {
+      "ack_calls": 377,
+      "acked_head": 516,
+      "agent": {
+        "agent_id": "01M5CE1ZK58ADT68HF0CJADSSR",
+        "display_name": "distributed-inboxes-c100-1",
+        "name": "instance-01M5CE1ZK58ADT68HF0CJADSSR"
+      },
+      "delivered_records": 516,
+      "errors": [],
+      "max_batch": 3,
+      "wait_calls": 382
+    },
+    {
+      "ack_calls": 378,
+      "acked_head": 518,
+      "agent": {
+        "agent_id": "01M5CE1ZNM3H3CNGERAR2T27VJ",
+        "display_name": "distributed-inboxes-c100-8",
+        "name": "instance-01M5CE1ZNM3H3CNGERAR2T27VJ"
+      },
+      "delivered_records": 518,
+      "errors": [],
+      "max_batch": 2,
+      "wait_calls": 382
+    },
+    {
+      "ack_calls": 379,
+      "acked_head": 517,
+      "agent": {
+        "agent_id": "01M5CE1ZNZ08V36W1AN2GPSTGT",
+        "display_name": "distributed-inboxes-c100-9",
+        "name": "instance-01M5CE1ZNZ08V36W1AN2GPSTGT"
+      },
+      "delivered_records": 517,
+      "errors": [],
+      "max_batch": 2,
+      "wait_calls": 382
+    },
+    {
+      "ack_calls": 377,
+      "acked_head": 521,
+      "agent": {
+        "agent_id": "01M5CE1ZTY8JQASTW7X9V98RV7",
+        "display_name": "distributed-inboxes-c100-32",
+        "name": "instance-01M5CE1ZTY8JQASTW7X9V98RV7"
+      },
+      "delivered_records": 521,
+      "errors": [],
+      "max_batch": 3,
+      "wait_calls": 381
+    },
+    {
+      "ack_calls": 379,
+      "acked_head": 516,
+      "agent": {
+        "agent_id": "01M5CE1ZMEAF1JNX2P3SWGC64S",
+        "display_name": "distributed-inboxes-c100-5",
+        "name": "instance-01M5CE1ZMEAF1JNX2P3SWGC64S"
+      },
+      "delivered_records": 516,
+      "errors": [],
+      "max_batch": 2,
+      "wait_calls": 383
+    },
+    {
+      "ack_calls": 375,
+      "acked_head": 515,
+      "agent": {
+        "agent_id": "01M5CE1ZKGGDB4TMF45XQ9JBH6",
+        "display_name": "distributed-inboxes-c100-2",
+        "name": "instance-01M5CE1ZKGGDB4TMF45XQ9JBH6"
+      },
+      "delivered_records": 515,
+      "errors": [],
+      "max_batch": 2,
+      "wait_calls": 382
+    },
+    {
+      "ack_calls": 376,
+      "acked_head": 517,
+      "agent": {
+        "agent_id": "01M5CE206CNB5K9P3YF6TV671A",
+        "display_name": "distributed-inboxes-c100-97",
+        "name": "instance-01M5CE206CNB5K9P3YF6TV671A"
+      },
+      "delivered_records": 517,
+      "errors": [],
+      "max_batch": 2,
+      "wait_calls": 380
+    },
+    {
+      "ack_calls": 378,
+      "acked_head": 517,
+      "agent": {
+        "agent_id": "01M5CE205MZB8K3Z8RMMN0KZG5",
+        "display_name": "distributed-inboxes-c100-93",
+        "name": "instance-01M5CE205MZB8K3Z8RMMN0KZG5"
+      },
+      "delivered_records": 517,
+      "errors": [],
+      "max_batch": 3,
+      "wait_calls": 382
+    },
+    {
+      "ack_calls": 376,
+      "acked_head": 518,
+      "agent": {
+        "agent_id": "01M5CE1ZRBNSHJH967XTH5P71B",
+        "display_name": "distributed-inboxes-c100-19",
+        "name": "instance-01M5CE1ZRBNSHJH967XTH5P71B"
+      },
+      "delivered_records": 518,
+      "errors": [],
+      "max_batch": 3,
+      "wait_calls": 381
+    },
+    {
+      "ack_calls": 378,
+      "acked_head": 520,
+      "agent": {
+        "agent_id": "01M5CE1ZKTM2KDS1XJHS8TDA08",
+        "display_name": "distributed-inboxes-c100-3",
+        "name": "instance-01M5CE1ZKTM2KDS1XJHS8TDA08"
+      },
+      "delivered_records": 520,
+      "errors": [],
+      "max_batch": 2,
+      "wait_calls": 382
+    },
+    {
+      "ack_calls": 378,
+      "acked_head": 518,
+      "agent": {
+        "agent_id": "01M5CE1ZW9KPK139E7W4A3RECB",
+        "display_name": "distributed-inboxes-c100-41",
+        "name": "instance-01M5CE1ZW9KPK139E7W4A3RECB"
+      },
+      "delivered_records": 518,
+      "errors": [],
+      "max_batch": 2,
+      "wait_calls": 382
+    },
+    {
+      "ack_calls": 376,
+      "acked_head": 517,
+      "agent": {
+        "agent_id": "01M5CE204F942FJ5S4H2Q64S8Q",
+        "display_name": "distributed-inboxes-c100-87",
+        "name": "instance-01M5CE204F942FJ5S4H2Q64S8Q"
+      },
+      "delivered_records": 517,
+      "errors": [],
+      "max_batch": 2,
+      "wait_calls": 380
+    },
+    {
+      "ack_calls": 376,
+      "acked_head": 515,
+      "agent": {
+        "agent_id": "01M5CE1ZPSE2HXXY91NNWF40YP",
+        "display_name": "distributed-inboxes-c100-11",
+        "name": "instance-01M5CE1ZPSE2HXXY91NNWF40YP"
+      },
+      "delivered_records": 515,
+      "errors": [],
+      "max_batch": 3,
+      "wait_calls": 382
+    },
+    {
+      "ack_calls": 375,
+      "acked_head": 520,
+      "agent": {
+        "agent_id": "01M5CE202V7JT1J6F6ETQK7JX1",
+        "display_name": "distributed-inboxes-c100-78",
+        "name": "instance-01M5CE202V7JT1J6F6ETQK7JX1"
+      },
+      "delivered_records": 520,
+      "errors": [],
+      "max_batch": 2,
+      "wait_calls": 380
+    },
+    {
+      "ack_calls": 374,
+      "acked_head": 518,
+      "agent": {
+        "agent_id": "01M5CE1ZV25Y2PHPTS605Y29RP",
+        "display_name": "distributed-inboxes-c100-33",
+        "name": "instance-01M5CE1ZV25Y2PHPTS605Y29RP"
+      },
+      "delivered_records": 518,
+      "errors": [],
+      "max_batch": 3,
+      "wait_calls": 379
+    },
+    {
+      "ack_calls": 377,
+      "acked_head": 516,
+      "agent": {
+        "agent_id": "01M5CE1ZVNWYQEMVCMR7TWDAGG",
+        "display_name": "distributed-inboxes-c100-37",
+        "name": "instance-01M5CE1ZVNWYQEMVCMR7TWDAGG"
+      },
+      "delivered_records": 516,
+      "errors": [],
+      "max_batch": 2,
+      "wait_calls": 382
+    },
+    {
+      "ack_calls": 375,
+      "acked_head": 516,
+      "agent": {
+        "agent_id": "01M5CE205A2NQ10J98H52X6X6Q",
+        "display_name": "distributed-inboxes-c100-91",
+        "name": "instance-01M5CE205A2NQ10J98H52X6X6Q"
+      },
+      "delivered_records": 516,
+      "errors": [],
+      "max_batch": 3,
+      "wait_calls": 380
+    },
+    {
+      "ack_calls": 378,
+      "acked_head": 518,
+      "agent": {
+        "agent_id": "01M5CE1ZW4WHFXGG2YG4BRFC3C",
+        "display_name": "distributed-inboxes-c100-40",
+        "name": "instance-01M5CE1ZW4WHFXGG2YG4BRFC3C"
+      },
+      "delivered_records": 518,
+      "errors": [],
+      "max_batch": 2,
+      "wait_calls": 382
+    },
+    {
+      "ack_calls": 376,
+      "acked_head": 517,
+      "agent": {
+        "agent_id": "01M5CE1ZQ4TTYM38JDY1TY032Z",
+        "display_name": "distributed-inboxes-c100-12",
+        "name": "instance-01M5CE1ZQ4TTYM38JDY1TY032Z"
+      },
+      "delivered_records": 517,
+      "errors": [],
+      "max_batch": 2,
+      "wait_calls": 381
+    },
+    {
+      "ack_calls": 374,
+      "acked_head": 517,
+      "agent": {
+        "agent_id": "01M5CE202G10R6JY7V4Q52KN4F",
+        "display_name": "distributed-inboxes-c100-76",
+        "name": "instance-01M5CE202G10R6JY7V4Q52KN4F"
+      },
+      "delivered_records": 517,
+      "errors": [],
+      "max_batch": 3,
+      "wait_calls": 380
+    },
+    {
+      "ack_calls": 374,
+      "acked_head": 514,
+      "agent": {
+        "agent_id": "01M5CE1ZXQXC0QM41BCDP4X73G",
+        "display_name": "distributed-inboxes-c100-50",
+        "name": "instance-01M5CE1ZXQXC0QM41BCDP4X73G"
+      },
+      "delivered_records": 514,
+      "errors": [],
+      "max_batch": 3,
+      "wait_calls": 379
+    },
+    {
+      "ack_calls": 376,
+      "acked_head": 520,
+      "agent": {
+        "agent_id": "01M5CE2015QVAS07B778X0Z0RS",
+        "display_name": "distributed-inboxes-c100-68",
+        "name": "instance-01M5CE2015QVAS07B778X0Z0RS"
+      },
+      "delivered_records": 520,
+      "errors": [],
+      "max_batch": 2,
+      "wait_calls": 381
+    },
+    {
+      "ack_calls": 373,
+      "acked_head": 517,
+      "agent": {
+        "agent_id": "01M5CE1ZYKSN9FFXCEVSPWZDT5",
+        "display_name": "distributed-inboxes-c100-56",
+        "name": "instance-01M5CE1ZYKSN9FFXCEVSPWZDT5"
+      },
+      "delivered_records": 517,
+      "errors": [],
+      "max_batch": 2,
+      "wait_calls": 380
+    },
+    {
+      "ack_calls": 375,
+      "acked_head": 518,
+      "agent": {
+        "agent_id": "01M5CE205FXWNCYW3HYZQB3RBX",
+        "display_name": "distributed-inboxes-c100-92",
+        "name": "instance-01M5CE205FXWNCYW3HYZQB3RBX"
+      },
+      "delivered_records": 518,
+      "errors": [],
+      "max_batch": 2,
+      "wait_calls": 379
+    },
+    {
+      "ack_calls": 376,
+      "acked_head": 517,
+      "agent": {
+        "agent_id": "01M5CE1ZWMKRX5D85GN4HKS1FE",
+        "display_name": "distributed-inboxes-c100-43",
+        "name": "instance-01M5CE1ZWMKRX5D85GN4HKS1FE"
+      },
+      "delivered_records": 517,
+      "errors": [],
+      "max_batch": 2,
+      "wait_calls": 382
+    },
+    {
+      "ack_calls": 376,
+      "acked_head": 517,
+      "agent": {
+        "agent_id": "01M5CE20678VSW6S1GBGZZQV67",
+        "display_name": "distributed-inboxes-c100-96",
+        "name": "instance-01M5CE20678VSW6S1GBGZZQV67"
+      },
+      "delivered_records": 517,
+      "errors": [],
+      "max_batch": 3,
+      "wait_calls": 380
+    },
+    {
+      "ack_calls": 375,
+      "acked_head": 518,
+      "agent": {
+        "agent_id": "01M5CE1ZY6P2J54NC7X5QTWSYH",
+        "display_name": "distributed-inboxes-c100-53",
+        "name": "instance-01M5CE1ZY6P2J54NC7X5QTWSYH"
+      },
+      "delivered_records": 518,
+      "errors": [],
+      "max_batch": 2,
+      "wait_calls": 379
+    },
+    {
+      "ack_calls": 377,
+      "acked_head": 518,
+      "agent": {
+        "agent_id": "01M5CE200GF1NP665QG97PAG3E",
+        "display_name": "distributed-inboxes-c100-65",
+        "name": "instance-01M5CE200GF1NP665QG97PAG3E"
+      },
+      "delivered_records": 518,
+      "errors": [],
+      "max_batch": 2,
+      "wait_calls": 381
+    },
+    {
+      "ack_calls": 376,
+      "acked_head": 517,
+      "agent": {
+        "agent_id": "01M5CE203CD8JZBCCM6J4JFHCE",
+        "display_name": "distributed-inboxes-c100-81",
+        "name": "instance-01M5CE203CD8JZBCCM6J4JFHCE"
+      },
+      "delivered_records": 517,
+      "errors": [],
+      "max_batch": 2,
+      "wait_calls": 381
+    },
+    {
+      "ack_calls": 377,
+      "acked_head": 516,
+      "agent": {
+        "agent_id": "01M5CE1ZRP84MY90DMP051KTN1",
+        "display_name": "distributed-inboxes-c100-21",
+        "name": "instance-01M5CE1ZRP84MY90DMP051KTN1"
+      },
+      "delivered_records": 516,
+      "errors": [],
+      "max_batch": 3,
+      "wait_calls": 382
+    },
+    {
+      "ack_calls": 379,
+      "acked_head": 515,
+      "agent": {
+        "agent_id": "01M5CE1ZS72CKXQNM0CHZ6MAMM",
+        "display_name": "distributed-inboxes-c100-25",
+        "name": "instance-01M5CE1ZS72CKXQNM0CHZ6MAMM"
+      },
+      "delivered_records": 515,
+      "errors": [],
+      "max_batch": 2,
+      "wait_calls": 383
+    },
+    {
+      "ack_calls": 377,
+      "acked_head": 519,
+      "agent": {
+        "agent_id": "01M5CE1ZS35R1D64FJG7A2H0AZ",
+        "display_name": "distributed-inboxes-c100-24",
+        "name": "instance-01M5CE1ZS35R1D64FJG7A2H0AZ"
+      },
+      "delivered_records": 519,
+      "errors": [],
+      "max_batch": 2,
+      "wait_calls": 383
+    },
+    {
+      "ack_calls": 377,
+      "acked_head": 519,
+      "agent": {
+        "agent_id": "01M5CE1ZVH0PXM5WWNTK277G8W",
+        "display_name": "distributed-inboxes-c100-36",
+        "name": "instance-01M5CE1ZVH0PXM5WWNTK277G8W"
+      },
+      "delivered_records": 519,
+      "errors": [],
+      "max_batch": 3,
+      "wait_calls": 382
+    },
+    {
+      "ack_calls": 376,
+      "acked_head": 514,
+      "agent": {
+        "agent_id": "01M5CE2036ZDJ55YPDTMHWCK5Y",
+        "display_name": "distributed-inboxes-c100-80",
+        "name": "instance-01M5CE2036ZDJ55YPDTMHWCK5Y"
+      },
+      "delivered_records": 514,
+      "errors": [],
+      "max_batch": 2,
+      "wait_calls": 381
+    },
+    {
+      "ack_calls": 372,
+      "acked_head": 516,
+      "agent": {
+        "agent_id": "01M5CE201FPPJATTPFS2J9C1Q5",
+        "display_name": "distributed-inboxes-c100-70",
+        "name": "instance-01M5CE201FPPJATTPFS2J9C1Q5"
+      },
+      "delivered_records": 516,
+      "errors": [],
+      "max_batch": 3,
+      "wait_calls": 380
+    },
+    {
+      "ack_calls": 378,
+      "acked_head": 518,
+      "agent": {
+        "agent_id": "01M5CE1ZT4B2FJXANQHH5Q04NT",
+        "display_name": "distributed-inboxes-c100-27",
+        "name": "instance-01M5CE1ZT4B2FJXANQHH5Q04NT"
+      },
+      "delivered_records": 518,
+      "errors": [],
+      "max_batch": 2,
+      "wait_calls": 382
+    },
+    {
+      "ack_calls": 379,
+      "acked_head": 518,
+      "agent": {
+        "agent_id": "01M5CE200B0E4RV0Y2SVAHXA8R",
+        "display_name": "distributed-inboxes-c100-64",
+        "name": "instance-01M5CE200B0E4RV0Y2SVAHXA8R"
+      },
+      "delivered_records": 518,
+      "errors": [],
+      "max_batch": 2,
+      "wait_calls": 383
+    },
+    {
+      "ack_calls": 377,
+      "acked_head": 519,
+      "agent": {
+        "agent_id": "01M5CE1ZVVXPGZ2Q030RWE66KP",
+        "display_name": "distributed-inboxes-c100-38",
+        "name": "instance-01M5CE1ZVVXPGZ2Q030RWE66KP"
+      },
+      "delivered_records": 519,
+      "errors": [],
+      "max_batch": 2,
+      "wait_calls": 381
+    },
+    {
+      "ack_calls": 374,
+      "acked_head": 516,
+      "agent": {
+        "agent_id": "01M5CE202NKNAAF4J9S9RV5BX6",
+        "display_name": "distributed-inboxes-c100-77",
+        "name": "instance-01M5CE202NKNAAF4J9S9RV5BX6"
+      },
+      "delivered_records": 516,
+      "errors": [],
+      "max_batch": 3,
+      "wait_calls": 380
+    },
+    {
+      "ack_calls": 378,
+      "acked_head": 516,
+      "agent": {
+        "agent_id": "01M5CE1ZZZPBP0A4M107J8R5W0",
+        "display_name": "distributed-inboxes-c100-62",
+        "name": "instance-01M5CE1ZZZPBP0A4M107J8R5W0"
+      },
+      "delivered_records": 516,
+      "errors": [],
+      "max_batch": 2,
+      "wait_calls": 382
+    },
+    {
+      "ack_calls": 376,
+      "acked_head": 516,
+      "agent": {
+        "agent_id": "01M5CE1ZYAQV9V86GJ32PWQTTW",
+        "display_name": "distributed-inboxes-c100-54",
+        "name": "instance-01M5CE1ZYAQV9V86GJ32PWQTTW"
+      },
+      "delivered_records": 516,
+      "errors": [],
+      "max_batch": 3,
+      "wait_calls": 381
+    },
+    {
+      "ack_calls": 377,
+      "acked_head": 522,
+      "agent": {
+        "agent_id": "01M5CE1ZYSZGR3A069JF9CF8D5",
+        "display_name": "distributed-inboxes-c100-57",
+        "name": "instance-01M5CE1ZYSZGR3A069JF9CF8D5"
+      },
+      "delivered_records": 522,
+      "errors": [],
+      "max_batch": 2,
+      "wait_calls": 381
+    },
+    {
+      "ack_calls": 380,
+      "acked_head": 518,
+      "agent": {
+        "agent_id": "01M5CE204TJGBQNCQR4CG908J1",
+        "display_name": "distributed-inboxes-c100-89",
+        "name": "instance-01M5CE204TJGBQNCQR4CG908J1"
+      },
+      "delivered_records": 518,
+      "errors": [],
+      "max_batch": 2,
+      "wait_calls": 383
+    },
+    {
+      "ack_calls": 379,
+      "acked_head": 517,
+      "agent": {
+        "agent_id": "01M5CE201SQ0J9HHBRHC5F8GJ2",
+        "display_name": "distributed-inboxes-c100-72",
+        "name": "instance-01M5CE201SQ0J9HHBRHC5F8GJ2"
+      },
+      "delivered_records": 517,
+      "errors": [],
+      "max_batch": 2,
+      "wait_calls": 383
+    },
+    {
+      "ack_calls": 380,
+      "acked_head": 519,
+      "agent": {
+        "agent_id": "01M5CE204ZYC95CP56PKV04J6G",
+        "display_name": "distributed-inboxes-c100-90",
+        "name": "instance-01M5CE204ZYC95CP56PKV04J6G"
+      },
+      "delivered_records": 519,
+      "errors": [],
+      "max_batch": 2,
+      "wait_calls": 382
+    },
+    {
+      "ack_calls": 379,
+      "acked_head": 520,
+      "agent": {
+        "agent_id": "01M5CE1ZSZYFTAGSSE60S2NV1A",
+        "display_name": "distributed-inboxes-c100-26",
+        "name": "instance-01M5CE1ZSZYFTAGSSE60S2NV1A"
+      },
+      "delivered_records": 520,
+      "errors": [],
+      "max_batch": 2,
+      "wait_calls": 383
+    },
+    {
+      "ack_calls": 375,
+      "acked_head": 517,
+      "agent": {
+        "agent_id": "01M5CE1ZZMF3SBGG2FKK4RMD8W",
+        "display_name": "distributed-inboxes-c100-60",
+        "name": "instance-01M5CE1ZZMF3SBGG2FKK4RMD8W"
+      },
+      "delivered_records": 517,
+      "errors": [],
+      "max_batch": 2,
+      "wait_calls": 380
+    },
+    {
+      "ack_calls": 377,
+      "acked_head": 515,
+      "agent": {
+        "agent_id": "01M5CE1ZQYZT1K36WY3039E628",
+        "display_name": "distributed-inboxes-c100-16",
+        "name": "instance-01M5CE1ZQYZT1K36WY3039E628"
+      },
+      "delivered_records": 515,
+      "errors": [],
+      "max_batch": 3,
+      "wait_calls": 382
+    },
+    {
+      "ack_calls": 377,
+      "acked_head": 520,
+      "agent": {
+        "agent_id": "01M5CE1ZVCJYBBG3FYZ88HFJS1",
+        "display_name": "distributed-inboxes-c100-35",
+        "name": "instance-01M5CE1ZVCJYBBG3FYZ88HFJS1"
+      },
+      "delivered_records": 520,
+      "errors": [],
+      "max_batch": 2,
+      "wait_calls": 382
+    },
+    {
+      "ack_calls": 377,
+      "acked_head": 517,
+      "agent": {
+        "agent_id": "01M5CE2020TZK2NBZQ9X50JYXF",
+        "display_name": "distributed-inboxes-c100-73",
+        "name": "instance-01M5CE2020TZK2NBZQ9X50JYXF"
+      },
+      "delivered_records": 517,
+      "errors": [],
+      "max_batch": 2,
+      "wait_calls": 381
+    },
+    {
+      "ack_calls": 380,
+      "acked_head": 518,
+      "agent": {
+        "agent_id": "01M5CE2010JK7QSYAR23P68NNN",
+        "display_name": "distributed-inboxes-c100-67",
+        "name": "instance-01M5CE2010JK7QSYAR23P68NNN"
+      },
+      "delivered_records": 518,
+      "errors": [],
+      "max_batch": 2,
+      "wait_calls": 383
+    },
+    {
+      "ack_calls": 376,
+      "acked_head": 521,
+      "agent": {
+        "agent_id": "01M5CE1ZWYJCJK0FM02FWTAH4B",
+        "display_name": "distributed-inboxes-c100-45",
+        "name": "instance-01M5CE1ZWYJCJK0FM02FWTAH4B"
+      },
+      "delivered_records": 521,
+      "errors": [],
+      "max_batch": 2,
+      "wait_calls": 380
+    },
+    {
+      "ack_calls": 375,
+      "acked_head": 515,
+      "agent": {
+        "agent_id": "01M5CE1ZXJB25HBYAJFHAYX41C",
+        "display_name": "distributed-inboxes-c100-49",
+        "name": "instance-01M5CE1ZXJB25HBYAJFHAYX41C"
+      },
+      "delivered_records": 515,
+      "errors": [],
+      "max_batch": 2,
+      "wait_calls": 380
+    },
+    {
+      "ack_calls": 374,
+      "acked_head": 514,
+      "agent": {
+        "agent_id": "01M5CE1ZZTS8J4TR9A2R2Q266Y",
+        "display_name": "distributed-inboxes-c100-61",
+        "name": "instance-01M5CE1ZZTS8J4TR9A2R2Q266Y"
+      },
+      "delivered_records": 514,
+      "errors": [],
+      "max_batch": 2,
+      "wait_calls": 380
+    },
+    {
+      "ack_calls": 378,
+      "acked_head": 517,
+      "agent": {
+        "agent_id": "01M5CE206PPTVWY604637ZHBR6",
+        "display_name": "distributed-inboxes-c100-99",
+        "name": "instance-01M5CE206PPTVWY604637ZHBR6"
+      },
+      "delivered_records": 517,
+      "errors": [],
+      "max_batch": 2,
+      "wait_calls": 382
+    },
+    {
+      "ack_calls": 373,
+      "acked_head": 515,
+      "agent": {
+        "agent_id": "01M5CE204AXB1RFWDSB8CSDEF9",
+        "display_name": "distributed-inboxes-c100-86",
+        "name": "instance-01M5CE204AXB1RFWDSB8CSDEF9"
+      },
+      "delivered_records": 515,
+      "errors": [],
+      "max_batch": 3,
+      "wait_calls": 379
+    },
+    {
+      "ack_calls": 377,
+      "acked_head": 519,
+      "agent": {
+        "agent_id": "01M5CE2060218ZWRMKWFVXMYWH",
+        "display_name": "distributed-inboxes-c100-95",
+        "name": "instance-01M5CE2060218ZWRMKWFVXMYWH"
+      },
+      "delivered_records": 519,
+      "errors": [],
+      "max_batch": 2,
+      "wait_calls": 381
+    },
+    {
+      "ack_calls": 378,
+      "acked_head": 519,
+      "agent": {
+        "agent_id": "01M5CE1ZNABK7Y7SRZPJK9723B",
+        "display_name": "distributed-inboxes-c100-7",
+        "name": "instance-01M5CE1ZNABK7Y7SRZPJK9723B"
+      },
+      "delivered_records": 519,
+      "errors": [],
+      "max_batch": 2,
+      "wait_calls": 383
+    },
+    {
+      "ack_calls": 377,
+      "acked_head": 517,
+      "agent": {
+        "agent_id": "01M5CE1ZQSJ9WKKFTMZNFS8CM0",
+        "display_name": "distributed-inboxes-c100-15",
+        "name": "instance-01M5CE1ZQSJ9WKKFTMZNFS8CM0"
+      },
+      "delivered_records": 517,
+      "errors": [],
+      "max_batch": 3,
+      "wait_calls": 382
+    },
+    {
+      "ack_calls": 377,
+      "acked_head": 519,
+      "agent": {
+        "agent_id": "01M5CE2045GPEPAXJWZWJVJ1N3",
+        "display_name": "distributed-inboxes-c100-85",
+        "name": "instance-01M5CE2045GPEPAXJWZWJVJ1N3"
+      },
+      "delivered_records": 519,
+      "errors": [],
+      "max_batch": 2,
+      "wait_calls": 382
+    },
+    {
+      "ack_calls": 376,
+      "acked_head": 519,
+      "agent": {
+        "agent_id": "01M5CE1ZZFDSRYSSV8R676CVFM",
+        "display_name": "distributed-inboxes-c100-59",
+        "name": "instance-01M5CE1ZZFDSRYSSV8R676CVFM"
+      },
+      "delivered_records": 519,
+      "errors": [],
+      "max_batch": 2,
+      "wait_calls": 381
+    },
+    {
+      "ack_calls": 376,
+      "acked_head": 518,
+      "agent": {
+        "agent_id": "01M5CE1ZZBQM15HX6VWAW52RSE",
+        "display_name": "distributed-inboxes-c100-58",
+        "name": "instance-01M5CE1ZZBQM15HX6VWAW52RSE"
+      },
+      "delivered_records": 518,
+      "errors": [],
+      "max_batch": 2,
+      "wait_calls": 381
+    },
+    {
+      "ack_calls": 377,
+      "acked_head": 520,
+      "agent": {
+        "agent_id": "01M5CE1ZTEA75FRTWHVCPKFJ7P",
+        "display_name": "distributed-inboxes-c100-29",
+        "name": "instance-01M5CE1ZTEA75FRTWHVCPKFJ7P"
+      },
+      "delivered_records": 520,
+      "errors": [],
+      "max_batch": 2,
+      "wait_calls": 381
+    },
+    {
+      "ack_calls": 375,
+      "acked_head": 516,
+      "agent": {
+        "agent_id": "01M5CE2030KDMAG1BPNF65RQWF",
+        "display_name": "distributed-inboxes-c100-79",
+        "name": "instance-01M5CE2030KDMAG1BPNF65RQWF"
+      },
+      "delivered_records": 516,
+      "errors": [],
+      "max_batch": 2,
+      "wait_calls": 381
+    },
+    {
+      "ack_calls": 378,
+      "acked_head": 520,
+      "agent": {
+        "agent_id": "01M5CE201MEW69FZBFF560DN3B",
+        "display_name": "distributed-inboxes-c100-71",
+        "name": "instance-01M5CE201MEW69FZBFF560DN3B"
+      },
+      "delivered_records": 520,
+      "errors": [],
+      "max_batch": 2,
+      "wait_calls": 382
+    },
+    {
+      "ack_calls": 378,
+      "acked_head": 519,
+      "agent": {
+        "agent_id": "01M5CE1ZR6WZET82H5BMJ8ERGT",
+        "display_name": "distributed-inboxes-c100-18",
+        "name": "instance-01M5CE1ZR6WZET82H5BMJ8ERGT"
+      },
+      "delivered_records": 519,
+      "errors": [],
+      "max_batch": 2,
+      "wait_calls": 382
+    },
+    {
+      "ack_calls": 376,
+      "acked_head": 516,
+      "agent": {
+        "agent_id": "01M5CE1ZXCEKDHTZD3C1P8RCTH",
+        "display_name": "distributed-inboxes-c100-48",
+        "name": "instance-01M5CE1ZXCEKDHTZD3C1P8RCTH"
+      },
+      "delivered_records": 516,
+      "errors": [],
+      "max_batch": 2,
+      "wait_calls": 381
+    },
+    {
+      "ack_calls": 374,
+      "acked_head": 519,
+      "agent": {
+        "agent_id": "01M5CE200P76DJ902G7M94G7C6",
+        "display_name": "distributed-inboxes-c100-66",
+        "name": "instance-01M5CE200P76DJ902G7M94G7C6"
+      },
+      "delivered_records": 519,
+      "errors": [],
+      "max_batch": 2,
+      "wait_calls": 380
+    }
+  ],
+  "receiver_identity_shared_with_sender": true,
+  "requested_measurement_seconds": 10,
+  "send_ack_ms": {
+    "count": 46184,
+    "max": 51.341929,
+    "mean": 21.674383970834064,
+    "min": 6.867349,
+    "p50": 21.406872,
+    "p95": 27.648409,
+    "p99": 32.060556
+  },
+  "send_ack_p50_below_10_ms_target_pass": false,
+  "throughput_5000_per_second_target_pass": false,
+  "transport": "native-async-uds",
+  "warmup_fully_delivered_and_acked_before_measurement": true,
+  "warmup_messages": 5586
+}

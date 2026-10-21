@@ -1,0 +1,79 @@
+{
+  "agents": [
+    {
+      "agent_id": "01M5CB2WKVBZJVPADWDCR7TAH2",
+      "display_name": "distributed-inboxes-c008-0",
+      "name": "instance-01M5CB2WKVBZJVPADWDCR7TAH2"
+    },
+    {
+      "agent_id": "01M5CB2WM65HJ1WJ38N8HZ7EEM",
+      "display_name": "distributed-inboxes-c008-1",
+      "name": "instance-01M5CB2WM65HJ1WJ38N8HZ7EEM"
+    },
+    {
+      "agent_id": "01M5CB2WME6YF5WMNNRHP5HPYX",
+      "display_name": "distributed-inboxes-c008-2",
+      "name": "instance-01M5CB2WME6YF5WMNNRHP5HPYX"
+    },
+    {
+      "agent_id": "01M5CB2WMT7BZGTQACA6WX02NY",
+      "display_name": "distributed-inboxes-c008-3",
+      "name": "instance-01M5CB2WMT7BZGTQACA6WX02NY"
+    },
+    {
+      "agent_id": "01M5CB2WN2B84QQAP5QTSBKDXK",
+      "display_name": "distributed-inboxes-c008-4",
+      "name": "instance-01M5CB2WN2B84QQAP5QTSBKDXK"
+    },
+    {
+      "agent_id": "01M5CB2WN866SE96QMQX4FMYV2",
+      "display_name": "distributed-inboxes-c008-5",
+      "name": "instance-01M5CB2WN866SE96QMQX4FMYV2"
+    },
+    {
+      "agent_id": "01M5CB2WNKYHP1GDDGDDB4RRX8",
+      "display_name": "distributed-inboxes-c008-6",
+      "name": "instance-01M5CB2WNKYHP1GDDGDDB4RRX8"
+    },
+    {
+      "agent_id": "01M5CB2WNXX3YVK6XYBPYTHX9F",
+      "display_name": "distributed-inboxes-c008-7",
+      "name": "instance-01M5CB2WNXX3YVK6XYBPYTHX9F"
+    }
+  ],
+  "all_receiver_inboxes_empty_with_verified_acked_heads": true,
+  "command": [
+    "/tmp/cooperators-step3-baseline/coop",
+    "--root",
+    "/tmp/ctb-jbeo1u_3",
+    "daemon",
+    "run",
+    "--http-addr",
+    "127.0.0.1:0"
+  ],
+  "contiguous_sequences": true,
+  "correctness_passed": true,
+  "daemon_exit_after_termination": -15,
+  "durable_records": 2195,
+  "hash_chains_verified": true,
+  "inbox_heads": {
+    "01M5CB2WKVBZJVPADWDCR7TAH2": 275,
+    "01M5CB2WM65HJ1WJ38N8HZ7EEM": 274,
+    "01M5CB2WME6YF5WMNNRHP5HPYX": 274,
+    "01M5CB2WMT7BZGTQACA6WX02NY": 274,
+    "01M5CB2WN2B84QQAP5QTSBKDXK": 274,
+    "01M5CB2WN866SE96QMQX4FMYV2": 275,
+    "01M5CB2WNKYHP1GDDGDDB4RRX8": 274,
+    "01M5CB2WNXX3YVK6XYBPYTHX9F": 275
+  },
+  "label": "distributed-inboxes-c008",
+  "pid": 540710,
+  "receipt_count": 2195,
+  "receipt_payload_and_identity_match": true,
+  "root": "/tmp/ctb-jbeo1u_3",
+  "running_executable_sha256": "c6d1047a8a4d9b0094274151c9658a101ed018ce07f82d66ed9fb512eb285321",
+  "start_utc": "2026-10-20T09:43:06.577208+00:00",
+  "unique_receipts": 2195,
+  "verified_deliveries_and_acks": 2195,
+  "warmup_fully_delivered_and_acked_before_measurement": 268
+}

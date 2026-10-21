@@ -1,0 +1,19 @@
+[
+  "codex",
+  "--no-daemon",
+  "-a",
+  "never",
+  "exec",
+  "--ephemeral",
+  "--skip-git-repo-check",
+  "--json",
+  "-C",
+  "/tmp/coop-installed-g70xcfoa",
+  "-s",
+  "read-only",
+  "-c",
+  "mcp_servers={\"cooperators\"={\"command\"=\"python3\", \"args\"=[\"/home/nzsn/Repos/Cooperators/scripts/record_mcp_stdio.py\", \"--log\", \"/home/nzsn/Repos/Cooperators/docs/impl/acceptance-20261020/installed/codex-mcp.jsonl\", \"--binary\", \"/home/nzsn/Repos/Cooperators/target/release/coop\", \"--kind\", \"codex\", \"--display-name\", \"installed-codex\"], \"env\"={\"COOPERATORS_HOME\"=\"/tmp/coop-installed-g70xcfoa/bus\", \"COOP_SOCKET\"=\"/tmp/coop-installed-g70xcfoa/bus/run/daemon.sock\"}, \"tool_timeout_sec\"=180}}",
+  "-o",
+  "/home/nzsn/Repos/Cooperators/docs/impl/acceptance-20261020/installed/codex-exchange-final.txt",
+  "-"
+]

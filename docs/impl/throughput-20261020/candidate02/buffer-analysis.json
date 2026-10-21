@@ -1,0 +1,180 @@
+{
+  "buffer-baseline-run01": {
+    "completed": true,
+    "cpu_during_interval": {
+      "client": {
+        "sampled_seconds": 10.011807427999997,
+        "system_percent_of_one_cpu": 6.891862482994616,
+        "user_percent_of_one_cpu": 11.786083666570502
+      },
+      "daemon": {
+        "sampled_seconds": 10.011807427999997,
+        "system_percent_of_one_cpu": 10.187970627035519,
+        "user_percent_of_one_cpu": 11.786083666570502
+      }
+    },
+    "duration_until_first_error_or_completion_seconds": 10.176237529,
+    "first_error_observer": null,
+    "receiver_calls_during_interval": {
+      "ack": {
+        "count": 2902,
+        "p50": 1.590749,
+        "p95": 2.438485,
+        "sum_ms": 5004.230047
+      },
+      "wait_message": {
+        "count": 2903,
+        "p50": 1.607263,
+        "p95": 2.561439,
+        "sum_ms": 5064.930747
+      }
+    },
+    "receiver_local_gaps_ms": {
+      "count": 5804,
+      "p50": 0.015181,
+      "p95": 0.030136,
+      "sum_ms": 93.497848
+    },
+    "rejected_send_calls": 0,
+    "returned_acked_messages_total": 6519,
+    "successful_phase_summary": {
+      "active_receiver_agents": 1,
+      "active_sender_agents": 100,
+      "correctness_passed": true,
+      "durable_acknowledgments_per_second": 570.7060277921345,
+      "elapsed_seconds": 10.180372586,
+      "enrolled_agents": 101,
+      "label": "same-inbox-c100",
+      "measured_messages": 5810,
+      "outstanding_sends_per_sender": 1,
+      "profile": "same-inbox",
+      "receiver_drain": [
+        {
+          "ack_calls": 3256,
+          "max_batch": 5,
+          "wait_calls": 3259
+        }
+      ],
+      "receiver_identity_shared_with_sender": false,
+      "requested_measurement_seconds": 10.0,
+      "send_ack_ms": {
+        "count": 5810,
+        "max": 241.11824,
+        "mean": 173.45207573666093,
+        "min": 3.711117,
+        "p50": 171.276724,
+        "p95": 207.359018,
+        "p99": 226.081208
+      },
+      "send_ack_p50_below_10_ms_target_pass": false,
+      "throughput_5000_per_second_target_pass": false,
+      "transport": "uds",
+      "verified_deliveries_and_acks": 6519,
+      "warmup_messages": 709
+    },
+    "successful_send_receipts_total": 6519,
+    "warmups": 709
+  },
+  "buffer-candidate-run01": {
+    "completed": false,
+    "cpu_during_interval": {
+      "client": {
+        "sampled_seconds": 3.420799287,
+        "system_percent_of_one_cpu": 107.28486801160867,
+        "user_percent_of_one_cpu": 48.23434120412924
+      },
+      "daemon": {
+        "sampled_seconds": 3.420799287,
+        "system_percent_of_one_cpu": 27.47895801932211,
+        "user_percent_of_one_cpu": 44.14173043529403
+      }
+    },
+    "duration_until_first_error_or_completion_seconds": 3.584429081,
+    "first_error_observer": {
+      "current_receiver_call": {
+        "method": "ack",
+        "started_monotonic_ns": 377496748023020
+      },
+      "highest_successful_ack_cursor": 16014,
+      "observed_monotonic_ns": 377496754904765,
+      "returned_messages": 16114,
+      "successful_ack_calls": 161,
+      "successful_send_receipts": 25962
+    },
+    "receiver_calls_during_interval": {
+      "ack": {
+        "count": 105,
+        "p50": 13.34526,
+        "p95": 37.015443,
+        "sum_ms": 1636.876154
+      },
+      "wait_message": {
+        "count": 106,
+        "p50": 16.695199,
+        "p95": 43.079965,
+        "sum_ms": 1919.625422
+      }
+    },
+    "receiver_local_gaps_ms": {
+      "count": 210,
+      "p50": 0.026979,
+      "p95": 0.127127,
+      "sum_ms": 10.688184
+    },
+    "rejected_send_calls": 100,
+    "returned_acked_messages_total": 27452,
+    "successful_send_receipts_total": 37452,
+    "warmups": 5535
+  },
+  "diagnostic-c100-run01": {
+    "completed": false,
+    "cpu_during_interval": {
+      "client": {
+        "sampled_seconds": 2.287091809,
+        "system_percent_of_one_cpu": 101.43886619988328,
+        "user_percent_of_one_cpu": 50.71943309994164
+      },
+      "daemon": {
+        "sampled_seconds": 2.287091809,
+        "system_percent_of_one_cpu": 31.91826393358396,
+        "user_percent_of_one_cpu": 41.537466762883234
+      }
+    },
+    "duration_until_first_error_or_completion_seconds": 2.487644807,
+    "first_error_observer": {
+      "current_receiver_call": {
+        "method": "wait_message",
+        "started_monotonic_ns": 377286084517601
+      },
+      "highest_successful_ack_cursor": 7579,
+      "observed_monotonic_ns": 377286142729710,
+      "returned_messages": 7579,
+      "successful_ack_calls": 76,
+      "successful_send_receipts": 17514
+    },
+    "receiver_calls_during_interval": {
+      "ack": {
+        "count": 27,
+        "p50": 18.885468,
+        "p95": 49.378978,
+        "sum_ms": 550.785384
+      },
+      "wait_message": {
+        "count": 27,
+        "p50": 65.473421,
+        "p95": 103.76406,
+        "sum_ms": 1860.799446
+      }
+    },
+    "receiver_local_gaps_ms": {
+      "count": 53,
+      "p50": 0.058863,
+      "p95": 0.124714,
+      "sum_ms": 2.806703
+    },
+    "rejected_send_calls": 80,
+    "returned_acked_messages_total": 44859,
+    "successful_send_receipts_total": 44859,
+    "warmups": 4898
+  }
+}

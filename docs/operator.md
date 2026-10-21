@@ -56,13 +56,39 @@ rebuild.
 | `wait_batch_limit` | 100 | Maximum messages returned by one `wait_message` call. |
 | `max_inbox_messages` | 10 000 | Maximum unacknowledged messages per inbox. |
 | `max_inbox_bytes` | 67 108 864 (64 MiB) | Maximum unacknowledged serialized bytes per inbox. |
+| `write_batch_messages` | 64 | Maximum direct-message records in one active batch. |
+| `write_batch_bytes` | 262 144 (256 KiB) | Batch collection byte bound; a larger admitted message commits alone. |
+| `write_batch_delay` | 250 microseconds | Maximum intentional collection delay from the oldest queued request; scheduling and disk time are additional. |
+| `write_queue_messages` | 1 024 | Maximum waiting requests for one inbox, excluding its active batch. |
+| `write_queue_bytes` | 8 388 608 (8 MiB) | Maximum serialized-size upper bound waiting in one inbox queue. |
 
-Both inbox limits are checked on every send while holding the broker send lock.
+Both inbox backlog limits are checked at admission under the individual inbox
+lock, including all earlier accepted records in the active batch.
 A send that would exceed either limit is rejected with
 `RESOURCE_EXHAUSTED` (-32003) and is not appended. `wait_message` does not free
 capacity; `ack` does. Expired messages remain part of the durable inbox and of
 the pending count until acked. Stdio tool calls are capped at 4 MiB; the HTTP
 transport has the same rmcp body limit.
+
+Write queue limits bound requests waiting for admission separately from the
+durable unacknowledged backlog. A full queue rejects the request before file
+mutation. Queue space becomes available as the writer takes batches; backlog
+space becomes available through acknowledgment. Messages larger than the queue
+byte capacity are rejected even if the backlog cap would otherwise allow them.
+
+Direct-message workers run on the blocking pool. Each busy inbox has one finite
+worker; different inboxes can write concurrently. A batch in one inbox shares a
+file sync. TTL companion metadata is synced before the corresponding inbox
+records. Messages, receipts, and committed status/metrics heads become visible
+after their covering sync. Reads and acknowledgments use a separate committed
+view, so they can consume older records during the next batch's disk work.
+Queue, document, and channel operations retain their existing mutation ordering.
+
+An accepted send can finish after client timeout or disconnect. Reuse its
+idempotency key when retrying. A failed uncertain commit quarantines that inbox
+writer until daemon restart and recovery; unrelated inboxes continue operating.
+Already committed dedupe receipts remain available. Pending keys associated with
+an uncertain active batch cannot be moved to another recipient before recovery.
 
 ## On-disk layout
 

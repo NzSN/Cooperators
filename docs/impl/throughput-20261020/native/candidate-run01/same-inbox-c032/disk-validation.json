@@ -1,0 +1,379 @@
+{
+  "all_inbox_reads": [
+    {
+      "hash_chain_read_pass": true,
+      "receiver_id": "01M5CDYMQEA1HFNNQZV366TAX9",
+      "records_read": 0,
+      "trailing_newline_missing": false,
+      "truncated_bytes": 0
+    },
+    {
+      "hash_chain_read_pass": true,
+      "receiver_id": "01M5CDYMQND10E00K2198PPWFV",
+      "records_read": 0,
+      "trailing_newline_missing": false,
+      "truncated_bytes": 0
+    },
+    {
+      "hash_chain_read_pass": true,
+      "receiver_id": "01M5CDYMQVF82S5P9X1QASDN3K",
+      "records_read": 0,
+      "trailing_newline_missing": false,
+      "truncated_bytes": 0
+    },
+    {
+      "hash_chain_read_pass": true,
+      "receiver_id": "01M5CDYMQZ8SD0YYRWR2PVESPG",
+      "records_read": 0,
+      "trailing_newline_missing": false,
+      "truncated_bytes": 0
+    },
+    {
+      "hash_chain_read_pass": true,
+      "receiver_id": "01M5CDYMR4PGQZKCPM74G2SBGE",
+      "records_read": 0,
+      "trailing_newline_missing": false,
+      "truncated_bytes": 0
+    },
+    {
+      "hash_chain_read_pass": true,
+      "receiver_id": "01M5CDYMRBWM9E55KJX7D40N7B",
+      "records_read": 0,
+      "trailing_newline_missing": false,
+      "truncated_bytes": 0
+    },
+    {
+      "hash_chain_read_pass": true,
+      "receiver_id": "01M5CDYMRF13RGW70SADPQJC2J",
+      "records_read": 0,
+      "trailing_newline_missing": false,
+      "truncated_bytes": 0
+    },
+    {
+      "hash_chain_read_pass": true,
+      "receiver_id": "01M5CDYMRME92C6M26F32FGNV0",
+      "records_read": 0,
+      "trailing_newline_missing": false,
+      "truncated_bytes": 0
+    },
+    {
+      "hash_chain_read_pass": true,
+      "receiver_id": "01M5CDYMRTT82KMBPZTJZ648X8",
+      "records_read": 0,
+      "trailing_newline_missing": false,
+      "truncated_bytes": 0
+    },
+    {
+      "hash_chain_read_pass": true,
+      "receiver_id": "01M5CDYMRY45FDNMWG7YJYP7J6",
+      "records_read": 0,
+      "trailing_newline_missing": false,
+      "truncated_bytes": 0
+    },
+    {
+      "hash_chain_read_pass": true,
+      "receiver_id": "01M5CDYMS3FP6ET9DK24K7J3KB",
+      "records_read": 0,
+      "trailing_newline_missing": false,
+      "truncated_bytes": 0
+    },
+    {
+      "hash_chain_read_pass": true,
+      "receiver_id": "01M5CDYMS7193YKAMMKCZT0W6G",
+      "records_read": 0,
+      "trailing_newline_missing": false,
+      "truncated_bytes": 0
+    },
+    {
+      "hash_chain_read_pass": true,
+      "receiver_id": "01M5CDYMSCWVN709PBF8G01Q61",
+      "records_read": 0,
+      "trailing_newline_missing": false,
+      "truncated_bytes": 0
+    },
+    {
+      "hash_chain_read_pass": true,
+      "receiver_id": "01M5CDYMSJEV9E71P8GRDYEEA3",
+      "records_read": 0,
+      "trailing_newline_missing": false,
+      "truncated_bytes": 0
+    },
+    {
+      "hash_chain_read_pass": true,
+      "receiver_id": "01M5CDYMSQTRJD0W8GHPJ5A453",
+      "records_read": 0,
+      "trailing_newline_missing": false,
+      "truncated_bytes": 0
+    },
+    {
+      "hash_chain_read_pass": true,
+      "receiver_id": "01M5CDYMSXC3MM44NQFZAAZ4ZP",
+      "records_read": 0,
+      "trailing_newline_missing": false,
+      "truncated_bytes": 0
+    },
+    {
+      "hash_chain_read_pass": true,
+      "receiver_id": "01M5CDYMT3DZ46PEBPVB5J9J6R",
+      "records_read": 0,
+      "trailing_newline_missing": false,
+      "truncated_bytes": 0
+    },
+    {
+      "hash_chain_read_pass": true,
+      "receiver_id": "01M5CDYMT89WW6E6K6JQSK2TXW",
+      "records_read": 0,
+      "trailing_newline_missing": false,
+      "truncated_bytes": 0
+    },
+    {
+      "hash_chain_read_pass": true,
+      "receiver_id": "01M5CDYMTG74S4HN3V21DQZWWJ",
+      "records_read": 0,
+      "trailing_newline_missing": false,
+      "truncated_bytes": 0
+    },
+    {
+      "hash_chain_read_pass": true,
+      "receiver_id": "01M5CDYMTP9M7TKQJB2YRQDY0X",
+      "records_read": 0,
+      "trailing_newline_missing": false,
+      "truncated_bytes": 0
+    },
+    {
+      "hash_chain_read_pass": true,
+      "receiver_id": "01M5CDYMTV8509M8S6W45XKJS3",
+      "records_read": 0,
+      "trailing_newline_missing": false,
+      "truncated_bytes": 0
+    },
+    {
+      "hash_chain_read_pass": true,
+      "receiver_id": "01M5CDYMV24JYHHG33K158TYXQ",
+      "records_read": 0,
+      "trailing_newline_missing": false,
+      "truncated_bytes": 0
+    },
+    {
+      "hash_chain_read_pass": true,
+      "receiver_id": "01M5CDYMV7FKSZAVBKVB22MB0R",
+      "records_read": 0,
+      "trailing_newline_missing": false,
+      "truncated_bytes": 0
+    },
+    {
+      "hash_chain_read_pass": true,
+      "receiver_id": "01M5CDYMVDK4E33TPTEFXSX5GF",
+      "records_read": 0,
+      "trailing_newline_missing": false,
+      "truncated_bytes": 0
+    },
+    {
+      "hash_chain_read_pass": true,
+      "receiver_id": "01M5CDYMVKN7ZXRCR575EHNSMG",
+      "records_read": 0,
+      "trailing_newline_missing": false,
+      "truncated_bytes": 0
+    },
+    {
+      "hash_chain_read_pass": true,
+      "receiver_id": "01M5CDYMVSZ7X683JVYT50BWB6",
+      "records_read": 0,
+      "trailing_newline_missing": false,
+      "truncated_bytes": 0
+    },
+    {
+      "hash_chain_read_pass": true,
+      "receiver_id": "01M5CDYMWFY4D4EFS9MQ96JEFM",
+      "records_read": 0,
+      "trailing_newline_missing": false,
+      "truncated_bytes": 0
+    },
+    {
+      "hash_chain_read_pass": true,
+      "receiver_id": "01M5CDYMWN5TY763Z49K34XQ8N",
+      "records_read": 0,
+      "trailing_newline_missing": false,
+      "truncated_bytes": 0
+    },
+    {
+      "hash_chain_read_pass": true,
+      "receiver_id": "01M5CDYMWW2VGYGNS4FHQXFAK5",
+      "records_read": 0,
+      "trailing_newline_missing": false,
+      "truncated_bytes": 0
+    },
+    {
+      "hash_chain_read_pass": true,
+      "receiver_id": "01M5CDYMX1JCFMBBG6NW9JEJCG",
+      "records_read": 0,
+      "trailing_newline_missing": false,
+      "truncated_bytes": 0
+    },
+    {
+      "hash_chain_read_pass": true,
+      "receiver_id": "01M5CDYMX6KT87ZMKXYV9S7X4Y",
+      "records_read": 0,
+      "trailing_newline_missing": false,
+      "truncated_bytes": 0
+    },
+    {
+      "hash_chain_read_pass": true,
+      "receiver_id": "01M5CDYMXBCKM325E2DBYSD5FF",
+      "records_read": 0,
+      "trailing_newline_missing": false,
+      "truncated_bytes": 0
+    },
+    {
+      "hash_chain_read_pass": true,
+      "receiver_id": "01M5CDYMXGYGWRXFTFHWB0QNET",
+      "records_read": 66640,
+      "trailing_newline_missing": false,
+      "truncated_bytes": 0
+    }
+  ],
+  "contiguous_sequences": true,
+  "correctness_passed": true,
+  "durable_records": 66640,
+  "errors": [],
+  "exact_envelope_disk_delivery_match": true,
+  "hash_chains_verified": true,
+  "inbox_heads": {
+    "01M5CDYMQEA1HFNNQZV366TAX9": {
+      "hash": "sha256:0000000000000000000000000000000000000000000000000000000000000000",
+      "seq": 0
+    },
+    "01M5CDYMQND10E00K2198PPWFV": {
+      "hash": "sha256:0000000000000000000000000000000000000000000000000000000000000000",
+      "seq": 0
+    },
+    "01M5CDYMQVF82S5P9X1QASDN3K": {
+      "hash": "sha256:0000000000000000000000000000000000000000000000000000000000000000",
+      "seq": 0
+    },
+    "01M5CDYMQZ8SD0YYRWR2PVESPG": {
+      "hash": "sha256:0000000000000000000000000000000000000000000000000000000000000000",
+      "seq": 0
+    },
+    "01M5CDYMR4PGQZKCPM74G2SBGE": {
+      "hash": "sha256:0000000000000000000000000000000000000000000000000000000000000000",
+      "seq": 0
+    },
+    "01M5CDYMRBWM9E55KJX7D40N7B": {
+      "hash": "sha256:0000000000000000000000000000000000000000000000000000000000000000",
+      "seq": 0
+    },
+    "01M5CDYMRF13RGW70SADPQJC2J": {
+      "hash": "sha256:0000000000000000000000000000000000000000000000000000000000000000",
+      "seq": 0
+    },
+    "01M5CDYMRME92C6M26F32FGNV0": {
+      "hash": "sha256:0000000000000000000000000000000000000000000000000000000000000000",
+      "seq": 0
+    },
+    "01M5CDYMRTT82KMBPZTJZ648X8": {
+      "hash": "sha256:0000000000000000000000000000000000000000000000000000000000000000",
+      "seq": 0
+    },
+    "01M5CDYMRY45FDNMWG7YJYP7J6": {
+      "hash": "sha256:0000000000000000000000000000000000000000000000000000000000000000",
+      "seq": 0
+    },
+    "01M5CDYMS3FP6ET9DK24K7J3KB": {
+      "hash": "sha256:0000000000000000000000000000000000000000000000000000000000000000",
+      "seq": 0
+    },
+    "01M5CDYMS7193YKAMMKCZT0W6G": {
+      "hash": "sha256:0000000000000000000000000000000000000000000000000000000000000000",
+      "seq": 0
+    },
+    "01M5CDYMSCWVN709PBF8G01Q61": {
+      "hash": "sha256:0000000000000000000000000000000000000000000000000000000000000000",
+      "seq": 0
+    },
+    "01M5CDYMSJEV9E71P8GRDYEEA3": {
+      "hash": "sha256:0000000000000000000000000000000000000000000000000000000000000000",
+      "seq": 0
+    },
+    "01M5CDYMSQTRJD0W8GHPJ5A453": {
+      "hash": "sha256:0000000000000000000000000000000000000000000000000000000000000000",
+      "seq": 0
+    },
+    "01M5CDYMSXC3MM44NQFZAAZ4ZP": {
+      "hash": "sha256:0000000000000000000000000000000000000000000000000000000000000000",
+      "seq": 0
+    },
+    "01M5CDYMT3DZ46PEBPVB5J9J6R": {
+      "hash": "sha256:0000000000000000000000000000000000000000000000000000000000000000",
+      "seq": 0
+    },
+    "01M5CDYMT89WW6E6K6JQSK2TXW": {
+      "hash": "sha256:0000000000000000000000000000000000000000000000000000000000000000",
+      "seq": 0
+    },
+    "01M5CDYMTG74S4HN3V21DQZWWJ": {
+      "hash": "sha256:0000000000000000000000000000000000000000000000000000000000000000",
+      "seq": 0
+    },
+    "01M5CDYMTP9M7TKQJB2YRQDY0X": {
+      "hash": "sha256:0000000000000000000000000000000000000000000000000000000000000000",
+      "seq": 0
+    },
+    "01M5CDYMTV8509M8S6W45XKJS3": {
+      "hash": "sha256:0000000000000000000000000000000000000000000000000000000000000000",
+      "seq": 0
+    },
+    "01M5CDYMV24JYHHG33K158TYXQ": {
+      "hash": "sha256:0000000000000000000000000000000000000000000000000000000000000000",
+      "seq": 0
+    },
+    "01M5CDYMV7FKSZAVBKVB22MB0R": {
+      "hash": "sha256:0000000000000000000000000000000000000000000000000000000000000000",
+      "seq": 0
+    },
+    "01M5CDYMVDK4E33TPTEFXSX5GF": {
+      "hash": "sha256:0000000000000000000000000000000000000000000000000000000000000000",
+      "seq": 0
+    },
+    "01M5CDYMVKN7ZXRCR575EHNSMG": {
+      "hash": "sha256:0000000000000000000000000000000000000000000000000000000000000000",
+      "seq": 0
+    },
+    "01M5CDYMVSZ7X683JVYT50BWB6": {
+      "hash": "sha256:0000000000000000000000000000000000000000000000000000000000000000",
+      "seq": 0
+    },
+    "01M5CDYMWFY4D4EFS9MQ96JEFM": {
+      "hash": "sha256:0000000000000000000000000000000000000000000000000000000000000000",
+      "seq": 0
+    },
+    "01M5CDYMWN5TY763Z49K34XQ8N": {
+      "hash": "sha256:0000000000000000000000000000000000000000000000000000000000000000",
+      "seq": 0
+    },
+    "01M5CDYMWW2VGYGNS4FHQXFAK5": {
+      "hash": "sha256:0000000000000000000000000000000000000000000000000000000000000000",
+      "seq": 0
+    },
+    "01M5CDYMX1JCFMBBG6NW9JEJCG": {
+      "hash": "sha256:0000000000000000000000000000000000000000000000000000000000000000",
+      "seq": 0
+    },
+    "01M5CDYMX6KT87ZMKXYV9S7X4Y": {
+      "hash": "sha256:0000000000000000000000000000000000000000000000000000000000000000",
+      "seq": 0
+    },
+    "01M5CDYMXBCKM325E2DBYSD5FF": {
+      "hash": "sha256:0000000000000000000000000000000000000000000000000000000000000000",
+      "seq": 0
+    },
+    "01M5CDYMXGYGWRXFTFHWB0QNET": {
+      "hash": "sha256:debf10c3a40906bb599c9933bc4e6b01df917c2a47a30ca411c074fe47a8d4fe",
+      "seq": 66640
+    }
+  },
+  "reader": "LogFile<Envelope>::read_segments and storage::hash_record; no repair/open",
+  "receipt_count": 66640,
+  "unique_receipts": true,
+  "verified_deliveries_and_acks": 66640
+}

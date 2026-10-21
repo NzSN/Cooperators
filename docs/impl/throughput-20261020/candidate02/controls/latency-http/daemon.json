@@ -1,0 +1,30 @@
+{
+  "agents": [
+    {
+      "agent_id": "01M5CDBM68397RH2XK6F6EK58C",
+      "display_name": "latency-http-0",
+      "name": "instance-01M5CDBM68397RH2XK6F6EK58C"
+    }
+  ],
+  "command": [
+    "/home/nzsn/Repos/Cooperators/target/release/coop",
+    "--root",
+    "/tmp/ctb-5y2oiyfk",
+    "daemon",
+    "run",
+    "--http-addr",
+    "127.0.0.1:0"
+  ],
+  "contiguous_sequences": true,
+  "correctness_passed": true,
+  "daemon_exit_after_termination": -15,
+  "durable_records": 520,
+  "label": "latency-http",
+  "pid": 569598,
+  "receipt_count": 520,
+  "receipt_payload_and_identity_match": true,
+  "root": "/tmp/ctb-5y2oiyfk",
+  "running_executable_sha256": "32d5b650e8768407d297165eb350c295ab0b7aa0da14272fcee3948765383488",
+  "start_utc": "2026-10-20T10:22:50.015683+00:00",
+  "unique_receipts": 520
+}

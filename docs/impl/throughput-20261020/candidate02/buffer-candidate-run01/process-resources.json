@@ -1,0 +1,631 @@
+{
+  "clock_ticks_per_second": 100,
+  "page_bytes": 4096,
+  "sample_interval_seconds": 0.5,
+  "samples": [
+    {
+      "live_receiver_observer": {
+        "highest_successful_ack_cursor": 0,
+        "returned_messages": 0,
+        "successful_ack_calls": 0,
+        "successful_send_receipts": 0
+      },
+      "monotonic_ns": 377491498464716,
+      "processes": {
+        "client": {
+          "io_unavailable": "[Errno 2] No such file or directory: '/proc/568248/io'",
+          "pid": 568248,
+          "rss_pages": 5426,
+          "system_cpu_ticks": 2,
+          "user_cpu_ticks": 8
+        }
+      }
+    },
+    {
+      "live_receiver_observer": {
+        "highest_successful_ack_cursor": 0,
+        "returned_messages": 0,
+        "successful_ack_calls": 0,
+        "successful_send_receipts": 0
+      },
+      "monotonic_ns": 377491536294612,
+      "processes": {
+        "client": {
+          "delta": {
+            "cpu_percent_of_one_logical_cpu": 26.434119723723267,
+            "elapsed_seconds": 0.037829896
+          },
+          "io_unavailable": "[Errno 2] No such file or directory: '/proc/568248/io'",
+          "pid": 568248,
+          "rss_pages": 5430,
+          "system_cpu_ticks": 2,
+          "user_cpu_ticks": 9
+        },
+        "daemon": {
+          "io_unavailable": "[Errno 2] No such file or directory: '/proc/568262/io'",
+          "pid": 568262,
+          "rss_pages": 1735,
+          "system_cpu_ticks": 0,
+          "user_cpu_ticks": 0
+        }
+      }
+    },
+    {
+      "live_receiver_observer": {
+        "highest_successful_ack_cursor": 0,
+        "returned_messages": 0,
+        "successful_ack_calls": 0,
+        "successful_send_receipts": 0
+      },
+      "monotonic_ns": 377491998860779,
+      "processes": {
+        "client": {
+          "delta": {
+            "cpu_percent_of_one_logical_cpu": 4.323705758618529,
+            "elapsed_seconds": 0.462566167
+          },
+          "io_unavailable": "[Errno 2] No such file or directory: '/proc/568248/io'",
+          "pid": 568248,
+          "rss_pages": 5526,
+          "system_cpu_ticks": 2,
+          "user_cpu_ticks": 11
+        },
+        "daemon": {
+          "delta": {
+            "cpu_percent_of_one_logical_cpu": 17.294823034474117,
+            "elapsed_seconds": 0.462566167
+          },
+          "io_unavailable": "[Errno 2] No such file or directory: '/proc/568262/io'",
+          "pid": 568262,
+          "rss_pages": 2119,
+          "system_cpu_ticks": 7,
+          "user_cpu_ticks": 1
+        }
+      }
+    },
+    {
+      "live_receiver_observer": {
+        "current_receiver_call": {
+          "method": "wait_message",
+          "started_monotonic_ns": 377492478175812
+        },
+        "highest_successful_ack_cursor": 1100,
+        "returned_messages": 1100,
+        "successful_ack_calls": 11,
+        "successful_send_receipts": 1986
+      },
+      "monotonic_ns": 377492499312075,
+      "processes": {
+        "client": {
+          "delta": {
+            "cpu_percent_of_one_logical_cpu": 131.88096529577174,
+            "elapsed_seconds": 0.500451296
+          },
+          "io_unavailable": "[Errno 2] No such file or directory: '/proc/568248/io'",
+          "pid": 568248,
+          "rss_pages": 6902,
+          "system_cpu_ticks": 47,
+          "user_cpu_ticks": 32
+        },
+        "daemon": {
+          "delta": {
+            "cpu_percent_of_one_logical_cpu": 67.9386790917612,
+            "elapsed_seconds": 0.500451296
+          },
+          "io_unavailable": "[Errno 2] No such file or directory: '/proc/568262/io'",
+          "pid": 568262,
+          "rss_pages": 3239,
+          "system_cpu_ticks": 21,
+          "user_cpu_ticks": 21
+        }
+      }
+    },
+    {
+      "live_receiver_observer": {
+        "current_receiver_call": {
+          "method": "ack",
+          "started_monotonic_ns": 377493071372009
+        },
+        "highest_successful_ack_cursor": 3900,
+        "returned_messages": 4000,
+        "successful_ack_calls": 39,
+        "successful_send_receipts": 5136
+      },
+      "monotonic_ns": 377493082369197,
+      "processes": {
+        "client": {
+          "delta": {
+            "cpu_percent_of_one_logical_cpu": 154.3588039732409,
+            "elapsed_seconds": 0.583057122
+          },
+          "io_unavailable": "[Errno 2] No such file or directory: '/proc/568248/io'",
+          "pid": 568248,
+          "rss_pages": 8086,
+          "system_cpu_ticks": 107,
+          "user_cpu_ticks": 62
+        },
+        "daemon": {
+          "delta": {
+            "cpu_percent_of_one_logical_cpu": 72.03410852084575,
+            "elapsed_seconds": 0.583057122
+          },
+          "io_unavailable": "[Errno 2] No such file or directory: '/proc/568262/io'",
+          "pid": 568262,
+          "rss_pages": 4007,
+          "system_cpu_ticks": 40,
+          "user_cpu_ticks": 44
+        }
+      }
+    },
+    {
+      "live_receiver_observer": {
+        "current_receiver_call": {
+          "method": "ack",
+          "started_monotonic_ns": 377493649654977
+        },
+        "highest_successful_ack_cursor": 6714,
+        "returned_messages": 6814,
+        "successful_ack_calls": 68,
+        "successful_send_receipts": 8269
+      },
+      "monotonic_ns": 377493655058978,
+      "processes": {
+        "client": {
+          "delta": {
+            "cpu_percent_of_one_logical_cpu": 148.42241440309547,
+            "elapsed_seconds": 0.572689781
+          },
+          "io_unavailable": "[Errno 2] No such file or directory: '/proc/568248/io'",
+          "pid": 568248,
+          "rss_pages": 9142,
+          "system_cpu_ticks": 169,
+          "user_cpu_ticks": 85
+        },
+        "daemon": {
+          "delta": {
+            "cpu_percent_of_one_logical_cpu": 62.86125786484044,
+            "elapsed_seconds": 0.572689781
+          },
+          "io_unavailable": "[Errno 2] No such file or directory: '/proc/568262/io'",
+          "pid": 568262,
+          "rss_pages": 4807,
+          "system_cpu_ticks": 53,
+          "user_cpu_ticks": 67
+        }
+      }
+    },
+    {
+      "live_receiver_observer": {
+        "current_receiver_call": {
+          "method": "wait_message",
+          "started_monotonic_ns": 377494184421012
+        },
+        "highest_successful_ack_cursor": 8314,
+        "returned_messages": 8314,
+        "successful_ack_calls": 84,
+        "successful_send_receipts": 11313
+      },
+      "monotonic_ns": 377494192077125,
+      "processes": {
+        "client": {
+          "delta": {
+            "cpu_percent_of_one_logical_cpu": 156.4192950820338,
+            "elapsed_seconds": 0.537018147
+          },
+          "io_unavailable": "[Errno 2] No such file or directory: '/proc/568248/io'",
+          "pid": 568248,
+          "rss_pages": 10166,
+          "system_cpu_ticks": 224,
+          "user_cpu_ticks": 114
+        },
+        "daemon": {
+          "delta": {
+            "cpu_percent_of_one_logical_cpu": 76.34751307575459,
+            "elapsed_seconds": 0.537018147
+          },
+          "io_unavailable": "[Errno 2] No such file or directory: '/proc/568262/io'",
+          "pid": 568262,
+          "rss_pages": 5415,
+          "system_cpu_ticks": 69,
+          "user_cpu_ticks": 92
+        }
+      }
+    },
+    {
+      "live_receiver_observer": {
+        "current_receiver_call": {
+          "method": "ack",
+          "started_monotonic_ns": 377494752346652
+        },
+        "highest_successful_ack_cursor": 10014,
+        "returned_messages": 10114,
+        "successful_ack_calls": 101,
+        "successful_send_receipts": 14650
+      },
+      "monotonic_ns": 377494765022361,
+      "processes": {
+        "client": {
+          "delta": {
+            "cpu_percent_of_one_logical_cpu": 162.31917844238782,
+            "elapsed_seconds": 0.572945236
+          },
+          "io_unavailable": "[Errno 2] No such file or directory: '/proc/568248/io'",
+          "pid": 568248,
+          "rss_pages": 11254,
+          "system_cpu_ticks": 291,
+          "user_cpu_ticks": 140
+        },
+        "daemon": {
+          "delta": {
+            "cpu_percent_of_one_logical_cpu": 76.7961704458609,
+            "elapsed_seconds": 0.572945236
+          },
+          "io_unavailable": "[Errno 2] No such file or directory: '/proc/568262/io'",
+          "pid": 568262,
+          "rss_pages": 6247,
+          "system_cpu_ticks": 85,
+          "user_cpu_ticks": 120
+        }
+      }
+    },
+    {
+      "live_receiver_observer": {
+        "current_receiver_call": {
+          "method": "wait_message",
+          "started_monotonic_ns": 377495384447672
+        },
+        "highest_successful_ack_cursor": 12014,
+        "returned_messages": 12014,
+        "successful_ack_calls": 121,
+        "successful_send_receipts": 18215
+      },
+      "monotonic_ns": 377495387001211,
+      "processes": {
+        "client": {
+          "delta": {
+            "cpu_percent_of_one_logical_cpu": 155.9538559872253,
+            "elapsed_seconds": 0.62197885
+          },
+          "io_unavailable": "[Errno 2] No such file or directory: '/proc/568248/io'",
+          "pid": 568248,
+          "rss_pages": 12470,
+          "system_cpu_ticks": 358,
+          "user_cpu_ticks": 170
+        },
+        "daemon": {
+          "delta": {
+            "cpu_percent_of_one_logical_cpu": 69.13418358196586,
+            "elapsed_seconds": 0.62197885
+          },
+          "io_unavailable": "[Errno 2] No such file or directory: '/proc/568262/io'",
+          "pid": 568262,
+          "rss_pages": 6855,
+          "system_cpu_ticks": 102,
+          "user_cpu_ticks": 146
+        }
+      }
+    },
+    {
+      "live_receiver_observer": {
+        "current_receiver_call": {
+          "method": "ack",
+          "started_monotonic_ns": 377495943553352
+        },
+        "highest_successful_ack_cursor": 13714,
+        "returned_messages": 13814,
+        "successful_ack_calls": 138,
+        "successful_send_receipts": 21438
+      },
+      "monotonic_ns": 377495951300450,
+      "processes": {
+        "client": {
+          "delta": {
+            "cpu_percent_of_one_logical_cpu": 152.40141055728057,
+            "elapsed_seconds": 0.564299239
+          },
+          "io_unavailable": "[Errno 2] No such file or directory: '/proc/568248/io'",
+          "pid": 568248,
+          "rss_pages": 13462,
+          "system_cpu_ticks": 418,
+          "user_cpu_ticks": 196
+        },
+        "daemon": {
+          "delta": {
+            "cpu_percent_of_one_logical_cpu": 69.11226757830165,
+            "elapsed_seconds": 0.564299239
+          },
+          "io_unavailable": "[Errno 2] No such file or directory: '/proc/568262/io'",
+          "pid": 568262,
+          "rss_pages": 7431,
+          "system_cpu_ticks": 116,
+          "user_cpu_ticks": 171
+        }
+      }
+    },
+    {
+      "live_receiver_observer": {
+        "current_receiver_call": {
+          "method": "ack",
+          "started_monotonic_ns": 377496463391439
+        },
+        "highest_successful_ack_cursor": 15314,
+        "returned_messages": 15414,
+        "successful_ack_calls": 154,
+        "successful_send_receipts": 24543
+      },
+      "monotonic_ns": 377496503168484,
+      "processes": {
+        "client": {
+          "delta": {
+            "cpu_percent_of_one_logical_cpu": 157.6463839904161,
+            "elapsed_seconds": 0.551868034
+          },
+          "io_unavailable": "[Errno 2] No such file or directory: '/proc/568248/io'",
+          "pid": 568248,
+          "rss_pages": 14518,
+          "system_cpu_ticks": 474,
+          "user_cpu_ticks": 227
+        },
+        "daemon": {
+          "delta": {
+            "cpu_percent_of_one_logical_cpu": 76.105150891925,
+            "elapsed_seconds": 0.551868034
+          },
+          "io_unavailable": "[Errno 2] No such file or directory: '/proc/568262/io'",
+          "pid": 568262,
+          "rss_pages": 7975,
+          "system_cpu_ticks": 134,
+          "user_cpu_ticks": 195
+        }
+      }
+    },
+    {
+      "live_receiver_observer": {
+        "current_receiver_call": {
+          "method": "wait_message",
+          "started_monotonic_ns": 377497066810762
+        },
+        "highest_successful_ack_cursor": 25014,
+        "returned_messages": 25014,
+        "successful_ack_calls": 251,
+        "successful_send_receipts": 27143
+      },
+      "monotonic_ns": 377497067855535,
+      "processes": {
+        "client": {
+          "delta": {
+            "cpu_percent_of_one_logical_cpu": 145.21317578433366,
+            "elapsed_seconds": 0.564687051
+          },
+          "io_unavailable": "[Errno 2] No such file or directory: '/proc/568248/io'",
+          "pid": 568248,
+          "rss_pages": 16278,
+          "system_cpu_ticks": 524,
+          "user_cpu_ticks": 259
+        },
+        "daemon": {
+          "delta": {
+            "cpu_percent_of_one_logical_cpu": 72.60658789216683,
+            "elapsed_seconds": 0.564687051
+          },
+          "io_unavailable": "[Errno 2] No such file or directory: '/proc/568262/io'",
+          "pid": 568262,
+          "rss_pages": 8359,
+          "system_cpu_ticks": 152,
+          "user_cpu_ticks": 218
+        }
+      }
+    },
+    {
+      "live_receiver_observer": {
+        "current_receiver_call": {
+          "method": "wait_message",
+          "started_monotonic_ns": 377497144838522
+        },
+        "highest_successful_ack_cursor": 27452,
+        "returned_messages": 27452,
+        "successful_ack_calls": 280,
+        "successful_send_receipts": 29342
+      },
+      "monotonic_ns": 377497575580512,
+      "processes": {
+        "client": {
+          "delta": {
+            "cpu_percent_of_one_logical_cpu": 116.20464360176632,
+            "elapsed_seconds": 0.507724977
+          },
+          "io_unavailable": "[Errno 2] No such file or directory: '/proc/568248/io'",
+          "pid": 568248,
+          "rss_pages": 16918,
+          "system_cpu_ticks": 561,
+          "user_cpu_ticks": 281
+        },
+        "daemon": {
+          "delta": {
+            "cpu_percent_of_one_logical_cpu": 63.02624737722919,
+            "elapsed_seconds": 0.507724977
+          },
+          "io_unavailable": "[Errno 2] No such file or directory: '/proc/568262/io'",
+          "pid": 568262,
+          "rss_pages": 8743,
+          "system_cpu_ticks": 166,
+          "user_cpu_ticks": 236
+        }
+      }
+    },
+    {
+      "live_receiver_observer": {
+        "current_receiver_call": {
+          "method": "wait_message",
+          "started_monotonic_ns": 377497144838522
+        },
+        "highest_successful_ack_cursor": 27452,
+        "returned_messages": 27452,
+        "successful_ack_calls": 280,
+        "successful_send_receipts": 31552
+      },
+      "monotonic_ns": 377498078441716,
+      "processes": {
+        "client": {
+          "delta": {
+            "cpu_percent_of_one_logical_cpu": 113.35135728625428,
+            "elapsed_seconds": 0.502861204
+          },
+          "io_unavailable": "[Errno 2] No such file or directory: '/proc/568248/io'",
+          "pid": 568248,
+          "rss_pages": 17526,
+          "system_cpu_ticks": 599,
+          "user_cpu_ticks": 300
+        },
+        "daemon": {
+          "delta": {
+            "cpu_percent_of_one_logical_cpu": 61.64722940129619,
+            "elapsed_seconds": 0.502861204
+          },
+          "io_unavailable": "[Errno 2] No such file or directory: '/proc/568262/io'",
+          "pid": 568262,
+          "rss_pages": 9159,
+          "system_cpu_ticks": 180,
+          "user_cpu_ticks": 253
+        }
+      }
+    },
+    {
+      "live_receiver_observer": {
+        "current_receiver_call": {
+          "method": "wait_message",
+          "started_monotonic_ns": 377497144838522
+        },
+        "highest_successful_ack_cursor": 27452,
+        "returned_messages": 27452,
+        "successful_ack_calls": 280,
+        "successful_send_receipts": 33742
+      },
+      "monotonic_ns": 377498583567779,
+      "processes": {
+        "client": {
+          "delta": {
+            "cpu_percent_of_one_logical_cpu": 108.88371048080329,
+            "elapsed_seconds": 0.505126063
+          },
+          "io_unavailable": "[Errno 2] No such file or directory: '/proc/568248/io'",
+          "pid": 568248,
+          "rss_pages": 18166,
+          "system_cpu_ticks": 635,
+          "user_cpu_ticks": 319
+        },
+        "daemon": {
+          "delta": {
+            "cpu_percent_of_one_logical_cpu": 57.41141098078719,
+            "elapsed_seconds": 0.505126063
+          },
+          "io_unavailable": "[Errno 2] No such file or directory: '/proc/568262/io'",
+          "pid": 568262,
+          "rss_pages": 9511,
+          "system_cpu_ticks": 190,
+          "user_cpu_ticks": 272
+        }
+      }
+    },
+    {
+      "live_receiver_observer": {
+        "current_receiver_call": {
+          "method": "wait_message",
+          "started_monotonic_ns": 377497144838522
+        },
+        "highest_successful_ack_cursor": 27452,
+        "returned_messages": 27452,
+        "successful_ack_calls": 280,
+        "successful_send_receipts": 36040
+      },
+      "monotonic_ns": 377499088868061,
+      "processes": {
+        "client": {
+          "delta": {
+            "cpu_percent_of_one_logical_cpu": 114.78323299253572,
+            "elapsed_seconds": 0.505300282
+          },
+          "io_unavailable": "[Errno 2] No such file or directory: '/proc/568248/io'",
+          "pid": 568248,
+          "rss_pages": 18806,
+          "system_cpu_ticks": 673,
+          "user_cpu_ticks": 339
+        },
+        "daemon": {
+          "delta": {
+            "cpu_percent_of_one_logical_cpu": 61.349659013251845,
+            "elapsed_seconds": 0.505300282
+          },
+          "io_unavailable": "[Errno 2] No such file or directory: '/proc/568262/io'",
+          "pid": 568262,
+          "rss_pages": 9895,
+          "system_cpu_ticks": 201,
+          "user_cpu_ticks": 292
+        }
+      }
+    },
+    {
+      "live_receiver_observer": {
+        "current_receiver_call": {
+          "method": "wait_message",
+          "started_monotonic_ns": 377497144838522
+        },
+        "highest_successful_ack_cursor": 27452,
+        "returned_messages": 27452,
+        "successful_ack_calls": 280,
+        "successful_send_receipts": 37452
+      },
+      "monotonic_ns": 377499404242258,
+      "processes": {
+        "client": {
+          "delta": {
+            "cpu_percent_of_one_logical_cpu": 110.97927583466823,
+            "elapsed_seconds": 0.315374197
+          },
+          "io_unavailable": "[Errno 2] No such file or directory: '/proc/568248/io'",
+          "pid": 568248,
+          "rss_pages": 19190,
+          "system_cpu_ticks": 696,
+          "user_cpu_ticks": 351
+        },
+        "daemon": {
+          "delta": {
+            "cpu_percent_of_one_logical_cpu": 63.416729048381846,
+            "elapsed_seconds": 0.315374197
+          },
+          "io_unavailable": "[Errno 2] No such file or directory: '/proc/568262/io'",
+          "pid": 568262,
+          "rss_pages": 10119,
+          "system_cpu_ticks": 212,
+          "user_cpu_ticks": 301
+        }
+      }
+    },
+    {
+      "live_receiver_observer": {
+        "current_receiver_call": {
+          "method": "wait_message",
+          "started_monotonic_ns": 377497144838522
+        },
+        "highest_successful_ack_cursor": 27452,
+        "returned_messages": 27452,
+        "successful_ack_calls": 280,
+        "successful_send_receipts": 37452
+      },
+      "monotonic_ns": 377499447838009,
+      "processes": {
+        "client": {
+          "delta": {
+            "cpu_percent_of_one_logical_cpu": 91.75206088318102,
+            "elapsed_seconds": 0.043595751
+          },
+          "io_unavailable": "[Errno 2] No such file or directory: '/proc/568248/io'",
+          "pid": 568248,
+          "rss_pages": 19190,
+          "system_cpu_ticks": 699,
+          "user_cpu_ticks": 352
+        }
+      }
+    }
+  ]
+}

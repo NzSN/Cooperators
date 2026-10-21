@@ -1,0 +1,23 @@
+{
+  "v": 1,
+  "agents": {
+    "instance-01M5CDT31KE4N72KHC02EPJ7V1": {
+      "agent_id": "01M5CDT31KE4N72KHC02EPJ7V1",
+      "token_hash": "sha256:0a68cf1039da97e7e543d74f936b356d7a89b1ea261b606f96537181fd29e2bd",
+      "kind": "benchmark",
+      "capabilities": [],
+      "registered_at": "2026-10-20T10:30:44.019Z",
+      "display_name": "same-inbox-c001-0",
+      "launch_key_hash": "sha256:0a68cf1039da97e7e543d74f936b356d7a89b1ea261b606f96537181fd29e2bd"
+    },
+    "instance-01M5CDT31TJ8PGS17TSZFBCEN6": {
+      "agent_id": "01M5CDT31TJ8PGS17TSZFBCEN6",
+      "token_hash": "sha256:6ae2e6ec4d57ff7759b577aac41ab1e36fcd332a060dc2eef0ecc7094256905d",
+      "kind": "benchmark",
+      "capabilities": [],
+      "registered_at": "2026-10-20T10:30:44.026Z",
+      "display_name": "same-inbox-c001-1",
+      "launch_key_hash": "sha256:6ae2e6ec4d57ff7759b577aac41ab1e36fcd332a060dc2eef0ecc7094256905d"
+    }
+  }
+}

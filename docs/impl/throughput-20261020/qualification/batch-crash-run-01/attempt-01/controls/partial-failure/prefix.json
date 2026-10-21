@@ -1,0 +1,28 @@
+{
+  "receipt": {
+    "duplicate": false,
+    "idempotency_key": "prefix",
+    "message_id": "01M5CEDDNFSNX994YKX5YEHS5M",
+    "seq": 1,
+    "to": "recipient",
+    "to_agent_id": "01M5CEDDNBNANT23PPMM8KA8Y6"
+  },
+  "records": [
+    {
+      "body": {
+        "mime": "text/plain",
+        "text": "payload-prefix"
+      },
+      "from": "sender",
+      "id": "01M5CEDDNFSNX994YKX5YEHS5M",
+      "idempotency_key": "prefix",
+      "kind": "batch-crash",
+      "prev_hash": "sha256:0000000000000000000000000000000000000000000000000000000000000000",
+      "reply_to": null,
+      "seq": 1,
+      "to": "recipient",
+      "ts": "2026-10-20T10:41:17.487Z",
+      "v": 1
+    }
+  ]
+}

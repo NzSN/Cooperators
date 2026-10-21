@@ -13,7 +13,6 @@ use std::sync::{Arc, Mutex};
 use crate::id;
 use crate::queues::TaskPhase;
 use crate::server::DaemonState;
-use crate::status;
 use crate::VERSION;
 
 /// Process-local counters shared by the HTTP surface.
@@ -73,15 +72,14 @@ pub async fn render(state: &Arc<DaemonState>) -> String {
     };
 
     let mut inboxes: Vec<(String, usize, u64)> = {
-        let inboxes = state.inboxes.lock().await;
-        inboxes
-            .iter()
-            .map(|(agent_id, inbox)| {
-                let label = names
-                    .get(agent_id)
-                    .cloned()
-                    .unwrap_or_else(|| agent_id.clone());
-                (label, inbox.pending_messages, inbox.pending_bytes)
+        state
+            .inboxes
+            .backlog_snapshot()
+            .await
+            .into_iter()
+            .map(|(agent_id, messages, bytes)| {
+                let label = names.get(&agent_id).cloned().unwrap_or(agent_id);
+                (label, messages, bytes)
             })
             .collect()
     };
@@ -140,7 +138,7 @@ pub async fn render(state: &Arc<DaemonState>) -> String {
 
     // Filesystem scanning is blocking; keep it off the async worker.
     let scan_state = Arc::clone(state);
-    let heads = tokio::task::spawn_blocking(move || status::scan_seq_heads(&scan_state.root))
+    let heads = tokio::task::spawn_blocking(move || scan_state.status().seq_heads)
         .await
         .unwrap_or_default();
 

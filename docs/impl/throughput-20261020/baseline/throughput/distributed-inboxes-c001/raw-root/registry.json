@@ -1,0 +1,14 @@
+{
+  "v": 1,
+  "agents": {
+    "instance-01M5CB2HQ9B3VC7XHH4W8P2HCW": {
+      "agent_id": "01M5CB2HQ9B3VC7XHH4W8P2HCW",
+      "token_hash": "sha256:6887897bc0ac468ac05d7bcd80689c03fbc9b34181414eafe6552ac2a0d16b37",
+      "kind": "benchmark",
+      "capabilities": [],
+      "registered_at": "2026-10-20T09:42:55.465Z",
+      "display_name": "distributed-inboxes-c001-0",
+      "launch_key_hash": "sha256:6887897bc0ac468ac05d7bcd80689c03fbc9b34181414eafe6552ac2a0d16b37"
+    }
+  }
+}

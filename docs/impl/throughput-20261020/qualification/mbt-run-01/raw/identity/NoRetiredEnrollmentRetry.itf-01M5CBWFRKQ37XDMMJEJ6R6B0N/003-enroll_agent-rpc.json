@@ -1,0 +1,22 @@
+{
+  "method": "enroll_agent",
+  "request": {
+    "display_name": "codex",
+    "kind": "codex",
+    "launch_key": {
+      "credential_hash": "sha256:097ca7d4c68d48b3bba16576db5b5df139848765d28f4b8bd48da9320f539a37"
+    }
+  },
+  "response": {
+    "error": {
+      "code": -32004,
+      "data": {
+        "agent_id": "01M5CBWFTKYE3ZF28W56MFKRMN",
+        "code": "CONFLICT",
+        "name": "instance-01M5CBWFTKYE3ZF28W56MFKRMN",
+        "retired": true
+      },
+      "message": "instance is retired"
+    }
+  }
+}

@@ -1,0 +1,2 @@
+{"v":1,"id":"01M5CDKRKM9F5683NJQJ3ZYJDQ","seq":1,"ts":"2026-10-20T10:27:16.724Z","from":"sender","to":"receiver","kind":"writers-test","reply_to":null,"idempotency_key":null,"body":{"mime":"text/plain","text":"w1"},"prev_hash":"sha256:0000000000000000000000000000000000000000000000000000000000000000"}
+{"unfinished_writer_record":

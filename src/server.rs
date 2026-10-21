@@ -43,7 +43,8 @@ use crate::docs::{self, DocEvent, DocRuntime};
 use crate::envelope::Body;
 use crate::error::{BrokerError, ErrorCode};
 use crate::id;
-use crate::messaging::{self, DedupeEntry, Inbox};
+use crate::inbox_writer::InboxStore;
+use crate::messaging;
 use crate::paths;
 use crate::presence::Presence;
 use crate::queues::{self, QueueEvent, QueueRuntime};
@@ -106,6 +107,20 @@ pub struct DaemonConfig {
     pub max_inbox_bytes: u64,
     /// Segment size threshold for channel, queue, and document logs.
     pub log_rotation_bytes: u64,
+    /// Maximum records committed together in one inbox file sync.
+    pub write_batch_messages: usize,
+    /// Maximum serialized bytes collected into one inbox batch. A single
+    /// larger message is still committed on its own.
+    pub write_batch_bytes: u64,
+    /// Maximum intentional collection delay measured from the oldest queued
+    /// request. Disk and scheduling time are additional.
+    pub write_batch_delay: Duration,
+    /// Maximum requests waiting in one inbox's writer queue, excluding the
+    /// bounded batch currently being committed.
+    pub write_queue_messages: usize,
+    /// Maximum serialized-size upper bound for requests waiting in one writer
+    /// queue, excluding the active batch.
+    pub write_queue_bytes: u64,
 }
 
 impl DaemonConfig {
@@ -122,6 +137,11 @@ impl DaemonConfig {
             max_inbox_messages: DEFAULT_MAX_INBOX_MESSAGES,
             max_inbox_bytes: DEFAULT_MAX_INBOX_BYTES,
             log_rotation_bytes: crate::storage::DEFAULT_ROTATION_BYTES,
+            write_batch_messages: 64,
+            write_batch_bytes: 256 * 1024,
+            write_batch_delay: Duration::from_micros(250),
+            write_queue_messages: 1024,
+            write_queue_bytes: 8 * 1024 * 1024,
         }
     }
 }
@@ -131,15 +151,14 @@ impl DaemonConfig {
 pub struct DaemonState {
     // Background tasks hold the state, so ownership outlives every writer even
     // if the listening future is cancelled before the process exits.
-    _root_lease: Option<RootLease>,
+    _root_lease: Option<Arc<RootLease>>,
     pub(crate) root: PathBuf,
     started: Instant,
     started_at: String,
     pub(crate) config: DaemonConfig,
     pub(crate) registry: RwLock<Registry>,
     pub(crate) presence: Mutex<Presence>,
-    pub(crate) inboxes: Mutex<HashMap<String, Inbox>>,
-    pub(crate) dedupe: Mutex<HashMap<(String, String), DedupeEntry>>,
+    pub(crate) inboxes: Arc<InboxStore>,
     pub(crate) send_lock: Mutex<()>,
     pub(crate) channel_logs: Mutex<HashMap<String, ChannelLog>>,
     /// Open queue logs, one per queue name (design §7).
@@ -160,8 +179,9 @@ impl DaemonState {
     /// Production constructor: locks the root before replay and holds ownership
     /// until all state users, including background workers, have gone away.
     pub fn owned(config: DaemonConfig) -> Result<Self, BrokerError> {
-        let lease = acquire_root_lease(&config.root)?;
+        let lease = Arc::new(acquire_root_lease(&config.root)?);
         let mut state = Self::with_config(config)?;
+        state.inboxes.set_owner(Arc::clone(&lease));
         state._root_lease = Some(lease);
         Ok(state)
     }
@@ -187,6 +207,7 @@ impl DaemonState {
                 inboxes.insert(record.agent_id.clone(), inbox);
             }
         }
+        let inboxes = Arc::new(InboxStore::new(&config, inboxes, dedupe)?);
         let presence_log = crate::channels::open_channel_rotating(
             &config.root,
             "#presence",
@@ -213,8 +234,7 @@ impl DaemonState {
             config,
             registry: RwLock::new(registry),
             presence: Mutex::new(presence),
-            inboxes: Mutex::new(inboxes),
-            dedupe: Mutex::new(dedupe),
+            inboxes,
             send_lock: Mutex::new(()),
             channel_logs: Mutex::new(channel_logs),
             queues: Mutex::new(queues),
@@ -253,13 +273,15 @@ impl DaemonState {
 
     /// Builds the current `daemon.status` payload.
     pub fn status(&self) -> StatusResponse {
+        let mut seq_heads = status::scan_seq_heads(&self.root);
+        self.inboxes.apply_committed_heads(&mut seq_heads);
         StatusResponse {
             version: VERSION.to_string(),
             pid: std::process::id(),
             uptime_s: self.uptime_s(),
             root: self.root.display().to_string(),
             started_at: self.started_at.clone(),
-            seq_heads: status::scan_seq_heads(&self.root),
+            seq_heads,
         }
     }
 }

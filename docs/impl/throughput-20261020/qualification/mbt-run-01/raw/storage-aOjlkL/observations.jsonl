@@ -1,0 +1,7 @@
+{"observation":{"receipts":[],"records":[]},"result":"none"}
+{"observation":{"receipts":[],"records":[{"id":1,"seq":0}]},"result":"io-error"}
+{"observation":{"receipts":[],"records":[{"id":1,"seq":0}]},"result":"recovery-required"}
+{"observation":{"receipts":[],"records":[]},"result":"ok"}
+{"observation":{"receipts":[],"records":[{"id":2,"seq":1}]},"result":"pending"}
+{"observation":{"receipts":[{"id":2,"seq":1}],"records":[{"id":2,"seq":1}]},"result":"ok"}
+{"observation":{"receipts":[{"id":2,"seq":1}],"records":[{"id":2,"seq":1}]},"result":"ok"}

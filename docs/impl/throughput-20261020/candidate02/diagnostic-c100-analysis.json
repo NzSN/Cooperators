@@ -1,0 +1,75 @@
+{
+  "first_error_completed_call_snapshot": {
+    "first_error": {
+      "agent": {
+        "agent_id": "01M5CCW6QVQ1TRKP2QBEYKDM6T",
+        "display_name": "same-inbox-c100-31",
+        "name": "instance-01M5CCW6QVQ1TRKP2QBEYKDM6T"
+      },
+      "completed_monotonic_ns": 377286142726861,
+      "connection": 32,
+      "elapsed_ms": 5.795274,
+      "error": "UDS send_message: {'jsonrpc': '2.0', 'id': 192, 'error': {'code': -32003, 'message': 'inbox for \"instance-01M5CCW77PF3FASVK0SRCYJPD0\" is full (pending 10000 messages, 4847580 bytes; limits 10000 messages, 67108864 bytes)', 'data': {'code': 'RESOURCE_EXHAUSTED'}}}",
+      "method": "send_message",
+      "started_monotonic_ns": 377286136931587
+    },
+    "highest_successful_ack_cursor": 7579,
+    "highest_successful_send_receipt_seq": 17564,
+    "returned_messages": 7579,
+    "successful_ack_calls": 76,
+    "successful_send_receipts_completed": 17514
+  },
+  "first_error_live_observer": {
+    "current_receiver_call": {
+      "method": "wait_message",
+      "started_monotonic_ns": 377286084517601
+    },
+    "highest_successful_ack_cursor": 7579,
+    "observed_monotonic_ns": 377286142729710,
+    "returned_messages": 7579,
+    "successful_ack_calls": 76,
+    "successful_send_receipts": 17514
+  },
+  "measurement_before_error_cpu": {
+    "client": {
+      "cpu_percent_of_one_logical_cpu": 152.1582992998249,
+      "elapsed_seconds": 2.287091809,
+      "intervals": 4,
+      "system_percent_of_one_cpu": 101.43886619988328,
+      "user_percent_of_one_cpu": 50.71943309994164
+    },
+    "daemon": {
+      "cpu_percent_of_one_logical_cpu": 73.4557306964672,
+      "elapsed_seconds": 2.287091809,
+      "intervals": 4,
+      "system_percent_of_one_cpu": 31.91826393358396,
+      "user_percent_of_one_cpu": 41.537466762883234
+    }
+  },
+  "measurement_to_first_error_seconds": 2.487644807,
+  "receiver_between_rpc_gaps_ms": {
+    "count": 53,
+    "max": 0.169071,
+    "p50": 0.058863,
+    "p95": 0.124714,
+    "sum": 2.806703
+  },
+  "receiver_pre_error_latency_ms": {
+    "ack": {
+      "count": 27,
+      "max": 50.813628,
+      "p50": 18.885468,
+      "p95": 49.378978,
+      "sum": 550.785384
+    },
+    "wait_message": {
+      "count": 27,
+      "max": 132.257067,
+      "p50": 65.473421,
+      "p95": 103.76406,
+      "sum": 1860.799446
+    }
+  },
+  "resource_limitation": "CPU time is in percent of one logical CPU. /proc/PID/io is unavailable. CPU alone does not split Python GIL, framing, parsing, or thread scheduling costs.",
+  "warmup_messages": 4898
+}

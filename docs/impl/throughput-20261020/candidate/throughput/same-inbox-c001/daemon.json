@@ -1,0 +1,43 @@
+{
+  "agents": [
+    {
+      "agent_id": "01M5CBYKZ72WNBWZC2KR7SDZJP",
+      "display_name": "same-inbox-c001-0",
+      "name": "instance-01M5CBYKZ72WNBWZC2KR7SDZJP"
+    },
+    {
+      "agent_id": "01M5CBYKZG9XT76MF6D6Y72EAX",
+      "display_name": "same-inbox-c001-1",
+      "name": "instance-01M5CBYKZG9XT76MF6D6Y72EAX"
+    }
+  ],
+  "all_receiver_inboxes_empty_with_verified_acked_heads": true,
+  "command": [
+    "/home/nzsn/Repos/Cooperators/target/release/coop",
+    "--root",
+    "/tmp/ctb-zy9ryn3p",
+    "daemon",
+    "run",
+    "--http-addr",
+    "127.0.0.1:0"
+  ],
+  "contiguous_sequences": true,
+  "correctness_passed": true,
+  "daemon_exit_after_termination": -15,
+  "durable_records": 3548,
+  "hash_chains_verified": true,
+  "inbox_heads": {
+    "01M5CBYKZ72WNBWZC2KR7SDZJP": 0,
+    "01M5CBYKZG9XT76MF6D6Y72EAX": 3548
+  },
+  "label": "same-inbox-c001",
+  "pid": 562988,
+  "receipt_count": 3548,
+  "receipt_payload_and_identity_match": true,
+  "root": "/tmp/ctb-zy9ryn3p",
+  "running_executable_sha256": "0fe56619a6fa7366322bdedadc4b2d718d6429f7081244237185ad8a7bae7029",
+  "start_utc": "2026-10-20T09:58:15.231870+00:00",
+  "unique_receipts": 3548,
+  "verified_deliveries_and_acks": 3548,
+  "warmup_fully_delivered_and_acked_before_measurement": 327
+}

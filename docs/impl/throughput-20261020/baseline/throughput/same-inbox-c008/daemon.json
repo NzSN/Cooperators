@@ -1,0 +1,85 @@
+{
+  "agents": [
+    {
+      "agent_id": "01M5CB1CVRDB83HYYTE4W068KZ",
+      "display_name": "same-inbox-c008-0",
+      "name": "instance-01M5CB1CVRDB83HYYTE4W068KZ"
+    },
+    {
+      "agent_id": "01M5CB1CW2MZA17S2J9G95DYZJ",
+      "display_name": "same-inbox-c008-1",
+      "name": "instance-01M5CB1CW2MZA17S2J9G95DYZJ"
+    },
+    {
+      "agent_id": "01M5CB1CWH85ET4CV4X30VW8J5",
+      "display_name": "same-inbox-c008-2",
+      "name": "instance-01M5CB1CWH85ET4CV4X30VW8J5"
+    },
+    {
+      "agent_id": "01M5CB1CX5880XFPB6205KG9JE",
+      "display_name": "same-inbox-c008-3",
+      "name": "instance-01M5CB1CX5880XFPB6205KG9JE"
+    },
+    {
+      "agent_id": "01M5CB1CXGP33VZAS9M4PQ271Y",
+      "display_name": "same-inbox-c008-4",
+      "name": "instance-01M5CB1CXGP33VZAS9M4PQ271Y"
+    },
+    {
+      "agent_id": "01M5CB1CXXCAYB97XNRNHB5GTS",
+      "display_name": "same-inbox-c008-5",
+      "name": "instance-01M5CB1CXXCAYB97XNRNHB5GTS"
+    },
+    {
+      "agent_id": "01M5CB1CY61GWKJF4SEK3TEJSM",
+      "display_name": "same-inbox-c008-6",
+      "name": "instance-01M5CB1CY61GWKJF4SEK3TEJSM"
+    },
+    {
+      "agent_id": "01M5CB1CYJ8R583SZPJX34EW74",
+      "display_name": "same-inbox-c008-7",
+      "name": "instance-01M5CB1CYJ8R583SZPJX34EW74"
+    },
+    {
+      "agent_id": "01M5CB1CZ34B98ZMD7PHF6BQDS",
+      "display_name": "same-inbox-c008-8",
+      "name": "instance-01M5CB1CZ34B98ZMD7PHF6BQDS"
+    }
+  ],
+  "all_receiver_inboxes_empty_with_verified_acked_heads": true,
+  "command": [
+    "/tmp/cooperators-step3-baseline/coop",
+    "--root",
+    "/tmp/ctb-qn2_8gmk",
+    "daemon",
+    "run",
+    "--http-addr",
+    "127.0.0.1:0"
+  ],
+  "contiguous_sequences": true,
+  "correctness_passed": true,
+  "daemon_exit_after_termination": -15,
+  "durable_records": 2370,
+  "hash_chains_verified": true,
+  "inbox_heads": {
+    "01M5CB1CVRDB83HYYTE4W068KZ": 0,
+    "01M5CB1CW2MZA17S2J9G95DYZJ": 0,
+    "01M5CB1CWH85ET4CV4X30VW8J5": 0,
+    "01M5CB1CX5880XFPB6205KG9JE": 0,
+    "01M5CB1CXGP33VZAS9M4PQ271Y": 0,
+    "01M5CB1CXXCAYB97XNRNHB5GTS": 0,
+    "01M5CB1CY61GWKJF4SEK3TEJSM": 0,
+    "01M5CB1CYJ8R583SZPJX34EW74": 0,
+    "01M5CB1CZ34B98ZMD7PHF6BQDS": 2370
+  },
+  "label": "same-inbox-c008",
+  "pid": 540098,
+  "receipt_count": 2370,
+  "receipt_payload_and_identity_match": true,
+  "root": "/tmp/ctb-qn2_8gmk",
+  "running_executable_sha256": "c6d1047a8a4d9b0094274151c9658a101ed018ce07f82d66ed9fb512eb285321",
+  "start_utc": "2026-10-20T09:42:17.677642+00:00",
+  "unique_receipts": 2370,
+  "verified_deliveries_and_acks": 2370,
+  "warmup_fully_delivered_and_acked_before_measurement": 258
+}

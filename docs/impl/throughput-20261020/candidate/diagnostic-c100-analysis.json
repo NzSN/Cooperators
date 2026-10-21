@@ -1,0 +1,39 @@
+{
+  "first_error_live_observer": {
+    "current_receiver_call": {
+      "method": "wait_message",
+      "started_monotonic_ns": 376658508649158
+    },
+    "highest_successful_ack_cursor": 6938,
+    "observed_monotonic_ns": 376658740342509,
+    "returned_messages": 6938,
+    "successful_ack_calls": 71,
+    "successful_send_receipts": 16861
+  },
+  "measurement_to_first_error_seconds": 6.95470003,
+  "receiver_between_rpc_gaps_ms": {
+    "count": 79,
+    "max": 0.759977,
+    "p50": 0.129833,
+    "p95": 0.47287,
+    "sum_ms": 10.644832
+  },
+  "receiver_pre_error": {
+    "ack": {
+      "count": 40,
+      "max": 106.005615,
+      "p50": 33.03751,
+      "p95": 83.772125,
+      "sum_ms": 1587.324314
+    },
+    "wait_message": {
+      "count": 40,
+      "max": 268.000052,
+      "p50": 118.227762,
+      "p95": 229.376156,
+      "sum_ms": 5103.373019
+    }
+  },
+  "resource_sample_limitation": "/proc/<pid>/io does not exist in this execution environment. Sampler v1 grouped stat/io reads and therefore discarded CPU samples too; no CPU utilization conclusion is supported by run01.",
+  "warmup_messages": 2995
+}

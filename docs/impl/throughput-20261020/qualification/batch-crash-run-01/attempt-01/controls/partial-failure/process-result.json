@@ -1,0 +1,9 @@
+{
+  "exit_code": null,
+  "exit_status": "signal: 9 (SIGKILL)",
+  "mode": "partial-failure",
+  "pid": 202,
+  "program": "/home/nzsn/Repos/Cooperators/target/debug/deps/batch_crash-a58fca80dba94d07",
+  "signal": 9,
+  "success": false
+}

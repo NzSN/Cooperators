@@ -1,0 +1,15 @@
+{
+  "command": [
+    "cargo",
+    "test",
+    "--offline",
+    "--locked",
+    "--features",
+    "mbt-injection"
+  ],
+  "COOP_REQUIRE_UDS": "1",
+  "CARGO_BUILD_JOBS": "2",
+  "started_utc": "2026-10-20T09:54:20.540345+00:00",
+  "ended_utc": "2026-10-20T09:55:08.805871+00:00",
+  "exit_code": 0
+}

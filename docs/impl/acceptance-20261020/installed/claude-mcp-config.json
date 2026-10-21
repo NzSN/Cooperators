@@ -1,0 +1,22 @@
+{
+  "mcpServers": {
+    "cooperators": {
+      "command": "python3",
+      "args": [
+        "/home/nzsn/Repos/Cooperators/scripts/record_mcp_stdio.py",
+        "--log",
+        "/home/nzsn/Repos/Cooperators/docs/impl/acceptance-20261020/installed/claude-mcp.jsonl",
+        "--binary",
+        "/home/nzsn/Repos/Cooperators/target/release/coop",
+        "--kind",
+        "claude",
+        "--display-name",
+        "installed-claude"
+      ],
+      "env": {
+        "COOPERATORS_HOME": "/tmp/coop-installed-g70xcfoa/bus",
+        "COOP_SOCKET": "/tmp/coop-installed-g70xcfoa/bus/run/daemon.sock"
+      }
+    }
+  }
+}

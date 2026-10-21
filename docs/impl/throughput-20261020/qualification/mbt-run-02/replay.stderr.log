@@ -1,0 +1,92 @@
+PASS /home/nzsn/Repos/Cooperators/spec/mbt/traces/NoAck__violation.itf.json
+PASS /home/nzsn/Repos/Cooperators/spec/mbt/traces/NoAck__violation1.itf.json
+PASS /home/nzsn/Repos/Cooperators/spec/mbt/traces/NoAck__violation2.itf.json
+PASS /home/nzsn/Repos/Cooperators/spec/mbt/traces/NoComplete__violation.itf.json
+PASS /home/nzsn/Repos/Cooperators/spec/mbt/traces/NoComplete__violation1.itf.json
+PASS /home/nzsn/Repos/Cooperators/spec/mbt/traces/NoComplete__violation2.itf.json
+PASS /home/nzsn/Repos/Cooperators/spec/mbt/traces/NoCrash__violation.itf.json
+PASS /home/nzsn/Repos/Cooperators/spec/mbt/traces/NoCrash__violation1.itf.json
+PASS /home/nzsn/Repos/Cooperators/spec/mbt/traces/NoCrash__violation2.itf.json
+PASS /home/nzsn/Repos/Cooperators/spec/mbt/traces/NoDead__violation.itf.json
+PASS /home/nzsn/Repos/Cooperators/spec/mbt/traces/NoDead__violation1.itf.json
+PASS /home/nzsn/Repos/Cooperators/spec/mbt/traces/NoDead__violation2.itf.json
+PASS /home/nzsn/Repos/Cooperators/spec/mbt/traces/NoExpire__violation.itf.json
+PASS /home/nzsn/Repos/Cooperators/spec/mbt/traces/NoExpire__violation1.itf.json
+PASS /home/nzsn/Repos/Cooperators/spec/mbt/traces/NoExpire__violation2.itf.json
+PASS /home/nzsn/Repos/Cooperators/spec/mbt/traces/NoFail__violation.itf.json
+PASS /home/nzsn/Repos/Cooperators/spec/mbt/traces/NoFail__violation1.itf.json
+PASS /home/nzsn/Repos/Cooperators/spec/mbt/traces/NoFail__violation2.itf.json
+PASS /home/nzsn/Repos/Cooperators/spec/mbt/traces/NoRelease__violation.itf.json
+PASS /home/nzsn/Repos/Cooperators/spec/mbt/traces/NoRelease__violation1.itf.json
+PASS /home/nzsn/Repos/Cooperators/spec/mbt/traces/NoRelease__violation2.itf.json
+PASS /home/nzsn/Repos/Cooperators/spec/mbt/traces/TraceComplete__violation.itf.json
+PASS /home/nzsn/Repos/Cooperators/spec/mbt/traces/TraceComplete__violation1.itf.json
+PASS /home/nzsn/Repos/Cooperators/spec/mbt/traces/TraceComplete__violation10.itf.json
+PASS /home/nzsn/Repos/Cooperators/spec/mbt/traces/TraceComplete__violation11.itf.json
+PASS /home/nzsn/Repos/Cooperators/spec/mbt/traces/TraceComplete__violation12.itf.json
+PASS /home/nzsn/Repos/Cooperators/spec/mbt/traces/TraceComplete__violation2.itf.json
+PASS /home/nzsn/Repos/Cooperators/spec/mbt/traces/TraceComplete__violation3.itf.json
+PASS /home/nzsn/Repos/Cooperators/spec/mbt/traces/TraceComplete__violation4.itf.json
+PASS /home/nzsn/Repos/Cooperators/spec/mbt/traces/TraceComplete__violation5.itf.json
+PASS /home/nzsn/Repos/Cooperators/spec/mbt/traces/TraceComplete__violation6.itf.json
+PASS /home/nzsn/Repos/Cooperators/spec/mbt/traces/TraceComplete__violation7.itf.json
+PASS /home/nzsn/Repos/Cooperators/spec/mbt/traces/TraceComplete__violation8.itf.json
+PASS /home/nzsn/Repos/Cooperators/spec/mbt/traces/TraceComplete__violation9.itf.json
+PASS /home/nzsn/Repos/Cooperators/spec/mbt/writers/traces/NoCompeteW1.itf.json
+PASS /home/nzsn/Repos/Cooperators/spec/mbt/writers/traces/NoCompeteW2.itf.json
+PASS /home/nzsn/Repos/Cooperators/spec/mbt/writers/traces/NoHandoff.itf.json
+PASS /home/nzsn/Repos/Cooperators/spec/mbt/writers/traces/NoIndependentRoots.itf.json
+PASS /home/nzsn/Repos/Cooperators/spec/mbt/writers/traces/NoRejectedRecovery.itf.json
+mbt: 39 traces, 0 failed
+writer fault fixture: /home/nzsn/Repos/Cooperators/docs/impl/throughput-20261020/qualification/mbt-run-02/raw/writer-HybE8n
+retained writer fault fixture: /home/nzsn/Repos/Cooperators/docs/impl/throughput-20261020/qualification/mbt-run-02/raw/writer-HybE8n
+PASS fault-writer /home/nzsn/Repos/Cooperators/spec/mbt/fault_interfaces/writer/traces/NoRejectedRepair.itf.json
+writer fault fixture: /home/nzsn/Repos/Cooperators/docs/impl/throughput-20261020/qualification/mbt-run-02/raw/writer-UtDvJK
+retained writer fault fixture: /home/nzsn/Repos/Cooperators/docs/impl/throughput-20261020/qualification/mbt-run-02/raw/writer-UtDvJK
+PASS fault-writer /home/nzsn/Repos/Cooperators/spec/mbt/fault_interfaces/writer/traces/NoUnownedWrite.itf.json
+writer fault fixture: /home/nzsn/Repos/Cooperators/docs/impl/throughput-20261020/qualification/mbt-run-02/raw/writer-hVwMiv
+retained writer fault fixture: /home/nzsn/Repos/Cooperators/docs/impl/throughput-20261020/qualification/mbt-run-02/raw/writer-hVwMiv
+PASS fault-writer /home/nzsn/Repos/Cooperators/spec/mbt/fault_interfaces/writer/traces/NoWriterHandoff.itf.json
+writer fault fixture: /home/nzsn/Repos/Cooperators/docs/impl/throughput-20261020/qualification/mbt-run-02/raw/writer-gDSNHb
+retained writer fault fixture: /home/nzsn/Repos/Cooperators/docs/impl/throughput-20261020/qualification/mbt-run-02/raw/writer-gDSNHb
+PASS fault-writer /home/nzsn/Repos/Cooperators/spec/mbt/fault_interfaces/writer/traces/NoWriterRejection.itf.json
+storage fixture: /home/nzsn/Repos/Cooperators/docs/impl/throughput-20261020/qualification/mbt-run-02/raw/storage-s6EBw4
+PASS fault-storage /home/nzsn/Repos/Cooperators/spec/mbt/fault_interfaces/storage/traces/NoAcknowledgedRecovery.itf.json
+storage fixture: /home/nzsn/Repos/Cooperators/docs/impl/throughput-20261020/qualification/mbt-run-02/raw/storage-N6tWhL
+PASS fault-storage /home/nzsn/Repos/Cooperators/spec/mbt/fault_interfaces/storage/traces/NoPartialRecovery.itf.json
+storage fixture: /home/nzsn/Repos/Cooperators/docs/impl/throughput-20261020/qualification/mbt-run-02/raw/storage-IHe4NE
+PASS fault-storage /home/nzsn/Repos/Cooperators/spec/mbt/fault_interfaces/storage/traces/NoStorageRecovery.itf.json
+PASS fault-inbox /home/nzsn/Repos/Cooperators/spec/mbt/fault_interfaces/inbox/traces/NoInboxCapacityRecovery.itf.json
+PASS fault-deadletter /home/nzsn/Repos/Cooperators/spec/mbt/fault_interfaces/deadletter/traces/NoProjectionCrashRetry.itf.json
+PASS fault-deadletter /home/nzsn/Repos/Cooperators/spec/mbt/fault_interfaces/deadletter/traces/NoProjectionRecovery.itf.json
+PASS fault-document /home/nzsn/Repos/Cooperators/spec/mbt/fault_interfaces/document/traces/NoDocumentCrashRetry.itf.json
+PASS fault-document /home/nzsn/Repos/Cooperators/spec/mbt/fault_interfaces/document/traces/NoDocumentRetry.itf.json
+PASS fault-status /home/nzsn/Repos/Cooperators/spec/mbt/fault_interfaces/status/traces/NoLargeStatus.itf.json
+rotation fixture: /home/nzsn/Repos/Cooperators/docs/impl/throughput-20261020/qualification/mbt-run-02/raw/rotation/NoOversizedRotation.itf
+PASS fault-rotation /home/nzsn/Repos/Cooperators/spec/mbt/fault_interfaces/rotation/traces/NoOversizedRotation.itf.json
+rotation fixture: /home/nzsn/Repos/Cooperators/docs/impl/throughput-20261020/qualification/mbt-run-02/raw/rotation/NoRotatedCursor.itf
+PASS fault-rotation /home/nzsn/Repos/Cooperators/spec/mbt/fault_interfaces/rotation/traces/NoRotatedCursor.itf.json
+rotation fixture: /home/nzsn/Repos/Cooperators/docs/impl/throughput-20261020/qualification/mbt-run-02/raw/rotation/NoRotationCrashRecovery.itf
+PASS fault-rotation /home/nzsn/Repos/Cooperators/spec/mbt/fault_interfaces/rotation/traces/NoRotationCrashRecovery.itf.json
+rotation fixture: /home/nzsn/Repos/Cooperators/docs/impl/throughput-20261020/qualification/mbt-run-02/raw/rotation/boundary-after-seal
+PASS actual process crash boundary after-seal
+rotation fixture: /home/nzsn/Repos/Cooperators/docs/impl/throughput-20261020/qualification/mbt-run-02/raw/rotation/boundary-after-create
+PASS actual process crash boundary after-create
+PASS rotation crash boundaries
+identity evidence: /home/nzsn/Repos/Cooperators/docs/impl/throughput-20261020/qualification/mbt-run-02/raw/identity/NoEnrollmentRetry.itf-01M5CDKTCGKTM3RRE3V4ZS9XA2
+PASS fault-identity /home/nzsn/Repos/Cooperators/spec/mbt/fault_interfaces/identity/traces/NoEnrollmentRetry.itf.json
+identity evidence: /home/nzsn/Repos/Cooperators/docs/impl/throughput-20261020/qualification/mbt-run-02/raw/identity/NoRetiredAuthentication.itf-01M5CDKTEMWMT9YH1N2TDV2FG5
+PASS fault-identity /home/nzsn/Repos/Cooperators/spec/mbt/fault_interfaces/identity/traces/NoRetiredAuthentication.itf.json
+identity evidence: /home/nzsn/Repos/Cooperators/docs/impl/throughput-20261020/qualification/mbt-run-02/raw/identity/NoRetiredEnrollmentRetry.itf-01M5CDKTH3SPNSYHCA746BC9C6
+PASS fault-identity /home/nzsn/Repos/Cooperators/spec/mbt/fault_interfaces/identity/traces/NoRetiredEnrollmentRetry.itf.json
+identity evidence: /home/nzsn/Repos/Cooperators/docs/impl/throughput-20261020/qualification/mbt-run-02/raw/identity/NoRetiredThenFresh.itf-01M5CDKTK60TQ96KRNGVRMAG5P
+PASS fault-identity /home/nzsn/Repos/Cooperators/spec/mbt/fault_interfaces/identity/traces/NoRetiredThenFresh.itf.json
+identity evidence: /home/nzsn/Repos/Cooperators/docs/impl/throughput-20261020/qualification/mbt-run-02/raw/identity/NoRevokedAuthentication.itf-01M5CDKTNJJHRTJ3AQ3HAJRQDR
+PASS fault-identity /home/nzsn/Repos/Cooperators/spec/mbt/fault_interfaces/identity/traces/NoRevokedAuthentication.itf.json
+identity evidence: /home/nzsn/Repos/Cooperators/docs/impl/throughput-20261020/qualification/mbt-run-02/raw/identity/NoSameKindEnrollment.itf-01M5CDKTR24HSRDEGDYGCERB09
+PASS fault-identity /home/nzsn/Repos/Cooperators/spec/mbt/fault_interfaces/identity/traces/NoSameKindEnrollment.itf.json
+identity evidence: /home/nzsn/Repos/Cooperators/docs/impl/throughput-20261020/qualification/mbt-run-02/raw/identity/NoStableReconnect.itf-01M5CDKTTFA4DTJ5TG4VSKCT8V
+PASS fault-identity /home/nzsn/Repos/Cooperators/spec/mbt/fault_interfaces/identity/traces/NoStableReconnect.itf.json
+identity evidence: /home/nzsn/Repos/Cooperators/docs/impl/throughput-20261020/qualification/mbt-run-02/raw/identity/NoStaleEnrollmentRetry.itf-01M5CDKTWT9DWWTSRD3DM7W7EB
+PASS fault-identity /home/nzsn/Repos/Cooperators/spec/mbt/fault_interfaces/identity/traces/NoStaleEnrollmentRetry.itf.json
+fault MBT: 24 traces, 0 failures

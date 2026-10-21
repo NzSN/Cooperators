@@ -1,0 +1,13 @@
+{
+  "codex": {
+    "version": "0.163.0",
+    "configured_default_model": "gpt-6.1-sol",
+    "model_override": false
+  },
+  "claude_code": {
+    "version": "2.1.300",
+    "actual_model": "deepseek-flash",
+    "provider": "existing user configuration",
+    "model_override": false
+  }
+}

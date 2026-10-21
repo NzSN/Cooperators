@@ -1,0 +1,62 @@
+{
+  "agents": [
+    {
+      "agent_id": "01M5CDVY2705AHNW7499SPAKSY",
+      "display_name": "distributed-inboxes-c008-0",
+      "name": "instance-01M5CDVY2705AHNW7499SPAKSY"
+    },
+    {
+      "agent_id": "01M5CDVY2GR3VYW1SJADZQENZJ",
+      "display_name": "distributed-inboxes-c008-1",
+      "name": "instance-01M5CDVY2GR3VYW1SJADZQENZJ"
+    },
+    {
+      "agent_id": "01M5CDVY2PCPT3B3XKSWAX62ES",
+      "display_name": "distributed-inboxes-c008-2",
+      "name": "instance-01M5CDVY2PCPT3B3XKSWAX62ES"
+    },
+    {
+      "agent_id": "01M5CDVY2W7K10P8319GMGMR68",
+      "display_name": "distributed-inboxes-c008-3",
+      "name": "instance-01M5CDVY2W7K10P8319GMGMR68"
+    },
+    {
+      "agent_id": "01M5CDVY36YEJWDMSVM3JRYZJ3",
+      "display_name": "distributed-inboxes-c008-4",
+      "name": "instance-01M5CDVY36YEJWDMSVM3JRYZJ3"
+    },
+    {
+      "agent_id": "01M5CDVY3C3DGV2MHZK736QBN6",
+      "display_name": "distributed-inboxes-c008-5",
+      "name": "instance-01M5CDVY3C3DGV2MHZK736QBN6"
+    },
+    {
+      "agent_id": "01M5CDVY3TYDWRXBG4V2KG7NA1",
+      "display_name": "distributed-inboxes-c008-6",
+      "name": "instance-01M5CDVY3TYDWRXBG4V2KG7NA1"
+    },
+    {
+      "agent_id": "01M5CDVY3ZG6DDNCWANSKDWJ9Q",
+      "display_name": "distributed-inboxes-c008-7",
+      "name": "instance-01M5CDVY3ZG6DDNCWANSKDWJ9Q"
+    }
+  ],
+  "command": [
+    "/tmp/cooperators-step3-baseline/coop",
+    "--root",
+    "/tmp/ctn-578796-1792492304417630319",
+    "daemon",
+    "run",
+    "--http-addr",
+    "off"
+  ],
+  "correctness_passed": true,
+  "errors": [],
+  "http": "off",
+  "label": "distributed-inboxes-c008",
+  "pid": 579024,
+  "root": "/tmp/ctn-578796-1792492304417630319",
+  "running_executable_sha256": "c6d1047a8a4d9b0094274151c9658a101ed018ce07f82d66ed9fb512eb285321",
+  "start_utc": "2026-10-20T10:31:44.417Z",
+  "stop": "SIGTERM; signal: 15 (SIGTERM)"
+}

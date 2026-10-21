@@ -1,0 +1,15 @@
+{
+  "argv": [
+    "cargo",
+    "build",
+    "--offline",
+    "--locked",
+    "--manifest-path",
+    "spec/mbt/Cargo.toml"
+  ],
+  "cwd": "/home/nzsn/Repos/Cooperators",
+  "elapsed_seconds": 15.643352508544922,
+  "exit_code": 0,
+  "finished_unix": 1792492029.0143902,
+  "started_unix": 1792492013.3710718
+}

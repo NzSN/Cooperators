@@ -1,0 +1,51 @@
+{
+  "ack_ms": {
+    "count": 1000,
+    "max": 1.199303,
+    "mean": 0.265023885,
+    "min": 0.100029,
+    "p50": 0.226609,
+    "p95": 0.537282,
+    "p99": 0.736577
+  },
+  "active_agents": 1,
+  "completed_message_cycles_per_second": 237.9151700161849,
+  "correctness_passed": true,
+  "cycle_ms": {
+    "count": 1000,
+    "max": 11.181912,
+    "mean": 4.189088227999999,
+    "min": 2.058078,
+    "p50": 4.029481,
+    "p95": 6.564613,
+    "p99": 9.039688
+  },
+  "elapsed_seconds": 4.203178805,
+  "enrolled_agents": 100,
+  "idle_agents_with_long_poll": 99,
+  "label": "scale-100-idle",
+  "measured_messages": 1000,
+  "send_ack_ms": {
+    "count": 1000,
+    "max": 10.702703,
+    "mean": 3.545426835,
+    "min": 1.776899,
+    "p50": 3.365501,
+    "p95": 5.57405,
+    "p99": 8.229869
+  },
+  "send_ack_p50_target_pass": true,
+  "transport": "uds",
+  "verified_deliveries_and_acks": 1003,
+  "wait_after_send_ms": {
+    "count": 1000,
+    "max": 1.206334,
+    "mean": 0.378637508,
+    "min": 0.138739,
+    "p50": 0.337971,
+    "p95": 0.704938,
+    "p99": 0.908989
+  },
+  "wait_after_send_p50_target_pass": true,
+  "warmup_messages": 3
+}

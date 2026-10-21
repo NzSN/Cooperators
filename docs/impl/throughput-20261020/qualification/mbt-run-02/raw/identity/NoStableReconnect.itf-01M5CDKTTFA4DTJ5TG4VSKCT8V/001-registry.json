@@ -1,0 +1,14 @@
+{
+  "v": 1,
+  "agents": {
+    "instance-01M5CDKTVTBS6V1J9KB6AHMX34": {
+      "agent_id": "01M5CDKTVTBS6V1J9KB6AHMX34",
+      "token_hash": "sha256:3bcb2c26fc652a430c39238e496048e35ad4231d8a1f31c87341c172f1bd4976",
+      "kind": "codex",
+      "capabilities": [],
+      "registered_at": "2026-10-20T10:27:19.034Z",
+      "display_name": "codex",
+      "launch_key_hash": "sha256:3bcb2c26fc652a430c39238e496048e35ad4231d8a1f31c87341c172f1bd4976"
+    }
+  }
+}

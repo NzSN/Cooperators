@@ -1,0 +1,14 @@
+{
+  "v": 1,
+  "agents": {
+    "instance-01M5C95MYKQB2DM2TQK14WAZDK": {
+      "agent_id": "01M5C95MYKQB2DM2TQK14WAZDK",
+      "token_hash": "sha256:6fa8b6018a259af1c8d2810bf3fc46a2353143902ec73839eb78aa98db28ca48",
+      "kind": "benchmark",
+      "capabilities": [],
+      "registered_at": "2026-10-20T09:09:39.923Z",
+      "display_name": "latency-http-0",
+      "launch_key_hash": "sha256:6fa8b6018a259af1c8d2810bf3fc46a2353143902ec73839eb78aa98db28ca48"
+    }
+  }
+}

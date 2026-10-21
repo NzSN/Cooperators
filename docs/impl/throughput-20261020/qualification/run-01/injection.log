@@ -1,0 +1,269 @@
+   Compiling cooperators v0.1.0 (/home/nzsn/Repos/Cooperators)
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 41.86s
+     Running unittests src/lib.rs (target/debug/deps/cooperators-d88fc52c4affa89f)
+
+running 9 tests
+test id::tests::ulid_time_encoding_matches_spec_vector ... ok
+test id::tests::rfc3339_format_is_stable ... ok
+test registry::tests::token_hash_is_sha256_and_tokens_are_128_bits ... ok
+test id::tests::generated_ulids_are_valid ... ok
+test server::tests::ndjson_request_response_framing_over_an_in_process_stream ... ok
+test server::tests::dispatch_handles_ping_echo_and_unknown_methods ... ok
+test server::tests::notifications_produce_no_response ... ok
+test registry::tests::registry_roundtrip_keeps_only_token_hashes ... ok
+test server::tests::status_reports_identity_and_an_empty_head_map ... ok
+
+test result: ok. 9 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.52s
+
+     Running unittests src/main.rs (target/debug/deps/coop-acdcaa02af68e338)
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running tests/enrollment_retry.rs (target/debug/deps/enrollment_retry-54b7fa1dcbaa2ad6)
+
+running 1 test
+test lost_enrollment_reply_retries_same_key_and_keeps_one_durable_identity ... ok
+
+test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.04s
+
+     Running tests/envelope.rs (target/debug/deps/envelope-d0f17fbdd72941ba)
+
+running 4 tests
+test validation_rejects_draft_and_malformed_records ... ok
+test new_envelope_has_ulid_timestamp_and_genesis_link ... ok
+test envelope_serde_roundtrip_preserves_every_design_field ... ok
+test optional_fields_accept_absence_and_serialize_as_null ... ok
+
+test result: ok. 4 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running tests/error.rs (target/debug/deps/error-fcf6cee864544580)
+
+running 1 test
+test taxonomy_maps_to_distinct_server_reserved_jsonrpc_codes ... ok
+
+test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running tests/instance_identity.rs (target/debug/deps/instance_identity-90e91a59ce1e318e)
+
+running 10 tests
+test invalid_launch_secrets_do_not_create_registry_records ... ok
+test existing_v1_registry_deserializes_without_new_fields ... ok
+test enrollment_retry_with_changed_metadata_is_rejected_without_mutation ... ok
+test legacy_shared_credential_observes_one_identity ... ok
+test enrollment_cannot_reuse_current_or_revoked_legacy_credentials ... ok
+test rotated_launch_key_never_revives_and_canonical_metadata_survives ... ok
+test same_kind_launches_are_distinct_and_retry_survives_registry_reload ... ok
+test concurrent_retry_uses_one_actual_id_and_independent_launch_uses_another ... ok
+test retirement_reserves_identity_and_alias_and_revokes_credentials_durably ... ok
+test enrolled_instances_keep_message_ack_presence_and_lease_ownership_isolated ... ok
+
+test result: ok. 10 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.08s
+
+     Running tests/instance_launch.rs (target/debug/deps/instance_launch-9c8cc1a241fd4f6d)
+
+running 2 tests
+test embedded_mcp_competitor_cannot_mutate_the_active_instance_root ... ok
+test two_mcp_processes_sharing_configuration_keep_independent_principals ... ok
+
+test result: ok. 2 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.30s
+
+     Running tests/log_rotation.rs (target/debug/deps/log_rotation-c7524d78a40c4ae8)
+
+running 6 tests
+test status_of_sealed_only_log_is_read_only_and_uses_logical_path ... ok
+test new_system_event_channel_uses_the_configured_rotation_threshold ... ok
+test document_versions_and_fences_survive_dotted_log_rotation_and_restart ... ok
+test sealed_only_queue_and_document_are_discovered_on_restart ... ok
+test queue_lease_fences_survive_dotted_log_rotation_and_restart ... ok
+test channel_cursor_and_dedupe_survive_rotation_and_restart ... ok
+
+test result: ok. 6 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.18s
+
+     Running tests/m1.rs (target/debug/deps/m1-28ae6810ea101bf1)
+
+running 8 tests
+test register_auth_roundtrip_and_wrong_token_rejection ... ok
+test ndjson_session_auth_and_messaging_over_in_process_streams ... ok
+test dedupe_returns_original_seq_without_second_append ... ok
+test restart_rebuilds_messages_dedupe_and_auth_without_shutdown_hooks ... ok
+test send_wait_ack_ordering_and_peek_semantics ... ok
+test ttl_messages_expire_for_waiters_but_survive_in_the_log ... ok
+test presence_stale_transition_and_heartbeat_revival ... ok
+test presence_gone_transition_with_short_ttl ... ok
+
+test result: ok. 8 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.51s
+
+     Running tests/m1_daemon.rs (target/debug/deps/m1_daemon-0fac2ee29217abc3)
+
+running 1 test
+test kill_9_restart_preserves_messages_dedupe_and_cli_roundtrip ... ok
+
+test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.16s
+
+     Running tests/m2.rs (target/debug/deps/m2-c374fd1a6aa20d9c)
+
+running 6 tests
+test queue_renew_and_fail_retry_then_dead_letter ... ok
+test restart_replays_queue_leases_doc_claims_and_channels ... ok
+test channel_publish_dedupe_read_and_cursor_replay ... ok
+test restart_after_expiry_requeues_task_and_frees_doc_claim ... ok
+test doc_cas_claim_exclusion_expired_write_and_blob_roundtrip ... ok
+test queue_claim_expiry_requeue_dead_letter_and_stale_fence ... ok
+
+test result: ok. 6 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 2.18s
+
+     Running tests/m3.rs (target/debug/deps/m3-29e816dd464e7380)
+
+running 10 tests
+test daemon_status_is_namespaced_as_coop_get_status ... ok
+test tools_list_exposes_every_method_with_matching_schemas ... ok
+test unreachable_daemon_is_a_tool_error_not_a_protocol_error ... ok
+test unknown_tool_is_a_tool_error_with_method_not_found ... ok
+test http_requires_bearer_and_rejects_bad_tokens ... ok
+test http_tools_list_matches_the_stdio_catalog ... ok
+test http_messaging_presence_and_status_roundtrip ... ok
+test mcp_stdio_subprocess_roundtrip_over_pipes ... ok
+test golden_transcripts_match_uds_and_mcp_tool_layer ... ok
+test http_endpoint_parity_in_process ... ok
+
+test result: ok. 10 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.56s
+
+     Running tests/m4.rs (target/debug/deps/m4-fd99ec50f7537fc1)
+
+running 8 tests
+test line_capped_reader_accepts_lines_at_the_limit ... ok
+test line_capped_reader_rejects_a_runaway_line ... ok
+test healthz_is_public_and_metrics_requires_a_bearer_token ... ok
+test stdio_message_cap_returns_resource_exhausted ... ok
+test dedupe_still_answers_when_the_inbox_is_full ... ok
+test inbox_byte_cap_rejects_large_messages_without_blocking_small_ones ... ok
+test inbox_message_cap_rejects_senders_until_ack_frees_capacity ... ok
+test metrics_report_inbox_backlog_queues_leases_and_message_heads ... ok
+
+test result: ok. 8 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.08s
+
+     Running tests/messaging_batch.rs (target/debug/deps/messaging_batch-732a679ad28c4d48)
+
+running 14 tests
+test faults::paused_writer_bounds_queued_requests_separately_from_its_active_batch ... ok
+test concurrent_admissions_respect_exact_serialized_inbox_byte_capacity ... ok
+test faults::canceled_writer_holds_root_ownership_through_its_last_sync ... ok
+test faults::canceling_a_sender_keeps_its_admitted_write_and_dedupe_result ... ok
+test concurrent_inbox_sends_have_unique_receipts_and_a_replayable_ordered_chain ... ok
+test concurrent_key_retries_across_inboxes_commit_one_message ... ok
+test faults::status_publishes_expiry_head_only_after_its_sync_and_inbox_head_after_both ... ok
+test concurrent_admissions_respect_inbox_message_capacity ... ok
+test faults::batched_ttl_records_recover_with_expired_cursor_progress ... ok
+test oversized_write_queue_request_is_rejected_without_using_inbox_capacity ... ok
+test faults::uncertain_key_cannot_move_to_another_inbox_until_actual_replay ... ok
+test retry_of_committed_key_succeeds_when_inbox_is_full ... ok
+test faults::paused_sync_hides_message_and_allows_another_inbox_to_commit ... ok
+test faults::expiry_sync_failure_hides_messages_and_retains_uncertain_keys_until_replay ... ok
+
+test result: ok. 14 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.47s
+
+     Running tests/paths.rs (target/debug/deps/paths-6d32f6c8c40209a1)
+
+running 1 test
+test ensure_layout_creates_the_design_directories_with_0700_on_root_and_run ... ok
+
+test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running tests/perf_smoke.rs (target/debug/deps/perf_smoke-58c142ba81e9b09d)
+
+running 1 test
+test perf_smoke_against_design_targets ... ignored, performance smoke; run with --ignored --nocapture in release mode
+
+test result: ok. 0 passed; 0 failed; 1 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running tests/root_ownership.rs (target/debug/deps/root_ownership-7f18f97dc1247987)
+
+running 1 test
+test background_writer_retains_root_ownership_after_listener_state_drops ... ok
+
+test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.02s
+
+     Running tests/runtime_faults.rs (target/debug/deps/runtime_faults-e1f1e1d52e7546f5)
+
+running 5 tests
+test status_handles_large_final_records_and_does_not_modify_tails ... ok
+test batch_cursor_never_skips_an_unreturned_live_message ... ok
+test expired_inbox_returns_acknowledgeable_progress_after_restart ... ok
+test failed_initial_document_creation_can_retry_before_and_after_restart ... ok
+test missing_dead_letter_is_reconciled_once_from_durable_terminal_event ... ok
+
+test result: ok. 5 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.11s
+
+     Running tests/storage.rs (target/debug/deps/storage-0d6388191a65d682)
+
+running 6 tests
+test record_hash_excludes_the_prev_hash_member ... ok
+test mid_log_corruption_is_an_error_not_a_tail_truncation ... ok
+test valid_final_record_without_newline_is_preserved ... ok
+test valid_log_replays_with_an_intact_hash_chain ... ok
+test sequencer_is_rebuilt_and_monotonic_across_restart ... ok
+test torn_tail_is_truncated_and_the_log_continues ... ok
+
+test result: ok. 6 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.10s
+
+     Running tests/storage_batch.rs (target/debug/deps/storage_batch-ccbc064a5b915f1d)
+
+running 9 tests
+test empty_batch_keeps_file_and_durable_head_unchanged ... ok
+test faults::recovered_batch_prefix_must_sync_before_open_returns ... ok
+test serialization_failure_precedes_all_writes_and_handle_stays_reusable ... ok
+test faults::batch_receipts_wait_for_covering_sync ... ok
+test faults::sync_failure_keeps_acknowledged_head_and_quarantines_until_reopen ... ok
+test faults::partial_second_record_recovers_complete_unacknowledged_prefix ... ok
+test batch_repairs_missing_separator_and_accounts_for_it_once ... ok
+test batch_receipts_bytes_and_chain_match_sequential_appends ... ok
+test rotating_batch_preserves_sealed_stream_chain_and_recovery ... ok
+
+test result: ok. 9 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.07s
+
+     Running tests/storage_faults.rs (target/debug/deps/storage_faults-f56a272d670a74cd)
+
+running 11 tests
+test test_clock_is_scoped_advances_and_unregisters_on_drop ... ok
+test named_points_are_one_shot_and_do_not_affect_other_boundaries ... ok
+test partial_write_returns_error_with_actual_prefix_on_disk ... ok
+test dropping_pause_handle_releases_waiter_with_error ... ok
+test release_can_turn_reached_sync_boundary_into_real_error_result ... ok
+test recovered_prefix_must_sync_before_open_exposes_records ... ok
+test daemon_initialization_refuses_unsynced_recovered_inbox ... ok
+test immediate_sync_failure_leaves_real_complete_record_and_is_path_scoped ... ok
+test pause_exposes_complete_real_bytes_before_receipt_then_performs_real_sync ... ok
+test partial_failure_quarantines_then_reopen_repairs_before_new_append ... ok
+test sync_failure_quarantines_handle_without_mutating_until_reopen ... ok
+
+test result: ok. 11 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.03s
+
+     Running tests/storage_rotation.rs (target/debug/deps/storage_rotation-7e98df3080006291)
+
+running 7 tests
+test oversized_record_is_alone_and_next_append_rotates ... ok
+test interrupted_archive_rename_recovers_missing_active_without_losing_head ... ok
+test sealed_final_record_corruption_is_fatal_and_read_only ... ok
+test interrupted_empty_active_creation_recovers_without_empty_seal ... ok
+test exact_threshold_and_global_sequence_hash_survive_restart ... ok
+test active_tail_repair_keeps_seals_and_global_head ... ok
+test dotted_names_have_distinct_segment_directories ... ok
+
+test result: ok. 7 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.09s
+
+     Running tests/uds.rs (target/debug/deps/uds-77dc9a4e88579d28)
+
+running 2 tests
+test second_bind_fails_while_the_first_daemon_is_listening ... ok
+test jsonrpc_echo_ping_and_status_over_a_real_uds_socket ... ok
+
+test result: ok. 2 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.05s
+
+   Doc-tests cooperators
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+

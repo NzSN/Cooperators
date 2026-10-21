@@ -32,6 +32,7 @@ pub mod error;
 #[cfg(feature = "mbt-injection")]
 pub mod faults;
 pub mod id;
+mod inbox_writer;
 pub mod leases;
 pub mod mcp;
 pub mod messaging;

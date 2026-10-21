@@ -1,0 +1,4035 @@
+{
+  "buffer_experiment": {
+    "declaration": "/home/nzsn/Repos/Cooperators/docs/impl/throughput-20261020/candidate02/buffer-plan.json",
+    "declaration_sha256": "001c155914c4100ff9942801879689ed8d66d4c5f1b083924df2fdcde5f9bf91",
+    "original_buffer_bytes": 8192,
+    "reader_buffer_bytes": 262144,
+    "scope": "Every fresh UDS connection; the only changed workload/client behavior is reader buffering",
+    "wrapper": "/home/nzsn/Repos/Cooperators/docs/impl/throughput-20261020/candidate02/diagnose_buffer.py",
+    "wrapper_sha256": "ca9dbc9509e946ca685e627b4ded88f1880e67eed6bae42f91cc7f77bb5090d4"
+  },
+  "connections": [
+    {
+      "agent": null,
+      "connection": 0,
+      "highest_successful_ack_cursor": 0,
+      "methods": {
+        "daemon.status": {
+          "calls": 1,
+          "latency_ms": {
+            "count": 1,
+            "max": 0.712574,
+            "mean": 0.712574,
+            "min": 0.712574,
+            "p50": 0.712574,
+            "p95": 0.712574,
+            "p99": 0.712574
+          },
+          "successful": 1
+        }
+      },
+      "nonempty_wait_batch_sizes": {},
+      "returned_messages": 0
+    },
+    {
+      "agent": {
+        "agent_id": "01M5CD2KA1WE2VKHR66ZTDFPDQ",
+        "display_name": "same-inbox-c100-0",
+        "name": "instance-01M5CD2KA1WE2VKHR66ZTDFPDQ"
+      },
+      "connection": 1,
+      "highest_successful_ack_cursor": 0,
+      "methods": {
+        "enroll_agent": {
+          "calls": 1,
+          "latency_ms": {
+            "count": 1,
+            "max": 6.768714,
+            "mean": 6.768714,
+            "min": 6.768714,
+            "p50": 6.768714,
+            "p95": 6.768714,
+            "p99": 6.768714
+          },
+          "successful": 1
+        },
+        "send_message": {
+          "calls": 269,
+          "latency_ms": {
+            "count": 269,
+            "max": 54.399486,
+            "mean": 17.14051712267658,
+            "min": 3.183551,
+            "p50": 15.806484,
+            "p95": 34.379125,
+            "p99": 48.571665
+          },
+          "successful": 268
+        }
+      },
+      "nonempty_wait_batch_sizes": {},
+      "returned_messages": 0
+    },
+    {
+      "agent": {
+        "agent_id": "01M5CD2KA87NDENH7G8WRFRCX6",
+        "display_name": "same-inbox-c100-1",
+        "name": "instance-01M5CD2KA87NDENH7G8WRFRCX6"
+      },
+      "connection": 2,
+      "highest_successful_ack_cursor": 0,
+      "methods": {
+        "enroll_agent": {
+          "calls": 1,
+          "latency_ms": {
+            "count": 1,
+            "max": 4.167709,
+            "mean": 4.167709,
+            "min": 4.167709,
+            "p50": 4.167709,
+            "p95": 4.167709,
+            "p99": 4.167709
+          },
+          "successful": 1
+        },
+        "send_message": {
+          "calls": 881,
+          "latency_ms": {
+            "count": 881,
+            "max": 48.37059,
+            "mean": 8.184360917139614,
+            "min": 2.067765,
+            "p50": 4.363889,
+            "p95": 25.772051,
+            "p99": 39.84321
+          },
+          "successful": 880
+        }
+      },
+      "nonempty_wait_batch_sizes": {},
+      "returned_messages": 0
+    },
+    {
+      "agent": {
+        "agent_id": "01M5CD2KACQJN4KFF7YJ5C210R",
+        "display_name": "same-inbox-c100-2",
+        "name": "instance-01M5CD2KACQJN4KFF7YJ5C210R"
+      },
+      "connection": 3,
+      "highest_successful_ack_cursor": 0,
+      "methods": {
+        "enroll_agent": {
+          "calls": 1,
+          "latency_ms": {
+            "count": 1,
+            "max": 4.40302,
+            "mean": 4.40302,
+            "min": 4.40302,
+            "p50": 4.40302,
+            "p95": 4.40302,
+            "p99": 4.40302
+          },
+          "successful": 1
+        },
+        "send_message": {
+          "calls": 277,
+          "latency_ms": {
+            "count": 277,
+            "max": 59.9189,
+            "mean": 16.681832534296028,
+            "min": 2.482648,
+            "p50": 16.016278,
+            "p95": 32.93376,
+            "p99": 39.005977
+          },
+          "successful": 276
+        }
+      },
+      "nonempty_wait_batch_sizes": {},
+      "returned_messages": 0
+    },
+    {
+      "agent": {
+        "agent_id": "01M5CD2KAHW6B2ZBSRFEAKBMX0",
+        "display_name": "same-inbox-c100-3",
+        "name": "instance-01M5CD2KAHW6B2ZBSRFEAKBMX0"
+      },
+      "connection": 4,
+      "highest_successful_ack_cursor": 0,
+      "methods": {
+        "enroll_agent": {
+          "calls": 1,
+          "latency_ms": {
+            "count": 1,
+            "max": 5.530354,
+            "mean": 5.530354,
+            "min": 5.530354,
+            "p50": 5.530354,
+            "p95": 5.530354,
+            "p99": 5.530354
+          },
+          "successful": 1
+        },
+        "send_message": {
+          "calls": 259,
+          "latency_ms": {
+            "count": 259,
+            "max": 65.660774,
+            "mean": 17.845949185328184,
+            "min": 2.804174,
+            "p50": 16.043823,
+            "p95": 36.514635,
+            "p99": 49.172279
+          },
+          "successful": 258
+        }
+      },
+      "nonempty_wait_batch_sizes": {},
+      "returned_messages": 0
+    },
+    {
+      "agent": {
+        "agent_id": "01M5CD2KAQ7V5GQAV7AWT2VWCZ",
+        "display_name": "same-inbox-c100-4",
+        "name": "instance-01M5CD2KAQ7V5GQAV7AWT2VWCZ"
+      },
+      "connection": 5,
+      "highest_successful_ack_cursor": 0,
+      "methods": {
+        "enroll_agent": {
+          "calls": 1,
+          "latency_ms": {
+            "count": 1,
+            "max": 6.243372,
+            "mean": 6.243372,
+            "min": 6.243372,
+            "p50": 6.243372,
+            "p95": 6.243372,
+            "p99": 6.243372
+          },
+          "successful": 1
+        },
+        "send_message": {
+          "calls": 262,
+          "latency_ms": {
+            "count": 262,
+            "max": 48.785142,
+            "mean": 17.602530862595422,
+            "min": 3.68656,
+            "p50": 15.956116,
+            "p95": 36.871669,
+            "p99": 45.416409
+          },
+          "successful": 261
+        }
+      },
+      "nonempty_wait_batch_sizes": {},
+      "returned_messages": 0
+    },
+    {
+      "agent": {
+        "agent_id": "01M5CD2KAXFW39PF1SCR7C73P9",
+        "display_name": "same-inbox-c100-5",
+        "name": "instance-01M5CD2KAXFW39PF1SCR7C73P9"
+      },
+      "connection": 6,
+      "highest_successful_ack_cursor": 0,
+      "methods": {
+        "enroll_agent": {
+          "calls": 1,
+          "latency_ms": {
+            "count": 1,
+            "max": 4.440282,
+            "mean": 4.440282,
+            "min": 4.440282,
+            "p50": 4.440282,
+            "p95": 4.440282,
+            "p99": 4.440282
+          },
+          "successful": 1
+        },
+        "send_message": {
+          "calls": 273,
+          "latency_ms": {
+            "count": 273,
+            "max": 71.178074,
+            "mean": 16.93254817948718,
+            "min": 2.271555,
+            "p50": 15.23895,
+            "p95": 35.980972,
+            "p99": 48.207645
+          },
+          "successful": 272
+        }
+      },
+      "nonempty_wait_batch_sizes": {},
+      "returned_messages": 0
+    },
+    {
+      "agent": {
+        "agent_id": "01M5CD2KB2SPM9AVRKFWGRMDY0",
+        "display_name": "same-inbox-c100-6",
+        "name": "instance-01M5CD2KB2SPM9AVRKFWGRMDY0"
+      },
+      "connection": 7,
+      "highest_successful_ack_cursor": 0,
+      "methods": {
+        "enroll_agent": {
+          "calls": 1,
+          "latency_ms": {
+            "count": 1,
+            "max": 4.680468,
+            "mean": 4.680468,
+            "min": 4.680468,
+            "p50": 4.680468,
+            "p95": 4.680468,
+            "p99": 4.680468
+          },
+          "successful": 1
+        },
+        "send_message": {
+          "calls": 900,
+          "latency_ms": {
+            "count": 900,
+            "max": 50.819924,
+            "mean": 8.028028383333334,
+            "min": 1.369019,
+            "p50": 4.419351,
+            "p95": 25.267214,
+            "p99": 35.316325
+          },
+          "successful": 899
+        }
+      },
+      "nonempty_wait_batch_sizes": {},
+      "returned_messages": 0
+    },
+    {
+      "agent": {
+        "agent_id": "01M5CD2KB60VWKG26HD0Z0489T",
+        "display_name": "same-inbox-c100-7",
+        "name": "instance-01M5CD2KB60VWKG26HD0Z0489T"
+      },
+      "connection": 8,
+      "highest_successful_ack_cursor": 0,
+      "methods": {
+        "enroll_agent": {
+          "calls": 1,
+          "latency_ms": {
+            "count": 1,
+            "max": 4.755719,
+            "mean": 4.755719,
+            "min": 4.755719,
+            "p50": 4.755719,
+            "p95": 4.755719,
+            "p99": 4.755719
+          },
+          "successful": 1
+        },
+        "send_message": {
+          "calls": 258,
+          "latency_ms": {
+            "count": 258,
+            "max": 54.362532,
+            "mean": 17.745138267441863,
+            "min": 3.350036,
+            "p50": 16.157797,
+            "p95": 36.240404,
+            "p99": 49.577875
+          },
+          "successful": 257
+        }
+      },
+      "nonempty_wait_batch_sizes": {},
+      "returned_messages": 0
+    },
+    {
+      "agent": {
+        "agent_id": "01M5CD2KBBPC1QZPTAPTCPBEJE",
+        "display_name": "same-inbox-c100-8",
+        "name": "instance-01M5CD2KBBPC1QZPTAPTCPBEJE"
+      },
+      "connection": 9,
+      "highest_successful_ack_cursor": 0,
+      "methods": {
+        "enroll_agent": {
+          "calls": 1,
+          "latency_ms": {
+            "count": 1,
+            "max": 3.902358,
+            "mean": 3.902358,
+            "min": 3.902358,
+            "p50": 3.902358,
+            "p95": 3.902358,
+            "p99": 3.902358
+          },
+          "successful": 1
+        },
+        "send_message": {
+          "calls": 271,
+          "latency_ms": {
+            "count": 271,
+            "max": 65.601038,
+            "mean": 17.07042598523985,
+            "min": 2.817114,
+            "p50": 16.006567,
+            "p95": 35.513874,
+            "p99": 49.483809
+          },
+          "successful": 270
+        }
+      },
+      "nonempty_wait_batch_sizes": {},
+      "returned_messages": 0
+    },
+    {
+      "agent": {
+        "agent_id": "01M5CD2KBF9J3TF69ZGS3V1GKG",
+        "display_name": "same-inbox-c100-9",
+        "name": "instance-01M5CD2KBF9J3TF69ZGS3V1GKG"
+      },
+      "connection": 10,
+      "highest_successful_ack_cursor": 0,
+      "methods": {
+        "enroll_agent": {
+          "calls": 1,
+          "latency_ms": {
+            "count": 1,
+            "max": 3.673898,
+            "mean": 3.673898,
+            "min": 3.673898,
+            "p50": 3.673898,
+            "p95": 3.673898,
+            "p99": 3.673898
+          },
+          "successful": 1
+        },
+        "send_message": {
+          "calls": 266,
+          "latency_ms": {
+            "count": 266,
+            "max": 51.603074,
+            "mean": 17.369003736842107,
+            "min": 3.500788,
+            "p50": 16.272403,
+            "p95": 33.114161,
+            "p99": 42.448352
+          },
+          "successful": 265
+        }
+      },
+      "nonempty_wait_batch_sizes": {},
+      "returned_messages": 0
+    },
+    {
+      "agent": {
+        "agent_id": "01M5CD2KBK12CDR2AK5F116WYE",
+        "display_name": "same-inbox-c100-10",
+        "name": "instance-01M5CD2KBK12CDR2AK5F116WYE"
+      },
+      "connection": 11,
+      "highest_successful_ack_cursor": 0,
+      "methods": {
+        "enroll_agent": {
+          "calls": 1,
+          "latency_ms": {
+            "count": 1,
+            "max": 5.99592,
+            "mean": 5.99592,
+            "min": 5.99592,
+            "p50": 5.99592,
+            "p95": 5.99592,
+            "p99": 5.99592
+          },
+          "successful": 1
+        },
+        "send_message": {
+          "calls": 267,
+          "latency_ms": {
+            "count": 267,
+            "max": 54.344772,
+            "mean": 17.232879985018727,
+            "min": 4.180858,
+            "p50": 15.915436,
+            "p95": 32.999691,
+            "p99": 44.576838
+          },
+          "successful": 266
+        }
+      },
+      "nonempty_wait_batch_sizes": {},
+      "returned_messages": 0
+    },
+    {
+      "agent": {
+        "agent_id": "01M5CD2KBSSKSZ012V7WDFE54B",
+        "display_name": "same-inbox-c100-11",
+        "name": "instance-01M5CD2KBSSKSZ012V7WDFE54B"
+      },
+      "connection": 12,
+      "highest_successful_ack_cursor": 0,
+      "methods": {
+        "enroll_agent": {
+          "calls": 1,
+          "latency_ms": {
+            "count": 1,
+            "max": 5.575876,
+            "mean": 5.575876,
+            "min": 5.575876,
+            "p50": 5.575876,
+            "p95": 5.575876,
+            "p99": 5.575876
+          },
+          "successful": 1
+        },
+        "send_message": {
+          "calls": 242,
+          "latency_ms": {
+            "count": 242,
+            "max": 68.64974,
+            "mean": 19.13038835123967,
+            "min": 3.015468,
+            "p50": 16.581969,
+            "p95": 39.85373,
+            "p99": 59.348552
+          },
+          "successful": 241
+        }
+      },
+      "nonempty_wait_batch_sizes": {},
+      "returned_messages": 0
+    },
+    {
+      "agent": {
+        "agent_id": "01M5CD2KBZDG2TYBPSFBA87CGW",
+        "display_name": "same-inbox-c100-12",
+        "name": "instance-01M5CD2KBZDG2TYBPSFBA87CGW"
+      },
+      "connection": 13,
+      "highest_successful_ack_cursor": 0,
+      "methods": {
+        "enroll_agent": {
+          "calls": 1,
+          "latency_ms": {
+            "count": 1,
+            "max": 4.764952,
+            "mean": 4.764952,
+            "min": 4.764952,
+            "p50": 4.764952,
+            "p95": 4.764952,
+            "p99": 4.764952
+          },
+          "successful": 1
+        },
+        "send_message": {
+          "calls": 266,
+          "latency_ms": {
+            "count": 266,
+            "max": 52.91092,
+            "mean": 17.402100383458645,
+            "min": 3.559516,
+            "p50": 15.204662,
+            "p95": 36.38825,
+            "p99": 45.65735
+          },
+          "successful": 265
+        }
+      },
+      "nonempty_wait_batch_sizes": {},
+      "returned_messages": 0
+    },
+    {
+      "agent": {
+        "agent_id": "01M5CD2KC45R0RK4N3ABJYDB59",
+        "display_name": "same-inbox-c100-13",
+        "name": "instance-01M5CD2KC45R0RK4N3ABJYDB59"
+      },
+      "connection": 14,
+      "highest_successful_ack_cursor": 0,
+      "methods": {
+        "enroll_agent": {
+          "calls": 1,
+          "latency_ms": {
+            "count": 1,
+            "max": 5.540721,
+            "mean": 5.540721,
+            "min": 5.540721,
+            "p50": 5.540721,
+            "p95": 5.540721,
+            "p99": 5.540721
+          },
+          "successful": 1
+        },
+        "send_message": {
+          "calls": 255,
+          "latency_ms": {
+            "count": 255,
+            "max": 50.017032,
+            "mean": 18.137213862745096,
+            "min": 2.523059,
+            "p50": 16.492605,
+            "p95": 36.30228,
+            "p99": 41.330351
+          },
+          "successful": 254
+        }
+      },
+      "nonempty_wait_batch_sizes": {},
+      "returned_messages": 0
+    },
+    {
+      "agent": {
+        "agent_id": "01M5CD2KCADGPT22MHFTAV8CE3",
+        "display_name": "same-inbox-c100-14",
+        "name": "instance-01M5CD2KCADGPT22MHFTAV8CE3"
+      },
+      "connection": 15,
+      "highest_successful_ack_cursor": 0,
+      "methods": {
+        "enroll_agent": {
+          "calls": 1,
+          "latency_ms": {
+            "count": 1,
+            "max": 4.714938,
+            "mean": 4.714938,
+            "min": 4.714938,
+            "p50": 4.714938,
+            "p95": 4.714938,
+            "p99": 4.714938
+          },
+          "successful": 1
+        },
+        "send_message": {
+          "calls": 879,
+          "latency_ms": {
+            "count": 879,
+            "max": 54.326614,
+            "mean": 8.211696614334471,
+            "min": 1.740447,
+            "p50": 4.402292,
+            "p95": 28.176655,
+            "p99": 40.16206
+          },
+          "successful": 878
+        }
+      },
+      "nonempty_wait_batch_sizes": {},
+      "returned_messages": 0
+    },
+    {
+      "agent": {
+        "agent_id": "01M5CD2KCFKPBV0GE6CDHZ7R6G",
+        "display_name": "same-inbox-c100-15",
+        "name": "instance-01M5CD2KCFKPBV0GE6CDHZ7R6G"
+      },
+      "connection": 16,
+      "highest_successful_ack_cursor": 0,
+      "methods": {
+        "enroll_agent": {
+          "calls": 1,
+          "latency_ms": {
+            "count": 1,
+            "max": 3.873537,
+            "mean": 3.873537,
+            "min": 3.873537,
+            "p50": 3.873537,
+            "p95": 3.873537,
+            "p99": 3.873537
+          },
+          "successful": 1
+        },
+        "send_message": {
+          "calls": 896,
+          "latency_ms": {
+            "count": 896,
+            "max": 44.57103,
+            "mean": 8.058047003348214,
+            "min": 1.177764,
+            "p50": 4.417599,
+            "p95": 25.055262,
+            "p99": 37.095448
+          },
+          "successful": 895
+        }
+      },
+      "nonempty_wait_batch_sizes": {},
+      "returned_messages": 0
+    },
+    {
+      "agent": {
+        "agent_id": "01M5CD2KCKD2YH9MSE541HBHW6",
+        "display_name": "same-inbox-c100-16",
+        "name": "instance-01M5CD2KCKD2YH9MSE541HBHW6"
+      },
+      "connection": 17,
+      "highest_successful_ack_cursor": 0,
+      "methods": {
+        "enroll_agent": {
+          "calls": 1,
+          "latency_ms": {
+            "count": 1,
+            "max": 3.991531,
+            "mean": 3.991531,
+            "min": 3.991531,
+            "p50": 3.991531,
+            "p95": 3.991531,
+            "p99": 3.991531
+          },
+          "successful": 1
+        },
+        "send_message": {
+          "calls": 267,
+          "latency_ms": {
+            "count": 267,
+            "max": 47.394203,
+            "mean": 17.33032862172285,
+            "min": 3.560382,
+            "p50": 15.594915,
+            "p95": 35.549029,
+            "p99": 45.089676
+          },
+          "successful": 266
+        }
+      },
+      "nonempty_wait_batch_sizes": {},
+      "returned_messages": 0
+    },
+    {
+      "agent": {
+        "agent_id": "01M5CD2KCQCQ9JSHXZH13M9307",
+        "display_name": "same-inbox-c100-17",
+        "name": "instance-01M5CD2KCQCQ9JSHXZH13M9307"
+      },
+      "connection": 18,
+      "highest_successful_ack_cursor": 0,
+      "methods": {
+        "enroll_agent": {
+          "calls": 1,
+          "latency_ms": {
+            "count": 1,
+            "max": 6.520023,
+            "mean": 6.520023,
+            "min": 6.520023,
+            "p50": 6.520023,
+            "p95": 6.520023,
+            "p99": 6.520023
+          },
+          "successful": 1
+        },
+        "send_message": {
+          "calls": 286,
+          "latency_ms": {
+            "count": 286,
+            "max": 54.220387,
+            "mean": 16.12426913286713,
+            "min": 3.269493,
+            "p50": 15.20344,
+            "p95": 32.07204,
+            "p99": 48.781224
+          },
+          "successful": 285
+        }
+      },
+      "nonempty_wait_batch_sizes": {},
+      "returned_messages": 0
+    },
+    {
+      "agent": {
+        "agent_id": "01M5CD2KCYGQ1MQBXT7CSPE2AT",
+        "display_name": "same-inbox-c100-18",
+        "name": "instance-01M5CD2KCYGQ1MQBXT7CSPE2AT"
+      },
+      "connection": 19,
+      "highest_successful_ack_cursor": 0,
+      "methods": {
+        "enroll_agent": {
+          "calls": 1,
+          "latency_ms": {
+            "count": 1,
+            "max": 5.538742,
+            "mean": 5.538742,
+            "min": 5.538742,
+            "p50": 5.538742,
+            "p95": 5.538742,
+            "p99": 5.538742
+          },
+          "successful": 1
+        },
+        "send_message": {
+          "calls": 273,
+          "latency_ms": {
+            "count": 273,
+            "max": 49.581809,
+            "mean": 16.90501663003663,
+            "min": 3.916068,
+            "p50": 15.88676,
+            "p95": 30.445185,
+            "p99": 42.673811
+          },
+          "successful": 272
+        }
+      },
+      "nonempty_wait_batch_sizes": {},
+      "returned_messages": 0
+    },
+    {
+      "agent": {
+        "agent_id": "01M5CD2KD3XZ9VTPCE6NHMW0H0",
+        "display_name": "same-inbox-c100-19",
+        "name": "instance-01M5CD2KD3XZ9VTPCE6NHMW0H0"
+      },
+      "connection": 20,
+      "highest_successful_ack_cursor": 0,
+      "methods": {
+        "enroll_agent": {
+          "calls": 1,
+          "latency_ms": {
+            "count": 1,
+            "max": 3.938051,
+            "mean": 3.938051,
+            "min": 3.938051,
+            "p50": 3.938051,
+            "p95": 3.938051,
+            "p99": 3.938051
+          },
+          "successful": 1
+        },
+        "send_message": {
+          "calls": 259,
+          "latency_ms": {
+            "count": 259,
+            "max": 55.878603,
+            "mean": 17.84108550965251,
+            "min": 2.722209,
+            "p50": 15.703774,
+            "p95": 37.787075,
+            "p99": 52.172849
+          },
+          "successful": 258
+        }
+      },
+      "nonempty_wait_batch_sizes": {},
+      "returned_messages": 0
+    },
+    {
+      "agent": {
+        "agent_id": "01M5CD2KD77A3WF0382DDT751T",
+        "display_name": "same-inbox-c100-20",
+        "name": "instance-01M5CD2KD77A3WF0382DDT751T"
+      },
+      "connection": 21,
+      "highest_successful_ack_cursor": 0,
+      "methods": {
+        "enroll_agent": {
+          "calls": 1,
+          "latency_ms": {
+            "count": 1,
+            "max": 4.999481,
+            "mean": 4.999481,
+            "min": 4.999481,
+            "p50": 4.999481,
+            "p95": 4.999481,
+            "p99": 4.999481
+          },
+          "successful": 1
+        },
+        "send_message": {
+          "calls": 267,
+          "latency_ms": {
+            "count": 267,
+            "max": 47.652099,
+            "mean": 17.303405239700375,
+            "min": 3.472762,
+            "p50": 15.956335,
+            "p95": 32.31977,
+            "p99": 41.786786
+          },
+          "successful": 266
+        }
+      },
+      "nonempty_wait_batch_sizes": {},
+      "returned_messages": 0
+    },
+    {
+      "agent": {
+        "agent_id": "01M5CD2KDDB828AY0BAT43XDMG",
+        "display_name": "same-inbox-c100-21",
+        "name": "instance-01M5CD2KDDB828AY0BAT43XDMG"
+      },
+      "connection": 22,
+      "highest_successful_ack_cursor": 0,
+      "methods": {
+        "enroll_agent": {
+          "calls": 1,
+          "latency_ms": {
+            "count": 1,
+            "max": 4.409391,
+            "mean": 4.409391,
+            "min": 4.409391,
+            "p50": 4.409391,
+            "p95": 4.409391,
+            "p99": 4.409391
+          },
+          "successful": 1
+        },
+        "send_message": {
+          "calls": 269,
+          "latency_ms": {
+            "count": 269,
+            "max": 47.997959,
+            "mean": 17.130718234200742,
+            "min": 3.168848,
+            "p50": 15.615456,
+            "p95": 35.569154,
+            "p99": 44.348633
+          },
+          "successful": 268
+        }
+      },
+      "nonempty_wait_batch_sizes": {},
+      "returned_messages": 0
+    },
+    {
+      "agent": {
+        "agent_id": "01M5CD2KDHQAMK98T8ZD5W4JCK",
+        "display_name": "same-inbox-c100-22",
+        "name": "instance-01M5CD2KDHQAMK98T8ZD5W4JCK"
+      },
+      "connection": 23,
+      "highest_successful_ack_cursor": 0,
+      "methods": {
+        "enroll_agent": {
+          "calls": 1,
+          "latency_ms": {
+            "count": 1,
+            "max": 4.318248,
+            "mean": 4.318248,
+            "min": 4.318248,
+            "p50": 4.318248,
+            "p95": 4.318248,
+            "p99": 4.318248
+          },
+          "successful": 1
+        },
+        "send_message": {
+          "calls": 884,
+          "latency_ms": {
+            "count": 884,
+            "max": 64.113515,
+            "mean": 8.164823998868778,
+            "min": 2.232337,
+            "p50": 4.352456,
+            "p95": 26.480854,
+            "p99": 37.764383
+          },
+          "successful": 883
+        }
+      },
+      "nonempty_wait_batch_sizes": {},
+      "returned_messages": 0
+    },
+    {
+      "agent": {
+        "agent_id": "01M5CD2KDPQD0JA6CJMVMPQVW1",
+        "display_name": "same-inbox-c100-23",
+        "name": "instance-01M5CD2KDPQD0JA6CJMVMPQVW1"
+      },
+      "connection": 24,
+      "highest_successful_ack_cursor": 0,
+      "methods": {
+        "enroll_agent": {
+          "calls": 1,
+          "latency_ms": {
+            "count": 1,
+            "max": 4.479716,
+            "mean": 4.479716,
+            "min": 4.479716,
+            "p50": 4.479716,
+            "p95": 4.479716,
+            "p99": 4.479716
+          },
+          "successful": 1
+        },
+        "send_message": {
+          "calls": 270,
+          "latency_ms": {
+            "count": 270,
+            "max": 61.562171,
+            "mean": 16.906156107407405,
+            "min": 3.022596,
+            "p50": 15.476973,
+            "p95": 33.219846,
+            "p99": 52.569486
+          },
+          "successful": 269
+        }
+      },
+      "nonempty_wait_batch_sizes": {},
+      "returned_messages": 0
+    },
+    {
+      "agent": {
+        "agent_id": "01M5CD2KDTHX6CJA04FPDXGSAK",
+        "display_name": "same-inbox-c100-24",
+        "name": "instance-01M5CD2KDTHX6CJA04FPDXGSAK"
+      },
+      "connection": 25,
+      "highest_successful_ack_cursor": 0,
+      "methods": {
+        "enroll_agent": {
+          "calls": 1,
+          "latency_ms": {
+            "count": 1,
+            "max": 25.508713,
+            "mean": 25.508713,
+            "min": 25.508713,
+            "p50": 25.508713,
+            "p95": 25.508713,
+            "p99": 25.508713
+          },
+          "successful": 1
+        },
+        "send_message": {
+          "calls": 265,
+          "latency_ms": {
+            "count": 265,
+            "max": 51.289768,
+            "mean": 17.40765345283019,
+            "min": 2.7168,
+            "p50": 16.077713,
+            "p95": 36.334503,
+            "p99": 45.67605
+          },
+          "successful": 264
+        }
+      },
+      "nonempty_wait_batch_sizes": {},
+      "returned_messages": 0
+    },
+    {
+      "agent": {
+        "agent_id": "01M5CD2KEM5Y8YW0752235K2DE",
+        "display_name": "same-inbox-c100-25",
+        "name": "instance-01M5CD2KEM5Y8YW0752235K2DE"
+      },
+      "connection": 26,
+      "highest_successful_ack_cursor": 0,
+      "methods": {
+        "enroll_agent": {
+          "calls": 1,
+          "latency_ms": {
+            "count": 1,
+            "max": 4.578556,
+            "mean": 4.578556,
+            "min": 4.578556,
+            "p50": 4.578556,
+            "p95": 4.578556,
+            "p99": 4.578556
+          },
+          "successful": 1
+        },
+        "send_message": {
+          "calls": 883,
+          "latency_ms": {
+            "count": 883,
+            "max": 55.430635,
+            "mean": 8.17773999207248,
+            "min": 1.900422,
+            "p50": 4.399244,
+            "p95": 25.645399,
+            "p99": 38.382788
+          },
+          "successful": 882
+        }
+      },
+      "nonempty_wait_batch_sizes": {},
+      "returned_messages": 0
+    },
+    {
+      "agent": {
+        "agent_id": "01M5CD2KESY3ESH9TJK7AAWQKM",
+        "display_name": "same-inbox-c100-26",
+        "name": "instance-01M5CD2KESY3ESH9TJK7AAWQKM"
+      },
+      "connection": 27,
+      "highest_successful_ack_cursor": 0,
+      "methods": {
+        "enroll_agent": {
+          "calls": 1,
+          "latency_ms": {
+            "count": 1,
+            "max": 4.300646,
+            "mean": 4.300646,
+            "min": 4.300646,
+            "p50": 4.300646,
+            "p95": 4.300646,
+            "p99": 4.300646
+          },
+          "successful": 1
+        },
+        "send_message": {
+          "calls": 258,
+          "latency_ms": {
+            "count": 258,
+            "max": 77.967423,
+            "mean": 17.87390708527132,
+            "min": 3.785722,
+            "p50": 16.133014,
+            "p95": 35.880933,
+            "p99": 46.492722
+          },
+          "successful": 257
+        }
+      },
+      "nonempty_wait_batch_sizes": {},
+      "returned_messages": 0
+    },
+    {
+      "agent": {
+        "agent_id": "01M5CD2KEXQNTPEC9T8F4B3V40",
+        "display_name": "same-inbox-c100-27",
+        "name": "instance-01M5CD2KEXQNTPEC9T8F4B3V40"
+      },
+      "connection": 28,
+      "highest_successful_ack_cursor": 0,
+      "methods": {
+        "enroll_agent": {
+          "calls": 1,
+          "latency_ms": {
+            "count": 1,
+            "max": 6.693221,
+            "mean": 6.693221,
+            "min": 6.693221,
+            "p50": 6.693221,
+            "p95": 6.693221,
+            "p99": 6.693221
+          },
+          "successful": 1
+        },
+        "send_message": {
+          "calls": 273,
+          "latency_ms": {
+            "count": 273,
+            "max": 51.808947,
+            "mean": 16.917874765567763,
+            "min": 2.317218,
+            "p50": 15.898302,
+            "p95": 33.361609,
+            "p99": 45.63679
+          },
+          "successful": 272
+        }
+      },
+      "nonempty_wait_batch_sizes": {},
+      "returned_messages": 0
+    },
+    {
+      "agent": {
+        "agent_id": "01M5CD2KF43DCN0VC6NK2115FJ",
+        "display_name": "same-inbox-c100-28",
+        "name": "instance-01M5CD2KF43DCN0VC6NK2115FJ"
+      },
+      "connection": 29,
+      "highest_successful_ack_cursor": 0,
+      "methods": {
+        "enroll_agent": {
+          "calls": 1,
+          "latency_ms": {
+            "count": 1,
+            "max": 5.359842,
+            "mean": 5.359842,
+            "min": 5.359842,
+            "p50": 5.359842,
+            "p95": 5.359842,
+            "p99": 5.359842
+          },
+          "successful": 1
+        },
+        "send_message": {
+          "calls": 891,
+          "latency_ms": {
+            "count": 891,
+            "max": 53.822849,
+            "mean": 8.098098668911335,
+            "min": 2.165433,
+            "p50": 4.436334,
+            "p95": 24.744275,
+            "p99": 36.19047
+          },
+          "successful": 890
+        }
+      },
+      "nonempty_wait_batch_sizes": {},
+      "returned_messages": 0
+    },
+    {
+      "agent": {
+        "agent_id": "01M5CD2KFA9K7G4FQ7XPXZBJDF",
+        "display_name": "same-inbox-c100-29",
+        "name": "instance-01M5CD2KFA9K7G4FQ7XPXZBJDF"
+      },
+      "connection": 30,
+      "highest_successful_ack_cursor": 0,
+      "methods": {
+        "enroll_agent": {
+          "calls": 1,
+          "latency_ms": {
+            "count": 1,
+            "max": 4.192454,
+            "mean": 4.192454,
+            "min": 4.192454,
+            "p50": 4.192454,
+            "p95": 4.192454,
+            "p99": 4.192454
+          },
+          "successful": 1
+        },
+        "send_message": {
+          "calls": 249,
+          "latency_ms": {
+            "count": 249,
+            "max": 46.811759,
+            "mean": 18.56573810441767,
+            "min": 3.28873,
+            "p50": 16.947464,
+            "p95": 37.086464,
+            "p99": 41.489365
+          },
+          "successful": 248
+        }
+      },
+      "nonempty_wait_batch_sizes": {},
+      "returned_messages": 0
+    },
+    {
+      "agent": {
+        "agent_id": "01M5CD2KFEZWVDJ76CG06FRCH8",
+        "display_name": "same-inbox-c100-30",
+        "name": "instance-01M5CD2KFEZWVDJ76CG06FRCH8"
+      },
+      "connection": 31,
+      "highest_successful_ack_cursor": 0,
+      "methods": {
+        "enroll_agent": {
+          "calls": 1,
+          "latency_ms": {
+            "count": 1,
+            "max": 5.139958,
+            "mean": 5.139958,
+            "min": 5.139958,
+            "p50": 5.139958,
+            "p95": 5.139958,
+            "p99": 5.139958
+          },
+          "successful": 1
+        },
+        "send_message": {
+          "calls": 886,
+          "latency_ms": {
+            "count": 886,
+            "max": 60.079665,
+            "mean": 8.133618905191874,
+            "min": 1.025163,
+            "p50": 4.408567,
+            "p95": 25.617145,
+            "p99": 42.373735
+          },
+          "successful": 885
+        }
+      },
+      "nonempty_wait_batch_sizes": {},
+      "returned_messages": 0
+    },
+    {
+      "agent": {
+        "agent_id": "01M5CD2KFK01PDZMC2P6JC36FY",
+        "display_name": "same-inbox-c100-31",
+        "name": "instance-01M5CD2KFK01PDZMC2P6JC36FY"
+      },
+      "connection": 32,
+      "highest_successful_ack_cursor": 0,
+      "methods": {
+        "enroll_agent": {
+          "calls": 1,
+          "latency_ms": {
+            "count": 1,
+            "max": 5.52032,
+            "mean": 5.52032,
+            "min": 5.52032,
+            "p50": 5.52032,
+            "p95": 5.52032,
+            "p99": 5.52032
+          },
+          "successful": 1
+        },
+        "send_message": {
+          "calls": 243,
+          "latency_ms": {
+            "count": 243,
+            "max": 53.613136,
+            "mean": 19.00488416049383,
+            "min": 3.03915,
+            "p50": 16.738282,
+            "p95": 36.16075,
+            "p99": 43.545088
+          },
+          "successful": 242
+        }
+      },
+      "nonempty_wait_batch_sizes": {},
+      "returned_messages": 0
+    },
+    {
+      "agent": {
+        "agent_id": "01M5CD2KFSBBYBS99X4GGWG9KS",
+        "display_name": "same-inbox-c100-32",
+        "name": "instance-01M5CD2KFSBBYBS99X4GGWG9KS"
+      },
+      "connection": 33,
+      "highest_successful_ack_cursor": 0,
+      "methods": {
+        "enroll_agent": {
+          "calls": 1,
+          "latency_ms": {
+            "count": 1,
+            "max": 4.365771,
+            "mean": 4.365771,
+            "min": 4.365771,
+            "p50": 4.365771,
+            "p95": 4.365771,
+            "p99": 4.365771
+          },
+          "successful": 1
+        },
+        "send_message": {
+          "calls": 251,
+          "latency_ms": {
+            "count": 251,
+            "max": 59.937633,
+            "mean": 18.208155569721118,
+            "min": 3.24927,
+            "p50": 16.421687,
+            "p95": 37.799761,
+            "p99": 52.304299
+          },
+          "successful": 250
+        }
+      },
+      "nonempty_wait_batch_sizes": {},
+      "returned_messages": 0
+    },
+    {
+      "agent": {
+        "agent_id": "01M5CD2KFXF8Z6GKWNBNNFVQAV",
+        "display_name": "same-inbox-c100-33",
+        "name": "instance-01M5CD2KFXF8Z6GKWNBNNFVQAV"
+      },
+      "connection": 34,
+      "highest_successful_ack_cursor": 0,
+      "methods": {
+        "enroll_agent": {
+          "calls": 1,
+          "latency_ms": {
+            "count": 1,
+            "max": 4.864053,
+            "mean": 4.864053,
+            "min": 4.864053,
+            "p50": 4.864053,
+            "p95": 4.864053,
+            "p99": 4.864053
+          },
+          "successful": 1
+        },
+        "send_message": {
+          "calls": 265,
+          "latency_ms": {
+            "count": 265,
+            "max": 55.548875,
+            "mean": 17.470743909433963,
+            "min": 3.308529,
+            "p50": 15.81954,
+            "p95": 33.55818,
+            "p99": 45.545238
+          },
+          "successful": 264
+        }
+      },
+      "nonempty_wait_batch_sizes": {},
+      "returned_messages": 0
+    },
+    {
+      "agent": {
+        "agent_id": "01M5CD2KG29Q4EWF3WP78E3FW5",
+        "display_name": "same-inbox-c100-34",
+        "name": "instance-01M5CD2KG29Q4EWF3WP78E3FW5"
+      },
+      "connection": 35,
+      "highest_successful_ack_cursor": 0,
+      "methods": {
+        "enroll_agent": {
+          "calls": 1,
+          "latency_ms": {
+            "count": 1,
+            "max": 5.469998,
+            "mean": 5.469998,
+            "min": 5.469998,
+            "p50": 5.469998,
+            "p95": 5.469998,
+            "p99": 5.469998
+          },
+          "successful": 1
+        },
+        "send_message": {
+          "calls": 264,
+          "latency_ms": {
+            "count": 264,
+            "max": 49.152153,
+            "mean": 17.497210928030302,
+            "min": 3.575435,
+            "p50": 15.938278,
+            "p95": 36.24532,
+            "p99": 42.555253
+          },
+          "successful": 263
+        }
+      },
+      "nonempty_wait_batch_sizes": {},
+      "returned_messages": 0
+    },
+    {
+      "agent": {
+        "agent_id": "01M5CD2KG8DEKESNZT8Z1D7C8Q",
+        "display_name": "same-inbox-c100-35",
+        "name": "instance-01M5CD2KG8DEKESNZT8Z1D7C8Q"
+      },
+      "connection": 36,
+      "highest_successful_ack_cursor": 0,
+      "methods": {
+        "enroll_agent": {
+          "calls": 1,
+          "latency_ms": {
+            "count": 1,
+            "max": 4.496264,
+            "mean": 4.496264,
+            "min": 4.496264,
+            "p50": 4.496264,
+            "p95": 4.496264,
+            "p99": 4.496264
+          },
+          "successful": 1
+        },
+        "send_message": {
+          "calls": 885,
+          "latency_ms": {
+            "count": 885,
+            "max": 65.86858,
+            "mean": 8.155967318644068,
+            "min": 2.198475,
+            "p50": 4.38496,
+            "p95": 26.695286,
+            "p99": 36.48914
+          },
+          "successful": 884
+        }
+      },
+      "nonempty_wait_batch_sizes": {},
+      "returned_messages": 0
+    },
+    {
+      "agent": {
+        "agent_id": "01M5CD2KGD1EJZ4QN3XV9E16SJ",
+        "display_name": "same-inbox-c100-36",
+        "name": "instance-01M5CD2KGD1EJZ4QN3XV9E16SJ"
+      },
+      "connection": 37,
+      "highest_successful_ack_cursor": 0,
+      "methods": {
+        "enroll_agent": {
+          "calls": 1,
+          "latency_ms": {
+            "count": 1,
+            "max": 3.923649,
+            "mean": 3.923649,
+            "min": 3.923649,
+            "p50": 3.923649,
+            "p95": 3.923649,
+            "p99": 3.923649
+          },
+          "successful": 1
+        },
+        "send_message": {
+          "calls": 264,
+          "latency_ms": {
+            "count": 264,
+            "max": 68.936511,
+            "mean": 17.522521484848482,
+            "min": 3.69956,
+            "p50": 16.014077,
+            "p95": 32.51551,
+            "p99": 49.232642
+          },
+          "successful": 263
+        }
+      },
+      "nonempty_wait_batch_sizes": {},
+      "returned_messages": 0
+    },
+    {
+      "agent": {
+        "agent_id": "01M5CD2KGH6W0D5JRZ0Q8F7P1X",
+        "display_name": "same-inbox-c100-37",
+        "name": "instance-01M5CD2KGH6W0D5JRZ0Q8F7P1X"
+      },
+      "connection": 38,
+      "highest_successful_ack_cursor": 0,
+      "methods": {
+        "enroll_agent": {
+          "calls": 1,
+          "latency_ms": {
+            "count": 1,
+            "max": 4.974347,
+            "mean": 4.974347,
+            "min": 4.974347,
+            "p50": 4.974347,
+            "p95": 4.974347,
+            "p99": 4.974347
+          },
+          "successful": 1
+        },
+        "send_message": {
+          "calls": 265,
+          "latency_ms": {
+            "count": 265,
+            "max": 64.34618,
+            "mean": 17.38877943018868,
+            "min": 3.141226,
+            "p50": 16.449198,
+            "p95": 32.640776,
+            "p99": 45.095403
+          },
+          "successful": 264
+        }
+      },
+      "nonempty_wait_batch_sizes": {},
+      "returned_messages": 0
+    },
+    {
+      "agent": {
+        "agent_id": "01M5CD2KGPQMMNAV3JVA1SEHAK",
+        "display_name": "same-inbox-c100-38",
+        "name": "instance-01M5CD2KGPQMMNAV3JVA1SEHAK"
+      },
+      "connection": 39,
+      "highest_successful_ack_cursor": 0,
+      "methods": {
+        "enroll_agent": {
+          "calls": 1,
+          "latency_ms": {
+            "count": 1,
+            "max": 4.895641,
+            "mean": 4.895641,
+            "min": 4.895641,
+            "p50": 4.895641,
+            "p95": 4.895641,
+            "p99": 4.895641
+          },
+          "successful": 1
+        },
+        "send_message": {
+          "calls": 260,
+          "latency_ms": {
+            "count": 260,
+            "max": 62.38135,
+            "mean": 17.796044165384615,
+            "min": 3.03755,
+            "p50": 15.729,
+            "p95": 34.229476,
+            "p99": 56.533961
+          },
+          "successful": 259
+        }
+      },
+      "nonempty_wait_batch_sizes": {},
+      "returned_messages": 0
+    },
+    {
+      "agent": {
+        "agent_id": "01M5CD2KGV3DRDJTQD2A5VEVQM",
+        "display_name": "same-inbox-c100-39",
+        "name": "instance-01M5CD2KGV3DRDJTQD2A5VEVQM"
+      },
+      "connection": 40,
+      "highest_successful_ack_cursor": 0,
+      "methods": {
+        "enroll_agent": {
+          "calls": 1,
+          "latency_ms": {
+            "count": 1,
+            "max": 4.235366,
+            "mean": 4.235366,
+            "min": 4.235366,
+            "p50": 4.235366,
+            "p95": 4.235366,
+            "p99": 4.235366
+          },
+          "successful": 1
+        },
+        "send_message": {
+          "calls": 250,
+          "latency_ms": {
+            "count": 250,
+            "max": 59.158619,
+            "mean": 18.494632524,
+            "min": 2.731894,
+            "p50": 16.335937,
+            "p95": 38.357082,
+            "p99": 53.880994
+          },
+          "successful": 249
+        }
+      },
+      "nonempty_wait_batch_sizes": {},
+      "returned_messages": 0
+    },
+    {
+      "agent": {
+        "agent_id": "01M5CD2KGZ47X53GWGP5BGW711",
+        "display_name": "same-inbox-c100-40",
+        "name": "instance-01M5CD2KGZ47X53GWGP5BGW711"
+      },
+      "connection": 41,
+      "highest_successful_ack_cursor": 0,
+      "methods": {
+        "enroll_agent": {
+          "calls": 1,
+          "latency_ms": {
+            "count": 1,
+            "max": 4.642377,
+            "mean": 4.642377,
+            "min": 4.642377,
+            "p50": 4.642377,
+            "p95": 4.642377,
+            "p99": 4.642377
+          },
+          "successful": 1
+        },
+        "send_message": {
+          "calls": 254,
+          "latency_ms": {
+            "count": 254,
+            "max": 69.287313,
+            "mean": 18.21534659055118,
+            "min": 2.588224,
+            "p50": 16.379294,
+            "p95": 37.275318,
+            "p99": 49.097015
+          },
+          "successful": 253
+        }
+      },
+      "nonempty_wait_batch_sizes": {},
+      "returned_messages": 0
+    },
+    {
+      "agent": {
+        "agent_id": "01M5CD2KH4QS8758DQHBW03VD0",
+        "display_name": "same-inbox-c100-41",
+        "name": "instance-01M5CD2KH4QS8758DQHBW03VD0"
+      },
+      "connection": 42,
+      "highest_successful_ack_cursor": 0,
+      "methods": {
+        "enroll_agent": {
+          "calls": 1,
+          "latency_ms": {
+            "count": 1,
+            "max": 5.924604,
+            "mean": 5.924604,
+            "min": 5.924604,
+            "p50": 5.924604,
+            "p95": 5.924604,
+            "p99": 5.924604
+          },
+          "successful": 1
+        },
+        "send_message": {
+          "calls": 266,
+          "latency_ms": {
+            "count": 266,
+            "max": 62.261164,
+            "mean": 17.354662248120302,
+            "min": 2.465141,
+            "p50": 16.026529,
+            "p95": 36.872405,
+            "p99": 57.560699
+          },
+          "successful": 265
+        }
+      },
+      "nonempty_wait_batch_sizes": {},
+      "returned_messages": 0
+    },
+    {
+      "agent": {
+        "agent_id": "01M5CD2KHACCP3GZCF5P70AQXV",
+        "display_name": "same-inbox-c100-42",
+        "name": "instance-01M5CD2KHACCP3GZCF5P70AQXV"
+      },
+      "connection": 43,
+      "highest_successful_ack_cursor": 0,
+      "methods": {
+        "enroll_agent": {
+          "calls": 1,
+          "latency_ms": {
+            "count": 1,
+            "max": 4.778124,
+            "mean": 4.778124,
+            "min": 4.778124,
+            "p50": 4.778124,
+            "p95": 4.778124,
+            "p99": 4.778124
+          },
+          "successful": 1
+        },
+        "send_message": {
+          "calls": 255,
+          "latency_ms": {
+            "count": 255,
+            "max": 58.476833,
+            "mean": 18.13304462745098,
+            "min": 3.474566,
+            "p50": 16.006678,
+            "p95": 36.312567,
+            "p99": 48.620563
+          },
+          "successful": 254
+        }
+      },
+      "nonempty_wait_batch_sizes": {},
+      "returned_messages": 0
+    },
+    {
+      "agent": {
+        "agent_id": "01M5CD2KHFA3R67ZSEE606GNQY",
+        "display_name": "same-inbox-c100-43",
+        "name": "instance-01M5CD2KHFA3R67ZSEE606GNQY"
+      },
+      "connection": 44,
+      "highest_successful_ack_cursor": 0,
+      "methods": {
+        "enroll_agent": {
+          "calls": 1,
+          "latency_ms": {
+            "count": 1,
+            "max": 4.001746,
+            "mean": 4.001746,
+            "min": 4.001746,
+            "p50": 4.001746,
+            "p95": 4.001746,
+            "p99": 4.001746
+          },
+          "successful": 1
+        },
+        "send_message": {
+          "calls": 266,
+          "latency_ms": {
+            "count": 266,
+            "max": 46.399987,
+            "mean": 17.399556845864662,
+            "min": 2.981317,
+            "p50": 15.959976,
+            "p95": 35.667158,
+            "p99": 45.490507
+          },
+          "successful": 265
+        }
+      },
+      "nonempty_wait_batch_sizes": {},
+      "returned_messages": 0
+    },
+    {
+      "agent": {
+        "agent_id": "01M5CD2KHKKVKDWY3Y03062FJP",
+        "display_name": "same-inbox-c100-44",
+        "name": "instance-01M5CD2KHKKVKDWY3Y03062FJP"
+      },
+      "connection": 45,
+      "highest_successful_ack_cursor": 0,
+      "methods": {
+        "enroll_agent": {
+          "calls": 1,
+          "latency_ms": {
+            "count": 1,
+            "max": 5.603117,
+            "mean": 5.603117,
+            "min": 5.603117,
+            "p50": 5.603117,
+            "p95": 5.603117,
+            "p99": 5.603117
+          },
+          "successful": 1
+        },
+        "send_message": {
+          "calls": 892,
+          "latency_ms": {
+            "count": 892,
+            "max": 49.592937,
+            "mean": 8.083977475336322,
+            "min": 1.689268,
+            "p50": 4.44842,
+            "p95": 24.638126,
+            "p99": 37.594608
+          },
+          "successful": 891
+        }
+      },
+      "nonempty_wait_batch_sizes": {},
+      "returned_messages": 0
+    },
+    {
+      "agent": {
+        "agent_id": "01M5CD2KHSJ1CAY59D348Q59W1",
+        "display_name": "same-inbox-c100-45",
+        "name": "instance-01M5CD2KHSJ1CAY59D348Q59W1"
+      },
+      "connection": 46,
+      "highest_successful_ack_cursor": 0,
+      "methods": {
+        "enroll_agent": {
+          "calls": 1,
+          "latency_ms": {
+            "count": 1,
+            "max": 4.22649,
+            "mean": 4.22649,
+            "min": 4.22649,
+            "p50": 4.22649,
+            "p95": 4.22649,
+            "p99": 4.22649
+          },
+          "successful": 1
+        },
+        "send_message": {
+          "calls": 895,
+          "latency_ms": {
+            "count": 895,
+            "max": 52.887963,
+            "mean": 8.0386867575419,
+            "min": 1.891337,
+            "p50": 4.406932,
+            "p95": 25.422371,
+            "p99": 39.307352
+          },
+          "successful": 894
+        }
+      },
+      "nonempty_wait_batch_sizes": {},
+      "returned_messages": 0
+    },
+    {
+      "agent": {
+        "agent_id": "01M5CD2KHXQNS11V6F80RVAEN1",
+        "display_name": "same-inbox-c100-46",
+        "name": "instance-01M5CD2KHXQNS11V6F80RVAEN1"
+      },
+      "connection": 47,
+      "highest_successful_ack_cursor": 0,
+      "methods": {
+        "enroll_agent": {
+          "calls": 1,
+          "latency_ms": {
+            "count": 1,
+            "max": 4.647149,
+            "mean": 4.647149,
+            "min": 4.647149,
+            "p50": 4.647149,
+            "p95": 4.647149,
+            "p99": 4.647149
+          },
+          "successful": 1
+        },
+        "send_message": {
+          "calls": 262,
+          "latency_ms": {
+            "count": 262,
+            "max": 57.203336,
+            "mean": 17.59462908778626,
+            "min": 3.794897,
+            "p50": 16.621303,
+            "p95": 33.379242,
+            "p99": 44.068787
+          },
+          "successful": 261
+        }
+      },
+      "nonempty_wait_batch_sizes": {},
+      "returned_messages": 0
+    },
+    {
+      "agent": {
+        "agent_id": "01M5CD2KJ21EJKPCV5YMD33C5V",
+        "display_name": "same-inbox-c100-47",
+        "name": "instance-01M5CD2KJ21EJKPCV5YMD33C5V"
+      },
+      "connection": 48,
+      "highest_successful_ack_cursor": 0,
+      "methods": {
+        "enroll_agent": {
+          "calls": 1,
+          "latency_ms": {
+            "count": 1,
+            "max": 5.215589,
+            "mean": 5.215589,
+            "min": 5.215589,
+            "p50": 5.215589,
+            "p95": 5.215589,
+            "p99": 5.215589
+          },
+          "successful": 1
+        },
+        "send_message": {
+          "calls": 259,
+          "latency_ms": {
+            "count": 259,
+            "max": 73.208499,
+            "mean": 17.820948328185327,
+            "min": 2.728619,
+            "p50": 16.140205,
+            "p95": 35.606516,
+            "p99": 50.471544
+          },
+          "successful": 258
+        }
+      },
+      "nonempty_wait_batch_sizes": {},
+      "returned_messages": 0
+    },
+    {
+      "agent": {
+        "agent_id": "01M5CD2KJ8CF28SW93ME5J7YYC",
+        "display_name": "same-inbox-c100-48",
+        "name": "instance-01M5CD2KJ8CF28SW93ME5J7YYC"
+      },
+      "connection": 49,
+      "highest_successful_ack_cursor": 0,
+      "methods": {
+        "enroll_agent": {
+          "calls": 1,
+          "latency_ms": {
+            "count": 1,
+            "max": 6.209192,
+            "mean": 6.209192,
+            "min": 6.209192,
+            "p50": 6.209192,
+            "p95": 6.209192,
+            "p99": 6.209192
+          },
+          "successful": 1
+        },
+        "send_message": {
+          "calls": 269,
+          "latency_ms": {
+            "count": 269,
+            "max": 51.709227,
+            "mean": 17.17379836802974,
+            "min": 2.655543,
+            "p50": 15.498318,
+            "p95": 35.921787,
+            "p99": 46.650168
+          },
+          "successful": 268
+        }
+      },
+      "nonempty_wait_batch_sizes": {},
+      "returned_messages": 0
+    },
+    {
+      "agent": {
+        "agent_id": "01M5CD2KJEEREYQTJNCC30WWPJ",
+        "display_name": "same-inbox-c100-49",
+        "name": "instance-01M5CD2KJEEREYQTJNCC30WWPJ"
+      },
+      "connection": 50,
+      "highest_successful_ack_cursor": 0,
+      "methods": {
+        "enroll_agent": {
+          "calls": 1,
+          "latency_ms": {
+            "count": 1,
+            "max": 4.446175,
+            "mean": 4.446175,
+            "min": 4.446175,
+            "p50": 4.446175,
+            "p95": 4.446175,
+            "p99": 4.446175
+          },
+          "successful": 1
+        },
+        "send_message": {
+          "calls": 266,
+          "latency_ms": {
+            "count": 266,
+            "max": 68.034593,
+            "mean": 17.34174512781955,
+            "min": 2.308343,
+            "p50": 16.083486,
+            "p95": 33.734267,
+            "p99": 41.660539
+          },
+          "successful": 265
+        }
+      },
+      "nonempty_wait_batch_sizes": {},
+      "returned_messages": 0
+    },
+    {
+      "agent": {
+        "agent_id": "01M5CD2KJKX8HCD6AS9SGHM309",
+        "display_name": "same-inbox-c100-50",
+        "name": "instance-01M5CD2KJKX8HCD6AS9SGHM309"
+      },
+      "connection": 51,
+      "highest_successful_ack_cursor": 0,
+      "methods": {
+        "enroll_agent": {
+          "calls": 1,
+          "latency_ms": {
+            "count": 1,
+            "max": 4.463156,
+            "mean": 4.463156,
+            "min": 4.463156,
+            "p50": 4.463156,
+            "p95": 4.463156,
+            "p99": 4.463156
+          },
+          "successful": 1
+        },
+        "send_message": {
+          "calls": 259,
+          "latency_ms": {
+            "count": 259,
+            "max": 55.762709,
+            "mean": 17.826761301158303,
+            "min": 3.686992,
+            "p50": 15.994311,
+            "p95": 36.30699,
+            "p99": 49.393607
+          },
+          "successful": 258
+        }
+      },
+      "nonempty_wait_batch_sizes": {},
+      "returned_messages": 0
+    },
+    {
+      "agent": {
+        "agent_id": "01M5CD2KJQ1XCJ9G9S53C7WK97",
+        "display_name": "same-inbox-c100-51",
+        "name": "instance-01M5CD2KJQ1XCJ9G9S53C7WK97"
+      },
+      "connection": 52,
+      "highest_successful_ack_cursor": 0,
+      "methods": {
+        "enroll_agent": {
+          "calls": 1,
+          "latency_ms": {
+            "count": 1,
+            "max": 16.993096,
+            "mean": 16.993096,
+            "min": 16.993096,
+            "p50": 16.993096,
+            "p95": 16.993096,
+            "p99": 16.993096
+          },
+          "successful": 1
+        },
+        "send_message": {
+          "calls": 266,
+          "latency_ms": {
+            "count": 266,
+            "max": 53.116664,
+            "mean": 17.354824289473683,
+            "min": 2.990528,
+            "p50": 15.194066,
+            "p95": 36.410115,
+            "p99": 45.772199
+          },
+          "successful": 265
+        }
+      },
+      "nonempty_wait_batch_sizes": {},
+      "returned_messages": 0
+    },
+    {
+      "agent": {
+        "agent_id": "01M5CD2KK955WEAJMWM4RNTR6B",
+        "display_name": "same-inbox-c100-52",
+        "name": "instance-01M5CD2KK955WEAJMWM4RNTR6B"
+      },
+      "connection": 53,
+      "highest_successful_ack_cursor": 0,
+      "methods": {
+        "enroll_agent": {
+          "calls": 1,
+          "latency_ms": {
+            "count": 1,
+            "max": 6.287023,
+            "mean": 6.287023,
+            "min": 6.287023,
+            "p50": 6.287023,
+            "p95": 6.287023,
+            "p99": 6.287023
+          },
+          "successful": 1
+        },
+        "send_message": {
+          "calls": 258,
+          "latency_ms": {
+            "count": 258,
+            "max": 62.732129,
+            "mean": 17.924609813953488,
+            "min": 3.692116,
+            "p50": 16.121696,
+            "p95": 35.75005,
+            "p99": 49.126637
+          },
+          "successful": 257
+        }
+      },
+      "nonempty_wait_batch_sizes": {},
+      "returned_messages": 0
+    },
+    {
+      "agent": {
+        "agent_id": "01M5CD2KKF4STSN8DZP274M5FZ",
+        "display_name": "same-inbox-c100-53",
+        "name": "instance-01M5CD2KKF4STSN8DZP274M5FZ"
+      },
+      "connection": 54,
+      "highest_successful_ack_cursor": 0,
+      "methods": {
+        "enroll_agent": {
+          "calls": 1,
+          "latency_ms": {
+            "count": 1,
+            "max": 5.347421,
+            "mean": 5.347421,
+            "min": 5.347421,
+            "p50": 5.347421,
+            "p95": 5.347421,
+            "p99": 5.347421
+          },
+          "successful": 1
+        },
+        "send_message": {
+          "calls": 890,
+          "latency_ms": {
+            "count": 890,
+            "max": 49.525561,
+            "mean": 8.105716366292135,
+            "min": 2.087761,
+            "p50": 4.409397,
+            "p95": 25.578253,
+            "p99": 38.481559
+          },
+          "successful": 889
+        }
+      },
+      "nonempty_wait_batch_sizes": {},
+      "returned_messages": 0
+    },
+    {
+      "agent": {
+        "agent_id": "01M5CD2KKNDZKXEXVXF8YM376C",
+        "display_name": "same-inbox-c100-54",
+        "name": "instance-01M5CD2KKNDZKXEXVXF8YM376C"
+      },
+      "connection": 55,
+      "highest_successful_ack_cursor": 0,
+      "methods": {
+        "enroll_agent": {
+          "calls": 1,
+          "latency_ms": {
+            "count": 1,
+            "max": 4.307877,
+            "mean": 4.307877,
+            "min": 4.307877,
+            "p50": 4.307877,
+            "p95": 4.307877,
+            "p99": 4.307877
+          },
+          "successful": 1
+        },
+        "send_message": {
+          "calls": 245,
+          "latency_ms": {
+            "count": 245,
+            "max": 63.791593,
+            "mean": 18.85911647346939,
+            "min": 3.794214,
+            "p50": 16.413403,
+            "p95": 37.601563,
+            "p99": 60.521419
+          },
+          "successful": 244
+        }
+      },
+      "nonempty_wait_batch_sizes": {},
+      "returned_messages": 0
+    },
+    {
+      "agent": {
+        "agent_id": "01M5CD2KKSX6WB7J6VGTABGJYQ",
+        "display_name": "same-inbox-c100-55",
+        "name": "instance-01M5CD2KKSX6WB7J6VGTABGJYQ"
+      },
+      "connection": 56,
+      "highest_successful_ack_cursor": 0,
+      "methods": {
+        "enroll_agent": {
+          "calls": 1,
+          "latency_ms": {
+            "count": 1,
+            "max": 6.406957,
+            "mean": 6.406957,
+            "min": 6.406957,
+            "p50": 6.406957,
+            "p95": 6.406957,
+            "p99": 6.406957
+          },
+          "successful": 1
+        },
+        "send_message": {
+          "calls": 266,
+          "latency_ms": {
+            "count": 266,
+            "max": 55.194949,
+            "mean": 17.39216469924812,
+            "min": 3.267111,
+            "p50": 16.100313,
+            "p95": 32.420399,
+            "p99": 47.395136
+          },
+          "successful": 265
+        }
+      },
+      "nonempty_wait_batch_sizes": {},
+      "returned_messages": 0
+    },
+    {
+      "agent": {
+        "agent_id": "01M5CD2KM0S2YXZSV02XF26851",
+        "display_name": "same-inbox-c100-56",
+        "name": "instance-01M5CD2KM0S2YXZSV02XF26851"
+      },
+      "connection": 57,
+      "highest_successful_ack_cursor": 0,
+      "methods": {
+        "enroll_agent": {
+          "calls": 1,
+          "latency_ms": {
+            "count": 1,
+            "max": 15.051868,
+            "mean": 15.051868,
+            "min": 15.051868,
+            "p50": 15.051868,
+            "p95": 15.051868,
+            "p99": 15.051868
+          },
+          "successful": 1
+        },
+        "send_message": {
+          "calls": 260,
+          "latency_ms": {
+            "count": 260,
+            "max": 63.79515,
+            "mean": 17.72342198076923,
+            "min": 3.136077,
+            "p50": 16.174292,
+            "p95": 33.466447,
+            "p99": 53.443399
+          },
+          "successful": 259
+        }
+      },
+      "nonempty_wait_batch_sizes": {},
+      "returned_messages": 0
+    },
+    {
+      "agent": {
+        "agent_id": "01M5CD2KMFNHSD0FMKQ1XAA2W2",
+        "display_name": "same-inbox-c100-57",
+        "name": "instance-01M5CD2KMFNHSD0FMKQ1XAA2W2"
+      },
+      "connection": 58,
+      "highest_successful_ack_cursor": 0,
+      "methods": {
+        "enroll_agent": {
+          "calls": 1,
+          "latency_ms": {
+            "count": 1,
+            "max": 6.156415,
+            "mean": 6.156415,
+            "min": 6.156415,
+            "p50": 6.156415,
+            "p95": 6.156415,
+            "p99": 6.156415
+          },
+          "successful": 1
+        },
+        "send_message": {
+          "calls": 274,
+          "latency_ms": {
+            "count": 274,
+            "max": 48.198472,
+            "mean": 16.878359054744525,
+            "min": 2.985863,
+            "p50": 15.339157,
+            "p95": 33.585474,
+            "p99": 42.607585
+          },
+          "successful": 273
+        }
+      },
+      "nonempty_wait_batch_sizes": {},
+      "returned_messages": 0
+    },
+    {
+      "agent": {
+        "agent_id": "01M5CD2KMN7YB7WQ3C51WF3WWQ",
+        "display_name": "same-inbox-c100-58",
+        "name": "instance-01M5CD2KMN7YB7WQ3C51WF3WWQ"
+      },
+      "connection": 59,
+      "highest_successful_ack_cursor": 0,
+      "methods": {
+        "enroll_agent": {
+          "calls": 1,
+          "latency_ms": {
+            "count": 1,
+            "max": 4.397435,
+            "mean": 4.397435,
+            "min": 4.397435,
+            "p50": 4.397435,
+            "p95": 4.397435,
+            "p99": 4.397435
+          },
+          "successful": 1
+        },
+        "send_message": {
+          "calls": 275,
+          "latency_ms": {
+            "count": 275,
+            "max": 43.185218,
+            "mean": 16.79054193090909,
+            "min": 2.506095,
+            "p50": 15.648345,
+            "p95": 32.950996,
+            "p99": 41.506645
+          },
+          "successful": 274
+        }
+      },
+      "nonempty_wait_batch_sizes": {},
+      "returned_messages": 0
+    },
+    {
+      "agent": {
+        "agent_id": "01M5CD2KMTBRRHQFZYDS0K1TWJ",
+        "display_name": "same-inbox-c100-59",
+        "name": "instance-01M5CD2KMTBRRHQFZYDS0K1TWJ"
+      },
+      "connection": 60,
+      "highest_successful_ack_cursor": 0,
+      "methods": {
+        "enroll_agent": {
+          "calls": 1,
+          "latency_ms": {
+            "count": 1,
+            "max": 4.256511,
+            "mean": 4.256511,
+            "min": 4.256511,
+            "p50": 4.256511,
+            "p95": 4.256511,
+            "p99": 4.256511
+          },
+          "successful": 1
+        },
+        "send_message": {
+          "calls": 259,
+          "latency_ms": {
+            "count": 259,
+            "max": 62.100983,
+            "mean": 17.839257756756755,
+            "min": 3.240075,
+            "p50": 16.414785,
+            "p95": 32.792233,
+            "p99": 45.559959
+          },
+          "successful": 258
+        }
+      },
+      "nonempty_wait_batch_sizes": {},
+      "returned_messages": 0
+    },
+    {
+      "agent": {
+        "agent_id": "01M5CD2KMYPT5XD8N6JPRQR30Y",
+        "display_name": "same-inbox-c100-60",
+        "name": "instance-01M5CD2KMYPT5XD8N6JPRQR30Y"
+      },
+      "connection": 61,
+      "highest_successful_ack_cursor": 0,
+      "methods": {
+        "enroll_agent": {
+          "calls": 1,
+          "latency_ms": {
+            "count": 1,
+            "max": 5.150688,
+            "mean": 5.150688,
+            "min": 5.150688,
+            "p50": 5.150688,
+            "p95": 5.150688,
+            "p99": 5.150688
+          },
+          "successful": 1
+        },
+        "send_message": {
+          "calls": 275,
+          "latency_ms": {
+            "count": 275,
+            "max": 57.701886,
+            "mean": 16.821310930909092,
+            "min": 2.39856,
+            "p50": 15.742948,
+            "p95": 36.284518,
+            "p99": 43.905799
+          },
+          "successful": 274
+        }
+      },
+      "nonempty_wait_batch_sizes": {},
+      "returned_messages": 0
+    },
+    {
+      "agent": {
+        "agent_id": "01M5CD2KN3HKG8TGHXY4T9ZBX6",
+        "display_name": "same-inbox-c100-61",
+        "name": "instance-01M5CD2KN3HKG8TGHXY4T9ZBX6"
+      },
+      "connection": 62,
+      "highest_successful_ack_cursor": 0,
+      "methods": {
+        "enroll_agent": {
+          "calls": 1,
+          "latency_ms": {
+            "count": 1,
+            "max": 4.664485,
+            "mean": 4.664485,
+            "min": 4.664485,
+            "p50": 4.664485,
+            "p95": 4.664485,
+            "p99": 4.664485
+          },
+          "successful": 1
+        },
+        "send_message": {
+          "calls": 899,
+          "latency_ms": {
+            "count": 899,
+            "max": 49.638427,
+            "mean": 8.027615390433816,
+            "min": 1.948201,
+            "p50": 4.429735,
+            "p95": 25.965522,
+            "p99": 34.337239
+          },
+          "successful": 898
+        }
+      },
+      "nonempty_wait_batch_sizes": {},
+      "returned_messages": 0
+    },
+    {
+      "agent": {
+        "agent_id": "01M5CD2KN83SZXKFQSG935E009",
+        "display_name": "same-inbox-c100-62",
+        "name": "instance-01M5CD2KN83SZXKFQSG935E009"
+      },
+      "connection": 63,
+      "highest_successful_ack_cursor": 0,
+      "methods": {
+        "enroll_agent": {
+          "calls": 1,
+          "latency_ms": {
+            "count": 1,
+            "max": 5.26853,
+            "mean": 5.26853,
+            "min": 5.26853,
+            "p50": 5.26853,
+            "p95": 5.26853,
+            "p99": 5.26853
+          },
+          "successful": 1
+        },
+        "send_message": {
+          "calls": 282,
+          "latency_ms": {
+            "count": 282,
+            "max": 61.827519,
+            "mean": 16.42879570212766,
+            "min": 2.67977,
+            "p50": 15.346042,
+            "p95": 32.819348,
+            "p99": 44.822882
+          },
+          "successful": 281
+        }
+      },
+      "nonempty_wait_batch_sizes": {},
+      "returned_messages": 0
+    },
+    {
+      "agent": {
+        "agent_id": "01M5CD2KNE0AKGHCV054KA6KK4",
+        "display_name": "same-inbox-c100-63",
+        "name": "instance-01M5CD2KNE0AKGHCV054KA6KK4"
+      },
+      "connection": 64,
+      "highest_successful_ack_cursor": 0,
+      "methods": {
+        "enroll_agent": {
+          "calls": 1,
+          "latency_ms": {
+            "count": 1,
+            "max": 5.929142,
+            "mean": 5.929142,
+            "min": 5.929142,
+            "p50": 5.929142,
+            "p95": 5.929142,
+            "p99": 5.929142
+          },
+          "successful": 1
+        },
+        "send_message": {
+          "calls": 265,
+          "latency_ms": {
+            "count": 265,
+            "max": 55.932626,
+            "mean": 17.365860671698112,
+            "min": 3.585802,
+            "p50": 15.677814,
+            "p95": 36.020609,
+            "p99": 47.243077
+          },
+          "successful": 264
+        }
+      },
+      "nonempty_wait_batch_sizes": {},
+      "returned_messages": 0
+    },
+    {
+      "agent": {
+        "agent_id": "01M5CD2KNMF58FGTR50J7TJG50",
+        "display_name": "same-inbox-c100-64",
+        "name": "instance-01M5CD2KNMF58FGTR50J7TJG50"
+      },
+      "connection": 65,
+      "highest_successful_ack_cursor": 0,
+      "methods": {
+        "enroll_agent": {
+          "calls": 1,
+          "latency_ms": {
+            "count": 1,
+            "max": 5.145922,
+            "mean": 5.145922,
+            "min": 5.145922,
+            "p50": 5.145922,
+            "p95": 5.145922,
+            "p99": 5.145922
+          },
+          "successful": 1
+        },
+        "send_message": {
+          "calls": 249,
+          "latency_ms": {
+            "count": 249,
+            "max": 63.208751,
+            "mean": 18.544313289156626,
+            "min": 3.020895,
+            "p50": 16.774396,
+            "p95": 39.3098,
+            "p99": 50.874868
+          },
+          "successful": 248
+        }
+      },
+      "nonempty_wait_batch_sizes": {},
+      "returned_messages": 0
+    },
+    {
+      "agent": {
+        "agent_id": "01M5CD2KNSW449TWPRQS50DHA3",
+        "display_name": "same-inbox-c100-65",
+        "name": "instance-01M5CD2KNSW449TWPRQS50DHA3"
+      },
+      "connection": 66,
+      "highest_successful_ack_cursor": 0,
+      "methods": {
+        "enroll_agent": {
+          "calls": 1,
+          "latency_ms": {
+            "count": 1,
+            "max": 4.452212,
+            "mean": 4.452212,
+            "min": 4.452212,
+            "p50": 4.452212,
+            "p95": 4.452212,
+            "p99": 4.452212
+          },
+          "successful": 1
+        },
+        "send_message": {
+          "calls": 269,
+          "latency_ms": {
+            "count": 269,
+            "max": 55.945738,
+            "mean": 17.19197152416357,
+            "min": 3.26512,
+            "p50": 15.809982,
+            "p95": 35.493327,
+            "p99": 47.511653
+          },
+          "successful": 268
+        }
+      },
+      "nonempty_wait_batch_sizes": {},
+      "returned_messages": 0
+    },
+    {
+      "agent": {
+        "agent_id": "01M5CD2KNYBDH545N1B4BQQ16Z",
+        "display_name": "same-inbox-c100-66",
+        "name": "instance-01M5CD2KNYBDH545N1B4BQQ16Z"
+      },
+      "connection": 67,
+      "highest_successful_ack_cursor": 0,
+      "methods": {
+        "enroll_agent": {
+          "calls": 1,
+          "latency_ms": {
+            "count": 1,
+            "max": 5.044367,
+            "mean": 5.044367,
+            "min": 5.044367,
+            "p50": 5.044367,
+            "p95": 5.044367,
+            "p99": 5.044367
+          },
+          "successful": 1
+        },
+        "send_message": {
+          "calls": 271,
+          "latency_ms": {
+            "count": 271,
+            "max": 49.554402,
+            "mean": 17.00777591881919,
+            "min": 3.030266,
+            "p50": 15.759173,
+            "p95": 33.557758,
+            "p99": 47.670954
+          },
+          "successful": 270
+        }
+      },
+      "nonempty_wait_batch_sizes": {},
+      "returned_messages": 0
+    },
+    {
+      "agent": {
+        "agent_id": "01M5CD2KP38KZJ0B3AMME89MKH",
+        "display_name": "same-inbox-c100-67",
+        "name": "instance-01M5CD2KP38KZJ0B3AMME89MKH"
+      },
+      "connection": 68,
+      "highest_successful_ack_cursor": 0,
+      "methods": {
+        "enroll_agent": {
+          "calls": 1,
+          "latency_ms": {
+            "count": 1,
+            "max": 5.072443,
+            "mean": 5.072443,
+            "min": 5.072443,
+            "p50": 5.072443,
+            "p95": 5.072443,
+            "p99": 5.072443
+          },
+          "successful": 1
+        },
+        "send_message": {
+          "calls": 264,
+          "latency_ms": {
+            "count": 264,
+            "max": 95.160275,
+            "mean": 17.509313636363636,
+            "min": 2.807685,
+            "p50": 15.751805,
+            "p95": 35.327801,
+            "p99": 51.765362
+          },
+          "successful": 263
+        }
+      },
+      "nonempty_wait_batch_sizes": {},
+      "returned_messages": 0
+    },
+    {
+      "agent": {
+        "agent_id": "01M5CD2KP8YCXYPB8FGTW1GM4B",
+        "display_name": "same-inbox-c100-68",
+        "name": "instance-01M5CD2KP8YCXYPB8FGTW1GM4B"
+      },
+      "connection": 69,
+      "highest_successful_ack_cursor": 0,
+      "methods": {
+        "enroll_agent": {
+          "calls": 1,
+          "latency_ms": {
+            "count": 1,
+            "max": 5.824645,
+            "mean": 5.824645,
+            "min": 5.824645,
+            "p50": 5.824645,
+            "p95": 5.824645,
+            "p99": 5.824645
+          },
+          "successful": 1
+        },
+        "send_message": {
+          "calls": 261,
+          "latency_ms": {
+            "count": 261,
+            "max": 59.349711,
+            "mean": 17.69416984291188,
+            "min": 2.989675,
+            "p50": 16.321135,
+            "p95": 36.432802,
+            "p99": 46.447062
+          },
+          "successful": 260
+        }
+      },
+      "nonempty_wait_batch_sizes": {},
+      "returned_messages": 0
+    },
+    {
+      "agent": {
+        "agent_id": "01M5CD2KPEEWCG3NMK1B43AQVS",
+        "display_name": "same-inbox-c100-69",
+        "name": "instance-01M5CD2KPEEWCG3NMK1B43AQVS"
+      },
+      "connection": 70,
+      "highest_successful_ack_cursor": 0,
+      "methods": {
+        "enroll_agent": {
+          "calls": 1,
+          "latency_ms": {
+            "count": 1,
+            "max": 4.587242,
+            "mean": 4.587242,
+            "min": 4.587242,
+            "p50": 4.587242,
+            "p95": 4.587242,
+            "p99": 4.587242
+          },
+          "successful": 1
+        },
+        "send_message": {
+          "calls": 260,
+          "latency_ms": {
+            "count": 260,
+            "max": 45.336817,
+            "mean": 17.661620738461536,
+            "min": 2.930507,
+            "p50": 16.307525,
+            "p95": 35.141693,
+            "p99": 44.208836
+          },
+          "successful": 259
+        }
+      },
+      "nonempty_wait_batch_sizes": {},
+      "returned_messages": 0
+    },
+    {
+      "agent": {
+        "agent_id": "01M5CD2KPK2DF8JKSDSP1WT4SW",
+        "display_name": "same-inbox-c100-70",
+        "name": "instance-01M5CD2KPK2DF8JKSDSP1WT4SW"
+      },
+      "connection": 71,
+      "highest_successful_ack_cursor": 0,
+      "methods": {
+        "enroll_agent": {
+          "calls": 1,
+          "latency_ms": {
+            "count": 1,
+            "max": 5.386534,
+            "mean": 5.386534,
+            "min": 5.386534,
+            "p50": 5.386534,
+            "p95": 5.386534,
+            "p99": 5.386534
+          },
+          "successful": 1
+        },
+        "send_message": {
+          "calls": 266,
+          "latency_ms": {
+            "count": 266,
+            "max": 62.825546,
+            "mean": 17.377728718045113,
+            "min": 2.98759,
+            "p50": 16.020696,
+            "p95": 35.375928,
+            "p99": 50.915889
+          },
+          "successful": 265
+        }
+      },
+      "nonempty_wait_batch_sizes": {},
+      "returned_messages": 0
+    },
+    {
+      "agent": {
+        "agent_id": "01M5CD2KPSTCM36B7G4Y2E89FY",
+        "display_name": "same-inbox-c100-71",
+        "name": "instance-01M5CD2KPSTCM36B7G4Y2E89FY"
+      },
+      "connection": 72,
+      "highest_successful_ack_cursor": 0,
+      "methods": {
+        "enroll_agent": {
+          "calls": 1,
+          "latency_ms": {
+            "count": 1,
+            "max": 4.710191,
+            "mean": 4.710191,
+            "min": 4.710191,
+            "p50": 4.710191,
+            "p95": 4.710191,
+            "p99": 4.710191
+          },
+          "successful": 1
+        },
+        "send_message": {
+          "calls": 261,
+          "latency_ms": {
+            "count": 261,
+            "max": 57.129508,
+            "mean": 17.693355609195404,
+            "min": 3.60013,
+            "p50": 16.119288,
+            "p95": 32.951641,
+            "p99": 48.50203
+          },
+          "successful": 260
+        }
+      },
+      "nonempty_wait_batch_sizes": {},
+      "returned_messages": 0
+    },
+    {
+      "agent": {
+        "agent_id": "01M5CD2KPXBNJ6Y7W84ZDPDNPS",
+        "display_name": "same-inbox-c100-72",
+        "name": "instance-01M5CD2KPXBNJ6Y7W84ZDPDNPS"
+      },
+      "connection": 73,
+      "highest_successful_ack_cursor": 0,
+      "methods": {
+        "enroll_agent": {
+          "calls": 1,
+          "latency_ms": {
+            "count": 1,
+            "max": 5.005131,
+            "mean": 5.005131,
+            "min": 5.005131,
+            "p50": 5.005131,
+            "p95": 5.005131,
+            "p99": 5.005131
+          },
+          "successful": 1
+        },
+        "send_message": {
+          "calls": 272,
+          "latency_ms": {
+            "count": 272,
+            "max": 50.045096,
+            "mean": 17.01247225735294,
+            "min": 2.827159,
+            "p50": 16.14792,
+            "p95": 31.16353,
+            "p99": 47.354789
+          },
+          "successful": 271
+        }
+      },
+      "nonempty_wait_batch_sizes": {},
+      "returned_messages": 0
+    },
+    {
+      "agent": {
+        "agent_id": "01M5CD2KQ3QME3VV4ME09EG3XZ",
+        "display_name": "same-inbox-c100-73",
+        "name": "instance-01M5CD2KQ3QME3VV4ME09EG3XZ"
+      },
+      "connection": 74,
+      "highest_successful_ack_cursor": 0,
+      "methods": {
+        "enroll_agent": {
+          "calls": 1,
+          "latency_ms": {
+            "count": 1,
+            "max": 5.282206,
+            "mean": 5.282206,
+            "min": 5.282206,
+            "p50": 5.282206,
+            "p95": 5.282206,
+            "p99": 5.282206
+          },
+          "successful": 1
+        },
+        "send_message": {
+          "calls": 248,
+          "latency_ms": {
+            "count": 248,
+            "max": 65.099742,
+            "mean": 18.638831939516127,
+            "min": 2.561424,
+            "p50": 16.23446,
+            "p95": 37.66545,
+            "p99": 46.748118
+          },
+          "successful": 247
+        }
+      },
+      "nonempty_wait_batch_sizes": {},
+      "returned_messages": 0
+    },
+    {
+      "agent": {
+        "agent_id": "01M5CD2KQ8Z271TXYDFBKEYCER",
+        "display_name": "same-inbox-c100-74",
+        "name": "instance-01M5CD2KQ8Z271TXYDFBKEYCER"
+      },
+      "connection": 75,
+      "highest_successful_ack_cursor": 0,
+      "methods": {
+        "enroll_agent": {
+          "calls": 1,
+          "latency_ms": {
+            "count": 1,
+            "max": 5.124747,
+            "mean": 5.124747,
+            "min": 5.124747,
+            "p50": 5.124747,
+            "p95": 5.124747,
+            "p99": 5.124747
+          },
+          "successful": 1
+        },
+        "send_message": {
+          "calls": 271,
+          "latency_ms": {
+            "count": 271,
+            "max": 78.421061,
+            "mean": 17.04714328413284,
+            "min": 3.243053,
+            "p50": 15.598085,
+            "p95": 32.244971,
+            "p99": 53.438406
+          },
+          "successful": 270
+        }
+      },
+      "nonempty_wait_batch_sizes": {},
+      "returned_messages": 0
+    },
+    {
+      "agent": {
+        "agent_id": "01M5CD2KQDVXR33MQ8FEWNP1NH",
+        "display_name": "same-inbox-c100-75",
+        "name": "instance-01M5CD2KQDVXR33MQ8FEWNP1NH"
+      },
+      "connection": 76,
+      "highest_successful_ack_cursor": 0,
+      "methods": {
+        "enroll_agent": {
+          "calls": 1,
+          "latency_ms": {
+            "count": 1,
+            "max": 5.3224,
+            "mean": 5.3224,
+            "min": 5.3224,
+            "p50": 5.3224,
+            "p95": 5.3224,
+            "p99": 5.3224
+          },
+          "successful": 1
+        },
+        "send_message": {
+          "calls": 887,
+          "latency_ms": {
+            "count": 887,
+            "max": 62.137458,
+            "mean": 8.140359961668546,
+            "min": 2.051934,
+            "p50": 4.452538,
+            "p95": 25.928929,
+            "p99": 37.104005
+          },
+          "successful": 886
+        }
+      },
+      "nonempty_wait_batch_sizes": {},
+      "returned_messages": 0
+    },
+    {
+      "agent": {
+        "agent_id": "01M5CD2KQKGHQ4EEC0NGX42H2D",
+        "display_name": "same-inbox-c100-76",
+        "name": "instance-01M5CD2KQKGHQ4EEC0NGX42H2D"
+      },
+      "connection": 77,
+      "highest_successful_ack_cursor": 0,
+      "methods": {
+        "enroll_agent": {
+          "calls": 1,
+          "latency_ms": {
+            "count": 1,
+            "max": 6.176672,
+            "mean": 6.176672,
+            "min": 6.176672,
+            "p50": 6.176672,
+            "p95": 6.176672,
+            "p99": 6.176672
+          },
+          "successful": 1
+        },
+        "send_message": {
+          "calls": 265,
+          "latency_ms": {
+            "count": 265,
+            "max": 64.757318,
+            "mean": 17.421860841509435,
+            "min": 3.470208,
+            "p50": 16.165675,
+            "p95": 35.219753,
+            "p99": 53.131326
+          },
+          "successful": 264
+        }
+      },
+      "nonempty_wait_batch_sizes": {},
+      "returned_messages": 0
+    },
+    {
+      "agent": {
+        "agent_id": "01M5CD2KQSGRSNY4T55794N2FC",
+        "display_name": "same-inbox-c100-77",
+        "name": "instance-01M5CD2KQSGRSNY4T55794N2FC"
+      },
+      "connection": 78,
+      "highest_successful_ack_cursor": 0,
+      "methods": {
+        "enroll_agent": {
+          "calls": 1,
+          "latency_ms": {
+            "count": 1,
+            "max": 6.056851,
+            "mean": 6.056851,
+            "min": 6.056851,
+            "p50": 6.056851,
+            "p95": 6.056851,
+            "p99": 6.056851
+          },
+          "successful": 1
+        },
+        "send_message": {
+          "calls": 259,
+          "latency_ms": {
+            "count": 259,
+            "max": 43.833027,
+            "mean": 17.84367978764479,
+            "min": 4.030813,
+            "p50": 16.259147,
+            "p95": 36.025731,
+            "p99": 41.746108
+          },
+          "successful": 258
+        }
+      },
+      "nonempty_wait_batch_sizes": {},
+      "returned_messages": 0
+    },
+    {
+      "agent": {
+        "agent_id": "01M5CD2KQZHJZV01M0RQFP40SC",
+        "display_name": "same-inbox-c100-78",
+        "name": "instance-01M5CD2KQZHJZV01M0RQFP40SC"
+      },
+      "connection": 79,
+      "highest_successful_ack_cursor": 0,
+      "methods": {
+        "enroll_agent": {
+          "calls": 1,
+          "latency_ms": {
+            "count": 1,
+            "max": 4.838238,
+            "mean": 4.838238,
+            "min": 4.838238,
+            "p50": 4.838238,
+            "p95": 4.838238,
+            "p99": 4.838238
+          },
+          "successful": 1
+        },
+        "send_message": {
+          "calls": 283,
+          "latency_ms": {
+            "count": 283,
+            "max": 50.941234,
+            "mean": 16.291256946996466,
+            "min": 2.532369,
+            "p50": 14.599022,
+            "p95": 32.211917,
+            "p99": 43.325414
+          },
+          "successful": 282
+        }
+      },
+      "nonempty_wait_batch_sizes": {},
+      "returned_messages": 0
+    },
+    {
+      "agent": {
+        "agent_id": "01M5CD2KR4E587BYQFXAP6E226",
+        "display_name": "same-inbox-c100-79",
+        "name": "instance-01M5CD2KR4E587BYQFXAP6E226"
+      },
+      "connection": 80,
+      "highest_successful_ack_cursor": 0,
+      "methods": {
+        "enroll_agent": {
+          "calls": 1,
+          "latency_ms": {
+            "count": 1,
+            "max": 6.786863,
+            "mean": 6.786863,
+            "min": 6.786863,
+            "p50": 6.786863,
+            "p95": 6.786863,
+            "p99": 6.786863
+          },
+          "successful": 1
+        },
+        "send_message": {
+          "calls": 262,
+          "latency_ms": {
+            "count": 262,
+            "max": 51.454449,
+            "mean": 17.626582213740456,
+            "min": 3.025843,
+            "p50": 16.214662,
+            "p95": 34.85835,
+            "p99": 49.334488
+          },
+          "successful": 261
+        }
+      },
+      "nonempty_wait_batch_sizes": {},
+      "returned_messages": 0
+    },
+    {
+      "agent": {
+        "agent_id": "01M5CD2KRBNS702B0XFJY808Q8",
+        "display_name": "same-inbox-c100-80",
+        "name": "instance-01M5CD2KRBNS702B0XFJY808Q8"
+      },
+      "connection": 81,
+      "highest_successful_ack_cursor": 0,
+      "methods": {
+        "enroll_agent": {
+          "calls": 1,
+          "latency_ms": {
+            "count": 1,
+            "max": 7.062896,
+            "mean": 7.062896,
+            "min": 7.062896,
+            "p50": 7.062896,
+            "p95": 7.062896,
+            "p99": 7.062896
+          },
+          "successful": 1
+        },
+        "send_message": {
+          "calls": 263,
+          "latency_ms": {
+            "count": 263,
+            "max": 61.944756,
+            "mean": 17.55703635741445,
+            "min": 3.653722,
+            "p50": 15.714331,
+            "p95": 35.245014,
+            "p99": 47.08197
+          },
+          "successful": 262
+        }
+      },
+      "nonempty_wait_batch_sizes": {},
+      "returned_messages": 0
+    },
+    {
+      "agent": {
+        "agent_id": "01M5CD2KRK2D6T913RZ7AYG1FJ",
+        "display_name": "same-inbox-c100-81",
+        "name": "instance-01M5CD2KRK2D6T913RZ7AYG1FJ"
+      },
+      "connection": 82,
+      "highest_successful_ack_cursor": 0,
+      "methods": {
+        "enroll_agent": {
+          "calls": 1,
+          "latency_ms": {
+            "count": 1,
+            "max": 4.603201,
+            "mean": 4.603201,
+            "min": 4.603201,
+            "p50": 4.603201,
+            "p95": 4.603201,
+            "p99": 4.603201
+          },
+          "successful": 1
+        },
+        "send_message": {
+          "calls": 263,
+          "latency_ms": {
+            "count": 263,
+            "max": 64.068084,
+            "mean": 17.581275159695817,
+            "min": 3.150264,
+            "p50": 16.159352,
+            "p95": 33.550481,
+            "p99": 45.783654
+          },
+          "successful": 262
+        }
+      },
+      "nonempty_wait_batch_sizes": {},
+      "returned_messages": 0
+    },
+    {
+      "agent": {
+        "agent_id": "01M5CD2KRQ4DWHP2T7ZZT347Z7",
+        "display_name": "same-inbox-c100-82",
+        "name": "instance-01M5CD2KRQ4DWHP2T7ZZT347Z7"
+      },
+      "connection": 83,
+      "highest_successful_ack_cursor": 0,
+      "methods": {
+        "enroll_agent": {
+          "calls": 1,
+          "latency_ms": {
+            "count": 1,
+            "max": 6.35704,
+            "mean": 6.35704,
+            "min": 6.35704,
+            "p50": 6.35704,
+            "p95": 6.35704,
+            "p99": 6.35704
+          },
+          "successful": 1
+        },
+        "send_message": {
+          "calls": 268,
+          "latency_ms": {
+            "count": 268,
+            "max": 46.354545,
+            "mean": 17.238206958955224,
+            "min": 3.122745,
+            "p50": 16.084768,
+            "p95": 33.608822,
+            "p99": 43.362374
+          },
+          "successful": 267
+        }
+      },
+      "nonempty_wait_batch_sizes": {},
+      "returned_messages": 0
+    },
+    {
+      "agent": {
+        "agent_id": "01M5CD2KRYM52S4F46CDJFXKF5",
+        "display_name": "same-inbox-c100-83",
+        "name": "instance-01M5CD2KRYM52S4F46CDJFXKF5"
+      },
+      "connection": 84,
+      "highest_successful_ack_cursor": 0,
+      "methods": {
+        "enroll_agent": {
+          "calls": 1,
+          "latency_ms": {
+            "count": 1,
+            "max": 6.505393,
+            "mean": 6.505393,
+            "min": 6.505393,
+            "p50": 6.505393,
+            "p95": 6.505393,
+            "p99": 6.505393
+          },
+          "successful": 1
+        },
+        "send_message": {
+          "calls": 881,
+          "latency_ms": {
+            "count": 881,
+            "max": 59.643123,
+            "mean": 8.189920599318956,
+            "min": 1.456972,
+            "p50": 4.424564,
+            "p95": 27.694438,
+            "p99": 40.008091
+          },
+          "successful": 880
+        }
+      },
+      "nonempty_wait_batch_sizes": {},
+      "returned_messages": 0
+    },
+    {
+      "agent": {
+        "agent_id": "01M5CD2KS5JQV7HM8X0FKD2BN7",
+        "display_name": "same-inbox-c100-84",
+        "name": "instance-01M5CD2KS5JQV7HM8X0FKD2BN7"
+      },
+      "connection": 85,
+      "highest_successful_ack_cursor": 0,
+      "methods": {
+        "enroll_agent": {
+          "calls": 1,
+          "latency_ms": {
+            "count": 1,
+            "max": 6.091425,
+            "mean": 6.091425,
+            "min": 6.091425,
+            "p50": 6.091425,
+            "p95": 6.091425,
+            "p99": 6.091425
+          },
+          "successful": 1
+        },
+        "send_message": {
+          "calls": 258,
+          "latency_ms": {
+            "count": 258,
+            "max": 67.020593,
+            "mean": 17.79787296124031,
+            "min": 3.524399,
+            "p50": 16.218092,
+            "p95": 36.419795,
+            "p99": 56.714549
+          },
+          "successful": 257
+        }
+      },
+      "nonempty_wait_batch_sizes": {},
+      "returned_messages": 0
+    },
+    {
+      "agent": {
+        "agent_id": "01M5CD2KSCT1KM86RTXY8GCPR3",
+        "display_name": "same-inbox-c100-85",
+        "name": "instance-01M5CD2KSCT1KM86RTXY8GCPR3"
+      },
+      "connection": 86,
+      "highest_successful_ack_cursor": 0,
+      "methods": {
+        "enroll_agent": {
+          "calls": 1,
+          "latency_ms": {
+            "count": 1,
+            "max": 6.895792,
+            "mean": 6.895792,
+            "min": 6.895792,
+            "p50": 6.895792,
+            "p95": 6.895792,
+            "p99": 6.895792
+          },
+          "successful": 1
+        },
+        "send_message": {
+          "calls": 256,
+          "latency_ms": {
+            "count": 256,
+            "max": 67.895028,
+            "mean": 18.03448775390625,
+            "min": 3.033389,
+            "p50": 16.65852,
+            "p95": 33.511711,
+            "p99": 46.004915
+          },
+          "successful": 255
+        }
+      },
+      "nonempty_wait_batch_sizes": {},
+      "returned_messages": 0
+    },
+    {
+      "agent": {
+        "agent_id": "01M5CD2KSJB32GCNHAD5400VY7",
+        "display_name": "same-inbox-c100-86",
+        "name": "instance-01M5CD2KSJB32GCNHAD5400VY7"
+      },
+      "connection": 87,
+      "highest_successful_ack_cursor": 0,
+      "methods": {
+        "enroll_agent": {
+          "calls": 1,
+          "latency_ms": {
+            "count": 1,
+            "max": 5.3896,
+            "mean": 5.3896,
+            "min": 5.3896,
+            "p50": 5.3896,
+            "p95": 5.3896,
+            "p99": 5.3896
+          },
+          "successful": 1
+        },
+        "send_message": {
+          "calls": 242,
+          "latency_ms": {
+            "count": 242,
+            "max": 63.811086,
+            "mean": 18.981578185950415,
+            "min": 2.593767,
+            "p50": 16.556059,
+            "p95": 39.160286,
+            "p99": 45.503943
+          },
+          "successful": 241
+        }
+      },
+      "nonempty_wait_batch_sizes": {},
+      "returned_messages": 0
+    },
+    {
+      "agent": {
+        "agent_id": "01M5CD2KSRR78F8J30DGKA9PVF",
+        "display_name": "same-inbox-c100-87",
+        "name": "instance-01M5CD2KSRR78F8J30DGKA9PVF"
+      },
+      "connection": 88,
+      "highest_successful_ack_cursor": 0,
+      "methods": {
+        "enroll_agent": {
+          "calls": 1,
+          "latency_ms": {
+            "count": 1,
+            "max": 5.507368,
+            "mean": 5.507368,
+            "min": 5.507368,
+            "p50": 5.507368,
+            "p95": 5.507368,
+            "p99": 5.507368
+          },
+          "successful": 1
+        },
+        "send_message": {
+          "calls": 238,
+          "latency_ms": {
+            "count": 238,
+            "max": 58.616494,
+            "mean": 19.36881198739496,
+            "min": 2.991081,
+            "p50": 16.841412,
+            "p95": 41.320494,
+            "p99": 55.765939
+          },
+          "successful": 237
+        }
+      },
+      "nonempty_wait_batch_sizes": {},
+      "returned_messages": 0
+    },
+    {
+      "agent": {
+        "agent_id": "01M5CD2KSXMME5PYGWM2AQQHCQ",
+        "display_name": "same-inbox-c100-88",
+        "name": "instance-01M5CD2KSXMME5PYGWM2AQQHCQ"
+      },
+      "connection": 89,
+      "highest_successful_ack_cursor": 0,
+      "methods": {
+        "enroll_agent": {
+          "calls": 1,
+          "latency_ms": {
+            "count": 1,
+            "max": 5.632498,
+            "mean": 5.632498,
+            "min": 5.632498,
+            "p50": 5.632498,
+            "p95": 5.632498,
+            "p99": 5.632498
+          },
+          "successful": 1
+        },
+        "send_message": {
+          "calls": 264,
+          "latency_ms": {
+            "count": 264,
+            "max": 65.372447,
+            "mean": 17.43053890151515,
+            "min": 0.84878,
+            "p50": 15.842186,
+            "p95": 36.608712,
+            "p99": 47.061328
+          },
+          "successful": 263
+        }
+      },
+      "nonempty_wait_batch_sizes": {},
+      "returned_messages": 0
+    },
+    {
+      "agent": {
+        "agent_id": "01M5CD2KT3PMCAH20WBX371FCC",
+        "display_name": "same-inbox-c100-89",
+        "name": "instance-01M5CD2KT3PMCAH20WBX371FCC"
+      },
+      "connection": 90,
+      "highest_successful_ack_cursor": 0,
+      "methods": {
+        "enroll_agent": {
+          "calls": 1,
+          "latency_ms": {
+            "count": 1,
+            "max": 4.43203,
+            "mean": 4.43203,
+            "min": 4.43203,
+            "p50": 4.43203,
+            "p95": 4.43203,
+            "p99": 4.43203
+          },
+          "successful": 1
+        },
+        "send_message": {
+          "calls": 267,
+          "latency_ms": {
+            "count": 267,
+            "max": 52.112982,
+            "mean": 17.337915876404494,
+            "min": 3.15106,
+            "p50": 15.302707,
+            "p95": 35.964383,
+            "p99": 45.419648
+          },
+          "successful": 266
+        }
+      },
+      "nonempty_wait_batch_sizes": {},
+      "returned_messages": 0
+    },
+    {
+      "agent": {
+        "agent_id": "01M5CD2KT82186Z4N0DZ7YN1YZ",
+        "display_name": "same-inbox-c100-90",
+        "name": "instance-01M5CD2KT82186Z4N0DZ7YN1YZ"
+      },
+      "connection": 91,
+      "highest_successful_ack_cursor": 0,
+      "methods": {
+        "enroll_agent": {
+          "calls": 1,
+          "latency_ms": {
+            "count": 1,
+            "max": 4.638829,
+            "mean": 4.638829,
+            "min": 4.638829,
+            "p50": 4.638829,
+            "p95": 4.638829,
+            "p99": 4.638829
+          },
+          "successful": 1
+        },
+        "send_message": {
+          "calls": 889,
+          "latency_ms": {
+            "count": 889,
+            "max": 50.420989,
+            "mean": 8.120367107986501,
+            "min": 2.047683,
+            "p50": 4.403716,
+            "p95": 26.581113,
+            "p99": 36.18193
+          },
+          "successful": 888
+        }
+      },
+      "nonempty_wait_batch_sizes": {},
+      "returned_messages": 0
+    },
+    {
+      "agent": {
+        "agent_id": "01M5CD2KTD4XHQ9J4GBB6MS93G",
+        "display_name": "same-inbox-c100-91",
+        "name": "instance-01M5CD2KTD4XHQ9J4GBB6MS93G"
+      },
+      "connection": 92,
+      "highest_successful_ack_cursor": 0,
+      "methods": {
+        "enroll_agent": {
+          "calls": 1,
+          "latency_ms": {
+            "count": 1,
+            "max": 5.941882,
+            "mean": 5.941882,
+            "min": 5.941882,
+            "p50": 5.941882,
+            "p95": 5.941882,
+            "p99": 5.941882
+          },
+          "successful": 1
+        },
+        "send_message": {
+          "calls": 259,
+          "latency_ms": {
+            "count": 259,
+            "max": 48.385131,
+            "mean": 17.86444533976834,
+            "min": 3.030039,
+            "p50": 16.477749,
+            "p95": 35.327563,
+            "p99": 40.978063
+          },
+          "successful": 258
+        }
+      },
+      "nonempty_wait_batch_sizes": {},
+      "returned_messages": 0
+    },
+    {
+      "agent": {
+        "agent_id": "01M5CD2KTK52A4XJCJQWM4T9AT",
+        "display_name": "same-inbox-c100-92",
+        "name": "instance-01M5CD2KTK52A4XJCJQWM4T9AT"
+      },
+      "connection": 93,
+      "highest_successful_ack_cursor": 0,
+      "methods": {
+        "enroll_agent": {
+          "calls": 1,
+          "latency_ms": {
+            "count": 1,
+            "max": 5.785563,
+            "mean": 5.785563,
+            "min": 5.785563,
+            "p50": 5.785563,
+            "p95": 5.785563,
+            "p99": 5.785563
+          },
+          "successful": 1
+        },
+        "send_message": {
+          "calls": 273,
+          "latency_ms": {
+            "count": 273,
+            "max": 61.48013,
+            "mean": 16.908821901098904,
+            "min": 2.597374,
+            "p50": 15.451995,
+            "p95": 35.493088,
+            "p99": 54.192692
+          },
+          "successful": 272
+        }
+      },
+      "nonempty_wait_batch_sizes": {},
+      "returned_messages": 0
+    },
+    {
+      "agent": {
+        "agent_id": "01M5CD2KTSENYD85K8MT1C6KEX",
+        "display_name": "same-inbox-c100-93",
+        "name": "instance-01M5CD2KTSENYD85K8MT1C6KEX"
+      },
+      "connection": 94,
+      "highest_successful_ack_cursor": 0,
+      "methods": {
+        "enroll_agent": {
+          "calls": 1,
+          "latency_ms": {
+            "count": 1,
+            "max": 4.753178,
+            "mean": 4.753178,
+            "min": 4.753178,
+            "p50": 4.753178,
+            "p95": 4.753178,
+            "p99": 4.753178
+          },
+          "successful": 1
+        },
+        "send_message": {
+          "calls": 256,
+          "latency_ms": {
+            "count": 256,
+            "max": 57.908588,
+            "mean": 18.0366197265625,
+            "min": 2.426024,
+            "p50": 16.212249,
+            "p95": 35.704541,
+            "p99": 46.175588
+          },
+          "successful": 255
+        }
+      },
+      "nonempty_wait_batch_sizes": {},
+      "returned_messages": 0
+    },
+    {
+      "agent": {
+        "agent_id": "01M5CD2KTYY8ZV1JWM0WX6Y9HQ",
+        "display_name": "same-inbox-c100-94",
+        "name": "instance-01M5CD2KTYY8ZV1JWM0WX6Y9HQ"
+      },
+      "connection": 95,
+      "highest_successful_ack_cursor": 0,
+      "methods": {
+        "enroll_agent": {
+          "calls": 1,
+          "latency_ms": {
+            "count": 1,
+            "max": 5.36267,
+            "mean": 5.36267,
+            "min": 5.36267,
+            "p50": 5.36267,
+            "p95": 5.36267,
+            "p99": 5.36267
+          },
+          "successful": 1
+        },
+        "send_message": {
+          "calls": 882,
+          "latency_ms": {
+            "count": 882,
+            "max": 65.205016,
+            "mean": 8.182193297052155,
+            "min": 0.794587,
+            "p50": 4.349844,
+            "p95": 24.808555,
+            "p99": 43.414173
+          },
+          "successful": 881
+        }
+      },
+      "nonempty_wait_batch_sizes": {},
+      "returned_messages": 0
+    },
+    {
+      "agent": {
+        "agent_id": "01M5CD2KV3AS3Q2V9236BM4KYZ",
+        "display_name": "same-inbox-c100-95",
+        "name": "instance-01M5CD2KV3AS3Q2V9236BM4KYZ"
+      },
+      "connection": 96,
+      "highest_successful_ack_cursor": 0,
+      "methods": {
+        "enroll_agent": {
+          "calls": 1,
+          "latency_ms": {
+            "count": 1,
+            "max": 5.822925,
+            "mean": 5.822925,
+            "min": 5.822925,
+            "p50": 5.822925,
+            "p95": 5.822925,
+            "p99": 5.822925
+          },
+          "successful": 1
+        },
+        "send_message": {
+          "calls": 888,
+          "latency_ms": {
+            "count": 888,
+            "max": 48.894277,
+            "mean": 8.130080146396397,
+            "min": 2.136355,
+            "p50": 4.409628,
+            "p95": 25.275637,
+            "p99": 39.712312
+          },
+          "successful": 887
+        }
+      },
+      "nonempty_wait_batch_sizes": {},
+      "returned_messages": 0
+    },
+    {
+      "agent": {
+        "agent_id": "01M5CD2KV95CEHDWMG08XFJ7BN",
+        "display_name": "same-inbox-c100-96",
+        "name": "instance-01M5CD2KV95CEHDWMG08XFJ7BN"
+      },
+      "connection": 97,
+      "highest_successful_ack_cursor": 0,
+      "methods": {
+        "enroll_agent": {
+          "calls": 1,
+          "latency_ms": {
+            "count": 1,
+            "max": 5.179646,
+            "mean": 5.179646,
+            "min": 5.179646,
+            "p50": 5.179646,
+            "p95": 5.179646,
+            "p99": 5.179646
+          },
+          "successful": 1
+        },
+        "send_message": {
+          "calls": 267,
+          "latency_ms": {
+            "count": 267,
+            "max": 48.690862,
+            "mean": 17.309272254681648,
+            "min": 2.414793,
+            "p50": 15.90846,
+            "p95": 33.8011,
+            "p99": 40.412108
+          },
+          "successful": 266
+        }
+      },
+      "nonempty_wait_batch_sizes": {},
+      "returned_messages": 0
+    },
+    {
+      "agent": {
+        "agent_id": "01M5CD2KVE3ACJG24GGS6BB3WY",
+        "display_name": "same-inbox-c100-97",
+        "name": "instance-01M5CD2KVE3ACJG24GGS6BB3WY"
+      },
+      "connection": 98,
+      "highest_successful_ack_cursor": 0,
+      "methods": {
+        "enroll_agent": {
+          "calls": 1,
+          "latency_ms": {
+            "count": 1,
+            "max": 6.131411,
+            "mean": 6.131411,
+            "min": 6.131411,
+            "p50": 6.131411,
+            "p95": 6.131411,
+            "p99": 6.131411
+          },
+          "successful": 1
+        },
+        "send_message": {
+          "calls": 272,
+          "latency_ms": {
+            "count": 272,
+            "max": 61.841334,
+            "mean": 16.94892273529412,
+            "min": 2.442107,
+            "p50": 15.960796,
+            "p95": 33.494557,
+            "p99": 48.354551
+          },
+          "successful": 271
+        }
+      },
+      "nonempty_wait_batch_sizes": {},
+      "returned_messages": 0
+    },
+    {
+      "agent": {
+        "agent_id": "01M5CD2KVNGWNCD5SWDCDJGXQN",
+        "display_name": "same-inbox-c100-98",
+        "name": "instance-01M5CD2KVNGWNCD5SWDCDJGXQN"
+      },
+      "connection": 99,
+      "highest_successful_ack_cursor": 0,
+      "methods": {
+        "enroll_agent": {
+          "calls": 1,
+          "latency_ms": {
+            "count": 1,
+            "max": 5.983841,
+            "mean": 5.983841,
+            "min": 5.983841,
+            "p50": 5.983841,
+            "p95": 5.983841,
+            "p99": 5.983841
+          },
+          "successful": 1
+        },
+        "send_message": {
+          "calls": 249,
+          "latency_ms": {
+            "count": 249,
+            "max": 61.139067,
+            "mean": 18.59749386746988,
+            "min": 3.209661,
+            "p50": 16.868648,
+            "p95": 36.191454,
+            "p99": 48.333594
+          },
+          "successful": 248
+        }
+      },
+      "nonempty_wait_batch_sizes": {},
+      "returned_messages": 0
+    },
+    {
+      "agent": {
+        "agent_id": "01M5CD2KVVJ1TRAW3EMGD8BSBY",
+        "display_name": "same-inbox-c100-99",
+        "name": "instance-01M5CD2KVVJ1TRAW3EMGD8BSBY"
+      },
+      "connection": 100,
+      "highest_successful_ack_cursor": 0,
+      "methods": {
+        "enroll_agent": {
+          "calls": 1,
+          "latency_ms": {
+            "count": 1,
+            "max": 5.056427,
+            "mean": 5.056427,
+            "min": 5.056427,
+            "p50": 5.056427,
+            "p95": 5.056427,
+            "p99": 5.056427
+          },
+          "successful": 1
+        },
+        "send_message": {
+          "calls": 264,
+          "latency_ms": {
+            "count": 264,
+            "max": 53.045007,
+            "mean": 17.53434035227273,
+            "min": 2.788667,
+            "p50": 16.281158,
+            "p95": 30.881503,
+            "p99": 48.218205
+          },
+          "successful": 263
+        }
+      },
+      "nonempty_wait_batch_sizes": {},
+      "returned_messages": 0
+    },
+    {
+      "agent": {
+        "agent_id": "01M5CD2KW0BDRRHPV3GER181BF",
+        "display_name": "same-inbox-c100-100",
+        "name": "instance-01M5CD2KW0BDRRHPV3GER181BF"
+      },
+      "connection": 101,
+      "highest_successful_ack_cursor": 27452,
+      "methods": {
+        "ack": {
+          "calls": 280,
+          "latency_ms": {
+            "count": 280,
+            "max": 45.894301,
+            "mean": 7.991265071428572,
+            "min": 0.122106,
+            "p50": 3.399085,
+            "p95": 24.118939,
+            "p99": 38.218785
+          },
+          "successful": 280
+        },
+        "enroll_agent": {
+          "calls": 1,
+          "latency_ms": {
+            "count": 1,
+            "max": 5.212895,
+            "mean": 5.212895,
+            "min": 5.212895,
+            "p50": 5.212895,
+            "p95": 5.212895,
+            "p99": 5.212895
+          },
+          "successful": 1
+        },
+        "wait_message": {
+          "calls": 284,
+          "latency_ms": {
+            "count": 284,
+            "max": 51.804646,
+            "mean": 9.508181211267607,
+            "min": 0.098407,
+            "p50": 3.76447,
+            "p95": 28.34403,
+            "p99": 47.488319
+          },
+          "successful": 284
+        }
+      },
+      "nonempty_wait_batch_sizes": {
+        "10": 1,
+        "100": 272,
+        "14": 1,
+        "18": 1,
+        "35": 1,
+        "79": 1,
+        "8": 2,
+        "80": 1
+      },
+      "returned_messages": 27452
+    }
+  ],
+  "diagnostic_wrapper_sha256": "f9474cc663ec38732a1f910db66991a1c2b33bc70e734a96e08a5cc4994d8ba3",
+  "experiment": "Separate diagnostic reproduction of frozen same-inbox C100 workload, with in-memory RPC tracing overhead",
+  "failed_send_calls": 100,
+  "first_send_error_live_observer": {
+    "current_receiver_call": {
+      "method": "ack",
+      "started_monotonic_ns": 377496748023020
+    },
+    "highest_successful_ack_cursor": 16014,
+    "observed_monotonic_ns": 377496754904765,
+    "returned_messages": 16114,
+    "successful_ack_calls": 161,
+    "successful_send_receipts": 25962
+  },
+  "first_send_error_snapshot": {
+    "first_error": {
+      "agent": {
+        "agent_id": "01M5CD2KB60VWKG26HD0Z0489T",
+        "display_name": "same-inbox-c100-7",
+        "name": "instance-01M5CD2KB60VWKG26HD0Z0489T"
+      },
+      "completed_monotonic_ns": 377496754901569,
+      "connection": 8,
+      "elapsed_ms": 7.597924,
+      "error": "UDS send_message: {'jsonrpc': '2.0', 'id': 259, 'error': {'code': -32003, 'message': 'inbox for \"instance-01M5CD2KW0BDRRHPV3GER181BF\" is full (pending 10000 messages, 4850000 bytes; limits 10000 messages, 67108864 bytes)', 'data': {'code': 'RESOURCE_EXHAUSTED'}}}",
+      "method": "send_message",
+      "started_monotonic_ns": 377496747303645
+    },
+    "highest_successful_ack_cursor": 16014,
+    "highest_successful_send_receipt_seq": 26028,
+    "returned_messages": 16114,
+    "successful_ack_calls": 161,
+    "successful_send_receipts_completed": 25962
+  },
+  "frozen_harness_sha256": "406e8ea291fca4fec7610142e363f04d62f9e7392c5e6f2a4928ca332bc53389",
+  "highest_successful_ack_cursor": 27452,
+  "returned_messages": 27452,
+  "successful_ack_calls": 280,
+  "successful_send_receipts": 37452
+}

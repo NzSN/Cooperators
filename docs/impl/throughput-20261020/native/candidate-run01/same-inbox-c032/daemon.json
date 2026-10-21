@@ -1,0 +1,187 @@
+{
+  "agents": [
+    {
+      "agent_id": "01M5CDYMQEA1HFNNQZV366TAX9",
+      "display_name": "same-inbox-c032-0",
+      "name": "instance-01M5CDYMQEA1HFNNQZV366TAX9"
+    },
+    {
+      "agent_id": "01M5CDYMQND10E00K2198PPWFV",
+      "display_name": "same-inbox-c032-1",
+      "name": "instance-01M5CDYMQND10E00K2198PPWFV"
+    },
+    {
+      "agent_id": "01M5CDYMQVF82S5P9X1QASDN3K",
+      "display_name": "same-inbox-c032-2",
+      "name": "instance-01M5CDYMQVF82S5P9X1QASDN3K"
+    },
+    {
+      "agent_id": "01M5CDYMQZ8SD0YYRWR2PVESPG",
+      "display_name": "same-inbox-c032-3",
+      "name": "instance-01M5CDYMQZ8SD0YYRWR2PVESPG"
+    },
+    {
+      "agent_id": "01M5CDYMR4PGQZKCPM74G2SBGE",
+      "display_name": "same-inbox-c032-4",
+      "name": "instance-01M5CDYMR4PGQZKCPM74G2SBGE"
+    },
+    {
+      "agent_id": "01M5CDYMRBWM9E55KJX7D40N7B",
+      "display_name": "same-inbox-c032-5",
+      "name": "instance-01M5CDYMRBWM9E55KJX7D40N7B"
+    },
+    {
+      "agent_id": "01M5CDYMRF13RGW70SADPQJC2J",
+      "display_name": "same-inbox-c032-6",
+      "name": "instance-01M5CDYMRF13RGW70SADPQJC2J"
+    },
+    {
+      "agent_id": "01M5CDYMRME92C6M26F32FGNV0",
+      "display_name": "same-inbox-c032-7",
+      "name": "instance-01M5CDYMRME92C6M26F32FGNV0"
+    },
+    {
+      "agent_id": "01M5CDYMRTT82KMBPZTJZ648X8",
+      "display_name": "same-inbox-c032-8",
+      "name": "instance-01M5CDYMRTT82KMBPZTJZ648X8"
+    },
+    {
+      "agent_id": "01M5CDYMRY45FDNMWG7YJYP7J6",
+      "display_name": "same-inbox-c032-9",
+      "name": "instance-01M5CDYMRY45FDNMWG7YJYP7J6"
+    },
+    {
+      "agent_id": "01M5CDYMS3FP6ET9DK24K7J3KB",
+      "display_name": "same-inbox-c032-10",
+      "name": "instance-01M5CDYMS3FP6ET9DK24K7J3KB"
+    },
+    {
+      "agent_id": "01M5CDYMS7193YKAMMKCZT0W6G",
+      "display_name": "same-inbox-c032-11",
+      "name": "instance-01M5CDYMS7193YKAMMKCZT0W6G"
+    },
+    {
+      "agent_id": "01M5CDYMSCWVN709PBF8G01Q61",
+      "display_name": "same-inbox-c032-12",
+      "name": "instance-01M5CDYMSCWVN709PBF8G01Q61"
+    },
+    {
+      "agent_id": "01M5CDYMSJEV9E71P8GRDYEEA3",
+      "display_name": "same-inbox-c032-13",
+      "name": "instance-01M5CDYMSJEV9E71P8GRDYEEA3"
+    },
+    {
+      "agent_id": "01M5CDYMSQTRJD0W8GHPJ5A453",
+      "display_name": "same-inbox-c032-14",
+      "name": "instance-01M5CDYMSQTRJD0W8GHPJ5A453"
+    },
+    {
+      "agent_id": "01M5CDYMSXC3MM44NQFZAAZ4ZP",
+      "display_name": "same-inbox-c032-15",
+      "name": "instance-01M5CDYMSXC3MM44NQFZAAZ4ZP"
+    },
+    {
+      "agent_id": "01M5CDYMT3DZ46PEBPVB5J9J6R",
+      "display_name": "same-inbox-c032-16",
+      "name": "instance-01M5CDYMT3DZ46PEBPVB5J9J6R"
+    },
+    {
+      "agent_id": "01M5CDYMT89WW6E6K6JQSK2TXW",
+      "display_name": "same-inbox-c032-17",
+      "name": "instance-01M5CDYMT89WW6E6K6JQSK2TXW"
+    },
+    {
+      "agent_id": "01M5CDYMTG74S4HN3V21DQZWWJ",
+      "display_name": "same-inbox-c032-18",
+      "name": "instance-01M5CDYMTG74S4HN3V21DQZWWJ"
+    },
+    {
+      "agent_id": "01M5CDYMTP9M7TKQJB2YRQDY0X",
+      "display_name": "same-inbox-c032-19",
+      "name": "instance-01M5CDYMTP9M7TKQJB2YRQDY0X"
+    },
+    {
+      "agent_id": "01M5CDYMTV8509M8S6W45XKJS3",
+      "display_name": "same-inbox-c032-20",
+      "name": "instance-01M5CDYMTV8509M8S6W45XKJS3"
+    },
+    {
+      "agent_id": "01M5CDYMV24JYHHG33K158TYXQ",
+      "display_name": "same-inbox-c032-21",
+      "name": "instance-01M5CDYMV24JYHHG33K158TYXQ"
+    },
+    {
+      "agent_id": "01M5CDYMV7FKSZAVBKVB22MB0R",
+      "display_name": "same-inbox-c032-22",
+      "name": "instance-01M5CDYMV7FKSZAVBKVB22MB0R"
+    },
+    {
+      "agent_id": "01M5CDYMVDK4E33TPTEFXSX5GF",
+      "display_name": "same-inbox-c032-23",
+      "name": "instance-01M5CDYMVDK4E33TPTEFXSX5GF"
+    },
+    {
+      "agent_id": "01M5CDYMVKN7ZXRCR575EHNSMG",
+      "display_name": "same-inbox-c032-24",
+      "name": "instance-01M5CDYMVKN7ZXRCR575EHNSMG"
+    },
+    {
+      "agent_id": "01M5CDYMVSZ7X683JVYT50BWB6",
+      "display_name": "same-inbox-c032-25",
+      "name": "instance-01M5CDYMVSZ7X683JVYT50BWB6"
+    },
+    {
+      "agent_id": "01M5CDYMWFY4D4EFS9MQ96JEFM",
+      "display_name": "same-inbox-c032-26",
+      "name": "instance-01M5CDYMWFY4D4EFS9MQ96JEFM"
+    },
+    {
+      "agent_id": "01M5CDYMWN5TY763Z49K34XQ8N",
+      "display_name": "same-inbox-c032-27",
+      "name": "instance-01M5CDYMWN5TY763Z49K34XQ8N"
+    },
+    {
+      "agent_id": "01M5CDYMWW2VGYGNS4FHQXFAK5",
+      "display_name": "same-inbox-c032-28",
+      "name": "instance-01M5CDYMWW2VGYGNS4FHQXFAK5"
+    },
+    {
+      "agent_id": "01M5CDYMX1JCFMBBG6NW9JEJCG",
+      "display_name": "same-inbox-c032-29",
+      "name": "instance-01M5CDYMX1JCFMBBG6NW9JEJCG"
+    },
+    {
+      "agent_id": "01M5CDYMX6KT87ZMKXYV9S7X4Y",
+      "display_name": "same-inbox-c032-30",
+      "name": "instance-01M5CDYMX6KT87ZMKXYV9S7X4Y"
+    },
+    {
+      "agent_id": "01M5CDYMXBCKM325E2DBYSD5FF",
+      "display_name": "same-inbox-c032-31",
+      "name": "instance-01M5CDYMXBCKM325E2DBYSD5FF"
+    },
+    {
+      "agent_id": "01M5CDYMXGYGWRXFTFHWB0QNET",
+      "display_name": "same-inbox-c032-32",
+      "name": "instance-01M5CDYMXGYGWRXFTFHWB0QNET"
+    }
+  ],
+  "command": [
+    "/home/nzsn/Repos/Cooperators/target/release/coop",
+    "--root",
+    "/tmp/ctn-579178-1792492393160164783",
+    "daemon",
+    "run",
+    "--http-addr",
+    "off"
+  ],
+  "correctness_passed": true,
+  "errors": [],
+  "http": "off",
+  "label": "same-inbox-c032",
+  "pid": 579252,
+  "root": "/tmp/ctn-579178-1792492393160164783",
+  "running_executable_sha256": "32d5b650e8768407d297165eb350c295ab0b7aa0da14272fcee3948765383488",
+  "start_utc": "2026-10-20T10:33:13.160Z",
+  "stop": "SIGTERM; signal: 15 (SIGTERM)"
+}

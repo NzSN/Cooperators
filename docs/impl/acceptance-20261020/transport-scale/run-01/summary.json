@@ -1,0 +1,427 @@
+{
+  "binary_sha256_after": "c6d1047a8a4d9b0094274151c9658a101ed018ce07f82d66ed9fb512eb285321",
+  "completed": true,
+  "end_utc": "2026-10-20T09:10:25.489645+00:00",
+  "identity": {
+    "binary": "/home/nzsn/Repos/Cooperators/target/release/coop",
+    "binary_build_recipe": "cargo build --offline --locked --release (default features)",
+    "binary_sha256": "c6d1047a8a4d9b0094274151c9658a101ed018ce07f82d66ed9fb512eb285321",
+    "cpu": "12th Gen Intel(R) Core(TM) i5-1240P",
+    "filesystem_mount": "/dev/sdd ext4   rw,relatime,discard,errors=remount-ro,data=ordered",
+    "filesystem_tmp": "ext2/ext3",
+    "git_head": "63e20514fffa039a97b0ec25e432657854d2fdef",
+    "git_status_before": "?? docs/impl/acceptance-20261020/\n?? examples/\n?? scripts/",
+    "logical_cpus": 12,
+    "platform": "Linux-6.18.54.1-microsoft-standard-WSL2-x86_64-with-glibc2.39",
+    "python": "3.12.3",
+    "script_sha256": "685580eadb8b5b3f4a827ca750ea969bbba65df9d30dd519babcf62b475bf18c",
+    "source_sha256": {
+      "Cargo.lock": "401880c50b7dabe78dc04e650a1bfa442225593461eed18ecc0af40564a7eb3f",
+      "Cargo.toml": "fb9676f2cd646e30414c4194ab8780b5340ff2abb533d5a1fad8010cd3492bd6",
+      "src/channels.rs": "3946e0fbc5e985a8680aa3ff493ec18919daa8304de5adde521b6c0bfaeed540",
+      "src/client.rs": "f3a2306f1c9eb1c6bc88705abccc7377f0f9d5dac50142675b23b195a1b79cd9",
+      "src/docs.rs": "ce64c276bcc5c24bb45a9ca59da52bf08124316dd98a1cc0c76a408e5c5759e5",
+      "src/envelope.rs": "7f6427cb5d6bc1fc1fcb5801eac2a7ad5336d2daa25998bc8f62b2ddf9393510",
+      "src/error.rs": "94ab22ac5d56ffd5621e14a374b3e1665dbd03a50e2247793edb180868eb6047",
+      "src/faults.rs": "90cf42716ca9f980cd778d667abb7d3faf8b334ea2da3929cabd95ae3eef706e",
+      "src/id.rs": "3c9978366a887d6a790b0fe1e49e178c58bcafdbec3ba622d8fde22a014e3dfb",
+      "src/leases.rs": "d3003851a85b0d2ca0bab64e4d6efe91b7e9dde406bfaf330702e9a3c7af9ee5",
+      "src/lib.rs": "3da5ae4d719a9d9537257fd50a4a674175fe42cd8645f9cb42826fe5695c8f49",
+      "src/main.rs": "363a8317f1c64eaaea839def652e47881c5a96875978b15b11c51a73db4cb5ba",
+      "src/mcp.rs": "32c32ef91883240719a5746e2e0ae421b555652ce5323141f169ed0f4a28c7d5",
+      "src/messaging.rs": "c220a4ee71ae5b9f8d7d3466a2bccde4680398634280fc15199c83e3e17baba3",
+      "src/metrics.rs": "bb5b7da51c8e63a205bac2636f9a373cfe5e85b09afd6d0f4b20d1eecec6e4cf",
+      "src/paths.rs": "42eae03c804d6ff639b1ae6445ad234db8926e096aea0683625c22ddc26b6bd9",
+      "src/presence.rs": "9049c080ae72fec1ed2807a8ef3ef68d7e5f74519269866dd2a2b6e69ba14df2",
+      "src/queues.rs": "7ef5aa98563f8b8060cd3ec675c656ca462981dee6f9abd90f1f8e86ea530b23",
+      "src/registry.rs": "1a66b3d9a3470cc94d067293ed4a35cd47def775b05e6028e4cd08e7a804ab59",
+      "src/rpc.rs": "085d4c74198fe2add7ad72eeba22effa3bc20a7be1b6b142195a1fc26f6b912c",
+      "src/server.rs": "18ebc1e3911a8c2d3290530551c842bdf3a562fa1d492ecf3dae70b62464e2dc",
+      "src/status.rs": "e69b9c586fa116cad133d7781aee67ff9032f0610f62a38742d5161581ca5260",
+      "src/storage.rs": "caa308ab78472d19f8b2f8d74fa90a0990b969c3536cdbe7b7ae58afd39b5c88"
+    },
+    "start_utc": "2026-10-20T09:09:37.930288+00:00"
+  },
+  "plan": {
+    "append": {
+      "concurrency": 1,
+      "maintenance": "Drain and verify all messages every 5000 sends to remain below the default inbox limit; maintenance time included in wall rate",
+      "seconds": 10,
+      "transport": "uds"
+    },
+    "latency": {
+      "cycle": "Self-send, wait, verify identity/payload/receipt, then acknowledge cursor",
+      "samples": 500,
+      "send_ack": "Elapsed client call through durable fsync acknowledgment",
+      "wait_after_send": "Elapsed wait(timeout_s=0) call issued immediately after send acknowledgment; includes client parsing and transport",
+      "warmups": 20
+    },
+    "limitations": [
+      "One host/filesystem and one run per condition; no confidence intervals",
+      "Self-send workload, fixed 128-byte text, closed-loop clients",
+      "Wait measurements begin after durable send ack and do not measure a preexisting waiter's wakeup",
+      "100 active clients increase offered concurrency; queueing is part of observed latency",
+      "Python client scheduling, parsing, GIL, and MCP wrapper overhead are included"
+    ],
+    "payload_text_bytes": 128,
+    "scale": {
+      "baseline_agents": 1,
+      "conditions": [
+        "1 active / 1 enrolled",
+        "1 active / 100 enrolled; other agents have outstanding empty-inbox long polls",
+        "100 active / 100 enrolled"
+      ],
+      "diagnostic_relative_thresholds_declared_before_run": {
+        "aggregate_cycle_throughput_ratio_min": 0.8,
+        "send_ack_p50_ratio_max": 1.25,
+        "send_ack_p95_ratio_max": 1.25,
+        "wait_p50_ratio_max": 1.25,
+        "wait_p95_ratio_max": 1.25
+      },
+      "loaded_agents": 100,
+      "loaded_cycles_per_agent": 50,
+      "relative_threshold_status": "Diagnostic engineering choice, not a numeric specification requirement; report loaded concurrency and absolute target misses independently",
+      "single_active_cycles": 1000,
+      "transport": "uds",
+      "warmups_per_active_agent": 3
+    },
+    "schema": "cooperators.transport-scale-plan/v1",
+    "specification_targets": {
+      "agents": 100,
+      "agents_without_degradation_numeric_definition": null,
+      "append_messages_per_second_gte": 5000,
+      "send_ack_p50_ms_lt": 10,
+      "wait_after_send_p50_ms_lt": 25
+    },
+    "transports": {
+      "http": "Persistent loopback HTTP/1.1 streamable HTTP MCP initialized session per agent",
+      "uds": "Persistent AF_UNIX NDJSON JSON-RPC connection per agent"
+    }
+  },
+  "results": [
+    {
+      "ack_ms": {
+        "count": 500,
+        "max": 1.010554,
+        "mean": 0.19196343600000002,
+        "min": 0.094825,
+        "p50": 0.16198,
+        "p95": 0.371593,
+        "p99": 0.520834
+      },
+      "active_agents": 1,
+      "completed_message_cycles_per_second": 286.34638980648225,
+      "correctness_passed": true,
+      "cycle_ms": {
+        "count": 500,
+        "max": 13.746745,
+        "mean": 3.480808628,
+        "min": 1.749466,
+        "p50": 3.155448,
+        "p95": 5.703179,
+        "p99": 7.948678
+      },
+      "elapsed_seconds": 1.746136909,
+      "enrolled_agents": 1,
+      "idle_agents_with_long_poll": 0,
+      "label": "latency-uds",
+      "measured_messages": 500,
+      "send_ack_ms": {
+        "count": 500,
+        "max": 13.104075,
+        "mean": 2.9976480139999997,
+        "min": 1.504756,
+        "p50": 2.679626,
+        "p95": 5.007243,
+        "p99": 7.428066
+      },
+      "send_ack_p50_target_pass": true,
+      "transport": "uds",
+      "verified_deliveries_and_acks": 520,
+      "wait_after_send_ms": {
+        "count": 500,
+        "max": 0.869274,
+        "mean": 0.291197178,
+        "min": 0.136737,
+        "p50": 0.254559,
+        "p95": 0.529874,
+        "p99": 0.652371
+      },
+      "wait_after_send_p50_target_pass": true,
+      "warmup_messages": 20
+    },
+    {
+      "ack_ms": {
+        "count": 500,
+        "max": 2.876358,
+        "mean": 0.748374858,
+        "min": 0.317577,
+        "p50": 0.6479,
+        "p95": 1.373553,
+        "p99": 1.985104
+      },
+      "active_agents": 1,
+      "completed_message_cycles_per_second": 188.99176341804224,
+      "correctness_passed": true,
+      "cycle_ms": {
+        "count": 500,
+        "max": 17.20247,
+        "mean": 5.27964944,
+        "min": 2.651689,
+        "p50": 4.894718,
+        "p95": 8.445931,
+        "p99": 10.196821
+      },
+      "elapsed_seconds": 2.645617941,
+      "enrolled_agents": 1,
+      "idle_agents_with_long_poll": 0,
+      "label": "latency-http",
+      "measured_messages": 500,
+      "send_ack_ms": {
+        "count": 500,
+        "max": 15.168809,
+        "mean": 3.634272994,
+        "min": 1.905391,
+        "p50": 3.377944,
+        "p95": 5.637454,
+        "p99": 7.73751
+      },
+      "send_ack_p50_target_pass": true,
+      "transport": "http",
+      "verified_deliveries_and_acks": 520,
+      "wait_after_send_ms": {
+        "count": 500,
+        "max": 2.30583,
+        "mean": 0.897001588,
+        "min": 0.416597,
+        "p50": 0.787705,
+        "p95": 1.537901,
+        "p99": 2.052109
+      },
+      "wait_after_send_p50_target_pass": true,
+      "warmup_messages": 20
+    },
+    {
+      "active_agents": 1,
+      "append_target_5000_messages_per_second_pass": false,
+      "correctness_passed": true,
+      "elapsed_seconds": 10.002095312,
+      "label": "append-uds",
+      "measured_messages": 3417,
+      "messages_per_second": 341.62841818758307,
+      "send_ack_ms": {
+        "count": 3417,
+        "max": 16.093616,
+        "mean": 2.915848460637987,
+        "min": 1.453619,
+        "p50": 2.630168,
+        "p95": 4.706827,
+        "p99": 6.882218
+      },
+      "transport": "uds",
+      "verified_measured_deliveries_and_acks": 3417,
+      "warmup_messages": 20
+    },
+    {
+      "ack_ms": {
+        "count": 1000,
+        "max": 4.704219,
+        "mean": 0.234184372,
+        "min": 0.094548,
+        "p50": 0.192405,
+        "p95": 0.478335,
+        "p99": 0.6621
+      },
+      "active_agents": 1,
+      "completed_message_cycles_per_second": 268.4712266581655,
+      "correctness_passed": true,
+      "cycle_ms": {
+        "count": 1000,
+        "max": 10.57394,
+        "mean": 3.7125813400000003,
+        "min": 1.61576,
+        "p50": 3.471161,
+        "p95": 5.870827,
+        "p99": 7.501029
+      },
+      "elapsed_seconds": 3.724793947,
+      "enrolled_agents": 1,
+      "idle_agents_with_long_poll": 0,
+      "label": "scale-1-active",
+      "measured_messages": 1000,
+      "send_ack_ms": {
+        "count": 1000,
+        "max": 8.584825,
+        "mean": 3.143088953,
+        "min": 1.398492,
+        "p50": 2.895787,
+        "p95": 5.076233,
+        "p99": 6.509957
+      },
+      "send_ack_p50_target_pass": true,
+      "transport": "uds",
+      "verified_deliveries_and_acks": 1003,
+      "wait_after_send_ms": {
+        "count": 1000,
+        "max": 1.02512,
+        "mean": 0.335308015,
+        "min": 0.121981,
+        "p50": 0.301863,
+        "p95": 0.620165,
+        "p99": 0.801945
+      },
+      "wait_after_send_p50_target_pass": true,
+      "warmup_messages": 3
+    },
+    {
+      "ack_ms": {
+        "count": 1000,
+        "max": 1.199303,
+        "mean": 0.265023885,
+        "min": 0.100029,
+        "p50": 0.226609,
+        "p95": 0.537282,
+        "p99": 0.736577
+      },
+      "active_agents": 1,
+      "completed_message_cycles_per_second": 237.9151700161849,
+      "correctness_passed": true,
+      "cycle_ms": {
+        "count": 1000,
+        "max": 11.181912,
+        "mean": 4.189088227999999,
+        "min": 2.058078,
+        "p50": 4.029481,
+        "p95": 6.564613,
+        "p99": 9.039688
+      },
+      "elapsed_seconds": 4.203178805,
+      "enrolled_agents": 100,
+      "idle_agents_with_long_poll": 99,
+      "label": "scale-100-idle",
+      "measured_messages": 1000,
+      "send_ack_ms": {
+        "count": 1000,
+        "max": 10.702703,
+        "mean": 3.545426835,
+        "min": 1.776899,
+        "p50": 3.365501,
+        "p95": 5.57405,
+        "p99": 8.229869
+      },
+      "send_ack_p50_target_pass": true,
+      "transport": "uds",
+      "verified_deliveries_and_acks": 1003,
+      "wait_after_send_ms": {
+        "count": 1000,
+        "max": 1.206334,
+        "mean": 0.378637508,
+        "min": 0.138739,
+        "p50": 0.337971,
+        "p95": 0.704938,
+        "p99": 0.908989
+      },
+      "wait_after_send_p50_target_pass": true,
+      "warmup_messages": 3
+    },
+    {
+      "ack_ms": {
+        "count": 5000,
+        "max": 25.011016,
+        "mean": 4.1695388574,
+        "min": 0.239229,
+        "p50": 3.847343,
+        "p95": 6.90543,
+        "p99": 9.538196
+      },
+      "active_agents": 100,
+      "completed_message_cycles_per_second": 243.1695252567932,
+      "correctness_passed": true,
+      "cycle_ms": {
+        "count": 5000,
+        "max": 596.149848,
+        "mean": 406.221284572,
+        "min": 42.63641,
+        "p50": 407.312026,
+        "p95": 541.122393,
+        "p99": 573.720399
+      },
+      "elapsed_seconds": 20.561787069,
+      "enrolled_agents": 100,
+      "idle_agents_with_long_poll": 0,
+      "label": "scale-100-active",
+      "measured_messages": 5000,
+      "send_ack_ms": {
+        "count": 5000,
+        "max": 585.187875,
+        "mean": 397.6151577446,
+        "min": 24.589906,
+        "p50": 398.863708,
+        "p95": 529.72719,
+        "p99": 561.372031
+      },
+      "send_ack_p50_target_pass": false,
+      "transport": "uds",
+      "verified_deliveries_and_acks": 5300,
+      "wait_after_send_ms": {
+        "count": 5000,
+        "max": 24.883355,
+        "mean": 4.43658797,
+        "min": 0.607574,
+        "p50": 4.112928,
+        "p95": 7.254835,
+        "p99": 9.83656
+      },
+      "wait_after_send_p50_target_pass": true,
+      "warmup_messages": 300
+    }
+  ],
+  "scale_comparisons": [
+    {
+      "aggregate_cycle_throughput_ratio": 0.8861849851757615,
+      "baseline": "scale-1-active",
+      "condition": "scale-100-idle",
+      "diagnostic_relative_thresholds_pass": true,
+      "send_ack_ms_p50_ratio": 1.162205990979309,
+      "send_ack_ms_p95_ratio": 1.0980681934812684,
+      "wait_after_send_ms_p50_ratio": 1.1196171773287884,
+      "wait_after_send_ms_p95_ratio": 1.1366942668483386
+    },
+    {
+      "aggregate_cycle_throughput_ratio": 0.905756375771367,
+      "baseline": "scale-1-active",
+      "condition": "scale-100-active",
+      "diagnostic_relative_thresholds_pass": false,
+      "send_ack_ms_p50_ratio": 137.73931162754718,
+      "send_ack_ms_p95_ratio": 104.35438838209356,
+      "wait_after_send_ms_p50_ratio": 13.625147831963508,
+      "wait_after_send_ms_p95_ratio": 11.698233534623851
+    }
+  ],
+  "schema": "cooperators.transport-scale-results/v1",
+  "source_sha256_after": {
+    "Cargo.lock": "401880c50b7dabe78dc04e650a1bfa442225593461eed18ecc0af40564a7eb3f",
+    "Cargo.toml": "fb9676f2cd646e30414c4194ab8780b5340ff2abb533d5a1fad8010cd3492bd6",
+    "src/channels.rs": "3946e0fbc5e985a8680aa3ff493ec18919daa8304de5adde521b6c0bfaeed540",
+    "src/client.rs": "f3a2306f1c9eb1c6bc88705abccc7377f0f9d5dac50142675b23b195a1b79cd9",
+    "src/docs.rs": "ce64c276bcc5c24bb45a9ca59da52bf08124316dd98a1cc0c76a408e5c5759e5",
+    "src/envelope.rs": "7f6427cb5d6bc1fc1fcb5801eac2a7ad5336d2daa25998bc8f62b2ddf9393510",
+    "src/error.rs": "94ab22ac5d56ffd5621e14a374b3e1665dbd03a50e2247793edb180868eb6047",
+    "src/faults.rs": "90cf42716ca9f980cd778d667abb7d3faf8b334ea2da3929cabd95ae3eef706e",
+    "src/id.rs": "3c9978366a887d6a790b0fe1e49e178c58bcafdbec3ba622d8fde22a014e3dfb",
+    "src/leases.rs": "d3003851a85b0d2ca0bab64e4d6efe91b7e9dde406bfaf330702e9a3c7af9ee5",
+    "src/lib.rs": "3da5ae4d719a9d9537257fd50a4a674175fe42cd8645f9cb42826fe5695c8f49",
+    "src/main.rs": "363a8317f1c64eaaea839def652e47881c5a96875978b15b11c51a73db4cb5ba",
+    "src/mcp.rs": "32c32ef91883240719a5746e2e0ae421b555652ce5323141f169ed0f4a28c7d5",
+    "src/messaging.rs": "c220a4ee71ae5b9f8d7d3466a2bccde4680398634280fc15199c83e3e17baba3",
+    "src/metrics.rs": "bb5b7da51c8e63a205bac2636f9a373cfe5e85b09afd6d0f4b20d1eecec6e4cf",
+    "src/paths.rs": "42eae03c804d6ff639b1ae6445ad234db8926e096aea0683625c22ddc26b6bd9",
+    "src/presence.rs": "9049c080ae72fec1ed2807a8ef3ef68d7e5f74519269866dd2a2b6e69ba14df2",
+    "src/queues.rs": "7ef5aa98563f8b8060cd3ec675c656ca462981dee6f9abd90f1f8e86ea530b23",
+    "src/registry.rs": "1a66b3d9a3470cc94d067293ed4a35cd47def775b05e6028e4cd08e7a804ab59",
+    "src/rpc.rs": "085d4c74198fe2add7ad72eeba22effa3bc20a7be1b6b142195a1fc26f6b912c",
+    "src/server.rs": "18ebc1e3911a8c2d3290530551c842bdf3a562fa1d492ecf3dae70b62464e2dc",
+    "src/status.rs": "e69b9c586fa116cad133d7781aee67ff9032f0610f62a38742d5161581ca5260",
+    "src/storage.rs": "caa308ab78472d19f8b2f8d74fa90a0990b969c3536cdbe7b7ae58afd39b5c88"
+  }
+}

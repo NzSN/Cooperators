@@ -1,0 +1,51 @@
+{
+  "source_results": "run/results.jsonl",
+  "fixture": {
+    "bytes": 327777786,
+    "durability_before_timing": "BufWriter flush; file sync_all; parent directory sync_all",
+    "event": "fixture",
+    "expiry_sidecars": false,
+    "generation_and_sync_seconds": 8.787490675,
+    "idempotency_keys": false,
+    "last_record_chain_hash": "sha256:977b1029e3fa078f6e7927afeddef27b8bb4b4631d5df060c944b21ad2c01a3a",
+    "path": "/tmp/cooperators-replay-1m-20261020/agents/01M5C926XFZTVNE9J8SWDRZAJJ/inbox.jsonl",
+    "payload": "text/plain: replay record {zero_based_index}",
+    "record_schema": "Envelope v1; unique deterministic ULID; seq 1..N; validated hash chain",
+    "records": 1000000,
+    "sha256": "4c9b4419f9b0675f4bb9abde45ebefddd7ba4fa8670dfd1428fe4d9a684d2c22",
+    "timestamp": "2026-10-20T00:00:00.000Z"
+  },
+  "scopes": [
+    {
+      "scope": "LogFile<Envelope>::open",
+      "samples_seconds": [
+        12.826868735,
+        8.64187261,
+        8.640246925
+      ],
+      "median_seconds": 8.64187261,
+      "minimum_seconds": 8.640246925,
+      "maximum_seconds": 12.826868735,
+      "target_seconds_exclusive": 10.0,
+      "samples_below_target": 2,
+      "sample_count": 3
+    },
+    {
+      "scope": "fresh coop daemon process to successful UDS daemon.status",
+      "samples_seconds": [
+        12.438932293,
+        12.737724912000001,
+        9.74571333
+      ],
+      "median_seconds": 12.438932293,
+      "minimum_seconds": 9.74571333,
+      "maximum_seconds": 12.737724912000001,
+      "target_seconds_exclusive": 10.0,
+      "samples_below_target": 1,
+      "sample_count": 3
+    }
+  ],
+  "integrity_and_runtime_validation": "passed",
+  "consistent_restart_target_compliance": false,
+  "fixture_removed": true
+}

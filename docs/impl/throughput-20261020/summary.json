@@ -1,0 +1,937 @@
+{
+  "all_performance_acceptance_targets_pass": false,
+  "baseline_binary_sha256": "c6d1047a8a4d9b0094274151c9658a101ed018ce07f82d66ed9fb512eb285321",
+  "batch_process_crashes": {
+    "actual_sigkill_controls": 3,
+    "additional_targeted_tests_passed": 4,
+    "limitations": [
+      "Actual Unix SIGKILL validates process-crash recovery; it does not simulate loss of the kernel page cache or hardware power failure.",
+      "Socketless production broker worker calls exercise batch sync, publication, replay and dedupe; this control does not exercise network transports.",
+      "Recovery dedupe retries use the identity reconstructed from the persisted registry through the in-process broker API; authentication transport behavior is covered by other qualification evidence.",
+      "The helper test returns immediately in ordinary parent test collection; the three parent tests each execute and kill a dedicated helper child."
+    ],
+    "no_op_child_helper_tests": 1,
+    "passed": true,
+    "source_file": "tests/batch_crash.rs",
+    "source_sha256": "76294bd8f2b386ecb0613077239d19c8542c84bbce71397b7d70e3ba8836604e",
+    "summary": "qualification/batch-crash-run-01/attempt-01/summary.json"
+  },
+  "candidate_binary_sha256": "32d5b650e8768407d297165eb350c295ab0b7aa0da14272fcee3948765383488",
+  "core_correctness_qualification_pass": true,
+  "core_source_matches_release_manifest": {
+    "Cargo.lock": true,
+    "Cargo.toml": true,
+    "src/channels.rs": true,
+    "src/client.rs": true,
+    "src/docs.rs": true,
+    "src/envelope.rs": true,
+    "src/error.rs": true,
+    "src/faults.rs": true,
+    "src/id.rs": true,
+    "src/inbox_writer.rs": true,
+    "src/leases.rs": true,
+    "src/lib.rs": true,
+    "src/main.rs": true,
+    "src/mcp.rs": true,
+    "src/messaging.rs": true,
+    "src/metrics.rs": true,
+    "src/paths.rs": true,
+    "src/presence.rs": true,
+    "src/queues.rs": true,
+    "src/registry.rs": true,
+    "src/rpc.rs": true,
+    "src/server.rs": true,
+    "src/status.rs": true,
+    "src/storage.rs": true
+  },
+  "date": "2026-10-20",
+  "doctests": {
+    "CARGO_BUILD_JOBS": "2",
+    "COOP_REQUIRE_UDS": "1",
+    "command": [
+      "cargo",
+      "test",
+      "--offline",
+      "--locked",
+      "--doc"
+    ],
+    "ended_utc": "2026-10-20T10:25:02.154701+00:00",
+    "exit_code": 0,
+    "ignored": 0,
+    "passed": 0,
+    "socket_skips_present": false,
+    "started_utc": "2026-10-20T10:25:01.784201+00:00"
+  },
+  "evidence_publication": {
+    "archived_files": 109,
+    "lossless_roundtrip_verified": true,
+    "map": "artifact-publication.json"
+  },
+  "frozen_drivers_and_native_method_still_match": true,
+  "generated_mbt": {
+    "actual_crash_controls": [
+      "after-seal",
+      "after-create"
+    ],
+    "binary_sha256": "eef594f487d0405f601cccf731b8903a6924dc88896c0daff462f44ab103160b",
+    "build": {
+      "argv": [
+        "cargo",
+        "build",
+        "--offline",
+        "--locked",
+        "--manifest-path",
+        "spec/mbt/Cargo.toml"
+      ],
+      "cwd": "/home/nzsn/Repos/Cooperators",
+      "elapsed_seconds": 15.643352508544922,
+      "exit_code": 0,
+      "finished_unix": 1792492029.0143902,
+      "started_unix": 1792492013.3710718
+    },
+    "changed_sources": [],
+    "compiler_and_provenance_gate_passed": true,
+    "credential_redaction": {
+      "credential_count": 5,
+      "remaining_plaintext_credential_files": []
+    },
+    "fault_failures": 0,
+    "fault_traces": 24,
+    "passed": true,
+    "protocol_and_writer_failures": 0,
+    "protocol_and_writer_traces": 39,
+    "replay": {
+      "argv": [
+        "/home/nzsn/Repos/Cooperators/spec/mbt/target/debug/cooperators-mbt",
+        "--skip-gen",
+        "--suite",
+        "all"
+      ],
+      "cwd": "/home/nzsn/Repos/Cooperators",
+      "elapsed_seconds": 9.886346578598022,
+      "exit_code": 0,
+      "finished_unix": 1792492039.1373038,
+      "started_unix": 1792492029.2509577
+    }
+  },
+  "implementation_complete": true,
+  "injection_tests": {
+    "CARGO_BUILD_JOBS": "2",
+    "COOP_REQUIRE_UDS": "1",
+    "command": [
+      "cargo",
+      "test",
+      "--offline",
+      "--locked",
+      "--lib",
+      "--bins",
+      "--tests",
+      "--features",
+      "mbt-injection"
+    ],
+    "ended_utc": "2026-10-20T10:25:01.783945+00:00",
+    "exit_code": 0,
+    "ignored": 1,
+    "passed": 124,
+    "socket_skips_present": false,
+    "started_utc": "2026-10-20T10:24:25.689620+00:00"
+  },
+  "input_sha256": {
+    "artifact-publication.json": "7031a5f5654f3e254f96f3f4c491a51ae0d210600e21c3d814a7af6fb812d366",
+    "candidate02/comparison.json": "42d5dfcc62571e5f40f2827e40392b0743639e94fb61e8db7865d37a15cb881f",
+    "candidate02/controls/summary.json": "32a6068296c678d6ea3acd5221ba73d3fb911b8d82401bba1a47b41fb640d9bc",
+    "native/baseline-run01/summary.json": "8fdb3555180050b257e78d5c86456a349b94e010ce57d01171e6af881c068dc9",
+    "native/candidate-run01/summary.json": "5913edc88d7e58da99ab95578c678df46efa569b9a752e13fd7ecb206927407d",
+    "native/comparison.json": "06d41ba4853ff98b7defdfda3c95381a9820cf2304c15b14cd6614f2a8a7ce2f",
+    "qualification/batch-crash-run-01/attempt-01/summary.json": "e3d189eb6163e8548e84f83a6f7a962522bf990cbebb8617096e105d47b40efd",
+    "qualification/final-checks.json": "dc704855f2ff00e5fcf739d7f76ffb3b7703f701f5e2c7a416e23d2a15d7a4df",
+    "qualification/final-source-and-static-check.json": "db67be57587303609cb4dee4f69f8e3c0028ae245e389bbd03c238aa79ea884a",
+    "qualification/mbt-run-02/summary.json": "d9f370552aee40722aa666dcce58a41220ff2dc493d52e7143045a1158ec3ca2",
+    "qualification/publication-verification.json": "4ab1429d2b905189adb948cffab96186ef5ce6e548d36442b250d8a41b605ae1",
+    "qualification/review.md": "fd0d78e4c8268172ba25aaac986bdd5c68aa0851c01433d461a79eabe5d0b076",
+    "qualification/run-02/doctests.json": "5cfea30c0271d30707c29f7622e1fed84c76cd4111153b3213322ad3666f3843",
+    "qualification/run-02/injection.json": "fbfa6c0173cabd6a7de2249f1d8874d68d06c7d0b8df42845e5229eee9f56b21",
+    "qualification/run-02/normal.json": "1497acd3fdbd39bed8c0131679ff41af926f21bbfd8ebfcbe931c61b08ba1284",
+    "qualification/run-02/source-manifest.json": "a94bb8fd5ffd2b0ee3fe80df7c17f9bf154c41c2a0c7769e9a4ab09145f94d0a"
+  },
+  "limitations": [
+    "One host and one measurement window per condition; no confidence intervals.",
+    "Native and Python comparisons use distinct drivers and HTTP settings; retain separate paired comparisons.",
+    "Python same-inbox C100 failed at unchanged backlog cap; no replacement rate is reported.",
+    "Serial overhead, distributed throughput and original 100-active latency targets remain open.",
+    "Native same-inbox C100 has 100 senders plus one receiver identity.",
+    "File readback verifies retained effects and integrity, not power-loss durability.",
+    "No new million-record startup or installed MCP-client qualification is claimed for the changed production source."
+  ],
+  "native": {
+    "all_owned_children_and_roots_gone": true,
+    "all_sixteen_phases_correct": true,
+    "comparison": "native/comparison.json",
+    "conditions": [
+      {
+        "baseline_correctness_passed": true,
+        "baseline_messages_per_second": 640.3177390844094,
+        "baseline_send_ack_ms": {
+          "count": 6404,
+          "max": 14.566107,
+          "mean": 1.5582905833853886,
+          "min": 1.025046,
+          "p50": 1.430384,
+          "p95": 2.184644,
+          "p99": 3.654317
+        },
+        "candidate_correctness_passed": true,
+        "candidate_messages_per_second": 492.7567836532519,
+        "candidate_p50_target_pass": true,
+        "candidate_send_ack_ms": {
+          "count": 4928,
+          "max": 14.133436,
+          "mean": 2.025824077516231,
+          "min": 1.471489,
+          "p50": 1.914476,
+          "p95": 2.727681,
+          "p99": 3.494721
+        },
+        "candidate_throughput_target_pass": false,
+        "label": "same-inbox-c001",
+        "senders": 1,
+        "throughput_ratio": 0.7695504178251332,
+        "topology": "same-inbox"
+      },
+      {
+        "baseline_correctness_passed": true,
+        "baseline_messages_per_second": 574.1193404230926,
+        "baseline_send_ack_ms": {
+          "count": 5749,
+          "max": 33.362551,
+          "mean": 13.920465485475694,
+          "min": 1.856368,
+          "p50": 13.488206,
+          "p95": 18.209659,
+          "p99": 22.158028
+        },
+        "candidate_correctness_passed": true,
+        "candidate_messages_per_second": 2043.9280560150726,
+        "candidate_p50_target_pass": true,
+        "candidate_send_ack_ms": {
+          "count": 20455,
+          "max": 16.898037,
+          "mean": 3.9098500259105187,
+          "min": 1.71962,
+          "p50": 3.720116,
+          "p95": 5.337798,
+          "p99": 8.648164
+        },
+        "candidate_throughput_target_pass": false,
+        "label": "same-inbox-c008",
+        "senders": 8,
+        "throughput_ratio": 3.560110088799336,
+        "topology": "same-inbox"
+      },
+      {
+        "baseline_correctness_passed": true,
+        "baseline_messages_per_second": 581.7467319520229,
+        "baseline_send_ack_ms": {
+          "count": 5849,
+          "max": 82.048879,
+          "mean": 54.85370999777733,
+          "min": 1.629579,
+          "p50": 53.780887,
+          "p95": 65.839697,
+          "p99": 74.33097
+        },
+        "candidate_correctness_passed": true,
+        "candidate_messages_per_second": 6030.282900685134,
+        "candidate_p50_target_pass": true,
+        "candidate_send_ack_ms": {
+          "count": 60362,
+          "max": 17.104058,
+          "mean": 5.300137442828338,
+          "min": 2.65157,
+          "p50": 5.022044,
+          "p95": 7.457199,
+          "p99": 10.645888
+        },
+        "candidate_throughput_target_pass": true,
+        "label": "same-inbox-c032",
+        "senders": 32,
+        "throughput_ratio": 10.36582170466315,
+        "topology": "same-inbox"
+      },
+      {
+        "baseline_correctness_passed": true,
+        "baseline_messages_per_second": 531.6284053938799,
+        "baseline_send_ack_ms": {
+          "count": 5418,
+          "max": 275.634916,
+          "mean": 186.3249363183831,
+          "min": 2.981326,
+          "p50": 183.400472,
+          "p95": 227.65093,
+          "p99": 266.212249
+        },
+        "candidate_correctness_passed": true,
+        "candidate_messages_per_second": 12834.931598266647,
+        "candidate_p50_target_pass": true,
+        "candidate_send_ack_ms": {
+          "count": 128485,
+          "max": 34.621402,
+          "mean": 7.7840113438300405,
+          "min": 3.722296,
+          "p50": 7.468993,
+          "p95": 10.439521,
+          "p99": 13.477666
+        },
+        "candidate_throughput_target_pass": true,
+        "label": "same-inbox-c100",
+        "senders": 100,
+        "throughput_ratio": 24.14267459760231,
+        "topology": "same-inbox"
+      },
+      {
+        "baseline_correctness_passed": true,
+        "baseline_messages_per_second": 522.8656845865534,
+        "baseline_send_ack_ms": {
+          "count": 5229,
+          "max": 14.132943,
+          "mean": 1.9085765136737431,
+          "min": 1.083446,
+          "p50": 1.682214,
+          "p95": 2.950754,
+          "p99": 6.697312
+        },
+        "candidate_correctness_passed": true,
+        "candidate_messages_per_second": 456.39451463996795,
+        "candidate_p50_target_pass": true,
+        "candidate_send_ack_ms": {
+          "count": 4564,
+          "max": 17.939593,
+          "mean": 2.1873591812007014,
+          "min": 1.535831,
+          "p50": 2.048126,
+          "p95": 2.956718,
+          "p99": 4.324135
+        },
+        "candidate_throughput_target_pass": false,
+        "label": "distributed-inboxes-c001",
+        "senders": 1,
+        "throughput_ratio": 0.8728714239505959,
+        "topology": "distributed-inboxes"
+      },
+      {
+        "baseline_correctness_passed": true,
+        "baseline_messages_per_second": 520.5625008333257,
+        "baseline_send_ack_ms": {
+          "count": 5213,
+          "max": 35.952501,
+          "mean": 15.354454865144838,
+          "min": 2.695623,
+          "p50": 14.502084,
+          "p95": 21.275308,
+          "p99": 25.465903
+        },
+        "candidate_correctness_passed": true,
+        "candidate_messages_per_second": 1712.3617570530873,
+        "candidate_p50_target_pass": true,
+        "candidate_send_ack_ms": {
+          "count": 17130,
+          "max": 621.602528,
+          "mean": 4.666620554290724,
+          "min": 2.05988,
+          "p50": 4.144578,
+          "p95": 7.544346,
+          "p99": 9.611741
+        },
+        "candidate_throughput_target_pass": false,
+        "label": "distributed-inboxes-c008",
+        "senders": 8,
+        "throughput_ratio": 3.2894450797203185,
+        "topology": "distributed-inboxes"
+      },
+      {
+        "baseline_correctness_passed": true,
+        "baseline_messages_per_second": 469.17152802249245,
+        "baseline_send_ack_ms": {
+          "count": 4729,
+          "max": 131.532181,
+          "mean": 67.94425942884322,
+          "min": 2.44479,
+          "p50": 65.267681,
+          "p95": 88.445839,
+          "p99": 100.719452
+        },
+        "candidate_correctness_passed": true,
+        "candidate_messages_per_second": 3712.3184706485154,
+        "candidate_p50_target_pass": true,
+        "candidate_send_ack_ms": {
+          "count": 37148,
+          "max": 414.632307,
+          "mean": 8.610088633573813,
+          "min": 3.140754,
+          "p50": 7.698114,
+          "p95": 12.202484,
+          "p99": 14.78218
+        },
+        "candidate_throughput_target_pass": false,
+        "label": "distributed-inboxes-c032",
+        "senders": 32,
+        "throughput_ratio": 7.912497346749788,
+        "topology": "distributed-inboxes"
+      },
+      {
+        "baseline_correctness_passed": true,
+        "baseline_messages_per_second": 455.82206674144703,
+        "baseline_send_ack_ms": {
+          "count": 4651,
+          "max": 258.749858,
+          "mean": 217.2211242425292,
+          "min": 3.085957,
+          "p50": 218.502026,
+          "p95": 246.036577,
+          "p99": 254.757923
+        },
+        "candidate_correctness_passed": true,
+        "candidate_messages_per_second": 4608.132631664534,
+        "candidate_p50_target_pass": false,
+        "candidate_send_ack_ms": {
+          "count": 46184,
+          "max": 51.341929,
+          "mean": 21.674383970834064,
+          "min": 6.867349,
+          "p50": 21.406872,
+          "p95": 27.648409,
+          "p99": 32.060556
+        },
+        "candidate_throughput_target_pass": false,
+        "label": "distributed-inboxes-c100",
+        "senders": 100,
+        "throughput_ratio": 10.10949878887363,
+        "topology": "distributed-inboxes"
+      }
+    ],
+    "full_target_gate_pass": false,
+    "identity_stable": true
+  },
+  "normal_tests": {
+    "CARGO_BUILD_JOBS": "2",
+    "COOP_REQUIRE_UDS": "1",
+    "command": [
+      "cargo",
+      "test",
+      "--offline",
+      "--locked",
+      "--lib",
+      "--bins",
+      "--tests"
+    ],
+    "ended_utc": "2026-10-20T10:24:25.689127+00:00",
+    "exit_code": 0,
+    "ignored": 1,
+    "passed": 92,
+    "socket_skips_present": false,
+    "started_utc": "2026-10-20T10:23:50.714375+00:00"
+  },
+  "python": {
+    "comparison": "candidate02/comparison.json",
+    "conditions": [
+      {
+        "baseline_acks_per_second": 266.9044279300645,
+        "baseline_send_ack_ms": {
+          "count": 2670,
+          "max": 22.313427,
+          "mean": 3.7322806157303368,
+          "min": 1.613888,
+          "p50": 3.306365,
+          "p95": 7.265645,
+          "p99": 9.717913
+        },
+        "candidate_acks_per_second": 465.4631573808891,
+        "candidate_p50_below_10_ms_target_pass": true,
+        "candidate_send_ack_ms": {
+          "count": 4655,
+          "max": 17.522205,
+          "mean": 2.1416190296455424,
+          "min": 1.488575,
+          "p50": 2.022785,
+          "p95": 2.844028,
+          "p99": 3.910533
+        },
+        "candidate_status": "COMPLETE",
+        "candidate_throughput_5000_per_second_target_pass": false,
+        "concurrent_senders": 1,
+        "profile": "same-inbox",
+        "throughput_ratio": 1.7439319421963722
+      },
+      {
+        "baseline_acks_per_second": 210.41092563664867,
+        "baseline_send_ack_ms": {
+          "count": 2112,
+          "max": 276.723824,
+          "mean": 37.933682924242426,
+          "min": 4.918828,
+          "p50": 35.063622,
+          "p95": 54.412946,
+          "p99": 78.213641
+        },
+        "candidate_acks_per_second": 1951.5568103950106,
+        "candidate_p50_below_10_ms_target_pass": true,
+        "candidate_send_ack_ms": {
+          "count": 19522,
+          "max": 26.452995,
+          "mean": 4.092687523511935,
+          "min": 2.345139,
+          "p50": 3.866299,
+          "p95": 5.827858,
+          "p99": 8.529011
+        },
+        "candidate_status": "COMPLETE",
+        "candidate_throughput_5000_per_second_target_pass": false,
+        "concurrent_senders": 8,
+        "profile": "same-inbox",
+        "throughput_ratio": 9.274978495009742
+      },
+      {
+        "baseline_acks_per_second": 195.039951970969,
+        "baseline_send_ack_ms": {
+          "count": 1982,
+          "max": 246.703186,
+          "mean": 162.77999699899092,
+          "min": 3.077925,
+          "p50": 162.377884,
+          "p95": 220.843835,
+          "p99": 235.350295
+        },
+        "candidate_acks_per_second": 3108.100177360351,
+        "candidate_p50_below_10_ms_target_pass": true,
+        "candidate_send_ack_ms": {
+          "count": 31109,
+          "max": 34.125897,
+          "mean": 10.280288512391913,
+          "min": 3.137761,
+          "p50": 9.635042,
+          "p95": 16.966298,
+          "p99": 21.599558
+        },
+        "candidate_status": "COMPLETE",
+        "candidate_throughput_5000_per_second_target_pass": false,
+        "concurrent_senders": 32,
+        "profile": "same-inbox",
+        "throughput_ratio": 15.93571032986606
+      },
+      {
+        "baseline_acks_per_second": 160.1870244739047,
+        "baseline_send_ack_ms": {
+          "count": 1677,
+          "max": 1451.700601,
+          "mean": 606.9164379254621,
+          "min": 5.585921,
+          "p50": 542.815924,
+          "p95": 1159.425171,
+          "p99": 1417.438357
+        },
+        "candidate_acks_per_second": null,
+        "candidate_p50_below_10_ms_target_pass": false,
+        "candidate_send_ack_ms": null,
+        "candidate_status": "FAILED_RUN",
+        "candidate_throughput_5000_per_second_target_pass": false,
+        "concurrent_senders": 100,
+        "failure": "UDS send_message: {'jsonrpc': '2.0', 'id': 180, 'error': {'code': -32003, 'message': 'inbox for \"instance-01M5CCTERJ0C3J5BHMJ5VDVWGD\" is full (pending 10000 messages, 4848155 bytes; limits 10000 messages, 67108864 bytes)', 'data': {'code': 'RESOURCE_EXHAUSTED'}}}",
+        "profile": "same-inbox",
+        "unavailable_metrics_reason": "Run failed; do not substitute diagnostic or best-case values"
+      },
+      {
+        "baseline_acks_per_second": 206.17227450918915,
+        "baseline_send_ack_ms": {
+          "count": 2062,
+          "max": 69.489053,
+          "mean": 4.834196146944714,
+          "min": 1.639792,
+          "p50": 3.964366,
+          "p95": 9.956319,
+          "p99": 12.422042
+        },
+        "candidate_acks_per_second": 469.1281340265844,
+        "candidate_p50_below_10_ms_target_pass": true,
+        "candidate_send_ack_ms": {
+          "count": 4692,
+          "max": 14.075578,
+          "mean": 2.125313046675192,
+          "min": 1.49145,
+          "p50": 2.007343,
+          "p95": 2.815634,
+          "p99": 3.641404
+        },
+        "candidate_status": "COMPLETE",
+        "candidate_throughput_5000_per_second_target_pass": false,
+        "concurrent_senders": 1,
+        "profile": "distributed-inboxes",
+        "throughput_ratio": 2.275418143120283
+      },
+      {
+        "baseline_acks_per_second": 191.93369139770311,
+        "baseline_send_ack_ms": {
+          "count": 1927,
+          "max": 129.755029,
+          "mean": 41.57330387285937,
+          "min": 8.18572,
+          "p50": 40.271804,
+          "p95": 58.632556,
+          "p99": 80.180508
+        },
+        "candidate_acks_per_second": 1887.165487384428,
+        "candidate_p50_below_10_ms_target_pass": true,
+        "candidate_send_ack_ms": {
+          "count": 18903,
+          "max": 42.685254,
+          "mean": 4.22928047537428,
+          "min": 1.706077,
+          "p50": 3.48495,
+          "p95": 8.27408,
+          "p99": 12.781925
+        },
+        "candidate_status": "COMPLETE",
+        "candidate_throughput_5000_per_second_target_pass": false,
+        "concurrent_senders": 8,
+        "profile": "distributed-inboxes",
+        "throughput_ratio": 9.83238259860307
+      },
+      {
+        "baseline_acks_per_second": 174.34373882368865,
+        "baseline_send_ack_ms": {
+          "count": 1789,
+          "max": 432.333293,
+          "mean": 181.32315192453885,
+          "min": 15.754818,
+          "p50": 172.0875,
+          "p95": 283.550737,
+          "p99": 419.099768
+        },
+        "candidate_acks_per_second": 1291.6253863477534,
+        "candidate_p50_below_10_ms_target_pass": false,
+        "candidate_send_ack_ms": {
+          "count": 12946,
+          "max": 139.039339,
+          "mean": 24.70771230673567,
+          "min": 3.362681,
+          "p50": 21.129044,
+          "p95": 51.53203,
+          "p99": 69.274189
+        },
+        "candidate_status": "COMPLETE",
+        "candidate_throughput_5000_per_second_target_pass": false,
+        "concurrent_senders": 32,
+        "profile": "distributed-inboxes",
+        "throughput_ratio": 7.408498837196303
+      },
+      {
+        "baseline_acks_per_second": 100.48058580742192,
+        "baseline_send_ack_ms": {
+          "count": 1071,
+          "max": 1446.751218,
+          "mean": 950.0507631045753,
+          "min": 6.610368,
+          "p50": 1015.495455,
+          "p95": 1199.049162,
+          "p99": 1254.088017
+        },
+        "candidate_acks_per_second": 1339.7216177263317,
+        "candidate_p50_below_10_ms_target_pass": false,
+        "candidate_send_ack_ms": {
+          "count": 13532,
+          "max": 449.902664,
+          "mean": 73.76638979877328,
+          "min": 3.772797,
+          "p50": 58.614782,
+          "p95": 188.175284,
+          "p99": 258.587223
+        },
+        "candidate_status": "COMPLETE",
+        "candidate_throughput_5000_per_second_target_pass": false,
+        "concurrent_senders": 100,
+        "profile": "distributed-inboxes",
+        "throughput_ratio": 13.333139003528522
+      }
+    ],
+    "controls": [
+      {
+        "ack_ms": {
+          "count": 500,
+          "max": 0.549782,
+          "mean": 0.119212104,
+          "min": 0.074335,
+          "p50": 0.098387,
+          "p95": 0.2193,
+          "p99": 0.324568
+        },
+        "active_agents": 1,
+        "completed_message_cycles_per_second": 403.1741751213816,
+        "correctness_passed": true,
+        "cycle_ms": {
+          "count": 500,
+          "max": 10.762891,
+          "mean": 2.472569622,
+          "min": 1.744015,
+          "p50": 2.322274,
+          "p95": 3.402931,
+          "p99": 4.230589
+        },
+        "elapsed_seconds": 1.240158797,
+        "enrolled_agents": 1,
+        "idle_agents_with_long_poll": 0,
+        "label": "latency-uds",
+        "measured_messages": 500,
+        "send_ack_ms": {
+          "count": 500,
+          "max": 10.329168,
+          "mean": 2.1823450859999998,
+          "min": 1.557569,
+          "p50": 2.061114,
+          "p95": 3.00874,
+          "p99": 3.66702
+        },
+        "send_ack_p50_target_pass": true,
+        "transport": "uds",
+        "verified_deliveries_and_acks": 520,
+        "wait_after_send_ms": {
+          "count": 500,
+          "max": 0.519351,
+          "mean": 0.171012432,
+          "min": 0.093588,
+          "p50": 0.150945,
+          "p95": 0.300496,
+          "p99": 0.376268
+        },
+        "wait_after_send_p50_target_pass": true,
+        "warmup_messages": 20
+      },
+      {
+        "ack_ms": {
+          "count": 500,
+          "max": 1.132507,
+          "mean": 0.377520844,
+          "min": 0.227559,
+          "p50": 0.354069,
+          "p95": 0.573229,
+          "p99": 0.756549
+        },
+        "active_agents": 1,
+        "completed_message_cycles_per_second": 282.9922711895918,
+        "correctness_passed": true,
+        "cycle_ms": {
+          "count": 500,
+          "max": 14.11001,
+          "mean": 3.526708344,
+          "min": 2.509479,
+          "p50": 3.354285,
+          "p95": 4.605793,
+          "p99": 5.399831
+        },
+        "elapsed_seconds": 1.766832705,
+        "enrolled_agents": 1,
+        "idle_agents_with_long_poll": 0,
+        "label": "latency-http",
+        "measured_messages": 500,
+        "send_ack_ms": {
+          "count": 500,
+          "max": 13.11167,
+          "mean": 2.661220504,
+          "min": 1.929863,
+          "p50": 2.54058,
+          "p95": 3.516003,
+          "p99": 4.204643
+        },
+        "send_ack_p50_target_pass": true,
+        "transport": "http",
+        "verified_deliveries_and_acks": 520,
+        "wait_after_send_ms": {
+          "count": 500,
+          "max": 1.04239,
+          "mean": 0.487966996,
+          "min": 0.285873,
+          "p50": 0.469398,
+          "p95": 0.69343,
+          "p99": 0.90529
+        },
+        "wait_after_send_p50_target_pass": true,
+        "warmup_messages": 20
+      },
+      {
+        "active_agents": 1,
+        "append_target_5000_messages_per_second_pass": false,
+        "correctness_passed": true,
+        "elapsed_seconds": 10.001253568,
+        "label": "append-uds",
+        "measured_messages": 4713,
+        "messages_per_second": 471.2409267453942,
+        "send_ack_ms": {
+          "count": 4713,
+          "max": 18.955519,
+          "mean": 2.1157501436452364,
+          "min": 1.501479,
+          "p50": 1.994972,
+          "p95": 2.827296,
+          "p99": 3.628786
+        },
+        "transport": "uds",
+        "verified_measured_deliveries_and_acks": 4713,
+        "warmup_messages": 20
+      },
+      {
+        "ack_ms": {
+          "count": 1000,
+          "max": 0.332881,
+          "mean": 0.107580911,
+          "min": 0.074214,
+          "p50": 0.094163,
+          "p95": 0.188108,
+          "p99": 0.265333
+        },
+        "active_agents": 1,
+        "completed_message_cycles_per_second": 404.5665224519307,
+        "correctness_passed": true,
+        "cycle_ms": {
+          "count": 1000,
+          "max": 13.750687,
+          "mean": 2.465325183,
+          "min": 1.780804,
+          "p50": 2.342777,
+          "p95": 3.29562,
+          "p99": 3.900539
+        },
+        "elapsed_seconds": 2.471781387,
+        "enrolled_agents": 1,
+        "idle_agents_with_long_poll": 0,
+        "label": "scale-1-active",
+        "measured_messages": 1000,
+        "send_ack_ms": {
+          "count": 1000,
+          "max": 13.459278,
+          "mean": 2.20207886,
+          "min": 1.569492,
+          "p50": 2.082587,
+          "p95": 2.934549,
+          "p99": 3.561038
+        },
+        "send_ack_p50_target_pass": true,
+        "transport": "uds",
+        "verified_deliveries_and_acks": 1003,
+        "wait_after_send_ms": {
+          "count": 1000,
+          "max": 0.517884,
+          "mean": 0.155665412,
+          "min": 0.095498,
+          "p50": 0.145175,
+          "p95": 0.238662,
+          "p99": 0.342637
+        },
+        "wait_after_send_p50_target_pass": true,
+        "warmup_messages": 3
+      },
+      {
+        "ack_ms": {
+          "count": 1000,
+          "max": 0.408141,
+          "mean": 0.104735125,
+          "min": 0.073896,
+          "p50": 0.093177,
+          "p95": 0.168492,
+          "p99": 0.250722
+        },
+        "active_agents": 1,
+        "completed_message_cycles_per_second": 431.22196189682984,
+        "correctness_passed": true,
+        "cycle_ms": {
+          "count": 1000,
+          "max": 7.728984,
+          "mean": 2.312833425,
+          "min": 1.696822,
+          "p50": 2.220211,
+          "p95": 2.967447,
+          "p99": 3.711995
+        },
+        "elapsed_seconds": 2.318991351,
+        "enrolled_agents": 100,
+        "idle_agents_with_long_poll": 99,
+        "label": "scale-100-idle",
+        "measured_messages": 1000,
+        "send_ack_ms": {
+          "count": 1000,
+          "max": 7.440837,
+          "mean": 2.056882157,
+          "min": 1.523907,
+          "p50": 1.96792,
+          "p95": 2.665008,
+          "p99": 3.378336
+        },
+        "send_ack_p50_target_pass": true,
+        "transport": "uds",
+        "verified_deliveries_and_acks": 1003,
+        "wait_after_send_ms": {
+          "count": 1000,
+          "max": 0.43364,
+          "mean": 0.151216143,
+          "min": 0.093773,
+          "p50": 0.14264,
+          "p95": 0.234925,
+          "p99": 0.309867
+        },
+        "wait_after_send_p50_target_pass": true,
+        "warmup_messages": 3
+      },
+      {
+        "ack_ms": {
+          "count": 5000,
+          "max": 191.276563,
+          "mean": 30.4915371384,
+          "min": 0.172122,
+          "p50": 25.364827,
+          "p95": 78.201705,
+          "p99": 110.234025
+        },
+        "active_agents": 100,
+        "completed_message_cycles_per_second": 990.8408724752359,
+        "correctness_passed": true,
+        "cycle_ms": {
+          "count": 5000,
+          "max": 407.320464,
+          "mean": 96.8491298962,
+          "min": 4.122906,
+          "p50": 88.79263,
+          "p95": 182.548378,
+          "p99": 230.914764
+        },
+        "elapsed_seconds": 5.046218963,
+        "enrolled_agents": 100,
+        "idle_agents_with_long_poll": 0,
+        "label": "scale-100-active",
+        "measured_messages": 5000,
+        "send_ack_ms": {
+          "count": 5000,
+          "max": 187.385763,
+          "mean": 34.1640657572,
+          "min": 2.264616,
+          "p50": 27.015638,
+          "p95": 83.234969,
+          "p99": 116.71092
+        },
+        "send_ack_p50_target_pass": false,
+        "transport": "uds",
+        "verified_deliveries_and_acks": 5300,
+        "wait_after_send_ms": {
+          "count": 5000,
+          "max": 312.638824,
+          "mean": 32.1935270006,
+          "min": 0.137141,
+          "p50": 25.980891,
+          "p95": 83.194639,
+          "p99": 120.646245
+        },
+        "wait_after_send_p50_target_pass": false,
+        "warmup_messages": 300
+      }
+    ],
+    "original_eight_condition_gate": "FAILED"
+  },
+  "schema": "cooperators.durable-throughput-qualification/v1",
+  "status": "IMPLEMENTED_CORRECTNESS_QUALIFIED_PERFORMANCE_PARTIAL"
+}

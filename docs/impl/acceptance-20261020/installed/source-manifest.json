@@ -1,0 +1,40 @@
+{
+  "source_files": {
+    "Cargo.lock": "401880c50b7dabe78dc04e650a1bfa442225593461eed18ecc0af40564a7eb3f",
+    "Cargo.toml": "fb9676f2cd646e30414c4194ab8780b5340ff2abb533d5a1fad8010cd3492bd6",
+    "src/channels.rs": "3946e0fbc5e985a8680aa3ff493ec18919daa8304de5adde521b6c0bfaeed540",
+    "src/client.rs": "f3a2306f1c9eb1c6bc88705abccc7377f0f9d5dac50142675b23b195a1b79cd9",
+    "src/docs.rs": "ce64c276bcc5c24bb45a9ca59da52bf08124316dd98a1cc0c76a408e5c5759e5",
+    "src/envelope.rs": "7f6427cb5d6bc1fc1fcb5801eac2a7ad5336d2daa25998bc8f62b2ddf9393510",
+    "src/error.rs": "94ab22ac5d56ffd5621e14a374b3e1665dbd03a50e2247793edb180868eb6047",
+    "src/faults.rs": "90cf42716ca9f980cd778d667abb7d3faf8b334ea2da3929cabd95ae3eef706e",
+    "src/id.rs": "3c9978366a887d6a790b0fe1e49e178c58bcafdbec3ba622d8fde22a014e3dfb",
+    "src/leases.rs": "d3003851a85b0d2ca0bab64e4d6efe91b7e9dde406bfaf330702e9a3c7af9ee5",
+    "src/lib.rs": "3da5ae4d719a9d9537257fd50a4a674175fe42cd8645f9cb42826fe5695c8f49",
+    "src/main.rs": "363a8317f1c64eaaea839def652e47881c5a96875978b15b11c51a73db4cb5ba",
+    "src/mcp.rs": "32c32ef91883240719a5746e2e0ae421b555652ce5323141f169ed0f4a28c7d5",
+    "src/messaging.rs": "c220a4ee71ae5b9f8d7d3466a2bccde4680398634280fc15199c83e3e17baba3",
+    "src/metrics.rs": "bb5b7da51c8e63a205bac2636f9a373cfe5e85b09afd6d0f4b20d1eecec6e4cf",
+    "src/paths.rs": "42eae03c804d6ff639b1ae6445ad234db8926e096aea0683625c22ddc26b6bd9",
+    "src/presence.rs": "9049c080ae72fec1ed2807a8ef3ef68d7e5f74519269866dd2a2b6e69ba14df2",
+    "src/queues.rs": "7ef5aa98563f8b8060cd3ec675c656ca462981dee6f9abd90f1f8e86ea530b23",
+    "src/registry.rs": "1a66b3d9a3470cc94d067293ed4a35cd47def775b05e6028e4cd08e7a804ab59",
+    "src/rpc.rs": "085d4c74198fe2add7ad72eeba22effa3bc20a7be1b6b142195a1fc26f6b912c",
+    "src/server.rs": "18ebc1e3911a8c2d3290530551c842bdf3a562fa1d492ecf3dae70b62464e2dc",
+    "src/status.rs": "e69b9c586fa116cad133d7781aee67ff9032f0610f62a38742d5161581ca5260",
+    "src/storage.rs": "caa308ab78472d19f8b2f8d74fa90a0990b969c3536cdbe7b7ae58afd39b5c88"
+  },
+  "release_binary": {
+    "path": "/home/nzsn/Repos/Cooperators/target/release/coop",
+    "sha256": "c6d1047a8a4d9b0094274151c9658a101ed018ce07f82d66ed9fb512eb285321",
+    "bytes": 10739248
+  },
+  "production_source_unchanged": true,
+  "release_binary_unchanged": true,
+  "harness_files": {
+    "scripts/record_mcp_stdio.py": "b701ad9e95bb4e4d2e557b041f4169548ad2b4ace09eb84bdfd076d784ae2b7f",
+    "scripts/verify_installed_acceptance.py": "c9b68d69bd7840baad54be5c78a15ac6d83d8e7901e3e37369c8d4edde609094"
+  },
+  "base_commit": "63e20514fffa039a97b0ec25e432657854d2fdef",
+  "completed_utc": "2026-10-20T09:20:23.423852+00:00"
+}

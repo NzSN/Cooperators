@@ -1,0 +1,201 @@
+{
+  "binary_sha256_after": "c6d1047a8a4d9b0094274151c9658a101ed018ce07f82d66ed9fb512eb285321",
+  "completed": true,
+  "end_utc": "2026-10-20T10:18:33.017354+00:00",
+  "identity": {
+    "binary": "/tmp/cooperators-step3-baseline/coop",
+    "binary_sha256": "c6d1047a8a4d9b0094274151c9658a101ed018ce07f82d66ed9fb512eb285321",
+    "cpu": "12th Gen Intel(R) Core(TM) i5-1240P",
+    "executable_source_identity": {
+      "base_commit": "63e20514fffa039a97b0ec25e432657854d2fdef",
+      "basis": "Original retained build/source evidence; current worktree is not attributed to this executable",
+      "manifest": "/home/nzsn/Repos/Cooperators/docs/impl/acceptance-20261020/installed/source-manifest.json",
+      "manifest_sha256": "3d6727b35d5480dc995401fc892fdc69698f234c031bd50f4b447a994796111a",
+      "source_sha256": {
+        "Cargo.lock": "401880c50b7dabe78dc04e650a1bfa442225593461eed18ecc0af40564a7eb3f",
+        "Cargo.toml": "fb9676f2cd646e30414c4194ab8780b5340ff2abb533d5a1fad8010cd3492bd6",
+        "src/channels.rs": "3946e0fbc5e985a8680aa3ff493ec18919daa8304de5adde521b6c0bfaeed540",
+        "src/client.rs": "f3a2306f1c9eb1c6bc88705abccc7377f0f9d5dac50142675b23b195a1b79cd9",
+        "src/docs.rs": "ce64c276bcc5c24bb45a9ca59da52bf08124316dd98a1cc0c76a408e5c5759e5",
+        "src/envelope.rs": "7f6427cb5d6bc1fc1fcb5801eac2a7ad5336d2daa25998bc8f62b2ddf9393510",
+        "src/error.rs": "94ab22ac5d56ffd5621e14a374b3e1665dbd03a50e2247793edb180868eb6047",
+        "src/faults.rs": "90cf42716ca9f980cd778d667abb7d3faf8b334ea2da3929cabd95ae3eef706e",
+        "src/id.rs": "3c9978366a887d6a790b0fe1e49e178c58bcafdbec3ba622d8fde22a014e3dfb",
+        "src/leases.rs": "d3003851a85b0d2ca0bab64e4d6efe91b7e9dde406bfaf330702e9a3c7af9ee5",
+        "src/lib.rs": "3da5ae4d719a9d9537257fd50a4a674175fe42cd8645f9cb42826fe5695c8f49",
+        "src/main.rs": "363a8317f1c64eaaea839def652e47881c5a96875978b15b11c51a73db4cb5ba",
+        "src/mcp.rs": "32c32ef91883240719a5746e2e0ae421b555652ce5323141f169ed0f4a28c7d5",
+        "src/messaging.rs": "c220a4ee71ae5b9f8d7d3466a2bccde4680398634280fc15199c83e3e17baba3",
+        "src/metrics.rs": "bb5b7da51c8e63a205bac2636f9a373cfe5e85b09afd6d0f4b20d1eecec6e4cf",
+        "src/paths.rs": "42eae03c804d6ff639b1ae6445ad234db8926e096aea0683625c22ddc26b6bd9",
+        "src/presence.rs": "9049c080ae72fec1ed2807a8ef3ef68d7e5f74519269866dd2a2b6e69ba14df2",
+        "src/queues.rs": "7ef5aa98563f8b8060cd3ec675c656ca462981dee6f9abd90f1f8e86ea530b23",
+        "src/registry.rs": "1a66b3d9a3470cc94d067293ed4a35cd47def775b05e6028e4cd08e7a804ab59",
+        "src/rpc.rs": "085d4c74198fe2add7ad72eeba22effa3bc20a7be1b6b142195a1fc26f6b912c",
+        "src/server.rs": "18ebc1e3911a8c2d3290530551c842bdf3a562fa1d492ecf3dae70b62464e2dc",
+        "src/status.rs": "e69b9c586fa116cad133d7781aee67ff9032f0610f62a38742d5161581ca5260",
+        "src/storage.rs": "caa308ab78472d19f8b2f8d74fa90a0990b969c3536cdbe7b7ae58afd39b5c88"
+      }
+    },
+    "filesystem_mount": "/dev/sdd ext4   rw,relatime,discard,errors=remount-ro,data=ordered",
+    "filesystem_tmp": "ext2/ext3",
+    "git_head": "63e20514fffa039a97b0ec25e432657854d2fdef",
+    "git_status_before": "M README.md\n M TASKS.md\n M docs/impl/perf-smoke.md\n M docs/operator.md\n M src/lib.rs\n M src/messaging.rs\n M src/metrics.rs\n M src/server.rs\n M src/storage.rs\n?? docs/design/0003-durable-inbox-group-commit.md\n?? docs/impl/acceptance-20261020/\n?? docs/impl/throughput-20261020/\n?? examples/\n?? scripts/\n?? src/inbox_writer.rs\n?? tests/messaging_batch.rs\n?? tests/storage_batch.rs",
+    "label": "diagnostic-buffer-baseline",
+    "logical_cpus": 12,
+    "observed_worktree_source_sha256": {
+      "Cargo.lock": "401880c50b7dabe78dc04e650a1bfa442225593461eed18ecc0af40564a7eb3f",
+      "Cargo.toml": "fb9676f2cd646e30414c4194ab8780b5340ff2abb533d5a1fad8010cd3492bd6",
+      "src/channels.rs": "3946e0fbc5e985a8680aa3ff493ec18919daa8304de5adde521b6c0bfaeed540",
+      "src/client.rs": "f3a2306f1c9eb1c6bc88705abccc7377f0f9d5dac50142675b23b195a1b79cd9",
+      "src/docs.rs": "ce64c276bcc5c24bb45a9ca59da52bf08124316dd98a1cc0c76a408e5c5759e5",
+      "src/envelope.rs": "7f6427cb5d6bc1fc1fcb5801eac2a7ad5336d2daa25998bc8f62b2ddf9393510",
+      "src/error.rs": "94ab22ac5d56ffd5621e14a374b3e1665dbd03a50e2247793edb180868eb6047",
+      "src/faults.rs": "90cf42716ca9f980cd778d667abb7d3faf8b334ea2da3929cabd95ae3eef706e",
+      "src/id.rs": "3c9978366a887d6a790b0fe1e49e178c58bcafdbec3ba622d8fde22a014e3dfb",
+      "src/inbox_writer.rs": "b928d0a369a484d17c0965565536c705751af02c00d2842be5fdb3bd32d11676",
+      "src/leases.rs": "d3003851a85b0d2ca0bab64e4d6efe91b7e9dde406bfaf330702e9a3c7af9ee5",
+      "src/lib.rs": "6360b82497cfbc258fcbe5ebaa699735ca3842610e6721ab5d6bc516d2b60c6a",
+      "src/main.rs": "363a8317f1c64eaaea839def652e47881c5a96875978b15b11c51a73db4cb5ba",
+      "src/mcp.rs": "32c32ef91883240719a5746e2e0ae421b555652ce5323141f169ed0f4a28c7d5",
+      "src/messaging.rs": "0272256f93cfff8eda0386128a5b30801f2b8968c15ddc88295437d4acee8038",
+      "src/metrics.rs": "800eddd2f40b5dd87992ebd74b3c6d9d0e8f58f6ce6ce1300ed32b61fab5ed69",
+      "src/paths.rs": "42eae03c804d6ff639b1ae6445ad234db8926e096aea0683625c22ddc26b6bd9",
+      "src/presence.rs": "9049c080ae72fec1ed2807a8ef3ef68d7e5f74519269866dd2a2b6e69ba14df2",
+      "src/queues.rs": "7ef5aa98563f8b8060cd3ec675c656ca462981dee6f9abd90f1f8e86ea530b23",
+      "src/registry.rs": "1a66b3d9a3470cc94d067293ed4a35cd47def775b05e6028e4cd08e7a804ab59",
+      "src/rpc.rs": "085d4c74198fe2add7ad72eeba22effa3bc20a7be1b6b142195a1fc26f6b912c",
+      "src/server.rs": "3a888c007b8555e439ce5e36701ed6cd808951768127081893d54ddce0550162",
+      "src/status.rs": "e69b9c586fa116cad133d7781aee67ff9032f0610f62a38742d5161581ca5260",
+      "src/storage.rs": "fd77dba9dd7766e862e4d39953f2da739ddbff0be6e46cc41c5adb28e808476e"
+    },
+    "platform": "Linux-6.18.54.1-microsoft-standard-WSL2-x86_64-with-glibc2.39",
+    "python": "3.12.3",
+    "script_sha256": "406e8ea291fca4fec7610142e363f04d62f9e7392c5e6f2a4928ca332bc53389",
+    "start_utc": "2026-10-20T10:18:20.630812+00:00",
+    "unchanged_transport_helper_sha256": "685580eadb8b5b3f4a827ca750ea969bbba65df9d30dd519babcf62b475bf18c"
+  },
+  "observed_worktree_source_sha256_after": {
+    "Cargo.lock": "401880c50b7dabe78dc04e650a1bfa442225593461eed18ecc0af40564a7eb3f",
+    "Cargo.toml": "fb9676f2cd646e30414c4194ab8780b5340ff2abb533d5a1fad8010cd3492bd6",
+    "src/channels.rs": "3946e0fbc5e985a8680aa3ff493ec18919daa8304de5adde521b6c0bfaeed540",
+    "src/client.rs": "f3a2306f1c9eb1c6bc88705abccc7377f0f9d5dac50142675b23b195a1b79cd9",
+    "src/docs.rs": "ce64c276bcc5c24bb45a9ca59da52bf08124316dd98a1cc0c76a408e5c5759e5",
+    "src/envelope.rs": "7f6427cb5d6bc1fc1fcb5801eac2a7ad5336d2daa25998bc8f62b2ddf9393510",
+    "src/error.rs": "94ab22ac5d56ffd5621e14a374b3e1665dbd03a50e2247793edb180868eb6047",
+    "src/faults.rs": "90cf42716ca9f980cd778d667abb7d3faf8b334ea2da3929cabd95ae3eef706e",
+    "src/id.rs": "3c9978366a887d6a790b0fe1e49e178c58bcafdbec3ba622d8fde22a014e3dfb",
+    "src/inbox_writer.rs": "b928d0a369a484d17c0965565536c705751af02c00d2842be5fdb3bd32d11676",
+    "src/leases.rs": "d3003851a85b0d2ca0bab64e4d6efe91b7e9dde406bfaf330702e9a3c7af9ee5",
+    "src/lib.rs": "6360b82497cfbc258fcbe5ebaa699735ca3842610e6721ab5d6bc516d2b60c6a",
+    "src/main.rs": "363a8317f1c64eaaea839def652e47881c5a96875978b15b11c51a73db4cb5ba",
+    "src/mcp.rs": "32c32ef91883240719a5746e2e0ae421b555652ce5323141f169ed0f4a28c7d5",
+    "src/messaging.rs": "0272256f93cfff8eda0386128a5b30801f2b8968c15ddc88295437d4acee8038",
+    "src/metrics.rs": "800eddd2f40b5dd87992ebd74b3c6d9d0e8f58f6ce6ce1300ed32b61fab5ed69",
+    "src/paths.rs": "42eae03c804d6ff639b1ae6445ad234db8926e096aea0683625c22ddc26b6bd9",
+    "src/presence.rs": "9049c080ae72fec1ed2807a8ef3ef68d7e5f74519269866dd2a2b6e69ba14df2",
+    "src/queues.rs": "7ef5aa98563f8b8060cd3ec675c656ca462981dee6f9abd90f1f8e86ea530b23",
+    "src/registry.rs": "1a66b3d9a3470cc94d067293ed4a35cd47def775b05e6028e4cd08e7a804ab59",
+    "src/rpc.rs": "085d4c74198fe2add7ad72eeba22effa3bc20a7be1b6b142195a1fc26f6b912c",
+    "src/server.rs": "3a888c007b8555e439ce5e36701ed6cd808951768127081893d54ddce0550162",
+    "src/status.rs": "e69b9c586fa116cad133d7781aee67ff9032f0610f62a38742d5161581ca5260",
+    "src/storage.rs": "fd77dba9dd7766e862e4d39953f2da739ddbff0be6e46cc41c5adb28e808476e"
+  },
+  "pinned_source_manifest_sha256_after": "3d6727b35d5480dc995401fc892fdc69698f234c031bd50f4b447a994796111a",
+  "plan": {
+    "correctness": [
+      "Every receipt must be unique, non-duplicate, positive-sequence, and identify the expected receiver",
+      "Every delivered envelope must match its receipt ID/sequence, sender, receiver, kind, MIME and all 128 payload bytes",
+      "Every batch cursor and acknowledgment must advance through contiguous delivered sequences",
+      "Every receipt including warmup must match exactly one persisted inbox record; reject extra records, sequence gaps, and broken SHA-256 chain links",
+      "All receivers are empty and their acknowledged cursors equal the verified heads before shutdown",
+      "Running /proc/PID/exe hash must match the selected executable; source/helper/binary hashes must remain stable throughout the run"
+    ],
+    "distributed_inboxes": "C enrolled sender sessions self-send; one additional read/ack connection per same agent identity, so C=100 is 100 enrolled agents",
+    "limitations": [
+      "One host and filesystem; one 10-second sample per condition does not establish confidence intervals",
+      "The Python GIL, client parsing and thread scheduling, plus concurrent receiver maintenance, are included",
+      "A single sender with one outstanding request provides no overlap for group commit",
+      "Fixed 128-byte payload and closed-loop request arrival; this does not establish a maximum externally paced arrival rate",
+      "Readback of persisted records checks contents and integrity; crash-durability claims require separate failure-injection evidence",
+      "Fresh daemon and bus root per condition; warmup is excluded and enrollment is outside timing"
+    ],
+    "measurement_seconds": 10.0,
+    "outstanding_sends_per_sender": 1,
+    "payload": {
+      "mime": "text/plain",
+      "text": "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx",
+      "text_bytes": 128
+    },
+    "profiles": [
+      "same-inbox"
+    ],
+    "quantiles": "Nearest rank p50/p95/p99 of client call latency in milliseconds, excluding warmups",
+    "rate_denominator": "Wall time from sender barrier release through the last receipt for a send admitted before the measurement deadline",
+    "rate_numerator": "Every successful durable send acknowledgment for requests admitted during that window, including completions after its deadline",
+    "receiver_drain": {
+      "accounting": "Concurrent drain, verification, and ack overhead remain inside the measured send workload; final catch-up is outside its window",
+      "capacity": "All warmups are delivered and acked before measurement; drain continuously during measurement to avoid the unchanged 10000-message inbox cap",
+      "connections": "One independent receiver connection and drain thread per destination inbox",
+      "daemon_batch_limit": "Unchanged daemon default, 100 messages",
+      "interval_ms": 20.0,
+      "operation": "Every interval, repeatedly wait_message(timeout_s=0) and ack each returned default-size batch until empty"
+    },
+    "same_inbox": "C enrolled sender sessions send to one additional receiver session",
+    "scheduling": "Closed loop: each sender waits for its durable receipt before issuing its next send; a barrier starts each window",
+    "schema": "cooperators.concurrent-throughput-plan/v1",
+    "sender_concurrencies": [
+      100
+    ],
+    "targets_declared_before_measurement": {
+      "100_active_senders": "Apply and report the absolute 10 ms p50 comparison at C=100 with this workload explicitly named; no numeric definition of without degradation is inferred",
+      "application": "Report 5000/s independently for every topology and concurrency; no aggregate or best-case substitution",
+      "durable_acknowledgments_per_second_gte": 5000,
+      "send_ack_p50_ms_lt": 10,
+      "unloaded_idle_controls": "Run unchanged benchmark_transport.py with defaults against each executable and retain its serial append, unloaded UDS/HTTP, one-active/100-idle, and 100-active cycle controls"
+    },
+    "transport": "persistent AF_UNIX NDJSON JSON-RPC via benchmark_transport.Uds",
+    "warmup_minimum_sends_per_sender": 3,
+    "warmup_seconds": 1.0
+  },
+  "results": [
+    {
+      "active_receiver_agents": 1,
+      "active_sender_agents": 100,
+      "correctness_passed": true,
+      "durable_acknowledgments_per_second": 570.7060277921345,
+      "elapsed_seconds": 10.180372586,
+      "enrolled_agents": 101,
+      "label": "same-inbox-c100",
+      "measured_messages": 5810,
+      "outstanding_sends_per_sender": 1,
+      "profile": "same-inbox",
+      "receiver_drain": [
+        {
+          "ack_calls": 3256,
+          "max_batch": 5,
+          "wait_calls": 3259
+        }
+      ],
+      "receiver_identity_shared_with_sender": false,
+      "requested_measurement_seconds": 10.0,
+      "send_ack_ms": {
+        "count": 5810,
+        "max": 241.11824,
+        "mean": 173.45207573666093,
+        "min": 3.711117,
+        "p50": 171.276724,
+        "p95": 207.359018,
+        "p99": 226.081208
+      },
+      "send_ack_p50_below_10_ms_target_pass": false,
+      "throughput_5000_per_second_target_pass": false,
+      "transport": "uds",
+      "verified_deliveries_and_acks": 6519,
+      "warmup_messages": 709
+    }
+  ],
+  "schema": "cooperators.concurrent-throughput-results/v1",
+  "script_sha256_after": "406e8ea291fca4fec7610142e363f04d62f9e7392c5e6f2a4928ca332bc53389",
+  "unchanged_transport_helper_sha256_after": "685580eadb8b5b3f4a827ca750ea969bbba65df9d30dd519babcf62b475bf18c"
+}

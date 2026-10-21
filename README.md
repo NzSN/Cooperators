@@ -8,6 +8,11 @@ optional streamable-HTTP MCP endpoint.
 The design is in [`docs/design/0001-cooperatorsd-broker.md`](docs/design/0001-cooperatorsd-broker.md).
 Operator procedures live in [`docs/operator.md`](docs/operator.md); measured
 M4 performance is in [`docs/impl/perf-smoke.md`](docs/impl/perf-smoke.md).
+The latest installed-client, transport, 100-agent, and actual million-record
+replay results are in the [2026-10-20 acceptance baseline](docs/impl/acceptance-20261020/README.md).
+The subsequent [durable inbox group-commit report](docs/impl/throughput-20261020/README.md)
+records the implementation, correctness qualification, shared-inbox throughput
+gains, and remaining performance target misses.
 
 ## What v1 provides
 
@@ -182,6 +187,19 @@ receipt while an inbox is full.
 The caps are fields on `DaemonConfig` (`max_inbox_messages`,
 `max_inbox_bytes`). Stdio messages are capped at 4 MiB, matching the rmcp HTTP
 body limit; oversized stdio tool calls return `RESOURCE_EXHAUSTED`.
+
+Direct messages use bounded per-inbox write queues. The defaults are 1,024
+waiting requests or an 8 MiB serialized-size estimate per inbox, plus an active
+batch of up to 64 records or 256 KiB. A larger admitted message forms a batch
+alone. A full write queue also returns `RESOURCE_EXHAUSTED` before appending
+that request. Inbox backlog capacity is checked exactly when the worker admits
+each request, including earlier admitted records in its batch.
+
+Concurrent sends to one inbox share a covering fsync; separate inboxes can
+write concurrently. Collection waits at most 250 microseconds from the oldest
+queued request, in addition to scheduling and disk time. Success is returned
+after the covering sync. A send may still commit after its caller disconnects;
+retry with the same idempotency key to obtain its original receipt.
 
 ## Health and metrics
 

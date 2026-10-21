@@ -1,0 +1,23 @@
+{
+  "v": 1,
+  "agents": {
+    "instance-01M5C9K2ND5ESF334KWC4DMARD": {
+      "agent_id": "01M5C9K2ND5ESF334KWC4DMARD",
+      "token_hash": "sha256:7b3a09d8c311029bf15467851cdb74e2f77eda6beb0c8624e7a076b1f258cd7d",
+      "kind": "benchmark",
+      "capabilities": [],
+      "registered_at": "2026-10-20T09:16:59.949Z",
+      "display_name": "pending-wait-http-0",
+      "launch_key_hash": "sha256:7b3a09d8c311029bf15467851cdb74e2f77eda6beb0c8624e7a076b1f258cd7d"
+    },
+    "instance-01M5C9K2P6QKYWHQFT4YF6M6QA": {
+      "agent_id": "01M5C9K2P6QKYWHQFT4YF6M6QA",
+      "token_hash": "sha256:16e1245030950a574ca3ecb0cb37680aa7d8d573f0b9e6f4f22a9125892eda1a",
+      "kind": "benchmark",
+      "capabilities": [],
+      "registered_at": "2026-10-20T09:16:59.974Z",
+      "display_name": "pending-wait-http-1",
+      "launch_key_hash": "sha256:16e1245030950a574ca3ecb0cb37680aa7d8d573f0b9e6f4f22a9125892eda1a"
+    }
+  }
+}

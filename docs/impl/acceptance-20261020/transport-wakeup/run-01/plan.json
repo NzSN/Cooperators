@@ -1,0 +1,21 @@
+{
+  "payload_bytes": 128,
+  "percentiles": "Nearest rank, warmups excluded; signed values are not clamped",
+  "qualification": "Recipient request sendall/HTTP request completes; wait that delay; assert recipient future is unfinished immediately before sending",
+  "qualification_delay_ms": 25,
+  "recipient_wait_timeout_seconds": 600,
+  "samples_per_transport": 100,
+  "schema": "cooperators.transport-wakeup-plan/v1",
+  "scope": "Actual daemon with default durability; UDS JSON-RPC or initialized streamable HTTP MCP persistent connections; client parsing, Python scheduling and GIL included",
+  "send_start_to_delivery_ms": "Sender begins send call until recipient thread returns parsed wait response",
+  "separate_sender_recipient_connections": true,
+  "server_wait_entry_limitation": "No server instrumentation; request sent plus delayed unfinished future supports a pending client wait but cannot prove exact server wait entry",
+  "server_wait_entry_witness": false,
+  "signed_send_ack_to_delivery_ms": "Recipient parsed wait-response timestamp minus sender parsed durable acknowledgment timestamp; negative means delivery observed first",
+  "target_interpretation": "Report observed timing against25ms for context; client witness does not qualify an exact production server-wakeup latency target",
+  "transports": [
+    "uds",
+    "http"
+  ],
+  "warmups_per_transport": 10
+}

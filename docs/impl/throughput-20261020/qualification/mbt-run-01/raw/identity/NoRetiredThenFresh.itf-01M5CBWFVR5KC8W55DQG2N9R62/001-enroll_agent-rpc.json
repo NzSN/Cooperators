@@ -1,0 +1,23 @@
+{
+  "method": "enroll_agent",
+  "request": {
+    "display_name": "codex",
+    "kind": "codex",
+    "launch_key": {
+      "credential_hash": "sha256:8b839cca012a188a81c0d026a9cd37d8ef62db403124c921ba0ef998170afa9a"
+    }
+  },
+  "response": {
+    "result": {
+      "agent_id": "01M5CBWFXTV8P0EXV2Q5719A2S",
+      "capabilities": [],
+      "display_name": "codex",
+      "kind": "codex",
+      "name": "instance-01M5CBWFXTV8P0EXV2Q5719A2S",
+      "resumed": false,
+      "token": {
+        "credential_hash": "sha256:8b839cca012a188a81c0d026a9cd37d8ef62db403124c921ba0ef998170afa9a"
+      }
+    }
+  }
+}

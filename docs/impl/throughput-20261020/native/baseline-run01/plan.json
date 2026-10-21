@@ -1,0 +1,62 @@
+{
+  "correctness": [
+    "Unique validated send receipts; exact sender/recipient/payload/kind/sequence correspondence",
+    "Contiguous wait and ack cursors; each delivery acked; final inboxes empty at persisted heads",
+    "After child exit, read_segments/hash_record verify every disk row and chain against every receipt and delivered envelope without repair",
+    "Raw successful receipts, deliveries, cursor RPC timing, and failure attempts retained even on capacity errors",
+    "Actual /proc child executable hash equals selected binary; source, driver, helper and binary identity recorded before and after",
+    "Credential scan across every retained regular-file byte; no plaintext tokens or launch keys retained"
+  ],
+  "declared_utc": "2026-10-20T10:30:43.931Z",
+  "distributed_inboxes": "C self-sending identities; separate persistent receiver connection per identity",
+  "driver_change": "Tokio asynchronous persistent UnixStream clients replace Python threads and socket.makefile; production binary selected separately",
+  "full_eight_profile_qualification": true,
+  "http": "off for both native baseline and candidate; frozen Python driver enabled an idle HTTP listener",
+  "limitations": [
+    "New driver control does not replace or invalidate earlier Python qualification failures",
+    "One host/filesystem and one 10-second window per condition; no confidence intervals",
+    "Different client/runtime and idle HTTP listener setting from frozen Python controls; compare native baseline and native candidate using the identical driver",
+    "Client verification, framing and concurrent drains remain inside timed workload; evidence serialization and disk readback occur outside timing",
+    "A single outstanding sender cannot supply group commit overlap; no externally paced arrival-rate claim",
+    "Readback verifies retained records and acknowledged effects, not crash durability under power loss",
+    "A filtered run is diagnostic and never a full eight-profile qualification"
+  ],
+  "measurement_seconds": 10,
+  "outstanding_sends_per_sender": 1,
+  "payload": {
+    "mime": "text/plain",
+    "text": "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx",
+    "text_bytes": 128
+  },
+  "profiles": [
+    "same-inbox",
+    "distributed-inboxes"
+  ],
+  "quantiles": "Nearest rank client call latency p50/p95/p99, excluding warmup",
+  "rate_denominator": "Wall time from barrier release through last successful receipt for requests admitted before deadline; includes in-flight completions",
+  "rate_numerator": "All successful measured-window receipts, including completions after deadline; errored phases are invalid qualification",
+  "receiver_drain": {
+    "capacity": "Unchanged 10000-message/64MiB caps; no client credits or pacing",
+    "catchup": "30-second final catch-up outside measured interval",
+    "default_batch_limit": 100,
+    "interval_ms": 20,
+    "operation": "Repeated wait_message(timeout_s=0), verify batch, ack, repeat until empty; sleep only after empty"
+  },
+  "same_inbox": "C senders plus one additional receiver identity",
+  "scheduling": "Closed loop per sender; ready barrier then release barrier; deadline set at release; fully ack warmup before measurement",
+  "schema": "cooperators.native-concurrent-throughput-plan/v1",
+  "sender_concurrencies": [
+    1,
+    8,
+    32,
+    100
+  ],
+  "targets_declared_before_measurement": {
+    "application": "Every topology/concurrency independently; aggregate gate fails on any phase error or target miss",
+    "durable_acknowledgments_per_second_gte": 5000,
+    "send_ack_p50_ms_lt": 10
+  },
+  "transport": "persistent AF_UNIX NDJSON JSON-RPC 2.0; token included on every authenticated request",
+  "warmup_minimum_sends_per_sender": 3,
+  "warmup_seconds": 1
+}

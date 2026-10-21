@@ -1,0 +1,38 @@
+{
+  "all_inbox_reads": [
+    {
+      "hash_chain_read_pass": true,
+      "receiver_id": "01M5CDXY3SH018NVZPACPHVRS4",
+      "records_read": 0,
+      "trailing_newline_missing": false,
+      "truncated_bytes": 0
+    },
+    {
+      "hash_chain_read_pass": true,
+      "receiver_id": "01M5CDXY4056K815QYE3CN901J",
+      "records_read": 5430,
+      "trailing_newline_missing": false,
+      "truncated_bytes": 0
+    }
+  ],
+  "contiguous_sequences": true,
+  "correctness_passed": true,
+  "durable_records": 5430,
+  "errors": [],
+  "exact_envelope_disk_delivery_match": true,
+  "hash_chains_verified": true,
+  "inbox_heads": {
+    "01M5CDXY3SH018NVZPACPHVRS4": {
+      "hash": "sha256:0000000000000000000000000000000000000000000000000000000000000000",
+      "seq": 0
+    },
+    "01M5CDXY4056K815QYE3CN901J": {
+      "hash": "sha256:3302f883632f8b64b62e4687eea8f852f21b48b20cef86d2fa1a1a79229a786b",
+      "seq": 5430
+    }
+  },
+  "reader": "LogFile<Envelope>::read_segments and storage::hash_record; no repair/open",
+  "receipt_count": 5430,
+  "unique_receipts": true,
+  "verified_deliveries_and_acks": 5430
+}

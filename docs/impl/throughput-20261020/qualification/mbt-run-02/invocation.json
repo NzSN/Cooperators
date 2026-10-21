@@ -1,0 +1,10 @@
+{
+  "argv": [
+    "python3",
+    "docs/impl/throughput-20261020/qualification/mbt-run-02/run_gate.py"
+  ],
+  "environment": {
+    "CARGO_BUILD_JOBS": "2"
+  },
+  "execution": "Host execution with required local Unix sockets and actual process crash controls"
+}

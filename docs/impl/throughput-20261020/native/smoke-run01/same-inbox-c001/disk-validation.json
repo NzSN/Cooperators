@@ -1,0 +1,14 @@
+{
+  "all_inbox_reads": [],
+  "contiguous_sequences": true,
+  "correctness_passed": true,
+  "durable_records": 0,
+  "errors": [],
+  "exact_envelope_disk_delivery_match": true,
+  "hash_chains_verified": true,
+  "inbox_heads": {},
+  "reader": "LogFile<Envelope>::read_segments and storage::hash_record; no repair/open",
+  "receipt_count": 0,
+  "unique_receipts": true,
+  "verified_deliveries_and_acks": 0
+}

@@ -1,0 +1,49 @@
+{
+  "active_receiver_connections": 1,
+  "active_sender_agents": 1,
+  "all_receiver_inboxes_empty_with_verified_acked_heads": true,
+  "all_targets_and_correctness_pass": false,
+  "correctness_passed": true,
+  "durable_acknowledgments_per_second": 492.7567836532519,
+  "elapsed_seconds": 10.000877032,
+  "enrolled_agents": 2,
+  "errors": [],
+  "http": "off",
+  "label": "same-inbox-c001",
+  "measured_messages": 4928,
+  "outstanding_sends_per_sender": 1,
+  "partial_sample_warning": null,
+  "phase_completed_without_errors": true,
+  "profile": "same-inbox",
+  "receiver_drain": [
+    {
+      "ack_calls": 573,
+      "acked_head": 5430,
+      "agent": {
+        "agent_id": "01M5CDXY4056K815QYE3CN901J",
+        "display_name": "same-inbox-c001-1",
+        "name": "instance-01M5CDXY4056K815QYE3CN901J"
+      },
+      "delivered_records": 5430,
+      "errors": [],
+      "max_batch": 13,
+      "wait_calls": 1084
+    }
+  ],
+  "receiver_identity_shared_with_sender": false,
+  "requested_measurement_seconds": 10,
+  "send_ack_ms": {
+    "count": 4928,
+    "max": 14.133436,
+    "mean": 2.025824077516231,
+    "min": 1.471489,
+    "p50": 1.914476,
+    "p95": 2.727681,
+    "p99": 3.494721
+  },
+  "send_ack_p50_below_10_ms_target_pass": true,
+  "throughput_5000_per_second_target_pass": false,
+  "transport": "native-async-uds",
+  "warmup_fully_delivered_and_acked_before_measurement": true,
+  "warmup_messages": 502
+}

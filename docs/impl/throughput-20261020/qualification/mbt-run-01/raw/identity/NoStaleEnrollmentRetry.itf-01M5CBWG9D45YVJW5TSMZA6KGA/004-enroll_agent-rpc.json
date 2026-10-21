@@ -1,0 +1,22 @@
+{
+  "method": "enroll_agent",
+  "request": {
+    "display_name": "codex",
+    "kind": "codex",
+    "launch_key": {
+      "credential_hash": "sha256:42c3c1a5a008e16bc199368788e4a06c43ab794b4dc865fd6ae07e9a6d8084af"
+    }
+  },
+  "response": {
+    "error": {
+      "code": -32004,
+      "data": {
+        "agent_id": "01M5CBWGBWYVF1AZP12616GSWR",
+        "code": "CONFLICT",
+        "name": "instance-01M5CBWGBWYVF1AZP12616GSWR",
+        "retired": false
+      },
+      "message": "launch credential was rotated; authenticate with the current credential"
+    }
+  }
+}

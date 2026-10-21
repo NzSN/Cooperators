@@ -1,0 +1,79 @@
+{
+  "agents": [
+    {
+      "agent_id": "01M5CD9XAYZK78YRPRNBDTWV3M",
+      "display_name": "distributed-inboxes-c008-0",
+      "name": "instance-01M5CD9XAYZK78YRPRNBDTWV3M"
+    },
+    {
+      "agent_id": "01M5CD9XB5RNJJ8Q7RHD2PTTEN",
+      "display_name": "distributed-inboxes-c008-1",
+      "name": "instance-01M5CD9XB5RNJJ8Q7RHD2PTTEN"
+    },
+    {
+      "agent_id": "01M5CD9XBAFQMKAS6VNW1NA52X",
+      "display_name": "distributed-inboxes-c008-2",
+      "name": "instance-01M5CD9XBAFQMKAS6VNW1NA52X"
+    },
+    {
+      "agent_id": "01M5CD9XBE0VFYXQYFKB4M60SA",
+      "display_name": "distributed-inboxes-c008-3",
+      "name": "instance-01M5CD9XBE0VFYXQYFKB4M60SA"
+    },
+    {
+      "agent_id": "01M5CD9XBKRBKCKYG8SENWCXQ1",
+      "display_name": "distributed-inboxes-c008-4",
+      "name": "instance-01M5CD9XBKRBKCKYG8SENWCXQ1"
+    },
+    {
+      "agent_id": "01M5CD9XBSX4TYC0SD1T4YP34K",
+      "display_name": "distributed-inboxes-c008-5",
+      "name": "instance-01M5CD9XBSX4TYC0SD1T4YP34K"
+    },
+    {
+      "agent_id": "01M5CD9XBZR20GBG7Y26QZHBZ0",
+      "display_name": "distributed-inboxes-c008-6",
+      "name": "instance-01M5CD9XBZR20GBG7Y26QZHBZ0"
+    },
+    {
+      "agent_id": "01M5CD9XC4YB3NDME3603YXHHD",
+      "display_name": "distributed-inboxes-c008-7",
+      "name": "instance-01M5CD9XC4YB3NDME3603YXHHD"
+    }
+  ],
+  "all_receiver_inboxes_empty_with_verified_acked_heads": true,
+  "command": [
+    "/home/nzsn/Repos/Cooperators/target/release/coop",
+    "--root",
+    "/tmp/ctb-4h981a_j",
+    "daemon",
+    "run",
+    "--http-addr",
+    "127.0.0.1:0"
+  ],
+  "contiguous_sequences": true,
+  "correctness_passed": true,
+  "daemon_exit_after_termination": -15,
+  "durable_records": 21307,
+  "hash_chains_verified": true,
+  "inbox_heads": {
+    "01M5CD9XAYZK78YRPRNBDTWV3M": 2656,
+    "01M5CD9XB5RNJJ8Q7RHD2PTTEN": 2665,
+    "01M5CD9XBAFQMKAS6VNW1NA52X": 2673,
+    "01M5CD9XBE0VFYXQYFKB4M60SA": 2668,
+    "01M5CD9XBKRBKCKYG8SENWCXQ1": 2669,
+    "01M5CD9XBSX4TYC0SD1T4YP34K": 2654,
+    "01M5CD9XBZR20GBG7Y26QZHBZ0": 2660,
+    "01M5CD9XC4YB3NDME3603YXHHD": 2662
+  },
+  "label": "distributed-inboxes-c008",
+  "pid": 569144,
+  "receipt_count": 21307,
+  "receipt_payload_and_identity_match": true,
+  "root": "/tmp/ctb-4h981a_j",
+  "running_executable_sha256": "32d5b650e8768407d297165eb350c295ab0b7aa0da14272fcee3948765383488",
+  "start_utc": "2026-10-20T10:21:53.850605+00:00",
+  "unique_receipts": 21307,
+  "verified_deliveries_and_acks": 21307,
+  "warmup_fully_delivered_and_acked_before_measurement": 2404
+}

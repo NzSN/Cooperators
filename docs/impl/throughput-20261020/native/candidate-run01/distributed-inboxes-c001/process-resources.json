@@ -1,0 +1,132 @@
+[
+  {
+    "daemon": {
+      "after": {
+        "io_error": "No such file or directory (os error 2)",
+        "major_faults": 0,
+        "minor_faults": 479,
+        "pid": 579323,
+        "resident_pages": 1974,
+        "system_ticks": 11,
+        "threads": 14,
+        "user_ticks": 6
+      },
+      "before": {
+        "io_error": "No such file or directory (os error 2)",
+        "major_faults": 0,
+        "minor_faults": 328,
+        "pid": 579323,
+        "resident_pages": 1846,
+        "system_ticks": 0,
+        "threads": 14,
+        "user_ticks": 0
+      },
+      "clock_ticks_per_second": 100.0,
+      "major_faults": 0,
+      "minor_faults": 151,
+      "one_logical_cpu_percent": 100,
+      "system_ticks": 11,
+      "total_cpu_percent": 16.968677535106625,
+      "user_ticks": 6,
+      "wall_seconds": 1.001845899
+    },
+    "driver": {
+      "after": {
+        "io_error": "No such file or directory (os error 2)",
+        "major_faults": 0,
+        "minor_faults": 249317,
+        "pid": 579178,
+        "resident_pages": 165887,
+        "system_ticks": 635,
+        "threads": 5,
+        "user_ticks": 4408
+      },
+      "before": {
+        "io_error": "No such file or directory (os error 2)",
+        "major_faults": 0,
+        "minor_faults": 249317,
+        "pid": 579178,
+        "resident_pages": 165887,
+        "system_ticks": 633,
+        "threads": 5,
+        "user_ticks": 4404
+      },
+      "clock_ticks_per_second": 100.0,
+      "major_faults": 0,
+      "minor_faults": 0,
+      "one_logical_cpu_percent": 100,
+      "system_ticks": 2,
+      "total_cpu_percent": 5.988945012390572,
+      "user_ticks": 4,
+      "wall_seconds": 1.001845899
+    },
+    "resource_window_seconds": 1.001845899,
+    "sample_window_seconds": 1.001716677,
+    "warmup": true
+  },
+  {
+    "daemon": {
+      "after": {
+        "io_error": "No such file or directory (os error 2)",
+        "major_faults": 0,
+        "minor_faults": 1325,
+        "pid": 579323,
+        "resident_pages": 2742,
+        "system_ticks": 106,
+        "threads": 14,
+        "user_ticks": 87
+      },
+      "before": {
+        "io_error": "No such file or directory (os error 2)",
+        "major_faults": 0,
+        "minor_faults": 479,
+        "pid": 579323,
+        "resident_pages": 1974,
+        "system_ticks": 11,
+        "threads": 14,
+        "user_ticks": 6
+      },
+      "clock_ticks_per_second": 100.0,
+      "major_faults": 0,
+      "minor_faults": 846,
+      "one_logical_cpu_percent": 100,
+      "system_ticks": 95,
+      "total_cpu_percent": 17.599267824700394,
+      "user_ticks": 81,
+      "wall_seconds": 10.000416026
+    },
+    "driver": {
+      "after": {
+        "io_error": "No such file or directory (os error 2)",
+        "major_faults": 0,
+        "minor_faults": 249317,
+        "pid": 579178,
+        "resident_pages": 165887,
+        "system_ticks": 660,
+        "threads": 5,
+        "user_ticks": 4439
+      },
+      "before": {
+        "io_error": "No such file or directory (os error 2)",
+        "major_faults": 0,
+        "minor_faults": 249317,
+        "pid": 579178,
+        "resident_pages": 165887,
+        "system_ticks": 635,
+        "threads": 5,
+        "user_ticks": 4408
+      },
+      "clock_ticks_per_second": 100.0,
+      "major_faults": 0,
+      "minor_faults": 0,
+      "one_logical_cpu_percent": 100,
+      "system_ticks": 25,
+      "total_cpu_percent": 5.599767035131944,
+      "user_ticks": 31,
+      "wall_seconds": 10.000416026
+    },
+    "resource_window_seconds": 10.000416026,
+    "sample_window_seconds": 10.000120189,
+    "warmup": false
+  }
+]

@@ -1,0 +1,21 @@
+{
+  "credential-check.json": "2a816296e243357449135c0fe9f0e742efa4ff78716da567622c380eb80a721d",
+  "environment.json": "90aa30771e8d420dce9ebbb904e6f68351afd44c7ea24a6e597740153a0f1910",
+  "plan.json": "1af17611217910e1d01d03dbb6dc3b50dbffc777d7a35f60eb715af32cb5d711",
+  "same-inbox-c001/daemon.json": "ad84d2438e4fc7963358bf95ca8b9a0804f6a095b52f42c217800a389ef9eabf",
+  "same-inbox-c001/daemon.stderr.log": "d3929a2c29f92ff97b9fbe1a89cc653e733c877b0c3e20a1261f740ede82fc35",
+  "same-inbox-c001/daemon.stdout.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+  "same-inbox-c001/deliveries.jsonl": "b983c9dd72f73738ccc8f3a1ac2771d1d55f823ea52235e6955cc501977036a4",
+  "same-inbox-c001/disk-validation.json": "f778a2ea6b752557c7f1b89e7141b512bc7a5d268e4255f714a594316e72ccbc",
+  "same-inbox-c001/failed-send-attempts.jsonl": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+  "same-inbox-c001/process-resources.json": "b530b870cc146d0b68a1e1f893105ae371440a4edb60f93ab29e31269adb9b5a",
+  "same-inbox-c001/raw-root/agents/01M5CDS78QATMGMK8RF9WZ372Q/inbox.jsonl": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+  "same-inbox-c001/raw-root/agents/01M5CDS790V3KFY8T4N5Q8XEK8/inbox.jsonl": "f572f5bdfdea74eda16c8fb12028fbda3635e7834c649d297b96802e6c4b6206",
+  "same-inbox-c001/raw-root/channels/#presence.jsonl": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+  "same-inbox-c001/raw-root/registry.json": "83e7b19773cccc7c4b55ab467d2a2ef338aa52c550383b33018ef7094de83108",
+  "same-inbox-c001/raw-root/run/owner.lock": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+  "same-inbox-c001/receiver-rpc.jsonl": "70bcabf050a2114f06f7a80cf9798b851ea3dc4491a0eb157366611d49d821e2",
+  "same-inbox-c001/samples.jsonl": "7f9936d704723fd2890987d9d0f287389d2f5619982ad74945edef4e25f6c03d",
+  "same-inbox-c001/summary.json": "7ca3ba5fe8a9dbbc1cfecdfb97efb25553a1320da0126ae51049742d77dc06d0",
+  "summary.json": "6177ae51af4a880cd20633d44cba7fa7ec3a8b7c93346a6736e18995d7b53e29"
+}

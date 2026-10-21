@@ -1,0 +1,8 @@
+{
+  "codex_readiness_exit": 0,
+  "codex_exchange_exit": 0,
+  "claude_turns_completed": 2,
+  "daemon_and_claude_bridge_stopped_after_completed_scenario": true,
+  "daemon_stop_exit": 143,
+  "bridge_stop_exit": 143
+}

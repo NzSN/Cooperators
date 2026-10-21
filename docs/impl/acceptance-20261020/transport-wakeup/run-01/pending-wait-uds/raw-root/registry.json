@@ -1,0 +1,23 @@
+{
+  "v": 1,
+  "agents": {
+    "instance-01M5C9JZ6RBJYDBSWT7QQA87BM": {
+      "agent_id": "01M5C9JZ6RBJYDBSWT7QQA87BM",
+      "token_hash": "sha256:007874727852c02325487350075e21e099532fd15e0448b8b6d938d734a1ce50",
+      "kind": "benchmark",
+      "capabilities": [],
+      "registered_at": "2026-10-20T09:16:56.408Z",
+      "display_name": "pending-wait-uds-0",
+      "launch_key_hash": "sha256:007874727852c02325487350075e21e099532fd15e0448b8b6d938d734a1ce50"
+    },
+    "instance-01M5C9JZ70RPNKTVNTWJ4JVQRN": {
+      "agent_id": "01M5C9JZ70RPNKTVNTWJ4JVQRN",
+      "token_hash": "sha256:d7fd2fc4f9a3cfed45ccfc124b3255f609fd3acce0bfb37357f6f925f8ee4ed7",
+      "kind": "benchmark",
+      "capabilities": [],
+      "registered_at": "2026-10-20T09:16:56.416Z",
+      "display_name": "pending-wait-uds-1",
+      "launch_key_hash": "sha256:d7fd2fc4f9a3cfed45ccfc124b3255f609fd3acce0bfb37357f6f925f8ee4ed7"
+    }
+  }
+}

@@ -1,0 +1,24 @@
+{
+  "captured_utc": "2026-10-20T09:58:11.516557+00:00",
+  "cgroup_cpu.max": "max 100000",
+  "cgroup_memory.max": "max",
+  "load_average_1_5_15": [
+    1.638671875,
+    3.5361328125,
+    4.11669921875
+  ],
+  "memory": {
+    "Dirty": "1292 kB",
+    "MemAvailable": "4851032 kB",
+    "MemTotal": "12249904 kB",
+    "SwapFree": "2244660 kB",
+    "SwapTotal": "3145728 kB",
+    "Writeback": "0 kB"
+  },
+  "process_cpu_summary": [
+    "    PID %CPU %MEM COMMAND",
+    "      2 71.4  0.1 python3",
+    "      1  0.0  0.1 codex",
+    "      3  0.0  0.0 ps"
+  ]
+}

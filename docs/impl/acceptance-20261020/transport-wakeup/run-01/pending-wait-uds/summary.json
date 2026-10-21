@@ -1,0 +1,47 @@
+{
+  "all_wait_requests_sent_and_pending_before_send": true,
+  "correctness_passed": true,
+  "exact_production_wakeup_target_qualified": false,
+  "negative_signed_ack_to_delivery_samples": 6,
+  "qualification_elapsed_ms": {
+    "count": 100,
+    "max": 25.757166,
+    "mean": 25.344550920000003,
+    "min": 25.169125,
+    "p50": 25.323043,
+    "p95": 25.548806,
+    "p99": 25.633243
+  },
+  "samples": 100,
+  "send_ack_ms": {
+    "count": 100,
+    "max": 14.739234,
+    "mean": 4.81974607,
+    "min": 2.651368,
+    "p50": 4.673419,
+    "p95": 6.692397,
+    "p99": 9.436838
+  },
+  "send_start_to_delivery_ms": {
+    "count": 100,
+    "max": 15.017153,
+    "mean": 5.03725841,
+    "min": 2.808818,
+    "p50": 4.828119,
+    "p95": 6.947594,
+    "p99": 9.810043
+  },
+  "send_start_to_delivery_p50_below25ms_observed": true,
+  "server_wait_entry_witness": false,
+  "signed_send_ack_to_delivery_ms": {
+    "count": 100,
+    "max": 0.577151,
+    "mean": 0.21751234,
+    "min": -0.23157,
+    "p50": 0.204846,
+    "p95": 0.429373,
+    "p99": 0.513747
+  },
+  "transport": "uds",
+  "warmups": 10
+}

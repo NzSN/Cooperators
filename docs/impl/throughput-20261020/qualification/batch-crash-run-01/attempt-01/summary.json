@@ -1,0 +1,177 @@
+{
+  "changed_core_source_files": [],
+  "command": [
+    "cargo",
+    "test",
+    "--offline",
+    "--locked",
+    "--features",
+    "mbt-injection",
+    "--test",
+    "batch_crash",
+    "--",
+    "--test-threads=1",
+    "--nocapture"
+  ],
+  "controls": [
+    {
+      "binary_sha256": "591f5b547e9106dd0dffbe8511b38e24f0d608c382871a370279b3fe123323e7",
+      "complete": true,
+      "dedupe_left_log_unchanged": true,
+      "duplicate_retry_count": 4,
+      "hooks": [
+        {
+          "bytes_requested": 320,
+          "bytes_written": 320,
+          "bytes_written_known": true,
+          "seq": 2,
+          "stage": "BeforeSync",
+          "sync_attempted": false,
+          "sync_succeeded": false
+        },
+        {
+          "bytes_requested": 320,
+          "bytes_written": 320,
+          "bytes_written_known": true,
+          "seq": 3,
+          "stage": "BeforeSync",
+          "sync_attempted": false,
+          "sync_succeeded": false
+        },
+        {
+          "bytes_requested": 320,
+          "bytes_written": 320,
+          "bytes_written_known": true,
+          "seq": 4,
+          "stage": "BeforeSync",
+          "sync_attempted": false,
+          "sync_succeeded": false
+        }
+      ],
+      "mode": "before-sync",
+      "prior_acknowledged_prefix_preserved": true,
+      "process": {
+        "exit_code": null,
+        "exit_status": "signal: 9 (SIGKILL)",
+        "mode": "before-sync",
+        "pid": 212,
+        "program": "/home/nzsn/Repos/Cooperators/target/debug/deps/batch_crash-a58fca80dba94d07",
+        "signal": 9,
+        "success": false
+      },
+      "published_records": 1,
+      "recovered_records": 4,
+      "successful_batch_receipts": 0,
+      "truncated_bytes": 0
+    },
+    {
+      "binary_sha256": "591f5b547e9106dd0dffbe8511b38e24f0d608c382871a370279b3fe123323e7",
+      "complete": true,
+      "dedupe_left_log_unchanged": true,
+      "duplicate_retry_count": 4,
+      "hooks": [
+        {
+          "bytes_requested": 320,
+          "bytes_written": 320,
+          "bytes_written_known": true,
+          "seq": 2,
+          "stage": "Synced",
+          "sync_attempted": true,
+          "sync_succeeded": true
+        },
+        {
+          "bytes_requested": 320,
+          "bytes_written": 320,
+          "bytes_written_known": true,
+          "seq": 3,
+          "stage": "Synced",
+          "sync_attempted": true,
+          "sync_succeeded": true
+        },
+        {
+          "bytes_requested": 320,
+          "bytes_written": 320,
+          "bytes_written_known": true,
+          "seq": 4,
+          "stage": "Synced",
+          "sync_attempted": true,
+          "sync_succeeded": true
+        }
+      ],
+      "mode": "after-sync",
+      "prior_acknowledged_prefix_preserved": true,
+      "process": {
+        "exit_code": null,
+        "exit_status": "signal: 9 (SIGKILL)",
+        "mode": "after-sync",
+        "pid": 192,
+        "program": "/home/nzsn/Repos/Cooperators/target/debug/deps/batch_crash-a58fca80dba94d07",
+        "signal": 9,
+        "success": false
+      },
+      "published_records": 4,
+      "recovered_records": 4,
+      "successful_batch_receipts": 3,
+      "truncated_bytes": 0
+    },
+    {
+      "binary_sha256": "591f5b547e9106dd0dffbe8511b38e24f0d608c382871a370279b3fe123323e7",
+      "complete": true,
+      "dedupe_left_log_unchanged": true,
+      "duplicate_retry_count": 2,
+      "hooks": [
+        {
+          "bytes_requested": 320,
+          "bytes_written": 320,
+          "bytes_written_known": true,
+          "seq": 2,
+          "stage": "BeforeSync",
+          "sync_attempted": false,
+          "sync_succeeded": false
+        },
+        {
+          "bytes_requested": 320,
+          "bytes_written": 9,
+          "bytes_written_known": true,
+          "seq": 3,
+          "stage": "PartialWriteFailed",
+          "sync_attempted": false,
+          "sync_succeeded": false
+        }
+      ],
+      "mode": "partial-failure",
+      "prior_acknowledged_prefix_preserved": true,
+      "process": {
+        "exit_code": null,
+        "exit_status": "signal: 9 (SIGKILL)",
+        "mode": "partial-failure",
+        "pid": 202,
+        "program": "/home/nzsn/Repos/Cooperators/target/debug/deps/batch_crash-a58fca80dba94d07",
+        "signal": 9,
+        "success": false
+      },
+      "published_records": 1,
+      "recovered_records": 2,
+      "successful_batch_receipts": 0,
+      "truncated_bytes": 9
+    }
+  ],
+  "core_source_files_matched": 24,
+  "elapsed_seconds": 2.8054134845733643,
+  "environment": {
+    "CARGO_BUILD_JOBS": "2",
+    "COOP_BATCH_CRASH_EVIDENCE_DIR": "/home/nzsn/Repos/Cooperators/docs/impl/throughput-20261020/qualification/batch-crash-run-01/attempt-01/controls"
+  },
+  "exit_code": 0,
+  "finished_unix": 1792492877.9450839,
+  "limitations": [
+    "Actual Unix SIGKILL validates process-crash recovery; it does not simulate loss of the kernel page cache or hardware power failure.",
+    "Socketless production broker worker calls exercise batch sync, publication, replay and dedupe; this control does not exercise network transports.",
+    "Recovery dedupe retries use the identity reconstructed from the persisted registry through the in-process broker API; authentication transport behavior is covered by other qualification evidence.",
+    "The helper test returns immediately in ordinary parent test collection; the three parent tests each execute and kill a dedicated helper child."
+  ],
+  "passed": true,
+  "plaintext_credential_files": [],
+  "release_binary_sha256": "32d5b650e8768407d297165eb350c295ab0b7aa0da14272fcee3948765383488",
+  "started_unix": 1792492875.1396704
+}

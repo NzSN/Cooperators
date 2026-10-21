@@ -1,0 +1,31 @@
+{
+  "caps": "Unchanged daemon defaults",
+  "concurrencies": [
+    1,
+    8,
+    32,
+    100
+  ],
+  "declared_utc": "2026-10-20T10:21:40.368399+00:00",
+  "driver_reader_buffer": "Original unchanged default 8 KiB; the separate larger-buffer diagnostic is not applied",
+  "empty_inbox_drain_interval_ms": 20,
+  "frozen_phase_function": "benchmark_throughput.ThroughputRun.phase unchanged",
+  "hashes": {
+    "docs/impl/throughput-20261020/candidate02/continue_distributed.py": "344e16af668492bc2b807f707ccedb0532d9b2495ffbfd6caa94ce653ffb7c0e",
+    "scripts/benchmark_throughput.py": "406e8ea291fca4fec7610142e363f04d62f9e7392c5e6f2a4928ca332bc53389",
+    "scripts/benchmark_transport.py": "685580eadb8b5b3f4a827ca750ea969bbba65df9d30dd519babcf62b475bf18c",
+    "target/release/coop": "32d5b650e8768407d297165eb350c295ab0b7aa0da14272fcee3948765383488"
+  },
+  "measurement_seconds": 10,
+  "minimum_warmup_sends_per_sender": 3,
+  "original_eight_case_gate": "FAILED because same-inbox C100 failed; no best-case substitution or reversal by this continuation",
+  "outstanding_sends_per_sender": 1,
+  "payload_text_bytes": 128,
+  "profiles": [
+    "distributed-inboxes"
+  ],
+  "schema": "cooperators.distributed-continuation-plan/v1",
+  "scope": "Only remaining four distributed-inbox cases; explicit partial continuation",
+  "source_manifest": "docs/impl/throughput-20261020/qualification/run-02/source-manifest.json",
+  "warmup_seconds": 1
+}

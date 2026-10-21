@@ -1,0 +1,20 @@
+{
+  "command": [
+    "/home/nzsn/Repos/Cooperators/target/release/coop",
+    "--root",
+    "/tmp/ctb-sc25n7tp",
+    "daemon",
+    "run",
+    "--http-addr",
+    "127.0.0.1:0"
+  ],
+  "correctness_passed": false,
+  "daemon_exit_after_termination": -15,
+  "error": "UDS send_message: {'jsonrpc': '2.0', 'id': 169, 'error': {'code': -32003, 'message': 'inbox for \"instance-01M5CC8Y49JGH8CHR275J5JQS9\" is full (pending 10000 messages, 4846939 bytes; limits 10000 messages, 67108864 bytes)', 'data': {'code': 'RESOURCE_EXHAUSTED'}}}",
+  "label": "same-inbox-c100",
+  "pid": 564112,
+  "root": "/tmp/ctb-sc25n7tp",
+  "running_executable_sha256": "0fe56619a6fa7366322bdedadc4b2d718d6429f7081244237185ad8a7bae7029",
+  "start_utc": "2026-10-20T10:03:51.982036+00:00",
+  "warmup_fully_delivered_and_acked_before_measurement": 2995
+}

@@ -1,0 +1,32 @@
+{
+  "agents": [
+    {
+      "agent_id": "01M5CDT31KE4N72KHC02EPJ7V1",
+      "display_name": "same-inbox-c001-0",
+      "name": "instance-01M5CDT31KE4N72KHC02EPJ7V1"
+    },
+    {
+      "agent_id": "01M5CDT31TJ8PGS17TSZFBCEN6",
+      "display_name": "same-inbox-c001-1",
+      "name": "instance-01M5CDT31TJ8PGS17TSZFBCEN6"
+    }
+  ],
+  "command": [
+    "/tmp/cooperators-step3-baseline/coop",
+    "--root",
+    "/tmp/ctn-578796-1792492243982863746",
+    "daemon",
+    "run",
+    "--http-addr",
+    "off"
+  ],
+  "correctness_passed": true,
+  "errors": [],
+  "http": "off",
+  "label": "same-inbox-c001",
+  "pid": 578823,
+  "root": "/tmp/ctn-578796-1792492243982863746",
+  "running_executable_sha256": "c6d1047a8a4d9b0094274151c9658a101ed018ce07f82d66ed9fb512eb285321",
+  "start_utc": "2026-10-20T10:30:43.982Z",
+  "stop": "SIGTERM; signal: 15 (SIGTERM)"
+}

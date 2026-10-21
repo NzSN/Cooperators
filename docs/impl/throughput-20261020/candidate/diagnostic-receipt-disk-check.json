@@ -1,0 +1,6 @@
+{
+  "all_successful_receipts_match_disk_ids_and_sequences": true,
+  "diagnostic_successful_receipts": 17693,
+  "highest_persisted_sequence": 17693,
+  "persisted_records": 17693
+}

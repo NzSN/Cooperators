@@ -1,0 +1,82 @@
+{
+  "disk_records": [
+    {
+      "body": {
+        "mime": "text/plain",
+        "text": "payload-prefix"
+      },
+      "from": "sender",
+      "id": "01M5CEDDNFSNX994YKX5YEHS5M",
+      "idempotency_key": "prefix",
+      "kind": "batch-crash",
+      "prev_hash": "sha256:0000000000000000000000000000000000000000000000000000000000000000",
+      "reply_to": null,
+      "seq": 1,
+      "to": "recipient",
+      "ts": "2026-10-20T10:41:17.487Z",
+      "v": 1
+    },
+    {
+      "body": {
+        "mime": "text/plain",
+        "text": "payload-batch-0"
+      },
+      "from": "sender",
+      "id": "01M5CEDDVVTV9WKRG6YW4JV1CS",
+      "idempotency_key": "batch-0",
+      "kind": "batch-crash",
+      "prev_hash": "sha256:4850e91fb7381a8193d99a9ef3b5856e0d99969c8d7fda26f6c1fccb06e7df52",
+      "reply_to": null,
+      "seq": 2,
+      "to": "recipient",
+      "ts": "2026-10-20T10:41:17.691Z",
+      "v": 1
+    }
+  ],
+  "errors": [
+    "I/O error: injected MBT filesystem failure",
+    "I/O error: injected MBT filesystem failure",
+    "I/O error: injected MBT filesystem failure"
+  ],
+  "hooks": [
+    {
+      "bytes_requested": 320,
+      "bytes_written": 320,
+      "bytes_written_known": true,
+      "seq": 2,
+      "stage": "BeforeSync",
+      "sync_attempted": false,
+      "sync_succeeded": false
+    },
+    {
+      "bytes_requested": 320,
+      "bytes_written": 9,
+      "bytes_written_known": true,
+      "seq": 3,
+      "stage": "PartialWriteFailed",
+      "sync_attempted": false,
+      "sync_succeeded": false
+    }
+  ],
+  "mode": "partial-failure",
+  "published_records": [
+    {
+      "body": {
+        "mime": "text/plain",
+        "text": "payload-prefix"
+      },
+      "from": "sender",
+      "id": "01M5CEDDNFSNX994YKX5YEHS5M",
+      "idempotency_key": "prefix",
+      "kind": "batch-crash",
+      "prev_hash": "sha256:0000000000000000000000000000000000000000000000000000000000000000",
+      "reply_to": null,
+      "seq": 1,
+      "to": "recipient",
+      "ts": "2026-10-20T10:41:17.487Z",
+      "v": 1
+    }
+  ],
+  "successful_batch_receipts": [],
+  "truncated_bytes": 9
+}

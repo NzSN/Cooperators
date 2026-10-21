@@ -1,0 +1,8 @@
+{
+  "observation": {
+    "deadRecords": [],
+    "terminal": true,
+    "up": false
+  },
+  "result": "stopped"
+}

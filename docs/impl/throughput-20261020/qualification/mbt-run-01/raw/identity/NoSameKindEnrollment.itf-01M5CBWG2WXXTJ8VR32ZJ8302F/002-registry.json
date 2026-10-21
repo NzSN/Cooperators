@@ -1,0 +1,23 @@
+{
+  "v": 1,
+  "agents": {
+    "instance-01M5CBWG4Y26NDQYPW5220R148": {
+      "agent_id": "01M5CBWG4Y26NDQYPW5220R148",
+      "token_hash": "sha256:8e27a3bc423c7fecf4a70a4b6c2add6914e3c6a44bd02ad51247d1a9db50ead7",
+      "kind": "codex",
+      "capabilities": [],
+      "registered_at": "2026-10-20T09:57:05.822Z",
+      "display_name": "codex",
+      "launch_key_hash": "sha256:8e27a3bc423c7fecf4a70a4b6c2add6914e3c6a44bd02ad51247d1a9db50ead7"
+    },
+    "instance-01M5CBWG59G1QJX48NKFEWDZH6": {
+      "agent_id": "01M5CBWG59G1QJX48NKFEWDZH6",
+      "token_hash": "sha256:2e90d1c3989cf050aeccbad6da51dec92c4f3b4e664c8727a5180a4ef9c8f8aa",
+      "kind": "codex",
+      "capabilities": [],
+      "registered_at": "2026-10-20T09:57:05.833Z",
+      "display_name": "codex",
+      "launch_key_hash": "sha256:2e90d1c3989cf050aeccbad6da51dec92c4f3b4e664c8727a5180a4ef9c8f8aa"
+    }
+  }
+}

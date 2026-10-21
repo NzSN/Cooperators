@@ -1,0 +1,14 @@
+{
+  "v": 1,
+  "agents": {
+    "instance-01M5CDBP2NVHJFYT8K8HFTP019": {
+      "agent_id": "01M5CDBP2NVHJFYT8K8HFTP019",
+      "token_hash": "sha256:dd2fb5afece1a56748b6a9ac7a4970a2ef9b2cda6ddf0fb46136c9b05eabd4ea",
+      "kind": "benchmark",
+      "capabilities": [],
+      "registered_at": "2026-10-20T10:22:51.989Z",
+      "display_name": "append-uds-0",
+      "launch_key_hash": "sha256:dd2fb5afece1a56748b6a9ac7a4970a2ef9b2cda6ddf0fb46136c9b05eabd4ea"
+    }
+  }
+}

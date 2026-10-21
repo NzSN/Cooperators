@@ -4,6 +4,16 @@ Status: **measured, one design target missed** (sustained append). Results are
 for this host and filesystem; they are not a release qualification on other
 hardware.
 
+The [2026-10-20 acceptance baseline](acceptance-20261020/README.md) adds actual
+UDS/HTTP timings, 100-agent measurements, and full million-record replay and
+daemon startup samples. It records throughput, active-client latency, and
+restart timing misses on that host. The measurements below describe the
+original 2026-10-18 smoke.
+
+The subsequent [durable group-commit comparison](throughput-20261020/README.md)
+records the changed write path, passing shared-inbox targets under the native
+32/100-sender load, and retained serial, distributed and client-workload misses.
+
 ## Environment
 
 | Item | Value |

@@ -1,0 +1,56 @@
+{
+  "correctness": [
+    "Every receipt must be unique, non-duplicate, positive-sequence, and identify the expected receiver",
+    "Every delivered envelope must match its receipt ID/sequence, sender, receiver, kind, MIME and all 128 payload bytes",
+    "Every batch cursor and acknowledgment must advance through contiguous delivered sequences",
+    "Every receipt including warmup must match exactly one persisted inbox record; reject extra records, sequence gaps, and broken SHA-256 chain links",
+    "All receivers are empty and their acknowledged cursors equal the verified heads before shutdown",
+    "Running /proc/PID/exe hash must match the selected executable; source/helper/binary hashes must remain stable throughout the run"
+  ],
+  "distributed_inboxes": "C enrolled sender sessions self-send; one additional read/ack connection per same agent identity, so C=100 is 100 enrolled agents",
+  "limitations": [
+    "One host and filesystem; one 10-second sample per condition does not establish confidence intervals",
+    "The Python GIL, client parsing and thread scheduling, plus concurrent receiver maintenance, are included",
+    "A single sender with one outstanding request provides no overlap for group commit",
+    "Fixed 128-byte payload and closed-loop request arrival; this does not establish a maximum externally paced arrival rate",
+    "Readback of persisted records checks contents and integrity; crash-durability claims require separate failure-injection evidence",
+    "Fresh daemon and bus root per condition; warmup is excluded and enrollment is outside timing"
+  ],
+  "measurement_seconds": 10.0,
+  "outstanding_sends_per_sender": 1,
+  "payload": {
+    "mime": "text/plain",
+    "text": "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx",
+    "text_bytes": 128
+  },
+  "profiles": [
+    "same-inbox"
+  ],
+  "quantiles": "Nearest rank p50/p95/p99 of client call latency in milliseconds, excluding warmups",
+  "rate_denominator": "Wall time from sender barrier release through the last receipt for a send admitted before the measurement deadline",
+  "rate_numerator": "Every successful durable send acknowledgment for requests admitted during that window, including completions after its deadline",
+  "receiver_drain": {
+    "accounting": "Concurrent drain, verification, and ack overhead remain inside the measured send workload; final catch-up is outside its window",
+    "capacity": "All warmups are delivered and acked before measurement; drain continuously during measurement to avoid the unchanged 10000-message inbox cap",
+    "connections": "One independent receiver connection and drain thread per destination inbox",
+    "daemon_batch_limit": "Unchanged daemon default, 100 messages",
+    "interval_ms": 20.0,
+    "operation": "Every interval, repeatedly wait_message(timeout_s=0) and ack each returned default-size batch until empty"
+  },
+  "same_inbox": "C enrolled sender sessions send to one additional receiver session",
+  "scheduling": "Closed loop: each sender waits for its durable receipt before issuing its next send; a barrier starts each window",
+  "schema": "cooperators.concurrent-throughput-plan/v1",
+  "sender_concurrencies": [
+    100
+  ],
+  "targets_declared_before_measurement": {
+    "100_active_senders": "Apply and report the absolute 10 ms p50 comparison at C=100 with this workload explicitly named; no numeric definition of without degradation is inferred",
+    "application": "Report 5000/s independently for every topology and concurrency; no aggregate or best-case substitution",
+    "durable_acknowledgments_per_second_gte": 5000,
+    "send_ack_p50_ms_lt": 10,
+    "unloaded_idle_controls": "Run unchanged benchmark_transport.py with defaults against each executable and retain its serial append, unloaded UDS/HTTP, one-active/100-idle, and 100-active cycle controls"
+  },
+  "transport": "persistent AF_UNIX NDJSON JSON-RPC via benchmark_transport.Uds",
+  "warmup_minimum_sends_per_sender": 3,
+  "warmup_seconds": 1.0
+}

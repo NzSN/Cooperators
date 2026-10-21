@@ -1,0 +1,21 @@
+{
+  "active_agents": 1,
+  "append_target_5000_messages_per_second_pass": false,
+  "correctness_passed": true,
+  "elapsed_seconds": 10.001253568,
+  "label": "append-uds",
+  "measured_messages": 4713,
+  "messages_per_second": 471.2409267453942,
+  "send_ack_ms": {
+    "count": 4713,
+    "max": 18.955519,
+    "mean": 2.1157501436452364,
+    "min": 1.501479,
+    "p50": 1.994972,
+    "p95": 2.827296,
+    "p99": 3.628786
+  },
+  "transport": "uds",
+  "verified_measured_deliveries_and_acks": 4713,
+  "warmup_messages": 20
+}

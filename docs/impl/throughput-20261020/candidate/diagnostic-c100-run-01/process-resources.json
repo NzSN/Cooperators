@@ -1,0 +1,327 @@
+{
+  "clock_ticks_per_second": 100,
+  "page_bytes": 4096,
+  "sample_interval_seconds": 0.5,
+  "samples": [
+    {
+      "live_receiver_observer": {
+        "highest_successful_ack_cursor": 0,
+        "returned_messages": 0,
+        "successful_ack_calls": 0,
+        "successful_send_receipts": 0
+      },
+      "monotonic_ns": 376649275468687,
+      "processes": {}
+    },
+    {
+      "live_receiver_observer": {
+        "highest_successful_ack_cursor": 0,
+        "returned_messages": 0,
+        "successful_ack_calls": 0,
+        "successful_send_receipts": 0
+      },
+      "monotonic_ns": 376649318063331,
+      "processes": {}
+    },
+    {
+      "live_receiver_observer": {
+        "highest_successful_ack_cursor": 0,
+        "returned_messages": 0,
+        "successful_ack_calls": 0,
+        "successful_send_receipts": 0
+      },
+      "monotonic_ns": 376649776097344,
+      "processes": {}
+    },
+    {
+      "live_receiver_observer": {
+        "highest_successful_ack_cursor": 0,
+        "returned_messages": 0,
+        "successful_ack_calls": 0,
+        "successful_send_receipts": 0
+      },
+      "monotonic_ns": 376650276930322,
+      "processes": {}
+    },
+    {
+      "live_receiver_observer": {
+        "current_receiver_call": {
+          "method": "wait_message",
+          "started_monotonic_ns": 376650742223502
+        },
+        "highest_successful_ack_cursor": 2,
+        "returned_messages": 2,
+        "successful_ack_calls": 1,
+        "successful_send_receipts": 251
+      },
+      "monotonic_ns": 376650777705921,
+      "processes": {}
+    },
+    {
+      "live_receiver_observer": {
+        "current_receiver_call": {
+          "method": "wait_message",
+          "started_monotonic_ns": 376651417894405
+        },
+        "highest_successful_ack_cursor": 602,
+        "returned_messages": 602,
+        "successful_ack_calls": 7,
+        "successful_send_receipts": 2249
+      },
+      "monotonic_ns": 376651426558868,
+      "processes": {}
+    },
+    {
+      "live_receiver_observer": {
+        "current_receiver_call": {
+          "method": "wait_message",
+          "started_monotonic_ns": 376652022411650
+        },
+        "highest_successful_ack_cursor": 3138,
+        "returned_messages": 3138,
+        "successful_ack_calls": 33,
+        "successful_send_receipts": 3393
+      },
+      "monotonic_ns": 376652024931293,
+      "processes": {}
+    },
+    {
+      "live_receiver_observer": {
+        "current_receiver_call": {
+          "method": "wait_message",
+          "started_monotonic_ns": 376652745241395
+        },
+        "highest_successful_ack_cursor": 3638,
+        "returned_messages": 3638,
+        "successful_ack_calls": 38,
+        "successful_send_receipts": 4934
+      },
+      "monotonic_ns": 376652795027921,
+      "processes": {}
+    },
+    {
+      "live_receiver_observer": {
+        "current_receiver_call": {
+          "method": "wait_message",
+          "started_monotonic_ns": 376653473723557
+        },
+        "highest_successful_ack_cursor": 4038,
+        "returned_messages": 4038,
+        "successful_ack_calls": 42,
+        "successful_send_receipts": 6377
+      },
+      "monotonic_ns": 376653492496949,
+      "processes": {}
+    },
+    {
+      "live_receiver_observer": {
+        "current_receiver_call": {
+          "method": "wait_message",
+          "started_monotonic_ns": 376653980346567
+        },
+        "highest_successful_ack_cursor": 4438,
+        "returned_messages": 4438,
+        "successful_ack_calls": 46,
+        "successful_send_receipts": 7753
+      },
+      "monotonic_ns": 376654146936783,
+      "processes": {}
+    },
+    {
+      "live_receiver_observer": {
+        "current_receiver_call": {
+          "method": "wait_message",
+          "started_monotonic_ns": 376654746528510
+        },
+        "highest_successful_ack_cursor": 4738,
+        "returned_messages": 4738,
+        "successful_ack_calls": 49,
+        "successful_send_receipts": 9071
+      },
+      "monotonic_ns": 376654949572910,
+      "processes": {}
+    },
+    {
+      "live_receiver_observer": {
+        "current_receiver_call": {
+          "method": "wait_message",
+          "started_monotonic_ns": 376655701694455
+        },
+        "highest_successful_ack_cursor": 5138,
+        "returned_messages": 5138,
+        "successful_ack_calls": 53,
+        "successful_send_receipts": 10651
+      },
+      "monotonic_ns": 376655762707893,
+      "processes": {}
+    },
+    {
+      "live_receiver_observer": {
+        "current_receiver_call": {
+          "method": "ack",
+          "started_monotonic_ns": 376656324580348
+        },
+        "highest_successful_ack_cursor": 5538,
+        "returned_messages": 5638,
+        "successful_ack_calls": 57,
+        "successful_send_receipts": 12065
+      },
+      "monotonic_ns": 376656361327148,
+      "processes": {}
+    },
+    {
+      "live_receiver_observer": {
+        "current_receiver_call": {
+          "method": "ack",
+          "started_monotonic_ns": 376656907184007
+        },
+        "highest_successful_ack_cursor": 5838,
+        "returned_messages": 5938,
+        "successful_ack_calls": 60,
+        "successful_send_receipts": 13083
+      },
+      "monotonic_ns": 376656908657067,
+      "processes": {}
+    },
+    {
+      "live_receiver_observer": {
+        "current_receiver_call": {
+          "method": "wait_message",
+          "started_monotonic_ns": 376657577459730
+        },
+        "highest_successful_ack_cursor": 6338,
+        "returned_messages": 6338,
+        "successful_ack_calls": 65,
+        "successful_send_receipts": 14728
+      },
+      "monotonic_ns": 376657703576883,
+      "processes": {}
+    },
+    {
+      "live_receiver_observer": {
+        "current_receiver_call": {
+          "method": "ack",
+          "started_monotonic_ns": 376658447961037
+        },
+        "highest_successful_ack_cursor": 6838,
+        "returned_messages": 6938,
+        "successful_ack_calls": 70,
+        "successful_send_receipts": 16372
+      },
+      "monotonic_ns": 376658466284234,
+      "processes": {}
+    },
+    {
+      "live_receiver_observer": {
+        "current_receiver_call": {
+          "method": "ack",
+          "started_monotonic_ns": 376659289898543
+        },
+        "highest_successful_ack_cursor": 16638,
+        "returned_messages": 16738,
+        "successful_ack_calls": 168,
+        "successful_send_receipts": 17037
+      },
+      "monotonic_ns": 376659290072324,
+      "processes": {}
+    },
+    {
+      "live_receiver_observer": {
+        "current_receiver_call": {
+          "method": "wait_message",
+          "started_monotonic_ns": 376659388825665
+        },
+        "highest_successful_ack_cursor": 17051,
+        "returned_messages": 17051,
+        "successful_ack_calls": 183,
+        "successful_send_receipts": 17136
+      },
+      "monotonic_ns": 376659791080106,
+      "processes": {}
+    },
+    {
+      "live_receiver_observer": {
+        "current_receiver_call": {
+          "method": "wait_message",
+          "started_monotonic_ns": 376659388825665
+        },
+        "highest_successful_ack_cursor": 17051,
+        "returned_messages": 17051,
+        "successful_ack_calls": 183,
+        "successful_send_receipts": 17285
+      },
+      "monotonic_ns": 376660291466659,
+      "processes": {}
+    },
+    {
+      "live_receiver_observer": {
+        "current_receiver_call": {
+          "method": "wait_message",
+          "started_monotonic_ns": 376659388825665
+        },
+        "highest_successful_ack_cursor": 17051,
+        "returned_messages": 17051,
+        "successful_ack_calls": 183,
+        "successful_send_receipts": 17416
+      },
+      "monotonic_ns": 376660791974139,
+      "processes": {}
+    },
+    {
+      "live_receiver_observer": {
+        "current_receiver_call": {
+          "method": "wait_message",
+          "started_monotonic_ns": 376659388825665
+        },
+        "highest_successful_ack_cursor": 17051,
+        "returned_messages": 17051,
+        "successful_ack_calls": 183,
+        "successful_send_receipts": 17552
+      },
+      "monotonic_ns": 376661292644009,
+      "processes": {}
+    },
+    {
+      "live_receiver_observer": {
+        "current_receiver_call": {
+          "method": "wait_message",
+          "started_monotonic_ns": 376659388825665
+        },
+        "highest_successful_ack_cursor": 17051,
+        "returned_messages": 17051,
+        "successful_ack_calls": 183,
+        "successful_send_receipts": 17693
+      },
+      "monotonic_ns": 376661784719394,
+      "processes": {}
+    },
+    {
+      "live_receiver_observer": {
+        "current_receiver_call": {
+          "method": "wait_message",
+          "started_monotonic_ns": 376659388825665
+        },
+        "highest_successful_ack_cursor": 17051,
+        "returned_messages": 17051,
+        "successful_ack_calls": 183,
+        "successful_send_receipts": 17693
+      },
+      "monotonic_ns": 376661793229325,
+      "processes": {}
+    },
+    {
+      "live_receiver_observer": {
+        "current_receiver_call": {
+          "method": "wait_message",
+          "started_monotonic_ns": 376659388825665
+        },
+        "highest_successful_ack_cursor": 17051,
+        "returned_messages": 17051,
+        "successful_ack_calls": 183,
+        "successful_send_receipts": 17693
+      },
+      "monotonic_ns": 376661858104163,
+      "processes": {}
+    }
+  ]
+}

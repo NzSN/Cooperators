@@ -42,3 +42,43 @@ the gate and commits between waves. Status column is the live tracker.
 - 2026-10-18 — T6 done: spec/Cooperators.tla + .cfg; TLC exhaustive at Len(log)<=6, Agents=2, Keys=1, MaxAttempts=2: 1,673,205 distinct states, no error, TaskResolved holds. Larger bounds timed out (interim-clean, not claimed).
 - 2026-10-19 — T7 done: spec/mbt/ harness; 34-trace battery, 0 failures, all 10 actions covered; MBT caught a real Dead-semantics divergence (attempts counted at claim; dead on MaxAttempts-th failed delivery) — spec fixed, consistent with the TLC spec. ModelMirrors gen protocol avoided (>64KiB line cap); generation runs apalache-mc directly.
 - 2026-10-19 — MBT adapter now GENERATED: scaffold→resolve→generate→check via Mirrors model_interface_gen (mirrorrust-v2); lock 59810995…; `check` clean; 34/34 traces pass through the generated binding; negative control still fails as required. Negotiated (digest-checked) replay unavailable: ModelMirrors 0.1.1.0 lacks mirrors.model-interface-negotiation/v1.
+
+## Acceptance follow-up — 2026-10-20
+
+The requested installed-client exercise and performance baseline have run.
+Full evidence and reproduction commands are in
+[`docs/impl/acceptance-20261020/README.md`](docs/impl/acceptance-20261020/README.md).
+
+| Work | Result |
+|---|---|
+| Actual installed Codex CLI and Claude Code exchange | Message/task/claim/completion/ack exercise passed with Claude `MCP_PROTOCOL_NEGOTIATION=legacy`; default modern discovery failed because `tools/list` omits required cache fields. |
+| Real UDS and HTTP latency | Send p50 2.680 ms / 3.378 ms; both below 10 ms. Pending-recipient delivery supplement p50 4.828 ms / 4.815 ms, with client-observed pending waits. |
+| Sustained append | 341.628 messages/sec; 5,000 target still missed. |
+| 100-agent baseline | 99 idle waiters preserve the predeclared diagnostic bounds; 100 active senders produce 398.864 ms send p50, missing 10 ms. |
+| Actual million-record replay | Storage median 8.642 s; full daemon startup median 12.439 s. Full startup misses 10 s in two of three samples. |
+
+Production source and the default release executable remained unchanged during
+those baseline exercises. The following write-path wave changes that source.
+
+## Durable throughput follow-up — 2026-10-20
+
+Step 3 implemented bounded per-inbox group commit, independent committed read
+views, cancellation-safe completions, shared pending-key dedupe, and recovery
+quarantine. See [design 0003](docs/design/0003-durable-inbox-group-commit.md) and
+the [full results](docs/impl/throughput-20261020/README.md).
+
+| Gate | Result |
+|---|---|
+| Core correctness | 92 normal / 124 injection tests passed, one pre-existing ignored performance test in each; required real UDS checks did not skip. |
+| Additional batch process crashes | 3/3 actual SIGKILL controls passed before sync, after receipts and after partial batch failure; separate targeted integration run passed 4 tests including its no-op child helper. |
+| Generated MBT | 63/63 traces, 2/2 actual rotation crash controls, compiler/provenance checks passed against matching final core source and build manifests. |
+| Native shared inbox, 32 senders | 6,030.3 durable msg/s, send p50 5.022 ms: both numeric targets PASS. |
+| Native shared inbox, 100 senders | 12,834.9 durable msg/s, send p50 7.469 ms: both numeric targets PASS. |
+| Native distributed inboxes, 100 agents | 4,608.1 durable msg/s, send p50 21.407 ms: both targets MISS. All eight native candidate cases passed correctness. |
+| Original Python workloads | Shared-inbox C100 reaches the unchanged backlog cap; successful cases retain their target misses. Original 100-active send/wait/ack control improves to 990.8 cycles/s but send p50 27.016 ms and wait p50 25.981 ms miss. |
+
+The write-path implementation and scoped correctness qualification are complete;
+overall performance acceptance remains open. Retained failures, single-sender
+overhead, and distributed/client workload limits are part of the report.
+Other outstanding work is the modern MCP compatibility correction and full
+startup/replay performance.

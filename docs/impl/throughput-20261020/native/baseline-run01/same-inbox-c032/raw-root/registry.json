@@ -1,0 +1,302 @@
+{
+  "v": 1,
+  "agents": {
+    "instance-01M5CDTS58E2P165VS0KAJNKHJ": {
+      "agent_id": "01M5CDTS58E2P165VS0KAJNKHJ",
+      "token_hash": "sha256:fd15533e7dec40f323b13e94911f153aa5b81b5264c4d95ac34e381f8273f734",
+      "kind": "benchmark",
+      "capabilities": [],
+      "registered_at": "2026-10-20T10:31:06.664Z",
+      "display_name": "same-inbox-c032-0",
+      "launch_key_hash": "sha256:fd15533e7dec40f323b13e94911f153aa5b81b5264c4d95ac34e381f8273f734"
+    },
+    "instance-01M5CDTS5EEAP9VXG338J43C3T": {
+      "agent_id": "01M5CDTS5EEAP9VXG338J43C3T",
+      "token_hash": "sha256:b48b93496ab081ed2523025c2162508a0c5dc7406a3831e2c968b1d0dfc459ef",
+      "kind": "benchmark",
+      "capabilities": [],
+      "registered_at": "2026-10-20T10:31:06.670Z",
+      "display_name": "same-inbox-c032-1",
+      "launch_key_hash": "sha256:b48b93496ab081ed2523025c2162508a0c5dc7406a3831e2c968b1d0dfc459ef"
+    },
+    "instance-01M5CDTS5J6F4QSSVHB8V587Y7": {
+      "agent_id": "01M5CDTS5J6F4QSSVHB8V587Y7",
+      "token_hash": "sha256:fae812d891026de10f2d7434f76cfcfa5ad8ccc79e5d33f28412f7fc19ea7ee5",
+      "kind": "benchmark",
+      "capabilities": [],
+      "registered_at": "2026-10-20T10:31:06.674Z",
+      "display_name": "same-inbox-c032-2",
+      "launch_key_hash": "sha256:fae812d891026de10f2d7434f76cfcfa5ad8ccc79e5d33f28412f7fc19ea7ee5"
+    },
+    "instance-01M5CDTS5PER8SJN5GJW4ZN9E0": {
+      "agent_id": "01M5CDTS5PER8SJN5GJW4ZN9E0",
+      "token_hash": "sha256:0d3ae7b68419db643780a6b5bb5b650d5c9547629f87c771cd9836862da3d480",
+      "kind": "benchmark",
+      "capabilities": [],
+      "registered_at": "2026-10-20T10:31:06.678Z",
+      "display_name": "same-inbox-c032-3",
+      "launch_key_hash": "sha256:0d3ae7b68419db643780a6b5bb5b650d5c9547629f87c771cd9836862da3d480"
+    },
+    "instance-01M5CDTS5X2AA7AP66EQ80ACV8": {
+      "agent_id": "01M5CDTS5X2AA7AP66EQ80ACV8",
+      "token_hash": "sha256:85fd0b03dc2426631f45877b9a05402adcbc30d78ca1af29a069e70f33ef907f",
+      "kind": "benchmark",
+      "capabilities": [],
+      "registered_at": "2026-10-20T10:31:06.685Z",
+      "display_name": "same-inbox-c032-4",
+      "launch_key_hash": "sha256:85fd0b03dc2426631f45877b9a05402adcbc30d78ca1af29a069e70f33ef907f"
+    },
+    "instance-01M5CDTS61F9W5SCMKD8GGMWAS": {
+      "agent_id": "01M5CDTS61F9W5SCMKD8GGMWAS",
+      "token_hash": "sha256:2586529887bc5bc794e8d5e69cb9ba180aa22c3a204aeee80bb1e8b060e320a6",
+      "kind": "benchmark",
+      "capabilities": [],
+      "registered_at": "2026-10-20T10:31:06.689Z",
+      "display_name": "same-inbox-c032-5",
+      "launch_key_hash": "sha256:2586529887bc5bc794e8d5e69cb9ba180aa22c3a204aeee80bb1e8b060e320a6"
+    },
+    "instance-01M5CDTS652F12TA2TEH7NHZNY": {
+      "agent_id": "01M5CDTS652F12TA2TEH7NHZNY",
+      "token_hash": "sha256:a20bc6b88615b889225bc75a0fb4a2d9a1f3bc8eab625a013109bb227bb01f27",
+      "kind": "benchmark",
+      "capabilities": [],
+      "registered_at": "2026-10-20T10:31:06.693Z",
+      "display_name": "same-inbox-c032-6",
+      "launch_key_hash": "sha256:a20bc6b88615b889225bc75a0fb4a2d9a1f3bc8eab625a013109bb227bb01f27"
+    },
+    "instance-01M5CDTS6AHBC765V283VMHMK9": {
+      "agent_id": "01M5CDTS6AHBC765V283VMHMK9",
+      "token_hash": "sha256:999075ac50883bb258a4c06f9c0984811f634e9f45ad9f5f3ae298be15c1d2f1",
+      "kind": "benchmark",
+      "capabilities": [],
+      "registered_at": "2026-10-20T10:31:06.698Z",
+      "display_name": "same-inbox-c032-7",
+      "launch_key_hash": "sha256:999075ac50883bb258a4c06f9c0984811f634e9f45ad9f5f3ae298be15c1d2f1"
+    },
+    "instance-01M5CDTS6G8A6AW76PBDW1YB39": {
+      "agent_id": "01M5CDTS6G8A6AW76PBDW1YB39",
+      "token_hash": "sha256:c2bc930238517cc9889bbd01723c1dc685b89da44f27901304687ba57393cc3c",
+      "kind": "benchmark",
+      "capabilities": [],
+      "registered_at": "2026-10-20T10:31:06.704Z",
+      "display_name": "same-inbox-c032-8",
+      "launch_key_hash": "sha256:c2bc930238517cc9889bbd01723c1dc685b89da44f27901304687ba57393cc3c"
+    },
+    "instance-01M5CDTS6M72Z3KQDA8JRJAA37": {
+      "agent_id": "01M5CDTS6M72Z3KQDA8JRJAA37",
+      "token_hash": "sha256:695c25b906094ef6d12aa60fb0e7b91dc7a24a5bfe47d5a972974eed89606e1f",
+      "kind": "benchmark",
+      "capabilities": [],
+      "registered_at": "2026-10-20T10:31:06.708Z",
+      "display_name": "same-inbox-c032-9",
+      "launch_key_hash": "sha256:695c25b906094ef6d12aa60fb0e7b91dc7a24a5bfe47d5a972974eed89606e1f"
+    },
+    "instance-01M5CDTS6RX87HMW46XNDBZV1W": {
+      "agent_id": "01M5CDTS6RX87HMW46XNDBZV1W",
+      "token_hash": "sha256:77f5e83f8d0483c8d83b50d43e4e3b5432dd900aea6c961e3caa63175027a39a",
+      "kind": "benchmark",
+      "capabilities": [],
+      "registered_at": "2026-10-20T10:31:06.712Z",
+      "display_name": "same-inbox-c032-10",
+      "launch_key_hash": "sha256:77f5e83f8d0483c8d83b50d43e4e3b5432dd900aea6c961e3caa63175027a39a"
+    },
+    "instance-01M5CDTS6Z4NRWTEZ7DEH482VY": {
+      "agent_id": "01M5CDTS6Z4NRWTEZ7DEH482VY",
+      "token_hash": "sha256:36954acba96d7d387c9387172991946f4fc8d90b26ed9bad385944d3c0d172c2",
+      "kind": "benchmark",
+      "capabilities": [],
+      "registered_at": "2026-10-20T10:31:06.719Z",
+      "display_name": "same-inbox-c032-11",
+      "launch_key_hash": "sha256:36954acba96d7d387c9387172991946f4fc8d90b26ed9bad385944d3c0d172c2"
+    },
+    "instance-01M5CDTS73C4FZTS9D6JDQ5RAS": {
+      "agent_id": "01M5CDTS73C4FZTS9D6JDQ5RAS",
+      "token_hash": "sha256:9201a4c6fa0f61f65220d4c8d75b4143aae3f5d45755b9766ceec6e27aca6190",
+      "kind": "benchmark",
+      "capabilities": [],
+      "registered_at": "2026-10-20T10:31:06.723Z",
+      "display_name": "same-inbox-c032-12",
+      "launch_key_hash": "sha256:9201a4c6fa0f61f65220d4c8d75b4143aae3f5d45755b9766ceec6e27aca6190"
+    },
+    "instance-01M5CDTS77FMK4NNRYF96WKRAJ": {
+      "agent_id": "01M5CDTS77FMK4NNRYF96WKRAJ",
+      "token_hash": "sha256:90a1c67ec55f9bc5c22a15efce24f5b16e0d60e09ec5e8ee2164bf98b9e158d2",
+      "kind": "benchmark",
+      "capabilities": [],
+      "registered_at": "2026-10-20T10:31:06.727Z",
+      "display_name": "same-inbox-c032-13",
+      "launch_key_hash": "sha256:90a1c67ec55f9bc5c22a15efce24f5b16e0d60e09ec5e8ee2164bf98b9e158d2"
+    },
+    "instance-01M5CDTS7D1VEZ52YD16EP1KDX": {
+      "agent_id": "01M5CDTS7D1VEZ52YD16EP1KDX",
+      "token_hash": "sha256:d530d7081a528acb9042dc2655b29df1fbc015fb28828787e0d1d1726e1d8850",
+      "kind": "benchmark",
+      "capabilities": [],
+      "registered_at": "2026-10-20T10:31:06.733Z",
+      "display_name": "same-inbox-c032-14",
+      "launch_key_hash": "sha256:d530d7081a528acb9042dc2655b29df1fbc015fb28828787e0d1d1726e1d8850"
+    },
+    "instance-01M5CDTS7J1YPDKMNFJ4YPPS32": {
+      "agent_id": "01M5CDTS7J1YPDKMNFJ4YPPS32",
+      "token_hash": "sha256:f5c735ba39e30ad5069ebb53db2d3dca2b76de559ea384b1ab252ac41726edbc",
+      "kind": "benchmark",
+      "capabilities": [],
+      "registered_at": "2026-10-20T10:31:06.738Z",
+      "display_name": "same-inbox-c032-15",
+      "launch_key_hash": "sha256:f5c735ba39e30ad5069ebb53db2d3dca2b76de559ea384b1ab252ac41726edbc"
+    },
+    "instance-01M5CDTS7PM1CD2C7H09S1MJ1Y": {
+      "agent_id": "01M5CDTS7PM1CD2C7H09S1MJ1Y",
+      "token_hash": "sha256:9e22201971524bc28b7c1022b38d84eea23cee8a1a62f84ce767815c571dea44",
+      "kind": "benchmark",
+      "capabilities": [],
+      "registered_at": "2026-10-20T10:31:06.742Z",
+      "display_name": "same-inbox-c032-16",
+      "launch_key_hash": "sha256:9e22201971524bc28b7c1022b38d84eea23cee8a1a62f84ce767815c571dea44"
+    },
+    "instance-01M5CDTS7TCYCKDMHMS2Z6R5RQ": {
+      "agent_id": "01M5CDTS7TCYCKDMHMS2Z6R5RQ",
+      "token_hash": "sha256:2234b6993cf385083aa6cd30d7d3eff412fce45c10a4d64706c42695d24c1ba7",
+      "kind": "benchmark",
+      "capabilities": [],
+      "registered_at": "2026-10-20T10:31:06.746Z",
+      "display_name": "same-inbox-c032-17",
+      "launch_key_hash": "sha256:2234b6993cf385083aa6cd30d7d3eff412fce45c10a4d64706c42695d24c1ba7"
+    },
+    "instance-01M5CDTS808WSFY4YMFBPCG3P4": {
+      "agent_id": "01M5CDTS808WSFY4YMFBPCG3P4",
+      "token_hash": "sha256:300b8d082e34bfe6a8b97a94f6c87fb9f761fac46581c2a75ce777aef9720d6c",
+      "kind": "benchmark",
+      "capabilities": [],
+      "registered_at": "2026-10-20T10:31:06.752Z",
+      "display_name": "same-inbox-c032-18",
+      "launch_key_hash": "sha256:300b8d082e34bfe6a8b97a94f6c87fb9f761fac46581c2a75ce777aef9720d6c"
+    },
+    "instance-01M5CDTS85GCXFAEVM1FNB1J6K": {
+      "agent_id": "01M5CDTS85GCXFAEVM1FNB1J6K",
+      "token_hash": "sha256:7e7860288829fa4e1a71a874ca4521387e932420be989a82db622384ebd773b5",
+      "kind": "benchmark",
+      "capabilities": [],
+      "registered_at": "2026-10-20T10:31:06.757Z",
+      "display_name": "same-inbox-c032-19",
+      "launch_key_hash": "sha256:7e7860288829fa4e1a71a874ca4521387e932420be989a82db622384ebd773b5"
+    },
+    "instance-01M5CDTS892Q29N5KJESK1EF0N": {
+      "agent_id": "01M5CDTS892Q29N5KJESK1EF0N",
+      "token_hash": "sha256:5aadcbc19e8cfaa4c4e4cb6a17551bb33caac1f7f01ba54a2bdb490f998562b7",
+      "kind": "benchmark",
+      "capabilities": [],
+      "registered_at": "2026-10-20T10:31:06.761Z",
+      "display_name": "same-inbox-c032-20",
+      "launch_key_hash": "sha256:5aadcbc19e8cfaa4c4e4cb6a17551bb33caac1f7f01ba54a2bdb490f998562b7"
+    },
+    "instance-01M5CDTS8DCF1ZA2BNXSYY5YWY": {
+      "agent_id": "01M5CDTS8DCF1ZA2BNXSYY5YWY",
+      "token_hash": "sha256:0959ae6446d7c39f7255507da6658ba6f85cd71f558d20e179eb8442ca73d3bc",
+      "kind": "benchmark",
+      "capabilities": [],
+      "registered_at": "2026-10-20T10:31:06.765Z",
+      "display_name": "same-inbox-c032-21",
+      "launch_key_hash": "sha256:0959ae6446d7c39f7255507da6658ba6f85cd71f558d20e179eb8442ca73d3bc"
+    },
+    "instance-01M5CDTS8J61J592R85CCXJ38D": {
+      "agent_id": "01M5CDTS8J61J592R85CCXJ38D",
+      "token_hash": "sha256:4ef3ad2eb0bf83420b8caa26b3aec7a83a6f74af17b914b662ae563fc418e743",
+      "kind": "benchmark",
+      "capabilities": [],
+      "registered_at": "2026-10-20T10:31:06.770Z",
+      "display_name": "same-inbox-c032-22",
+      "launch_key_hash": "sha256:4ef3ad2eb0bf83420b8caa26b3aec7a83a6f74af17b914b662ae563fc418e743"
+    },
+    "instance-01M5CDTS8RE1WDSXFAYR938F2R": {
+      "agent_id": "01M5CDTS8RE1WDSXFAYR938F2R",
+      "token_hash": "sha256:4aed91c826449cf518cdb018709f05311dbfff0212ce053b14eeafcca71ab9cc",
+      "kind": "benchmark",
+      "capabilities": [],
+      "registered_at": "2026-10-20T10:31:06.776Z",
+      "display_name": "same-inbox-c032-23",
+      "launch_key_hash": "sha256:4aed91c826449cf518cdb018709f05311dbfff0212ce053b14eeafcca71ab9cc"
+    },
+    "instance-01M5CDTS8WEYD44R7C0YWNP4NA": {
+      "agent_id": "01M5CDTS8WEYD44R7C0YWNP4NA",
+      "token_hash": "sha256:b7418adefd290dec2d4f987f21dca8b64926e114e02de028a6e21c2ad2d494f8",
+      "kind": "benchmark",
+      "capabilities": [],
+      "registered_at": "2026-10-20T10:31:06.780Z",
+      "display_name": "same-inbox-c032-24",
+      "launch_key_hash": "sha256:b7418adefd290dec2d4f987f21dca8b64926e114e02de028a6e21c2ad2d494f8"
+    },
+    "instance-01M5CDTS96PSTKQ49P0GHNNJ0X": {
+      "agent_id": "01M5CDTS96PSTKQ49P0GHNNJ0X",
+      "token_hash": "sha256:4d30b56d9726a360cfebf306937ca76b9996c7d4ce880f5e740ab1d4f7064b78",
+      "kind": "benchmark",
+      "capabilities": [],
+      "registered_at": "2026-10-20T10:31:06.790Z",
+      "display_name": "same-inbox-c032-25",
+      "launch_key_hash": "sha256:4d30b56d9726a360cfebf306937ca76b9996c7d4ce880f5e740ab1d4f7064b78"
+    },
+    "instance-01M5CDTS9ZJ3R9WWZW56JVNES7": {
+      "agent_id": "01M5CDTS9ZJ3R9WWZW56JVNES7",
+      "token_hash": "sha256:49d72424576989a7ac7f0ea605dbf434d37794a1810eb5f645ba064d923e2481",
+      "kind": "benchmark",
+      "capabilities": [],
+      "registered_at": "2026-10-20T10:31:06.815Z",
+      "display_name": "same-inbox-c032-26",
+      "launch_key_hash": "sha256:49d72424576989a7ac7f0ea605dbf434d37794a1810eb5f645ba064d923e2481"
+    },
+    "instance-01M5CDTSA69QJJRGC9J4A8PHR1": {
+      "agent_id": "01M5CDTSA69QJJRGC9J4A8PHR1",
+      "token_hash": "sha256:4b6df490ebe646c08ce582509b1c551cf596855ea67aad1b1b7bb3870f168796",
+      "kind": "benchmark",
+      "capabilities": [],
+      "registered_at": "2026-10-20T10:31:06.822Z",
+      "display_name": "same-inbox-c032-27",
+      "launch_key_hash": "sha256:4b6df490ebe646c08ce582509b1c551cf596855ea67aad1b1b7bb3870f168796"
+    },
+    "instance-01M5CDTSABF6MCJ53GS2XJ1ZKP": {
+      "agent_id": "01M5CDTSABF6MCJ53GS2XJ1ZKP",
+      "token_hash": "sha256:8638536af9fbf12a1ae2ede6aba07923938cd1afb61d70f36886d819facf22c5",
+      "kind": "benchmark",
+      "capabilities": [],
+      "registered_at": "2026-10-20T10:31:06.827Z",
+      "display_name": "same-inbox-c032-28",
+      "launch_key_hash": "sha256:8638536af9fbf12a1ae2ede6aba07923938cd1afb61d70f36886d819facf22c5"
+    },
+    "instance-01M5CDTSAF1K02AZKPGPSSTW2J": {
+      "agent_id": "01M5CDTSAF1K02AZKPGPSSTW2J",
+      "token_hash": "sha256:9ffb0e2e217fb3da4340b54bed4eefdbd67f4615dafbca6e03aa9c39bf4033e7",
+      "kind": "benchmark",
+      "capabilities": [],
+      "registered_at": "2026-10-20T10:31:06.831Z",
+      "display_name": "same-inbox-c032-29",
+      "launch_key_hash": "sha256:9ffb0e2e217fb3da4340b54bed4eefdbd67f4615dafbca6e03aa9c39bf4033e7"
+    },
+    "instance-01M5CDTSANQATFSBDB0A2K1MQ7": {
+      "agent_id": "01M5CDTSANQATFSBDB0A2K1MQ7",
+      "token_hash": "sha256:6d1a9306c8a0036821286be1dd24de845714e8d86862e5bc1e2b6fc584737ab2",
+      "kind": "benchmark",
+      "capabilities": [],
+      "registered_at": "2026-10-20T10:31:06.837Z",
+      "display_name": "same-inbox-c032-30",
+      "launch_key_hash": "sha256:6d1a9306c8a0036821286be1dd24de845714e8d86862e5bc1e2b6fc584737ab2"
+    },
+    "instance-01M5CDTSAVS9YBMSQDBHW6FRD9": {
+      "agent_id": "01M5CDTSAVS9YBMSQDBHW6FRD9",
+      "token_hash": "sha256:ea1fd8ce1fc5df14a6b53b7a70b95bd81e36b5eff038133a949c080611f37b53",
+      "kind": "benchmark",
+      "capabilities": [],
+      "registered_at": "2026-10-20T10:31:06.843Z",
+      "display_name": "same-inbox-c032-31",
+      "launch_key_hash": "sha256:ea1fd8ce1fc5df14a6b53b7a70b95bd81e36b5eff038133a949c080611f37b53"
+    },
+    "instance-01M5CDTSB0H3C5C2RDXCQT5EJ5": {
+      "agent_id": "01M5CDTSB0H3C5C2RDXCQT5EJ5",
+      "token_hash": "sha256:b30eed05403eca0e91e10fe49c61fea22d1ec80210e6d1d8fdd09b7700f57dac",
+      "kind": "benchmark",
+      "capabilities": [],
+      "registered_at": "2026-10-20T10:31:06.848Z",
+      "display_name": "same-inbox-c032-32",
+      "launch_key_hash": "sha256:b30eed05403eca0e91e10fe49c61fea22d1ec80210e6d1d8fdd09b7700f57dac"
+    }
+  }
+}

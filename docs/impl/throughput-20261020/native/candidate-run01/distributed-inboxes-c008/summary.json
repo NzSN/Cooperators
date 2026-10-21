@@ -1,0 +1,140 @@
+{
+  "active_receiver_connections": 8,
+  "active_sender_agents": 8,
+  "all_receiver_inboxes_empty_with_verified_acked_heads": true,
+  "all_targets_and_correctness_pass": false,
+  "correctness_passed": true,
+  "durable_acknowledgments_per_second": 1712.3617570530873,
+  "elapsed_seconds": 10.003727267,
+  "enrolled_agents": 8,
+  "errors": [],
+  "http": "off",
+  "label": "distributed-inboxes-c008",
+  "measured_messages": 17130,
+  "outstanding_sends_per_sender": 1,
+  "partial_sample_warning": null,
+  "phase_completed_without_errors": true,
+  "profile": "distributed-inboxes",
+  "receiver_drain": [
+    {
+      "ack_calls": 522,
+      "acked_head": 2287,
+      "agent": {
+        "agent_id": "01M5CE0R213D8Q9BQPVKQCBJ55",
+        "display_name": "distributed-inboxes-c008-6",
+        "name": "instance-01M5CE0R213D8Q9BQPVKQCBJ55"
+      },
+      "delivered_records": 2287,
+      "errors": [],
+      "max_batch": 9,
+      "wait_calls": 1020
+    },
+    {
+      "ack_calls": 525,
+      "acked_head": 2288,
+      "agent": {
+        "agent_id": "01M5CE0R0FYF5Q4RKFQV6710Q5",
+        "display_name": "distributed-inboxes-c008-0",
+        "name": "instance-01M5CE0R0FYF5Q4RKFQV6710Q5"
+      },
+      "delivered_records": 2288,
+      "errors": [],
+      "max_batch": 9,
+      "wait_calls": 1024
+    },
+    {
+      "ack_calls": 523,
+      "acked_head": 2288,
+      "agent": {
+        "agent_id": "01M5CE0R0Z4AF7HPZTADHVTX38",
+        "display_name": "distributed-inboxes-c008-2",
+        "name": "instance-01M5CE0R0Z4AF7HPZTADHVTX38"
+      },
+      "delivered_records": 2288,
+      "errors": [],
+      "max_batch": 9,
+      "wait_calls": 1021
+    },
+    {
+      "ack_calls": 514,
+      "acked_head": 2287,
+      "agent": {
+        "agent_id": "01M5CE0R2DPM1N68TE2EQ8ED4B",
+        "display_name": "distributed-inboxes-c008-7",
+        "name": "instance-01M5CE0R2DPM1N68TE2EQ8ED4B"
+      },
+      "delivered_records": 2287,
+      "errors": [],
+      "max_batch": 9,
+      "wait_calls": 1012
+    },
+    {
+      "ack_calls": 525,
+      "acked_head": 2289,
+      "agent": {
+        "agent_id": "01M5CE0R1QNC0VXVP7Q691MJ8K",
+        "display_name": "distributed-inboxes-c008-5",
+        "name": "instance-01M5CE0R1QNC0VXVP7Q691MJ8K"
+      },
+      "delivered_records": 2289,
+      "errors": [],
+      "max_batch": 8,
+      "wait_calls": 1024
+    },
+    {
+      "ack_calls": 523,
+      "acked_head": 2288,
+      "agent": {
+        "agent_id": "01M5CE0R19Q77NJ9PQQVS8G48Q",
+        "display_name": "distributed-inboxes-c008-3",
+        "name": "instance-01M5CE0R19Q77NJ9PQQVS8G48Q"
+      },
+      "delivered_records": 2288,
+      "errors": [],
+      "max_batch": 8,
+      "wait_calls": 1022
+    },
+    {
+      "ack_calls": 529,
+      "acked_head": 2289,
+      "agent": {
+        "agent_id": "01M5CE0R1JDXMHHTV8NVF2JETV",
+        "display_name": "distributed-inboxes-c008-4",
+        "name": "instance-01M5CE0R1JDXMHHTV8NVF2JETV"
+      },
+      "delivered_records": 2289,
+      "errors": [],
+      "max_batch": 9,
+      "wait_calls": 1028
+    },
+    {
+      "ack_calls": 521,
+      "acked_head": 2288,
+      "agent": {
+        "agent_id": "01M5CE0R0T46E12JZ7XYJCYG5T",
+        "display_name": "distributed-inboxes-c008-1",
+        "name": "instance-01M5CE0R0T46E12JZ7XYJCYG5T"
+      },
+      "delivered_records": 2288,
+      "errors": [],
+      "max_batch": 9,
+      "wait_calls": 1020
+    }
+  ],
+  "receiver_identity_shared_with_sender": true,
+  "requested_measurement_seconds": 10,
+  "send_ack_ms": {
+    "count": 17130,
+    "max": 621.602528,
+    "mean": 4.666620554290724,
+    "min": 2.05988,
+    "p50": 4.144578,
+    "p95": 7.544346,
+    "p99": 9.611741
+  },
+  "send_ack_p50_below_10_ms_target_pass": true,
+  "throughput_5000_per_second_target_pass": false,
+  "transport": "native-async-uds",
+  "warmup_fully_delivered_and_acked_before_measurement": true,
+  "warmup_messages": 1174
+}

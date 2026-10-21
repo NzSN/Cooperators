@@ -1,0 +1,530 @@
+{
+  "active_receiver_agents": 100,
+  "active_sender_agents": 100,
+  "correctness_passed": true,
+  "durable_acknowledgments_per_second": 100.48058580742192,
+  "elapsed_seconds": 10.658775438,
+  "enrolled_agents": 100,
+  "label": "distributed-inboxes-c100",
+  "measured_messages": 1071,
+  "outstanding_sends_per_sender": 1,
+  "profile": "distributed-inboxes",
+  "receiver_drain": [
+    {
+      "ack_calls": 13,
+      "max_batch": 1,
+      "wait_calls": 244
+    },
+    {
+      "ack_calls": 14,
+      "max_batch": 1,
+      "wait_calls": 248
+    },
+    {
+      "ack_calls": 14,
+      "max_batch": 1,
+      "wait_calls": 254
+    },
+    {
+      "ack_calls": 14,
+      "max_batch": 1,
+      "wait_calls": 226
+    },
+    {
+      "ack_calls": 14,
+      "max_batch": 1,
+      "wait_calls": 229
+    },
+    {
+      "ack_calls": 14,
+      "max_batch": 1,
+      "wait_calls": 239
+    },
+    {
+      "ack_calls": 13,
+      "max_batch": 1,
+      "wait_calls": 231
+    },
+    {
+      "ack_calls": 14,
+      "max_batch": 1,
+      "wait_calls": 233
+    },
+    {
+      "ack_calls": 14,
+      "max_batch": 1,
+      "wait_calls": 257
+    },
+    {
+      "ack_calls": 14,
+      "max_batch": 1,
+      "wait_calls": 243
+    },
+    {
+      "ack_calls": 14,
+      "max_batch": 1,
+      "wait_calls": 235
+    },
+    {
+      "ack_calls": 13,
+      "max_batch": 1,
+      "wait_calls": 242
+    },
+    {
+      "ack_calls": 13,
+      "max_batch": 1,
+      "wait_calls": 240
+    },
+    {
+      "ack_calls": 13,
+      "max_batch": 1,
+      "wait_calls": 249
+    },
+    {
+      "ack_calls": 14,
+      "max_batch": 1,
+      "wait_calls": 235
+    },
+    {
+      "ack_calls": 14,
+      "max_batch": 1,
+      "wait_calls": 233
+    },
+    {
+      "ack_calls": 14,
+      "max_batch": 1,
+      "wait_calls": 234
+    },
+    {
+      "ack_calls": 14,
+      "max_batch": 1,
+      "wait_calls": 248
+    },
+    {
+      "ack_calls": 13,
+      "max_batch": 1,
+      "wait_calls": 224
+    },
+    {
+      "ack_calls": 13,
+      "max_batch": 1,
+      "wait_calls": 232
+    },
+    {
+      "ack_calls": 14,
+      "max_batch": 1,
+      "wait_calls": 237
+    },
+    {
+      "ack_calls": 14,
+      "max_batch": 1,
+      "wait_calls": 235
+    },
+    {
+      "ack_calls": 14,
+      "max_batch": 1,
+      "wait_calls": 245
+    },
+    {
+      "ack_calls": 14,
+      "max_batch": 1,
+      "wait_calls": 239
+    },
+    {
+      "ack_calls": 14,
+      "max_batch": 1,
+      "wait_calls": 245
+    },
+    {
+      "ack_calls": 14,
+      "max_batch": 1,
+      "wait_calls": 231
+    },
+    {
+      "ack_calls": 15,
+      "max_batch": 1,
+      "wait_calls": 230
+    },
+    {
+      "ack_calls": 14,
+      "max_batch": 1,
+      "wait_calls": 233
+    },
+    {
+      "ack_calls": 14,
+      "max_batch": 1,
+      "wait_calls": 233
+    },
+    {
+      "ack_calls": 14,
+      "max_batch": 1,
+      "wait_calls": 245
+    },
+    {
+      "ack_calls": 14,
+      "max_batch": 1,
+      "wait_calls": 227
+    },
+    {
+      "ack_calls": 14,
+      "max_batch": 1,
+      "wait_calls": 239
+    },
+    {
+      "ack_calls": 14,
+      "max_batch": 1,
+      "wait_calls": 236
+    },
+    {
+      "ack_calls": 14,
+      "max_batch": 1,
+      "wait_calls": 243
+    },
+    {
+      "ack_calls": 13,
+      "max_batch": 1,
+      "wait_calls": 239
+    },
+    {
+      "ack_calls": 13,
+      "max_batch": 1,
+      "wait_calls": 240
+    },
+    {
+      "ack_calls": 14,
+      "max_batch": 1,
+      "wait_calls": 236
+    },
+    {
+      "ack_calls": 14,
+      "max_batch": 1,
+      "wait_calls": 241
+    },
+    {
+      "ack_calls": 13,
+      "max_batch": 1,
+      "wait_calls": 240
+    },
+    {
+      "ack_calls": 14,
+      "max_batch": 1,
+      "wait_calls": 236
+    },
+    {
+      "ack_calls": 14,
+      "max_batch": 1,
+      "wait_calls": 217
+    },
+    {
+      "ack_calls": 13,
+      "max_batch": 1,
+      "wait_calls": 234
+    },
+    {
+      "ack_calls": 13,
+      "max_batch": 1,
+      "wait_calls": 233
+    },
+    {
+      "ack_calls": 14,
+      "max_batch": 1,
+      "wait_calls": 236
+    },
+    {
+      "ack_calls": 14,
+      "max_batch": 1,
+      "wait_calls": 224
+    },
+    {
+      "ack_calls": 14,
+      "max_batch": 1,
+      "wait_calls": 228
+    },
+    {
+      "ack_calls": 14,
+      "max_batch": 1,
+      "wait_calls": 228
+    },
+    {
+      "ack_calls": 14,
+      "max_batch": 1,
+      "wait_calls": 238
+    },
+    {
+      "ack_calls": 14,
+      "max_batch": 1,
+      "wait_calls": 249
+    },
+    {
+      "ack_calls": 14,
+      "max_batch": 1,
+      "wait_calls": 246
+    },
+    {
+      "ack_calls": 14,
+      "max_batch": 1,
+      "wait_calls": 227
+    },
+    {
+      "ack_calls": 14,
+      "max_batch": 1,
+      "wait_calls": 234
+    },
+    {
+      "ack_calls": 13,
+      "max_batch": 1,
+      "wait_calls": 228
+    },
+    {
+      "ack_calls": 14,
+      "max_batch": 1,
+      "wait_calls": 240
+    },
+    {
+      "ack_calls": 13,
+      "max_batch": 1,
+      "wait_calls": 232
+    },
+    {
+      "ack_calls": 13,
+      "max_batch": 1,
+      "wait_calls": 234
+    },
+    {
+      "ack_calls": 13,
+      "max_batch": 1,
+      "wait_calls": 241
+    },
+    {
+      "ack_calls": 13,
+      "max_batch": 1,
+      "wait_calls": 230
+    },
+    {
+      "ack_calls": 13,
+      "max_batch": 1,
+      "wait_calls": 236
+    },
+    {
+      "ack_calls": 14,
+      "max_batch": 1,
+      "wait_calls": 229
+    },
+    {
+      "ack_calls": 14,
+      "max_batch": 1,
+      "wait_calls": 239
+    },
+    {
+      "ack_calls": 13,
+      "max_batch": 1,
+      "wait_calls": 227
+    },
+    {
+      "ack_calls": 14,
+      "max_batch": 1,
+      "wait_calls": 234
+    },
+    {
+      "ack_calls": 14,
+      "max_batch": 1,
+      "wait_calls": 234
+    },
+    {
+      "ack_calls": 14,
+      "max_batch": 1,
+      "wait_calls": 224
+    },
+    {
+      "ack_calls": 14,
+      "max_batch": 1,
+      "wait_calls": 229
+    },
+    {
+      "ack_calls": 14,
+      "max_batch": 1,
+      "wait_calls": 236
+    },
+    {
+      "ack_calls": 13,
+      "max_batch": 1,
+      "wait_calls": 233
+    },
+    {
+      "ack_calls": 14,
+      "max_batch": 1,
+      "wait_calls": 234
+    },
+    {
+      "ack_calls": 13,
+      "max_batch": 1,
+      "wait_calls": 232
+    },
+    {
+      "ack_calls": 13,
+      "max_batch": 1,
+      "wait_calls": 239
+    },
+    {
+      "ack_calls": 13,
+      "max_batch": 1,
+      "wait_calls": 234
+    },
+    {
+      "ack_calls": 14,
+      "max_batch": 1,
+      "wait_calls": 219
+    },
+    {
+      "ack_calls": 13,
+      "max_batch": 1,
+      "wait_calls": 219
+    },
+    {
+      "ack_calls": 14,
+      "max_batch": 1,
+      "wait_calls": 223
+    },
+    {
+      "ack_calls": 13,
+      "max_batch": 1,
+      "wait_calls": 236
+    },
+    {
+      "ack_calls": 14,
+      "max_batch": 1,
+      "wait_calls": 219
+    },
+    {
+      "ack_calls": 14,
+      "max_batch": 1,
+      "wait_calls": 232
+    },
+    {
+      "ack_calls": 13,
+      "max_batch": 1,
+      "wait_calls": 233
+    },
+    {
+      "ack_calls": 14,
+      "max_batch": 1,
+      "wait_calls": 228
+    },
+    {
+      "ack_calls": 14,
+      "max_batch": 1,
+      "wait_calls": 224
+    },
+    {
+      "ack_calls": 14,
+      "max_batch": 1,
+      "wait_calls": 237
+    },
+    {
+      "ack_calls": 14,
+      "max_batch": 1,
+      "wait_calls": 219
+    },
+    {
+      "ack_calls": 14,
+      "max_batch": 1,
+      "wait_calls": 227
+    },
+    {
+      "ack_calls": 14,
+      "max_batch": 1,
+      "wait_calls": 229
+    },
+    {
+      "ack_calls": 14,
+      "max_batch": 1,
+      "wait_calls": 223
+    },
+    {
+      "ack_calls": 13,
+      "max_batch": 1,
+      "wait_calls": 240
+    },
+    {
+      "ack_calls": 14,
+      "max_batch": 1,
+      "wait_calls": 225
+    },
+    {
+      "ack_calls": 13,
+      "max_batch": 1,
+      "wait_calls": 229
+    },
+    {
+      "ack_calls": 14,
+      "max_batch": 1,
+      "wait_calls": 217
+    },
+    {
+      "ack_calls": 14,
+      "max_batch": 1,
+      "wait_calls": 219
+    },
+    {
+      "ack_calls": 14,
+      "max_batch": 1,
+      "wait_calls": 223
+    },
+    {
+      "ack_calls": 14,
+      "max_batch": 1,
+      "wait_calls": 215
+    },
+    {
+      "ack_calls": 14,
+      "max_batch": 1,
+      "wait_calls": 220
+    },
+    {
+      "ack_calls": 13,
+      "max_batch": 1,
+      "wait_calls": 226
+    },
+    {
+      "ack_calls": 14,
+      "max_batch": 1,
+      "wait_calls": 231
+    },
+    {
+      "ack_calls": 14,
+      "max_batch": 1,
+      "wait_calls": 218
+    },
+    {
+      "ack_calls": 14,
+      "max_batch": 1,
+      "wait_calls": 217
+    },
+    {
+      "ack_calls": 13,
+      "max_batch": 1,
+      "wait_calls": 216
+    },
+    {
+      "ack_calls": 14,
+      "max_batch": 1,
+      "wait_calls": 226
+    }
+  ],
+  "receiver_identity_shared_with_sender": true,
+  "requested_measurement_seconds": 10,
+  "send_ack_ms": {
+    "count": 1071,
+    "max": 1446.751218,
+    "mean": 950.0507631045753,
+    "min": 6.610368,
+    "p50": 1015.495455,
+    "p95": 1199.049162,
+    "p99": 1254.088017
+  },
+  "send_ack_p50_below_10_ms_target_pass": false,
+  "throughput_5000_per_second_target_pass": false,
+  "transport": "uds",
+  "verified_deliveries_and_acks": 1371,
+  "warmup_messages": 300
+}

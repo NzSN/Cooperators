@@ -1,0 +1,86 @@
+{
+  "v": 1,
+  "agents": {
+    "instance-01M5CB1CVRDB83HYYTE4W068KZ": {
+      "agent_id": "01M5CB1CVRDB83HYYTE4W068KZ",
+      "token_hash": "sha256:d5e63f64daed7a16a8a94bbba627868b23b839759191b2dcd4d7a1b015451095",
+      "kind": "benchmark",
+      "capabilities": [],
+      "registered_at": "2026-10-20T09:42:17.720Z",
+      "display_name": "same-inbox-c008-0",
+      "launch_key_hash": "sha256:d5e63f64daed7a16a8a94bbba627868b23b839759191b2dcd4d7a1b015451095"
+    },
+    "instance-01M5CB1CW2MZA17S2J9G95DYZJ": {
+      "agent_id": "01M5CB1CW2MZA17S2J9G95DYZJ",
+      "token_hash": "sha256:61734f4c2ed7b8ba457e358ecad846f18b7556bb21cd2ff93ea99290058ad3ff",
+      "kind": "benchmark",
+      "capabilities": [],
+      "registered_at": "2026-10-20T09:42:17.730Z",
+      "display_name": "same-inbox-c008-1",
+      "launch_key_hash": "sha256:61734f4c2ed7b8ba457e358ecad846f18b7556bb21cd2ff93ea99290058ad3ff"
+    },
+    "instance-01M5CB1CWH85ET4CV4X30VW8J5": {
+      "agent_id": "01M5CB1CWH85ET4CV4X30VW8J5",
+      "token_hash": "sha256:bfb0ac8001456ce6032b0871f5855d02264688ea7f08b42f231c02d101ab895a",
+      "kind": "benchmark",
+      "capabilities": [],
+      "registered_at": "2026-10-20T09:42:17.745Z",
+      "display_name": "same-inbox-c008-2",
+      "launch_key_hash": "sha256:bfb0ac8001456ce6032b0871f5855d02264688ea7f08b42f231c02d101ab895a"
+    },
+    "instance-01M5CB1CX5880XFPB6205KG9JE": {
+      "agent_id": "01M5CB1CX5880XFPB6205KG9JE",
+      "token_hash": "sha256:8620254744ec9dd01cd2bc9934d829478f473c7df0887e6622585193a67610fd",
+      "kind": "benchmark",
+      "capabilities": [],
+      "registered_at": "2026-10-20T09:42:17.765Z",
+      "display_name": "same-inbox-c008-3",
+      "launch_key_hash": "sha256:8620254744ec9dd01cd2bc9934d829478f473c7df0887e6622585193a67610fd"
+    },
+    "instance-01M5CB1CXGP33VZAS9M4PQ271Y": {
+      "agent_id": "01M5CB1CXGP33VZAS9M4PQ271Y",
+      "token_hash": "sha256:79c767ebfbb4f8d570a2a7e6828ee56aef7fd40266603f1bc060fd4c3381ab6f",
+      "kind": "benchmark",
+      "capabilities": [],
+      "registered_at": "2026-10-20T09:42:17.776Z",
+      "display_name": "same-inbox-c008-4",
+      "launch_key_hash": "sha256:79c767ebfbb4f8d570a2a7e6828ee56aef7fd40266603f1bc060fd4c3381ab6f"
+    },
+    "instance-01M5CB1CXXCAYB97XNRNHB5GTS": {
+      "agent_id": "01M5CB1CXXCAYB97XNRNHB5GTS",
+      "token_hash": "sha256:02ab2d69885cb9a3b4965a56d15a2eab63d328053c99fd688cf302258aaf8509",
+      "kind": "benchmark",
+      "capabilities": [],
+      "registered_at": "2026-10-20T09:42:17.789Z",
+      "display_name": "same-inbox-c008-5",
+      "launch_key_hash": "sha256:02ab2d69885cb9a3b4965a56d15a2eab63d328053c99fd688cf302258aaf8509"
+    },
+    "instance-01M5CB1CY61GWKJF4SEK3TEJSM": {
+      "agent_id": "01M5CB1CY61GWKJF4SEK3TEJSM",
+      "token_hash": "sha256:f7ff51ac4cda9ad1f147e4d2a0fb0ec3bb2d7b991b33cfef018d8609be0bce7f",
+      "kind": "benchmark",
+      "capabilities": [],
+      "registered_at": "2026-10-20T09:42:17.798Z",
+      "display_name": "same-inbox-c008-6",
+      "launch_key_hash": "sha256:f7ff51ac4cda9ad1f147e4d2a0fb0ec3bb2d7b991b33cfef018d8609be0bce7f"
+    },
+    "instance-01M5CB1CYJ8R583SZPJX34EW74": {
+      "agent_id": "01M5CB1CYJ8R583SZPJX34EW74",
+      "token_hash": "sha256:19cb63d631d8231b8e7585735a08cddb72ee1b20e0426aed74c96a1829b57dec",
+      "kind": "benchmark",
+      "capabilities": [],
+      "registered_at": "2026-10-20T09:42:17.810Z",
+      "display_name": "same-inbox-c008-7",
+      "launch_key_hash": "sha256:19cb63d631d8231b8e7585735a08cddb72ee1b20e0426aed74c96a1829b57dec"
+    },
+    "instance-01M5CB1CZ34B98ZMD7PHF6BQDS": {
+      "agent_id": "01M5CB1CZ34B98ZMD7PHF6BQDS",
+      "token_hash": "sha256:df74ecfbaf7af8696692fac3e63f57c71e0648c144d4e93964ad121a77b5954e",
+      "kind": "benchmark",
+      "capabilities": [],
+      "registered_at": "2026-10-20T09:42:17.827Z",
+      "display_name": "same-inbox-c008-8",
+      "launch_key_hash": "sha256:df74ecfbaf7af8696692fac3e63f57c71e0648c144d4e93964ad121a77b5954e"
+    }
+  }
+}

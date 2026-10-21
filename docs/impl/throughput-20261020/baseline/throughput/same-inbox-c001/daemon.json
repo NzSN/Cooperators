@@ -1,0 +1,43 @@
+{
+  "agents": [
+    {
+      "agent_id": "01M5CB11Y0S3H2QYF5ZJ1MAEFG",
+      "display_name": "same-inbox-c001-0",
+      "name": "instance-01M5CB11Y0S3H2QYF5ZJ1MAEFG"
+    },
+    {
+      "agent_id": "01M5CB11YCZHAGPER6ABPGSQ41",
+      "display_name": "same-inbox-c001-1",
+      "name": "instance-01M5CB11YCZHAGPER6ABPGSQ41"
+    }
+  ],
+  "all_receiver_inboxes_empty_with_verified_acked_heads": true,
+  "command": [
+    "/tmp/cooperators-step3-baseline/coop",
+    "--root",
+    "/tmp/ctb-t5u2549t",
+    "daemon",
+    "run",
+    "--http-addr",
+    "127.0.0.1:0"
+  ],
+  "contiguous_sequences": true,
+  "correctness_passed": true,
+  "daemon_exit_after_termination": -15,
+  "durable_records": 2901,
+  "hash_chains_verified": true,
+  "inbox_heads": {
+    "01M5CB11Y0S3H2QYF5ZJ1MAEFG": 0,
+    "01M5CB11YCZHAGPER6ABPGSQ41": 2901
+  },
+  "label": "same-inbox-c001",
+  "pid": 540050,
+  "receipt_count": 2901,
+  "receipt_payload_and_identity_match": true,
+  "root": "/tmp/ctb-t5u2549t",
+  "running_executable_sha256": "c6d1047a8a4d9b0094274151c9658a101ed018ce07f82d66ed9fb512eb285321",
+  "start_utc": "2026-10-20T09:42:06.483914+00:00",
+  "unique_receipts": 2901,
+  "verified_deliveries_and_acks": 2901,
+  "warmup_fully_delivered_and_acked_before_measurement": 231
+}

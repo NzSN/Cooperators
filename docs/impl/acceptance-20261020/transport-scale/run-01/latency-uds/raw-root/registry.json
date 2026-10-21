@@ -1,0 +1,14 @@
+{
+  "v": 1,
+  "agents": {
+    "instance-01M5C95K3XZEDA3GJ4VY811VGE": {
+      "agent_id": "01M5C95K3XZEDA3GJ4VY811VGE",
+      "token_hash": "sha256:4f34ce58fc731f73050197e738a27b65d0dc6652bedd8e59a520ad2a0c7b04a0",
+      "kind": "benchmark",
+      "capabilities": [],
+      "registered_at": "2026-10-20T09:09:38.045Z",
+      "display_name": "latency-uds-0",
+      "launch_key_hash": "sha256:4f34ce58fc731f73050197e738a27b65d0dc6652bedd8e59a520ad2a0c7b04a0"
+    }
+  }
+}

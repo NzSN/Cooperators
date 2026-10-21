@@ -1,0 +1,10 @@
+{
+  "observation": {
+    "ack": 0,
+    "cursor": 0,
+    "head": 1,
+    "messages": [],
+    "pending": 1
+  },
+  "result": "ok"
+}

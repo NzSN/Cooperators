@@ -1,0 +1,187 @@
+{
+  "agents": [
+    {
+      "agent_id": "01M5CDTS58E2P165VS0KAJNKHJ",
+      "display_name": "same-inbox-c032-0",
+      "name": "instance-01M5CDTS58E2P165VS0KAJNKHJ"
+    },
+    {
+      "agent_id": "01M5CDTS5EEAP9VXG338J43C3T",
+      "display_name": "same-inbox-c032-1",
+      "name": "instance-01M5CDTS5EEAP9VXG338J43C3T"
+    },
+    {
+      "agent_id": "01M5CDTS5J6F4QSSVHB8V587Y7",
+      "display_name": "same-inbox-c032-2",
+      "name": "instance-01M5CDTS5J6F4QSSVHB8V587Y7"
+    },
+    {
+      "agent_id": "01M5CDTS5PER8SJN5GJW4ZN9E0",
+      "display_name": "same-inbox-c032-3",
+      "name": "instance-01M5CDTS5PER8SJN5GJW4ZN9E0"
+    },
+    {
+      "agent_id": "01M5CDTS5X2AA7AP66EQ80ACV8",
+      "display_name": "same-inbox-c032-4",
+      "name": "instance-01M5CDTS5X2AA7AP66EQ80ACV8"
+    },
+    {
+      "agent_id": "01M5CDTS61F9W5SCMKD8GGMWAS",
+      "display_name": "same-inbox-c032-5",
+      "name": "instance-01M5CDTS61F9W5SCMKD8GGMWAS"
+    },
+    {
+      "agent_id": "01M5CDTS652F12TA2TEH7NHZNY",
+      "display_name": "same-inbox-c032-6",
+      "name": "instance-01M5CDTS652F12TA2TEH7NHZNY"
+    },
+    {
+      "agent_id": "01M5CDTS6AHBC765V283VMHMK9",
+      "display_name": "same-inbox-c032-7",
+      "name": "instance-01M5CDTS6AHBC765V283VMHMK9"
+    },
+    {
+      "agent_id": "01M5CDTS6G8A6AW76PBDW1YB39",
+      "display_name": "same-inbox-c032-8",
+      "name": "instance-01M5CDTS6G8A6AW76PBDW1YB39"
+    },
+    {
+      "agent_id": "01M5CDTS6M72Z3KQDA8JRJAA37",
+      "display_name": "same-inbox-c032-9",
+      "name": "instance-01M5CDTS6M72Z3KQDA8JRJAA37"
+    },
+    {
+      "agent_id": "01M5CDTS6RX87HMW46XNDBZV1W",
+      "display_name": "same-inbox-c032-10",
+      "name": "instance-01M5CDTS6RX87HMW46XNDBZV1W"
+    },
+    {
+      "agent_id": "01M5CDTS6Z4NRWTEZ7DEH482VY",
+      "display_name": "same-inbox-c032-11",
+      "name": "instance-01M5CDTS6Z4NRWTEZ7DEH482VY"
+    },
+    {
+      "agent_id": "01M5CDTS73C4FZTS9D6JDQ5RAS",
+      "display_name": "same-inbox-c032-12",
+      "name": "instance-01M5CDTS73C4FZTS9D6JDQ5RAS"
+    },
+    {
+      "agent_id": "01M5CDTS77FMK4NNRYF96WKRAJ",
+      "display_name": "same-inbox-c032-13",
+      "name": "instance-01M5CDTS77FMK4NNRYF96WKRAJ"
+    },
+    {
+      "agent_id": "01M5CDTS7D1VEZ52YD16EP1KDX",
+      "display_name": "same-inbox-c032-14",
+      "name": "instance-01M5CDTS7D1VEZ52YD16EP1KDX"
+    },
+    {
+      "agent_id": "01M5CDTS7J1YPDKMNFJ4YPPS32",
+      "display_name": "same-inbox-c032-15",
+      "name": "instance-01M5CDTS7J1YPDKMNFJ4YPPS32"
+    },
+    {
+      "agent_id": "01M5CDTS7PM1CD2C7H09S1MJ1Y",
+      "display_name": "same-inbox-c032-16",
+      "name": "instance-01M5CDTS7PM1CD2C7H09S1MJ1Y"
+    },
+    {
+      "agent_id": "01M5CDTS7TCYCKDMHMS2Z6R5RQ",
+      "display_name": "same-inbox-c032-17",
+      "name": "instance-01M5CDTS7TCYCKDMHMS2Z6R5RQ"
+    },
+    {
+      "agent_id": "01M5CDTS808WSFY4YMFBPCG3P4",
+      "display_name": "same-inbox-c032-18",
+      "name": "instance-01M5CDTS808WSFY4YMFBPCG3P4"
+    },
+    {
+      "agent_id": "01M5CDTS85GCXFAEVM1FNB1J6K",
+      "display_name": "same-inbox-c032-19",
+      "name": "instance-01M5CDTS85GCXFAEVM1FNB1J6K"
+    },
+    {
+      "agent_id": "01M5CDTS892Q29N5KJESK1EF0N",
+      "display_name": "same-inbox-c032-20",
+      "name": "instance-01M5CDTS892Q29N5KJESK1EF0N"
+    },
+    {
+      "agent_id": "01M5CDTS8DCF1ZA2BNXSYY5YWY",
+      "display_name": "same-inbox-c032-21",
+      "name": "instance-01M5CDTS8DCF1ZA2BNXSYY5YWY"
+    },
+    {
+      "agent_id": "01M5CDTS8J61J592R85CCXJ38D",
+      "display_name": "same-inbox-c032-22",
+      "name": "instance-01M5CDTS8J61J592R85CCXJ38D"
+    },
+    {
+      "agent_id": "01M5CDTS8RE1WDSXFAYR938F2R",
+      "display_name": "same-inbox-c032-23",
+      "name": "instance-01M5CDTS8RE1WDSXFAYR938F2R"
+    },
+    {
+      "agent_id": "01M5CDTS8WEYD44R7C0YWNP4NA",
+      "display_name": "same-inbox-c032-24",
+      "name": "instance-01M5CDTS8WEYD44R7C0YWNP4NA"
+    },
+    {
+      "agent_id": "01M5CDTS96PSTKQ49P0GHNNJ0X",
+      "display_name": "same-inbox-c032-25",
+      "name": "instance-01M5CDTS96PSTKQ49P0GHNNJ0X"
+    },
+    {
+      "agent_id": "01M5CDTS9ZJ3R9WWZW56JVNES7",
+      "display_name": "same-inbox-c032-26",
+      "name": "instance-01M5CDTS9ZJ3R9WWZW56JVNES7"
+    },
+    {
+      "agent_id": "01M5CDTSA69QJJRGC9J4A8PHR1",
+      "display_name": "same-inbox-c032-27",
+      "name": "instance-01M5CDTSA69QJJRGC9J4A8PHR1"
+    },
+    {
+      "agent_id": "01M5CDTSABF6MCJ53GS2XJ1ZKP",
+      "display_name": "same-inbox-c032-28",
+      "name": "instance-01M5CDTSABF6MCJ53GS2XJ1ZKP"
+    },
+    {
+      "agent_id": "01M5CDTSAF1K02AZKPGPSSTW2J",
+      "display_name": "same-inbox-c032-29",
+      "name": "instance-01M5CDTSAF1K02AZKPGPSSTW2J"
+    },
+    {
+      "agent_id": "01M5CDTSANQATFSBDB0A2K1MQ7",
+      "display_name": "same-inbox-c032-30",
+      "name": "instance-01M5CDTSANQATFSBDB0A2K1MQ7"
+    },
+    {
+      "agent_id": "01M5CDTSAVS9YBMSQDBHW6FRD9",
+      "display_name": "same-inbox-c032-31",
+      "name": "instance-01M5CDTSAVS9YBMSQDBHW6FRD9"
+    },
+    {
+      "agent_id": "01M5CDTSB0H3C5C2RDXCQT5EJ5",
+      "display_name": "same-inbox-c032-32",
+      "name": "instance-01M5CDTSB0H3C5C2RDXCQT5EJ5"
+    }
+  ],
+  "command": [
+    "/tmp/cooperators-step3-baseline/coop",
+    "--root",
+    "/tmp/ctn-578796-1792492266627394400",
+    "daemon",
+    "run",
+    "--http-addr",
+    "off"
+  ],
+  "correctness_passed": true,
+  "errors": [],
+  "http": "off",
+  "label": "same-inbox-c032",
+  "pid": 578900,
+  "root": "/tmp/ctn-578796-1792492266627394400",
+  "running_executable_sha256": "c6d1047a8a4d9b0094274151c9658a101ed018ce07f82d66ed9fb512eb285321",
+  "start_utc": "2026-10-20T10:31:06.627Z",
+  "stop": "SIGTERM; signal: 15 (SIGTERM)"
+}

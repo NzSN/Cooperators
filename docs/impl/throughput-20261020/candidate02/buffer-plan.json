@@ -1,0 +1,35 @@
+{
+  "changed_variable": {
+    "application": "Every fresh Uds.reader immediately after original Uds.__init__; replace socket.makefile rb buffer and close previous reader before any request",
+    "uds_reader_buffer_bytes_after": 262144,
+    "uds_reader_buffer_bytes_before": 8192
+  },
+  "declared_utc": "2026-10-20T10:17:37.815762+00:00",
+  "hashes": {
+    "/tmp/cooperators-step3-baseline/coop": "c6d1047a8a4d9b0094274151c9658a101ed018ce07f82d66ed9fb512eb285321",
+    "docs/impl/throughput-20261020/candidate/diagnose_c100.py": "f9474cc663ec38732a1f910db66991a1c2b33bc70e734a96e08a5cc4994d8ba3",
+    "docs/impl/throughput-20261020/candidate02/diagnose_buffer.py": "ca9dbc9509e946ca685e627b4ded88f1880e67eed6bae42f91cc7f77bb5090d4",
+    "scripts/benchmark_throughput.py": "406e8ea291fca4fec7610142e363f04d62f9e7392c5e6f2a4928ca332bc53389",
+    "scripts/benchmark_transport.py": "685580eadb8b5b3f4a827ca750ea969bbba65df9d30dd519babcf62b475bf18c",
+    "target/release/coop": "32d5b650e8768407d297165eb350c295ab0b7aa0da14272fcee3948765383488"
+  },
+  "interpretation": "Diagnostic one-variable experiment; do not substitute for frozen qualification or claim a causal split among GIL/socket/kernel overhead from CPU alone. Preserve failures.",
+  "run_order": [
+    "candidate02 32d5b650e8768407d297165eb350c295ab0b7aa0da14272fcee3948765383488",
+    "original baseline c6d1047a8a4d9b0094274151c9658a101ed018ce07f82d66ed9fb512eb285321"
+  ],
+  "schema": "cooperators.reader-buffer-diagnostic-plan/v1",
+  "unchanged": {
+    "default_inbox_pending_message_cap": 10000,
+    "default_wait_batch_limit": 100,
+    "drain_empty_poll_interval_ms": 20,
+    "measurement_seconds": 10,
+    "minimum_warmup_sends_per_sender": 3,
+    "outstanding_sends_per_sender": 1,
+    "payload_text_bytes": 128,
+    "rpc_and_cpu_instrumentation": "Reuse unchanged candidate/diagnose_c100.py",
+    "sender_concurrency": 100,
+    "topology": "same-inbox",
+    "warmup_seconds": 1
+  }
+}

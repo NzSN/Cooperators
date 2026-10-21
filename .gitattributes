@@ -2,4 +2,6 @@
 * text=auto eol=lf
 /spec/** -text
 /docs/impl/generated-fault-mbt/** -text
+/docs/impl/acceptance-20261020/** -text
+/docs/impl/throughput-20261020/** -text
 /.agents/chatdocs/** -text

@@ -1,0 +1,6 @@
+{
+  "core_source_manifest": "../run-02/source-manifest.json",
+  "matched_files": 24,
+  "mismatched_files": [],
+  "release_binary_sha256": "32d5b650e8768407d297165eb350c295ab0b7aa0da14272fcee3948765383488"
+}

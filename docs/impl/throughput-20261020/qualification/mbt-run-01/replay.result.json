@@ -1,0 +1,13 @@
+{
+  "argv": [
+    "/home/nzsn/Repos/Cooperators/spec/mbt/target/debug/cooperators-mbt",
+    "--skip-gen",
+    "--suite",
+    "all"
+  ],
+  "cwd": "/home/nzsn/Repos/Cooperators",
+  "elapsed_seconds": 10.169602394104004,
+  "exit_code": 0,
+  "finished_unix": 1792490226.0698278,
+  "started_unix": 1792490215.900226
+}

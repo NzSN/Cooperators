@@ -1,0 +1,22 @@
+{
+  "agents": [],
+  "command": [
+    "/home/nzsn/Repos/Cooperators/target/release/coop",
+    "--root",
+    "/tmp/ctn-2-1792492190618369144",
+    "daemon",
+    "run",
+    "--http-addr",
+    "off"
+  ],
+  "correctness_passed": false,
+  "errors": [
+    "daemon exited before readiness"
+  ],
+  "http": "off",
+  "label": "same-inbox-c001",
+  "pid": 29,
+  "root": "/tmp/ctn-2-1792492190618369144",
+  "start_utc": "2026-10-20T10:29:50.618Z",
+  "stop": "reaped; exit status: 1"
+}

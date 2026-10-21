@@ -1,0 +1,25 @@
+{
+  "pid": 507317,
+  "root": "/tmp/coop-installed-g70xcfoa/bus",
+  "seq_heads": {
+    "agents/01M5C99W92KK201JHBBQRX8W32/inbox.jsonl": {
+      "bytes": 1326,
+      "seq": 2
+    },
+    "agents/01M5C9CTZGC2SXY69YX6PRBQA4/inbox.jsonl": {
+      "bytes": 603,
+      "seq": 1
+    },
+    "channels/#presence.jsonl": {
+      "bytes": 7629,
+      "seq": 13
+    },
+    "queues/installed-acceptance-20261020.jsonl": {
+      "bytes": 2390,
+      "seq": 4
+    }
+  },
+  "started_at": "2026-10-20T09:04:49.971Z",
+  "uptime_s": 835,
+  "version": "0.1.0"
+}

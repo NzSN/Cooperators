@@ -1,0 +1,22 @@
+{
+  "method": "register_agent",
+  "request": {
+    "kind": "codex",
+    "name": "instance-01M5CDKTYJJDJ30TGWWG9C78EQ",
+    "token": {
+      "credential_hash": "sha256:f1d60e1045e170a753672ec6283b6af320db096b06fdabb5266a17a59de6c450"
+    }
+  },
+  "response": {
+    "result": {
+      "agent_id": "01M5CDKTYJJDJ30TGWWG9C78EQ",
+      "capabilities": [],
+      "kind": "codex",
+      "name": "instance-01M5CDKTYJJDJ30TGWWG9C78EQ",
+      "rotated": true,
+      "token": {
+        "credential_hash": "sha256:86904550efd2dd5d05329ffd6ec926a36f25a8784129007905bc51afd9afa701"
+      }
+    }
+  }
+}

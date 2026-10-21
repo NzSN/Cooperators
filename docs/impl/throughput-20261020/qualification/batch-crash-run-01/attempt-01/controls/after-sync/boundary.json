@@ -1,0 +1,191 @@
+{
+  "disk_records": [
+    {
+      "body": {
+        "mime": "text/plain",
+        "text": "payload-prefix"
+      },
+      "from": "sender",
+      "id": "01M5CEDDE1FF0AJFNMMTW3B1NC",
+      "idempotency_key": "prefix",
+      "kind": "batch-crash",
+      "prev_hash": "sha256:0000000000000000000000000000000000000000000000000000000000000000",
+      "reply_to": null,
+      "seq": 1,
+      "to": "recipient",
+      "ts": "2026-10-20T10:41:17.249Z",
+      "v": 1
+    },
+    {
+      "body": {
+        "mime": "text/plain",
+        "text": "payload-batch-0"
+      },
+      "from": "sender",
+      "id": "01M5CEDDME66MBG7YVFV03RHKV",
+      "idempotency_key": "batch-0",
+      "kind": "batch-crash",
+      "prev_hash": "sha256:7121fd8063331fa6ac7f55d56951db8e0f5ef285e223eef0fcb110993167633b",
+      "reply_to": null,
+      "seq": 2,
+      "to": "recipient",
+      "ts": "2026-10-20T10:41:17.454Z",
+      "v": 1
+    },
+    {
+      "body": {
+        "mime": "text/plain",
+        "text": "payload-batch-1"
+      },
+      "from": "sender",
+      "id": "01M5CEDDMEE0RT4WBJTFXTFWKQ",
+      "idempotency_key": "batch-1",
+      "kind": "batch-crash",
+      "prev_hash": "sha256:d483872ab5675e76a2edb3fca8c2f7f207ae1d799f8bb4152d310a441b931d43",
+      "reply_to": null,
+      "seq": 3,
+      "to": "recipient",
+      "ts": "2026-10-20T10:41:17.454Z",
+      "v": 1
+    },
+    {
+      "body": {
+        "mime": "text/plain",
+        "text": "payload-batch-2"
+      },
+      "from": "sender",
+      "id": "01M5CEDDMEM2ZSZVKGV87G8GYY",
+      "idempotency_key": "batch-2",
+      "kind": "batch-crash",
+      "prev_hash": "sha256:2899665a9b630a3e0e2417caa2b42a49ff47a45db27eb190d533e62e41daa04e",
+      "reply_to": null,
+      "seq": 4,
+      "to": "recipient",
+      "ts": "2026-10-20T10:41:17.454Z",
+      "v": 1
+    }
+  ],
+  "hooks": [
+    {
+      "bytes_requested": 320,
+      "bytes_written": 320,
+      "bytes_written_known": true,
+      "seq": 2,
+      "stage": "Synced",
+      "sync_attempted": true,
+      "sync_succeeded": true
+    },
+    {
+      "bytes_requested": 320,
+      "bytes_written": 320,
+      "bytes_written_known": true,
+      "seq": 3,
+      "stage": "Synced",
+      "sync_attempted": true,
+      "sync_succeeded": true
+    },
+    {
+      "bytes_requested": 320,
+      "bytes_written": 320,
+      "bytes_written_known": true,
+      "seq": 4,
+      "stage": "Synced",
+      "sync_attempted": true,
+      "sync_succeeded": true
+    }
+  ],
+  "mode": "after-sync",
+  "published_records": [
+    {
+      "body": {
+        "mime": "text/plain",
+        "text": "payload-prefix"
+      },
+      "from": "sender",
+      "id": "01M5CEDDE1FF0AJFNMMTW3B1NC",
+      "idempotency_key": "prefix",
+      "kind": "batch-crash",
+      "prev_hash": "sha256:0000000000000000000000000000000000000000000000000000000000000000",
+      "reply_to": null,
+      "seq": 1,
+      "to": "recipient",
+      "ts": "2026-10-20T10:41:17.249Z",
+      "v": 1
+    },
+    {
+      "body": {
+        "mime": "text/plain",
+        "text": "payload-batch-0"
+      },
+      "from": "sender",
+      "id": "01M5CEDDME66MBG7YVFV03RHKV",
+      "idempotency_key": "batch-0",
+      "kind": "batch-crash",
+      "prev_hash": "sha256:7121fd8063331fa6ac7f55d56951db8e0f5ef285e223eef0fcb110993167633b",
+      "reply_to": null,
+      "seq": 2,
+      "to": "recipient",
+      "ts": "2026-10-20T10:41:17.454Z",
+      "v": 1
+    },
+    {
+      "body": {
+        "mime": "text/plain",
+        "text": "payload-batch-1"
+      },
+      "from": "sender",
+      "id": "01M5CEDDMEE0RT4WBJTFXTFWKQ",
+      "idempotency_key": "batch-1",
+      "kind": "batch-crash",
+      "prev_hash": "sha256:d483872ab5675e76a2edb3fca8c2f7f207ae1d799f8bb4152d310a441b931d43",
+      "reply_to": null,
+      "seq": 3,
+      "to": "recipient",
+      "ts": "2026-10-20T10:41:17.454Z",
+      "v": 1
+    },
+    {
+      "body": {
+        "mime": "text/plain",
+        "text": "payload-batch-2"
+      },
+      "from": "sender",
+      "id": "01M5CEDDMEM2ZSZVKGV87G8GYY",
+      "idempotency_key": "batch-2",
+      "kind": "batch-crash",
+      "prev_hash": "sha256:2899665a9b630a3e0e2417caa2b42a49ff47a45db27eb190d533e62e41daa04e",
+      "reply_to": null,
+      "seq": 4,
+      "to": "recipient",
+      "ts": "2026-10-20T10:41:17.454Z",
+      "v": 1
+    }
+  ],
+  "successful_batch_receipts": [
+    {
+      "duplicate": false,
+      "idempotency_key": "batch-0",
+      "message_id": "01M5CEDDME66MBG7YVFV03RHKV",
+      "seq": 2,
+      "to": "recipient",
+      "to_agent_id": "01M5CEDDDVX85W11FADEAY442B"
+    },
+    {
+      "duplicate": false,
+      "idempotency_key": "batch-1",
+      "message_id": "01M5CEDDMEE0RT4WBJTFXTFWKQ",
+      "seq": 3,
+      "to": "recipient",
+      "to_agent_id": "01M5CEDDDVX85W11FADEAY442B"
+    },
+    {
+      "duplicate": false,
+      "idempotency_key": "batch-2",
+      "message_id": "01M5CEDDMEM2ZSZVKGV87G8GYY",
+      "seq": 4,
+      "to": "recipient",
+      "to_agent_id": "01M5CEDDDVX85W11FADEAY442B"
+    }
+  ],
+  "truncated_bytes": 0
+}

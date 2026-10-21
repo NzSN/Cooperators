@@ -1,0 +1,44 @@
+{
+  "status": "pass_with_legacy_workaround",
+  "default_modern_discovery": "fail",
+  "legacy_workaround": "MCP_PROTOCOL_NEGOTIATION=legacy",
+  "codex_agent_id": "01M5C9CTZGC2SXY69YX6PRBQA4",
+  "claude_agent_id": "01M5C99W92KK201JHBBQRX8W32",
+  "task_id": "01M5C9DVQZZ14ZF7YP0HHKDF7R",
+  "queue_event_kinds": [
+    "queue_created",
+    "task_enqueued",
+    "task_claimed",
+    "task_completed"
+  ],
+  "lease_id": "01M5C9G8HABNY2E3S83N9TM9HS",
+  "fence": 3,
+  "message_ids": {
+    "request": "01M5C9EE93BH7Z3YGKCBKWWV2B",
+    "reply": "01M5C9HGCVAT15VPNPQ09H2CBK",
+    "receipt": "01M5C9HTZ46Z50W3A925S5CFHR"
+  },
+  "codex_ack_cursor": "1",
+  "claude_ack_cursor": "2",
+  "codex_completed_native_calls": 11,
+  "claude_completed_native_calls": 9,
+  "recovered_codex_argument_errors": [
+    {
+      "tool": "coop_send_message",
+      "arguments": {
+        "to_agent_id": "01M5C99W92KK201JHBBQRX8W32",
+        "kind": "acceptance-request",
+        "text": "{\"nonce\":\"acceptance-2c7bd08a-752b-4ad5-9e82-1c70cc0e4bf9\",\"queue\":\"installed-acceptance-20261020\",\"task_id\":\"01M5C9DVQZZ14ZF7YP0HHKDF7R\",\"requester_agent_id\":\"01M5C9CTZGC2SXY69YX6PRBQA4\",\"instructions\":\"claim the task with a 300-second lease, sum numbers, complete with matching lease/fence, then reply with task_id and answer\"}",
+        "idempotency_key": "acceptance-2c7bd08a-752b-4ad5-9e82-1c70cc0e4bf9-request"
+      },
+      "error": {
+        "code": -32602,
+        "data": null,
+        "message": "missing field `to`"
+      }
+    }
+  ],
+  "claude_cli_model": "deepseek-flash",
+  "durable_hash_chains_verified": true,
+  "all_cross_checks_passed": true
+}

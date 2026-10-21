@@ -1,0 +1,43 @@
+2026-10-20T09:07:47+00:00
+63e20514fffa039a97b0ec25e432657854d2fdef
+?? docs/impl/acceptance-20261020/
+?? examples/
+?? scripts/
+rustc 1.95.0 (59807616e 2026-04-14)
+binary: rustc
+commit-hash: 59807616e1fa2540724bfbac14d7976d7e4a3860
+commit-date: 2026-04-14
+host: x86_64-unknown-linux-gnu
+release: 1.95.0
+LLVM version: 22.1.2
+cargo 1.95.0 (f2d3ce0bd 2026-03-21)
+Linux DESKTOP-J0HSHNS 6.18.54.1-microsoft-standard-WSL2 #1 SMP PREEMPT_DYNAMIC Tue Oct  6 19:13:07 UTC 2026 x86_64 x86_64 x86_64 GNU/Linux
+Filesystem     Type  1K-blocks      Used Available Use% Mounted on
+/dev/sdd       ext4 1055762868 304026084 698033312  31% /
+fb9676f2cd646e30414c4194ab8780b5340ff2abb533d5a1fad8010cd3492bd6  Cargo.toml
+401880c50b7dabe78dc04e650a1bfa442225593461eed18ecc0af40564a7eb3f  Cargo.lock
+61cf6aae5489fa0242f45f982d62e9c3142d3e9c134011bf9a7a2292b6462dc4  examples/replay_baseline.rs
+194b2259f1072382f029aae31e6f6ff593cefd65ae9d6b11e6c32cb618797508  docs/impl/acceptance-20261020/replay/reproduce.sh
+c6d1047a8a4d9b0094274151c9658a101ed018ce07f82d66ed9fb512eb285321  target/release/coop
+74e1c3d4d098f16d4da13ed738509f28824c502e20376054f54e95dadb966c21  target/release/examples/replay_baseline
+3946e0fbc5e985a8680aa3ff493ec18919daa8304de5adde521b6c0bfaeed540  src/channels.rs
+f3a2306f1c9eb1c6bc88705abccc7377f0f9d5dac50142675b23b195a1b79cd9  src/client.rs
+ce64c276bcc5c24bb45a9ca59da52bf08124316dd98a1cc0c76a408e5c5759e5  src/docs.rs
+7f6427cb5d6bc1fc1fcb5801eac2a7ad5336d2daa25998bc8f62b2ddf9393510  src/envelope.rs
+94ab22ac5d56ffd5621e14a374b3e1665dbd03a50e2247793edb180868eb6047  src/error.rs
+90cf42716ca9f980cd778d667abb7d3faf8b334ea2da3929cabd95ae3eef706e  src/faults.rs
+3c9978366a887d6a790b0fe1e49e178c58bcafdbec3ba622d8fde22a014e3dfb  src/id.rs
+d3003851a85b0d2ca0bab64e4d6efe91b7e9dde406bfaf330702e9a3c7af9ee5  src/leases.rs
+3da5ae4d719a9d9537257fd50a4a674175fe42cd8645f9cb42826fe5695c8f49  src/lib.rs
+363a8317f1c64eaaea839def652e47881c5a96875978b15b11c51a73db4cb5ba  src/main.rs
+32c32ef91883240719a5746e2e0ae421b555652ce5323141f169ed0f4a28c7d5  src/mcp.rs
+c220a4ee71ae5b9f8d7d3466a2bccde4680398634280fc15199c83e3e17baba3  src/messaging.rs
+bb5b7da51c8e63a205bac2636f9a373cfe5e85b09afd6d0f4b20d1eecec6e4cf  src/metrics.rs
+42eae03c804d6ff639b1ae6445ad234db8926e096aea0683625c22ddc26b6bd9  src/paths.rs
+9049c080ae72fec1ed2807a8ef3ef68d7e5f74519269866dd2a2b6e69ba14df2  src/presence.rs
+7ef5aa98563f8b8060cd3ec675c656ca462981dee6f9abd90f1f8e86ea530b23  src/queues.rs
+1a66b3d9a3470cc94d067293ed4a35cd47def775b05e6028e4cd08e7a804ab59  src/registry.rs
+085d4c74198fe2add7ad72eeba22effa3bc20a7be1b6b142195a1fc26f6b912c  src/rpc.rs
+18ebc1e3911a8c2d3290530551c842bdf3a562fa1d492ecf3dae70b62464e2dc  src/server.rs
+e69b9c586fa116cad133d7781aee67ff9032f0610f62a38742d5161581ca5260  src/status.rs
+caa308ab78472d19f8b2f8d74fa90a0990b969c3536cdbe7b7ae58afd39b5c88  src/storage.rs

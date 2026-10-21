@@ -1,0 +1,32 @@
+{
+  "agents": [
+    {
+      "agent_id": "01M5CDXY3SH018NVZPACPHVRS4",
+      "display_name": "same-inbox-c001-0",
+      "name": "instance-01M5CDXY3SH018NVZPACPHVRS4"
+    },
+    {
+      "agent_id": "01M5CDXY4056K815QYE3CN901J",
+      "display_name": "same-inbox-c001-1",
+      "name": "instance-01M5CDXY4056K815QYE3CN901J"
+    }
+  ],
+  "command": [
+    "/home/nzsn/Repos/Cooperators/target/release/coop",
+    "--root",
+    "/tmp/ctn-579178-1792492370004612084",
+    "daemon",
+    "run",
+    "--http-addr",
+    "off"
+  ],
+  "correctness_passed": true,
+  "errors": [],
+  "http": "off",
+  "label": "same-inbox-c001",
+  "pid": 579205,
+  "root": "/tmp/ctn-579178-1792492370004612084",
+  "running_executable_sha256": "32d5b650e8768407d297165eb350c295ab0b7aa0da14272fcee3948765383488",
+  "start_utc": "2026-10-20T10:32:50.004Z",
+  "stop": "SIGTERM; signal: 15 (SIGTERM)"
+}

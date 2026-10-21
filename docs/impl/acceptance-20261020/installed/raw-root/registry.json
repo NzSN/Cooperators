@@ -1,0 +1,59 @@
+{
+  "v": 1,
+  "agents": {
+    "instance-01M5C8Y212CZ607KGDBSPWXT16": {
+      "agent_id": "01M5C8Y212CZ607KGDBSPWXT16",
+      "token_hash": "sha256:dbb5ff4f9f3e6328680efe6f483b8f44a166b9ef0a504784ec8dd71538a190b9",
+      "kind": "claude",
+      "capabilities": [],
+      "registered_at": "2026-10-20T09:05:31.170Z",
+      "display_name": "installed-claude",
+      "launch_key_hash": "sha256:dbb5ff4f9f3e6328680efe6f483b8f44a166b9ef0a504784ec8dd71538a190b9"
+    },
+    "instance-01M5C90EHDABVYC0BJZSYQ8H72": {
+      "agent_id": "01M5C90EHDABVYC0BJZSYQ8H72",
+      "token_hash": "sha256:72bddfa1da960b8954776f1de6ec8b27857a56141c720fa8c6bfc52dbe7066bf",
+      "kind": "claude",
+      "capabilities": [],
+      "registered_at": "2026-10-20T09:06:49.517Z",
+      "display_name": "installed-claude",
+      "launch_key_hash": "sha256:72bddfa1da960b8954776f1de6ec8b27857a56141c720fa8c6bfc52dbe7066bf"
+    },
+    "instance-01M5C940XYHT8F7GWVY0B3P7AK": {
+      "agent_id": "01M5C940XYHT8F7GWVY0B3P7AK",
+      "token_hash": "sha256:099bf36b46b1579805da7b60f84e94ce14e7758cd03520e83719a20a45c8ff07",
+      "kind": "claude",
+      "capabilities": [],
+      "registered_at": "2026-10-20T09:08:46.654Z",
+      "display_name": "installed-claude",
+      "launch_key_hash": "sha256:099bf36b46b1579805da7b60f84e94ce14e7758cd03520e83719a20a45c8ff07"
+    },
+    "instance-01M5C97YHW56PA84DXJMQQ6S7C": {
+      "agent_id": "01M5C97YHW56PA84DXJMQQ6S7C",
+      "token_hash": "sha256:7dcdd1ea8deab8dba37d1e5a72c24dae428e4cc697b78dbd357fd170f16a8acd",
+      "kind": "codex",
+      "capabilities": [],
+      "registered_at": "2026-10-20T09:10:55.292Z",
+      "display_name": "installed-codex",
+      "launch_key_hash": "sha256:7dcdd1ea8deab8dba37d1e5a72c24dae428e4cc697b78dbd357fd170f16a8acd"
+    },
+    "instance-01M5C99W92KK201JHBBQRX8W32": {
+      "agent_id": "01M5C99W92KK201JHBBQRX8W32",
+      "token_hash": "sha256:02c7e98f2f650aab39262f49b5fd16fec063ad9507d36f76da235196c57420ac",
+      "kind": "claude",
+      "capabilities": [],
+      "registered_at": "2026-10-20T09:11:58.498Z",
+      "display_name": "installed-claude",
+      "launch_key_hash": "sha256:02c7e98f2f650aab39262f49b5fd16fec063ad9507d36f76da235196c57420ac"
+    },
+    "instance-01M5C9CTZGC2SXY69YX6PRBQA4": {
+      "agent_id": "01M5C9CTZGC2SXY69YX6PRBQA4",
+      "token_hash": "sha256:12be7b437865bd8f6886ca9443d7da8b13d024e817985f9b8d007954d6b9ddf4",
+      "kind": "codex",
+      "capabilities": [],
+      "registered_at": "2026-10-20T09:13:35.472Z",
+      "display_name": "installed-codex",
+      "launch_key_hash": "sha256:12be7b437865bd8f6886ca9443d7da8b13d024e817985f9b8d007954d6b9ddf4"
+    }
+  }
+}

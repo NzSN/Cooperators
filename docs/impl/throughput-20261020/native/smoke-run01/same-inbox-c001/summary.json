@@ -1,0 +1,29 @@
+{
+  "active_receiver_connections": 0,
+  "active_sender_agents": 1,
+  "all_receiver_inboxes_empty_with_verified_acked_heads": false,
+  "all_targets_and_correctness_pass": false,
+  "correctness_passed": false,
+  "durable_acknowledgments_per_second": null,
+  "elapsed_seconds": null,
+  "enrolled_agents": 0,
+  "errors": [
+    "daemon exited before readiness"
+  ],
+  "http": "off",
+  "label": "same-inbox-c001",
+  "measured_messages": 0,
+  "outstanding_sends_per_sender": 1,
+  "partial_sample_warning": "Errors invalidate qualification; partial rates are descriptive only",
+  "phase_completed_without_errors": false,
+  "profile": "same-inbox",
+  "receiver_drain": [],
+  "receiver_identity_shared_with_sender": false,
+  "requested_measurement_seconds": 10,
+  "send_ack_ms": null,
+  "send_ack_p50_below_10_ms_target_pass": false,
+  "throughput_5000_per_second_target_pass": false,
+  "transport": "native-async-uds",
+  "warmup_fully_delivered_and_acked_before_measurement": false,
+  "warmup_messages": 0
+}

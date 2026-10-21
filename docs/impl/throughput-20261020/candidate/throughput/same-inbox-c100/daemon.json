@@ -1,0 +1,20 @@
+{
+  "command": [
+    "/home/nzsn/Repos/Cooperators/target/release/coop",
+    "--root",
+    "/tmp/ctb-rrldhtde",
+    "daemon",
+    "run",
+    "--http-addr",
+    "127.0.0.1:0"
+  ],
+  "correctness_passed": false,
+  "daemon_exit_after_termination": -15,
+  "error": "UDS send_message: {'jsonrpc': '2.0', 'id': 166, 'error': {'code': -32003, 'message': 'inbox for \"instance-01M5CBZQ26C2ZCMQDRCRVQ42ZS\" is full (pending 10000 messages, 4846839 bytes; limits 10000 messages, 67108864 bytes)', 'data': {'code': 'RESOURCE_EXHAUSTED'}}}",
+  "label": "same-inbox-c100",
+  "pid": 563218,
+  "root": "/tmp/ctb-rrldhtde",
+  "running_executable_sha256": "0fe56619a6fa7366322bdedadc4b2d718d6429f7081244237185ad8a7bae7029",
+  "start_utc": "2026-10-20T09:58:50.308485+00:00",
+  "warmup_fully_delivered_and_acked_before_measurement": 2838
+}

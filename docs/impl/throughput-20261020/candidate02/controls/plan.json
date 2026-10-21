@@ -1,0 +1,56 @@
+{
+  "append": {
+    "concurrency": 1,
+    "maintenance": "Drain and verify all messages every 5000 sends to remain below the default inbox limit; maintenance time included in wall rate",
+    "seconds": 10,
+    "transport": "uds"
+  },
+  "latency": {
+    "cycle": "Self-send, wait, verify identity/payload/receipt, then acknowledge cursor",
+    "samples": 500,
+    "send_ack": "Elapsed client call through durable fsync acknowledgment",
+    "wait_after_send": "Elapsed wait(timeout_s=0) call issued immediately after send acknowledgment; includes client parsing and transport",
+    "warmups": 20
+  },
+  "limitations": [
+    "One host/filesystem and one run per condition; no confidence intervals",
+    "Self-send workload, fixed 128-byte text, closed-loop clients",
+    "Wait measurements begin after durable send ack and do not measure a preexisting waiter's wakeup",
+    "100 active clients increase offered concurrency; queueing is part of observed latency",
+    "Python client scheduling, parsing, GIL, and MCP wrapper overhead are included"
+  ],
+  "payload_text_bytes": 128,
+  "scale": {
+    "baseline_agents": 1,
+    "conditions": [
+      "1 active / 1 enrolled",
+      "1 active / 100 enrolled; other agents have outstanding empty-inbox long polls",
+      "100 active / 100 enrolled"
+    ],
+    "diagnostic_relative_thresholds_declared_before_run": {
+      "aggregate_cycle_throughput_ratio_min": 0.8,
+      "send_ack_p50_ratio_max": 1.25,
+      "send_ack_p95_ratio_max": 1.25,
+      "wait_p50_ratio_max": 1.25,
+      "wait_p95_ratio_max": 1.25
+    },
+    "loaded_agents": 100,
+    "loaded_cycles_per_agent": 50,
+    "relative_threshold_status": "Diagnostic engineering choice, not a numeric specification requirement; report loaded concurrency and absolute target misses independently",
+    "single_active_cycles": 1000,
+    "transport": "uds",
+    "warmups_per_active_agent": 3
+  },
+  "schema": "cooperators.transport-scale-plan/v1",
+  "specification_targets": {
+    "agents": 100,
+    "agents_without_degradation_numeric_definition": null,
+    "append_messages_per_second_gte": 5000,
+    "send_ack_p50_ms_lt": 10,
+    "wait_after_send_p50_ms_lt": 25
+  },
+  "transports": {
+    "http": "Persistent loopback HTTP/1.1 streamable HTTP MCP initialized session per agent",
+    "uds": "Persistent AF_UNIX NDJSON JSON-RPC connection per agent"
+  }
+}

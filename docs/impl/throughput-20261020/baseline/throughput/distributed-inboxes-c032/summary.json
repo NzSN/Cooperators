@@ -1,0 +1,190 @@
+{
+  "active_receiver_agents": 32,
+  "active_sender_agents": 32,
+  "correctness_passed": true,
+  "durable_acknowledgments_per_second": 174.34373882368865,
+  "elapsed_seconds": 10.261337815,
+  "enrolled_agents": 32,
+  "label": "distributed-inboxes-c032",
+  "measured_messages": 1789,
+  "outstanding_sends_per_sender": 1,
+  "profile": "distributed-inboxes",
+  "receiver_drain": [
+    {
+      "ack_calls": 60,
+      "max_batch": 1,
+      "wait_calls": 422
+    },
+    {
+      "ack_calls": 61,
+      "max_batch": 1,
+      "wait_calls": 422
+    },
+    {
+      "ack_calls": 61,
+      "max_batch": 1,
+      "wait_calls": 421
+    },
+    {
+      "ack_calls": 61,
+      "max_batch": 1,
+      "wait_calls": 427
+    },
+    {
+      "ack_calls": 60,
+      "max_batch": 1,
+      "wait_calls": 419
+    },
+    {
+      "ack_calls": 60,
+      "max_batch": 1,
+      "wait_calls": 426
+    },
+    {
+      "ack_calls": 61,
+      "max_batch": 1,
+      "wait_calls": 424
+    },
+    {
+      "ack_calls": 61,
+      "max_batch": 1,
+      "wait_calls": 421
+    },
+    {
+      "ack_calls": 61,
+      "max_batch": 1,
+      "wait_calls": 422
+    },
+    {
+      "ack_calls": 61,
+      "max_batch": 1,
+      "wait_calls": 421
+    },
+    {
+      "ack_calls": 60,
+      "max_batch": 1,
+      "wait_calls": 422
+    },
+    {
+      "ack_calls": 61,
+      "max_batch": 1,
+      "wait_calls": 420
+    },
+    {
+      "ack_calls": 60,
+      "max_batch": 1,
+      "wait_calls": 423
+    },
+    {
+      "ack_calls": 61,
+      "max_batch": 1,
+      "wait_calls": 425
+    },
+    {
+      "ack_calls": 61,
+      "max_batch": 1,
+      "wait_calls": 423
+    },
+    {
+      "ack_calls": 61,
+      "max_batch": 1,
+      "wait_calls": 420
+    },
+    {
+      "ack_calls": 61,
+      "max_batch": 1,
+      "wait_calls": 425
+    },
+    {
+      "ack_calls": 60,
+      "max_batch": 1,
+      "wait_calls": 424
+    },
+    {
+      "ack_calls": 59,
+      "max_batch": 1,
+      "wait_calls": 425
+    },
+    {
+      "ack_calls": 61,
+      "max_batch": 1,
+      "wait_calls": 419
+    },
+    {
+      "ack_calls": 60,
+      "max_batch": 1,
+      "wait_calls": 420
+    },
+    {
+      "ack_calls": 61,
+      "max_batch": 1,
+      "wait_calls": 424
+    },
+    {
+      "ack_calls": 60,
+      "max_batch": 1,
+      "wait_calls": 420
+    },
+    {
+      "ack_calls": 60,
+      "max_batch": 1,
+      "wait_calls": 426
+    },
+    {
+      "ack_calls": 60,
+      "max_batch": 1,
+      "wait_calls": 421
+    },
+    {
+      "ack_calls": 60,
+      "max_batch": 1,
+      "wait_calls": 416
+    },
+    {
+      "ack_calls": 60,
+      "max_batch": 1,
+      "wait_calls": 418
+    },
+    {
+      "ack_calls": 60,
+      "max_batch": 1,
+      "wait_calls": 415
+    },
+    {
+      "ack_calls": 60,
+      "max_batch": 1,
+      "wait_calls": 413
+    },
+    {
+      "ack_calls": 61,
+      "max_batch": 1,
+      "wait_calls": 418
+    },
+    {
+      "ack_calls": 60,
+      "max_batch": 1,
+      "wait_calls": 423
+    },
+    {
+      "ack_calls": 61,
+      "max_batch": 1,
+      "wait_calls": 421
+    }
+  ],
+  "receiver_identity_shared_with_sender": true,
+  "requested_measurement_seconds": 10,
+  "send_ack_ms": {
+    "count": 1789,
+    "max": 432.333293,
+    "mean": 181.32315192453885,
+    "min": 15.754818,
+    "p50": 172.0875,
+    "p95": 283.550737,
+    "p99": 419.099768
+  },
+  "send_ack_p50_below_10_ms_target_pass": false,
+  "throughput_5000_per_second_target_pass": false,
+  "transport": "uds",
+  "verified_deliveries_and_acks": 1935,
+  "warmup_messages": 146
+}

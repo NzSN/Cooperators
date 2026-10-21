@@ -1,0 +1,20 @@
+{
+  "all_qualification_file_hashes_match_before_measurement": true,
+  "captured_utc": "2026-10-20T10:12:48.560540+00:00",
+  "load_average_1_5_15": [
+    3.19140625,
+    3.44140625,
+    3.42333984375
+  ],
+  "memory": {
+    "Dirty": "628 kB",
+    "MemAvailable": "4715112 kB",
+    "MemTotal": "12249904 kB",
+    "SwapFree": "2185424 kB",
+    "SwapTotal": "3145728 kB",
+    "Writeback": "124 kB"
+  },
+  "qualification_source_manifest": "docs/impl/throughput-20261020/qualification/run-02/source-manifest.json",
+  "qualification_source_manifest_sha256": "a94bb8fd5ffd2b0ee3fe80df7c17f9bf154c41c2a0c7769e9a4ab09145f94d0a",
+  "release_binary_sha256": "32d5b650e8768407d297165eb350c295ab0b7aa0da14272fcee3948765383488"
+}

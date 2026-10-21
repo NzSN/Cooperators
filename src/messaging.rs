@@ -125,12 +125,27 @@ pub(crate) struct DedupeEntry {
     pub message_id: String,
     pub seq: u64,
     pub to: String,
+    pub to_agent_id: String,
 }
 
-/// One open inbox with its replay-derived indexes.
+/// One opened inbox before its files and committed view are independently owned.
 #[derive(Debug)]
 pub(crate) struct Inbox {
+    pub files: InboxFiles,
+    pub state: InboxState,
+}
+
+/// Files used only by the inbox's one commit worker.
+#[derive(Debug)]
+pub(crate) struct InboxFiles {
     pub log: LogFile<Envelope>,
+    pub expiry_log: Option<LogFile<ExpiryRecord>>,
+    expiry_path: PathBuf,
+}
+
+/// Committed records and cursors, available while the next batch syncs.
+#[derive(Debug)]
+pub(crate) struct InboxState {
     pub records: Vec<Envelope>,
     pub notify: Arc<Notify>,
     pub acked_seq: u64,
@@ -139,17 +154,16 @@ pub(crate) struct Inbox {
     pub pending_messages: usize,
     /// Serialized bytes of the unacknowledged messages (one line each).
     pub pending_bytes: u64,
-    expiry_log: Option<LogFile<ExpiryRecord>>,
-    expiry_path: PathBuf,
     pub expires: HashMap<String, u64>,
+    pub(crate) write_failed: bool,
 }
 
 /// Serialized size of one inbox line, including its newline separator.
-fn envelope_line_bytes(envelope: &Envelope) -> u64 {
+pub(crate) fn envelope_line_bytes(envelope: &Envelope) -> u64 {
     serde_json::to_vec(envelope).map_or(0, |bytes| bytes.len() as u64 + 1)
 }
 
-fn inbox_now(root: &Path) -> u64 {
+pub(crate) fn inbox_now(root: &Path) -> u64 {
     #[cfg(feature = "mbt-injection")]
     if let Some(now) = crate::faults::now_millis(root) {
         return now;
@@ -163,7 +177,7 @@ impl Inbox {
         root.join("agents").join(agent_id).join("inbox.jsonl")
     }
 
-    fn open(root: &Path, agent_id: &str) -> Result<Self, BrokerError> {
+    pub(crate) fn open(root: &Path, agent_id: &str) -> Result<Self, BrokerError> {
         let path = Self::inbox_path(root, agent_id);
         let (mut log, report) = LogFile::open(&path).map_err(BrokerError::from)?;
         let truncated_bytes = report.truncated_bytes;
@@ -203,25 +217,41 @@ impl Inbox {
         let pending_messages = records.len();
         let pending_bytes = records.iter().map(envelope_line_bytes).sum();
         Ok(Self {
-            log,
-            records,
-            notify: Arc::new(Notify::new()),
-            acked_seq: 0,
-            pending_messages,
-            pending_bytes,
-            expiry_log,
-            expiry_path,
-            expires,
+            files: InboxFiles {
+                log,
+                expiry_log,
+                expiry_path,
+            },
+            state: InboxState {
+                records,
+                notify: Arc::new(Notify::new()),
+                acked_seq: 0,
+                pending_messages,
+                pending_bytes,
+                expires,
+                write_failed: false,
+            },
         })
     }
+}
 
+impl InboxState {
     fn is_expired(&self, message_id: &str, now_ms: u64) -> bool {
         self.expires
             .get(message_id)
             .is_some_and(|expires_at| *expires_at <= now_ms)
     }
+}
 
-    fn append_expiry(&mut self, message_id: &str, expires_at_ms: u64) -> Result<(), BrokerError> {
+impl InboxFiles {
+    /// Commits companion TTL metadata before the corresponding inbox batch.
+    pub(crate) fn append_expiry_batch(
+        &mut self,
+        entries: &[(String, u64)],
+    ) -> Result<Vec<AppendReceipt>, BrokerError> {
+        if entries.is_empty() {
+            return Ok(Vec::new());
+        }
         if self.expiry_log.is_none() {
             let (log, report) =
                 LogFile::<ExpiryRecord>::open(&self.expiry_path).map_err(BrokerError::from)?;
@@ -234,19 +264,22 @@ impl Inbox {
             }
             self.expiry_log = Some(log);
         }
-        let mut record = ExpiryRecord {
-            seq: 0,
-            prev_hash: String::new(),
-            message_id: message_id.to_string(),
-            expires_at_ms,
-            ts: id::now_rfc3339(),
-        };
-        self.expiry_log
+        let mut records: Vec<ExpiryRecord> = entries
+            .iter()
+            .map(|(message_id, expires_at_ms)| ExpiryRecord {
+                seq: 0,
+                prev_hash: String::new(),
+                message_id: message_id.clone(),
+                expires_at_ms: *expires_at_ms,
+                ts: id::now_rfc3339(),
+            })
+            .collect();
+        let receipts = self
+            .expiry_log
             .as_mut()
             .expect("expiry log was just created")
-            .append(&mut record)?;
-        self.expires.insert(message_id.to_string(), expires_at_ms);
-        Ok(())
+            .append_batch(&mut records)?;
+        Ok(receipts)
     }
 }
 
@@ -281,7 +314,7 @@ pub(crate) fn load_all_inboxes(root: &Path) -> Result<LoadedInboxes, BrokerError
     let mut dedupe = HashMap::new();
     for agent_id in agent_ids {
         let inbox = Inbox::open(root, &agent_id)?;
-        for envelope in &inbox.records {
+        for envelope in &inbox.state.records {
             if let Some(key) = &envelope.idempotency_key {
                 dedupe
                     .entry((envelope.from.clone(), key.clone()))
@@ -289,6 +322,7 @@ pub(crate) fn load_all_inboxes(root: &Path) -> Result<LoadedInboxes, BrokerError
                         message_id: envelope.id.clone(),
                         seq: envelope.seq,
                         to: envelope.to.clone(),
+                        to_agent_id: agent_id.clone(),
                     });
             }
         }
@@ -325,47 +359,21 @@ pub fn parse_cursor(cursor: &str) -> Result<u64, BrokerError> {
 }
 
 impl DaemonState {
-    /// Read-only access to the actual backlog counters for generated MBT ports.
+    /// Read-only access to the actual committed backlog counters for MBT ports.
     #[cfg(feature = "mbt-injection")]
     #[doc(hidden)]
     pub async fn debug_inbox_backlog(&self, agent_id: &str) -> Result<(usize, u64), BrokerError> {
-        let inboxes = self.inboxes.lock().await;
-        let inbox = inboxes
+        let handle = self
+            .inboxes
             .get(agent_id)
             .ok_or_else(|| BrokerError::internal("inbox not loaded"))?;
+        let inbox = handle.state.lock().await;
         Ok((inbox.pending_messages, inbox.pending_bytes))
     }
-    /// Ensures an inbox is open, creating the directory and log if needed.
+
+    /// Ensures one shared inbox writer exists, creating it off the async worker.
     pub(crate) async fn ensure_inbox(&self, agent_id: &str) -> Result<(), BrokerError> {
-        let mut inboxes = self.inboxes.lock().await;
-        if inboxes.contains_key(agent_id) {
-            return Ok(());
-        }
-        let inbox = Inbox::open(&self.root, agent_id)?;
-        let recovered: Vec<((String, String), DedupeEntry)> = inbox
-            .records
-            .iter()
-            .filter_map(|envelope| {
-                envelope.idempotency_key.as_ref().map(|key| {
-                    (
-                        (envelope.from.clone(), key.clone()),
-                        DedupeEntry {
-                            message_id: envelope.id.clone(),
-                            seq: envelope.seq,
-                            to: envelope.to.clone(),
-                        },
-                    )
-                })
-            })
-            .collect();
-        if !recovered.is_empty() {
-            let mut dedupe = self.dedupe.lock().await;
-            for (key, entry) in recovered {
-                dedupe.entry(key).or_insert(entry);
-            }
-        }
-        inboxes.insert(agent_id.to_string(), inbox);
-        Ok(())
+        self.inboxes.ensure(agent_id).await.map(|_| ())
     }
 
     /// Appends one message to the recipient's inbox and fsyncs before
@@ -392,8 +400,6 @@ impl DaemonState {
             return Err(BrokerError::invalid("idempotency_key must not be empty"));
         }
 
-        let _send_guard = self.send_lock.lock().await;
-
         let recipient = {
             let registry = self.registry.read().await;
             registry.resolve(&request.to).ok_or_else(|| {
@@ -403,135 +409,7 @@ impl DaemonState {
                 )
             })?
         };
-
-        if let Some(key) = request.idempotency_key.as_deref() {
-            let existing = {
-                let dedupe = self.dedupe.lock().await;
-                dedupe.get(&(sender.name.clone(), key.to_string())).cloned()
-            };
-            if let Some(existing) = existing {
-                let to_agent_id = if existing.to == recipient.name {
-                    recipient.agent_id.clone()
-                } else {
-                    let registry = self.registry.read().await;
-                    registry
-                        .resolve(&existing.to)
-                        .map(|identity| identity.agent_id)
-                        .unwrap_or_default()
-                };
-                return Ok(SendReceipt {
-                    message_id: existing.message_id,
-                    seq: existing.seq,
-                    duplicate: true,
-                    to: existing.to,
-                    to_agent_id,
-                    idempotency_key: Some(key.to_string()),
-                });
-            }
-        }
-
-        let mut envelope = Envelope::new(
-            sender.name.clone(),
-            recipient.name.clone(),
-            request.kind.clone(),
-            request.body.clone(),
-        )
-        .map_err(|error| BrokerError::internal(error.to_string()))?;
-        envelope.reply_to = request.reply_to.clone();
-        envelope.idempotency_key = request.idempotency_key.clone();
-
-        let now_ms = inbox_now(&self.root);
-        let expires_at_ms = request.ttl.map(|ttl| {
-            let millis = u64::try_from(ttl.as_millis()).unwrap_or(u64::MAX);
-            now_ms.saturating_add(millis)
-        });
-
-        let receipt = {
-            let mut inboxes = self.inboxes.lock().await;
-            if !inboxes.contains_key(&recipient.agent_id) {
-                let inbox = Inbox::open(&self.root, &recipient.agent_id)?;
-                let recovered: Vec<((String, String), DedupeEntry)> = inbox
-                    .records
-                    .iter()
-                    .filter_map(|envelope| {
-                        envelope.idempotency_key.as_ref().map(|key| {
-                            (
-                                (envelope.from.clone(), key.clone()),
-                                DedupeEntry {
-                                    message_id: envelope.id.clone(),
-                                    seq: envelope.seq,
-                                    to: envelope.to.clone(),
-                                },
-                            )
-                        })
-                    })
-                    .collect();
-                if !recovered.is_empty() {
-                    let mut dedupe = self.dedupe.lock().await;
-                    for (key, entry) in recovered {
-                        dedupe.entry(key).or_insert(entry);
-                    }
-                }
-                inboxes.insert(recipient.agent_id.clone(), inbox);
-            }
-            let inbox = inboxes
-                .get_mut(&recipient.agent_id)
-                .expect("inbox is present after insertion");
-
-            // Size the envelope as it will be persisted so the byte cap is
-            // exact rather than an estimate.
-            envelope.seq = inbox.log.next_seq();
-            envelope.prev_hash = inbox.log.last_hash().to_string();
-            let projected_bytes = envelope_line_bytes(&envelope);
-            let over_messages = inbox.pending_messages >= self.config.max_inbox_messages;
-            let over_bytes =
-                inbox.pending_bytes.saturating_add(projected_bytes) > self.config.max_inbox_bytes;
-            if over_messages || over_bytes {
-                return Err(BrokerError::application(
-                    ErrorCode::ResourceExhausted,
-                    format!(
-                        "inbox for {:?} is full (pending {} messages, {} bytes; limits {} messages, {} bytes)",
-                        recipient.name,
-                        inbox.pending_messages,
-                        inbox.pending_bytes,
-                        self.config.max_inbox_messages,
-                        self.config.max_inbox_bytes
-                    ),
-                ));
-            }
-
-            if let Some(expires_at_ms) = expires_at_ms {
-                inbox.append_expiry(&envelope.id, expires_at_ms)?;
-            }
-            let receipt = inbox.log.append(&mut envelope)?;
-            inbox.pending_messages += 1;
-            inbox.pending_bytes = inbox
-                .pending_bytes
-                .saturating_add(envelope_line_bytes(&envelope));
-            inbox.records.push(envelope.clone());
-            inbox.notify.notify_waiters();
-            receipt
-        };
-
-        if let Some(key) = request.idempotency_key {
-            self.dedupe.lock().await.insert(
-                (sender.name.clone(), key),
-                DedupeEntry {
-                    message_id: envelope.id.clone(),
-                    seq: receipt.seq,
-                    to: recipient.name.clone(),
-                },
-            );
-        }
-
-        Ok(SendReceipt {
-            message_id: envelope.id,
-            seq: receipt.seq,
-            duplicate: false,
-            to: recipient.name,
-            to_agent_id: recipient.agent_id,
-            idempotency_key: envelope.idempotency_key,
-        })
+        self.inboxes.send(sender, &recipient, request).await
     }
 
     /// Long-polls the agent's inbox from `cursor` (or the acknowledged
@@ -548,12 +426,12 @@ impl DaemonState {
 
         let mut start = 0u64;
         let mut initialized = false;
+        let handle = self.inboxes.get(agent_id).ok_or_else(|| {
+            BrokerError::internal(format!("no inbox loaded for agent {agent_id}"))
+        })?;
         loop {
             let (messages, next_seq, acked_seq, notified) = {
-                let mut inboxes = self.inboxes.lock().await;
-                let inbox = inboxes.get_mut(agent_id).ok_or_else(|| {
-                    BrokerError::internal(format!("no inbox loaded for agent {agent_id}"))
-                })?;
+                let inbox = handle.state.lock().await;
                 if !initialized {
                     start = explicit_start.unwrap_or(inbox.acked_seq);
                     initialized = true;
@@ -562,10 +440,8 @@ impl DaemonState {
                 let now_ms = inbox_now(&self.root);
                 let mut messages = Vec::new();
                 let mut scanned_seq = start;
-                for record in &inbox.records {
-                    if record.seq <= start {
-                        continue;
-                    }
+                let first = inbox.records.partition_point(|record| record.seq <= start);
+                for record in &inbox.records[first..] {
                     if messages.len() >= batch_limit {
                         break;
                     }
@@ -621,11 +497,11 @@ impl DaemonState {
     /// Advances the agent's acknowledged cursor through `cursor`.
     pub async fn ack(&self, agent_id: &str, cursor: &str) -> Result<AckReceipt, BrokerError> {
         let seq = parse_cursor(cursor)?;
-        let mut inboxes = self.inboxes.lock().await;
-        let inbox = inboxes.get_mut(agent_id).ok_or_else(|| {
+        let handle = self.inboxes.get(agent_id).ok_or_else(|| {
             BrokerError::internal(format!("no inbox loaded for agent {agent_id}"))
         })?;
-        let head = inbox.log.seq_head();
+        let mut inbox = handle.state.lock().await;
+        let head = inbox.records.last().map_or(0, |record| record.seq);
         if seq > head {
             return Err(BrokerError::invalid(format!(
                 "cursor {seq} is beyond the inbox head {head}"
@@ -633,14 +509,15 @@ impl DaemonState {
         }
         if seq > inbox.acked_seq {
             let previous = inbox.acked_seq;
-            let mut released_messages = 0usize;
-            let mut released_bytes = 0u64;
-            for record in &inbox.records {
-                if record.seq > previous && record.seq <= seq {
-                    released_messages += 1;
-                    released_bytes = released_bytes.saturating_add(envelope_line_bytes(record));
-                }
-            }
+            let first = inbox
+                .records
+                .partition_point(|record| record.seq <= previous);
+            let last = inbox.records.partition_point(|record| record.seq <= seq);
+            let released_messages = last - first;
+            let released_bytes: u64 = inbox.records[first..last]
+                .iter()
+                .map(envelope_line_bytes)
+                .sum();
             inbox.acked_seq = seq;
             inbox.pending_messages = inbox.pending_messages.saturating_sub(released_messages);
             inbox.pending_bytes = inbox.pending_bytes.saturating_sub(released_bytes);

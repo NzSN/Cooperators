@@ -1,0 +1,70 @@
+{
+  "active_receiver_agents": 8,
+  "active_sender_agents": 8,
+  "correctness_passed": true,
+  "durable_acknowledgments_per_second": 1887.165487384428,
+  "elapsed_seconds": 10.016609633,
+  "enrolled_agents": 8,
+  "label": "distributed-inboxes-c008",
+  "measured_messages": 18903,
+  "outstanding_sends_per_sender": 1,
+  "profile": "distributed-inboxes",
+  "receiver_drain": [
+    {
+      "ack_calls": 650,
+      "max_batch": 8,
+      "wait_calls": 1096
+    },
+    {
+      "ack_calls": 641,
+      "max_batch": 8,
+      "wait_calls": 1086
+    },
+    {
+      "ack_calls": 636,
+      "max_batch": 8,
+      "wait_calls": 1083
+    },
+    {
+      "ack_calls": 633,
+      "max_batch": 8,
+      "wait_calls": 1078
+    },
+    {
+      "ack_calls": 639,
+      "max_batch": 8,
+      "wait_calls": 1083
+    },
+    {
+      "ack_calls": 649,
+      "max_batch": 8,
+      "wait_calls": 1094
+    },
+    {
+      "ack_calls": 646,
+      "max_batch": 8,
+      "wait_calls": 1087
+    },
+    {
+      "ack_calls": 654,
+      "max_batch": 8,
+      "wait_calls": 1100
+    }
+  ],
+  "receiver_identity_shared_with_sender": true,
+  "requested_measurement_seconds": 10.0,
+  "send_ack_ms": {
+    "count": 18903,
+    "max": 42.685254,
+    "mean": 4.22928047537428,
+    "min": 1.706077,
+    "p50": 3.48495,
+    "p95": 8.27408,
+    "p99": 12.781925
+  },
+  "send_ack_p50_below_10_ms_target_pass": true,
+  "throughput_5000_per_second_target_pass": false,
+  "transport": "uds",
+  "verified_deliveries_and_acks": 21307,
+  "warmup_messages": 2404
+}

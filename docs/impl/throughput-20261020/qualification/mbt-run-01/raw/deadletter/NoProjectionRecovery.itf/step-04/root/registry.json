@@ -1,0 +1,12 @@
+{
+  "v": 1,
+  "agents": {
+    "fault-agent": {
+      "agent_id": "01M5CBWEE33TMCZNDP75SBWD0B",
+      "token_hash": "sha256:15cf81513d076cee39819bbf87be31ab1f18867e9f412d21fd09a2d612c736b0",
+      "kind": "codex",
+      "capabilities": [],
+      "registered_at": "2026-10-20T09:57:04.067Z"
+    }
+  }
+}

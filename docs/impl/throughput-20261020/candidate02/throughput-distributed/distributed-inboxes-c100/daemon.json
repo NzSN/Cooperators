@@ -1,0 +1,631 @@
+{
+  "agents": [
+    {
+      "agent_id": "01M5CDAMJGSD1FXMT3VYJP9T9T",
+      "display_name": "distributed-inboxes-c100-0",
+      "name": "instance-01M5CDAMJGSD1FXMT3VYJP9T9T"
+    },
+    {
+      "agent_id": "01M5CDAMJPHQSA7FBA3RQQ2T7N",
+      "display_name": "distributed-inboxes-c100-1",
+      "name": "instance-01M5CDAMJPHQSA7FBA3RQQ2T7N"
+    },
+    {
+      "agent_id": "01M5CDAMJT9E3J7EZW6TBNF2R8",
+      "display_name": "distributed-inboxes-c100-2",
+      "name": "instance-01M5CDAMJT9E3J7EZW6TBNF2R8"
+    },
+    {
+      "agent_id": "01M5CDAMK26Y6NPRFY4FC8CK1C",
+      "display_name": "distributed-inboxes-c100-3",
+      "name": "instance-01M5CDAMK26Y6NPRFY4FC8CK1C"
+    },
+    {
+      "agent_id": "01M5CDAMK7N9P90MJ9NG8JYNC6",
+      "display_name": "distributed-inboxes-c100-4",
+      "name": "instance-01M5CDAMK7N9P90MJ9NG8JYNC6"
+    },
+    {
+      "agent_id": "01M5CDAMKBX03NCGVZ1Q9ZY2P2",
+      "display_name": "distributed-inboxes-c100-5",
+      "name": "instance-01M5CDAMKBX03NCGVZ1Q9ZY2P2"
+    },
+    {
+      "agent_id": "01M5CDAMKH87V4E9K8ENY5A905",
+      "display_name": "distributed-inboxes-c100-6",
+      "name": "instance-01M5CDAMKH87V4E9K8ENY5A905"
+    },
+    {
+      "agent_id": "01M5CDAMKP08VDQ573P9YFK9F3",
+      "display_name": "distributed-inboxes-c100-7",
+      "name": "instance-01M5CDAMKP08VDQ573P9YFK9F3"
+    },
+    {
+      "agent_id": "01M5CDAMKVYN2Z3R926HG36CA2",
+      "display_name": "distributed-inboxes-c100-8",
+      "name": "instance-01M5CDAMKVYN2Z3R926HG36CA2"
+    },
+    {
+      "agent_id": "01M5CDAMKZFTMFWT3297CDF2JA",
+      "display_name": "distributed-inboxes-c100-9",
+      "name": "instance-01M5CDAMKZFTMFWT3297CDF2JA"
+    },
+    {
+      "agent_id": "01M5CDAMM6CRXQVK5QBBTEAN0G",
+      "display_name": "distributed-inboxes-c100-10",
+      "name": "instance-01M5CDAMM6CRXQVK5QBBTEAN0G"
+    },
+    {
+      "agent_id": "01M5CDAMMBHX6JGMD4MD9NEE3Q",
+      "display_name": "distributed-inboxes-c100-11",
+      "name": "instance-01M5CDAMMBHX6JGMD4MD9NEE3Q"
+    },
+    {
+      "agent_id": "01M5CDAMMHQQTTFBKYTST6A2C3",
+      "display_name": "distributed-inboxes-c100-12",
+      "name": "instance-01M5CDAMMHQQTTFBKYTST6A2C3"
+    },
+    {
+      "agent_id": "01M5CDAMMPHXQEJHAJW8FN8CDG",
+      "display_name": "distributed-inboxes-c100-13",
+      "name": "instance-01M5CDAMMPHXQEJHAJW8FN8CDG"
+    },
+    {
+      "agent_id": "01M5CDAMMW0XNGS3HM4H73DRTV",
+      "display_name": "distributed-inboxes-c100-14",
+      "name": "instance-01M5CDAMMW0XNGS3HM4H73DRTV"
+    },
+    {
+      "agent_id": "01M5CDAMN1Y3R0VQF98J1GXHTT",
+      "display_name": "distributed-inboxes-c100-15",
+      "name": "instance-01M5CDAMN1Y3R0VQF98J1GXHTT"
+    },
+    {
+      "agent_id": "01M5CDAMN7CVWFSJSYT1K2MG7Y",
+      "display_name": "distributed-inboxes-c100-16",
+      "name": "instance-01M5CDAMN7CVWFSJSYT1K2MG7Y"
+    },
+    {
+      "agent_id": "01M5CDAMNCBHGFSPRR5SWNJ2E8",
+      "display_name": "distributed-inboxes-c100-17",
+      "name": "instance-01M5CDAMNCBHGFSPRR5SWNJ2E8"
+    },
+    {
+      "agent_id": "01M5CDAMNHWK70ZG4B42DWES4M",
+      "display_name": "distributed-inboxes-c100-18",
+      "name": "instance-01M5CDAMNHWK70ZG4B42DWES4M"
+    },
+    {
+      "agent_id": "01M5CDAMNQK11MRQ4DTKTJV1GQ",
+      "display_name": "distributed-inboxes-c100-19",
+      "name": "instance-01M5CDAMNQK11MRQ4DTKTJV1GQ"
+    },
+    {
+      "agent_id": "01M5CDAMNXG1FH7TZ0WV75TB25",
+      "display_name": "distributed-inboxes-c100-20",
+      "name": "instance-01M5CDAMNXG1FH7TZ0WV75TB25"
+    },
+    {
+      "agent_id": "01M5CDAMP2S9D61MW8AMF07AMZ",
+      "display_name": "distributed-inboxes-c100-21",
+      "name": "instance-01M5CDAMP2S9D61MW8AMF07AMZ"
+    },
+    {
+      "agent_id": "01M5CDAMP7JHMXXSSB6N1N65MN",
+      "display_name": "distributed-inboxes-c100-22",
+      "name": "instance-01M5CDAMP7JHMXXSSB6N1N65MN"
+    },
+    {
+      "agent_id": "01M5CDAMPC3EFF2VVZCYM6VNTV",
+      "display_name": "distributed-inboxes-c100-23",
+      "name": "instance-01M5CDAMPC3EFF2VVZCYM6VNTV"
+    },
+    {
+      "agent_id": "01M5CDAMPH2QZDJQPKHR9XCDYV",
+      "display_name": "distributed-inboxes-c100-24",
+      "name": "instance-01M5CDAMPH2QZDJQPKHR9XCDYV"
+    },
+    {
+      "agent_id": "01M5CDAMQ3QFPBHMZCCB29ZNJ6",
+      "display_name": "distributed-inboxes-c100-25",
+      "name": "instance-01M5CDAMQ3QFPBHMZCCB29ZNJ6"
+    },
+    {
+      "agent_id": "01M5CDAMQ8Z70YB3PWJSEMQJG9",
+      "display_name": "distributed-inboxes-c100-26",
+      "name": "instance-01M5CDAMQ8Z70YB3PWJSEMQJG9"
+    },
+    {
+      "agent_id": "01M5CDAMQERX1NFM8NBP78TJK8",
+      "display_name": "distributed-inboxes-c100-27",
+      "name": "instance-01M5CDAMQERX1NFM8NBP78TJK8"
+    },
+    {
+      "agent_id": "01M5CDAMQKCA69K3GQZEMJZMVM",
+      "display_name": "distributed-inboxes-c100-28",
+      "name": "instance-01M5CDAMQKCA69K3GQZEMJZMVM"
+    },
+    {
+      "agent_id": "01M5CDAMQRPMK92R1YKA2WDFZW",
+      "display_name": "distributed-inboxes-c100-29",
+      "name": "instance-01M5CDAMQRPMK92R1YKA2WDFZW"
+    },
+    {
+      "agent_id": "01M5CDAMQXA53GWSJR98AS48Q0",
+      "display_name": "distributed-inboxes-c100-30",
+      "name": "instance-01M5CDAMQXA53GWSJR98AS48Q0"
+    },
+    {
+      "agent_id": "01M5CDAMR30PSG6R1JX9D65BK9",
+      "display_name": "distributed-inboxes-c100-31",
+      "name": "instance-01M5CDAMR30PSG6R1JX9D65BK9"
+    },
+    {
+      "agent_id": "01M5CDAMR9NXV8V27GSY48Y7GP",
+      "display_name": "distributed-inboxes-c100-32",
+      "name": "instance-01M5CDAMR9NXV8V27GSY48Y7GP"
+    },
+    {
+      "agent_id": "01M5CDAMRDJ4EDA6HTAEPJFT5T",
+      "display_name": "distributed-inboxes-c100-33",
+      "name": "instance-01M5CDAMRDJ4EDA6HTAEPJFT5T"
+    },
+    {
+      "agent_id": "01M5CDAMRK7NS9QNZQRF4YT2Q7",
+      "display_name": "distributed-inboxes-c100-34",
+      "name": "instance-01M5CDAMRK7NS9QNZQRF4YT2Q7"
+    },
+    {
+      "agent_id": "01M5CDAMRSGE3BFRY8T862439Q",
+      "display_name": "distributed-inboxes-c100-35",
+      "name": "instance-01M5CDAMRSGE3BFRY8T862439Q"
+    },
+    {
+      "agent_id": "01M5CDAMRYWX7HBPFA2E7G9N2Y",
+      "display_name": "distributed-inboxes-c100-36",
+      "name": "instance-01M5CDAMRYWX7HBPFA2E7G9N2Y"
+    },
+    {
+      "agent_id": "01M5CDAMS3Y7ATSTW5HS4GBZZ1",
+      "display_name": "distributed-inboxes-c100-37",
+      "name": "instance-01M5CDAMS3Y7ATSTW5HS4GBZZ1"
+    },
+    {
+      "agent_id": "01M5CDAMS9EEH0P4M4XECRPZ03",
+      "display_name": "distributed-inboxes-c100-38",
+      "name": "instance-01M5CDAMS9EEH0P4M4XECRPZ03"
+    },
+    {
+      "agent_id": "01M5CDAMSFXRGMZEQZJ3ENFYVB",
+      "display_name": "distributed-inboxes-c100-39",
+      "name": "instance-01M5CDAMSFXRGMZEQZJ3ENFYVB"
+    },
+    {
+      "agent_id": "01M5CDAMSM5JRNNCRR4V3Z9BB0",
+      "display_name": "distributed-inboxes-c100-40",
+      "name": "instance-01M5CDAMSM5JRNNCRR4V3Z9BB0"
+    },
+    {
+      "agent_id": "01M5CDAMSTJHKK10Y33M0D1EFC",
+      "display_name": "distributed-inboxes-c100-41",
+      "name": "instance-01M5CDAMSTJHKK10Y33M0D1EFC"
+    },
+    {
+      "agent_id": "01M5CDAMSY6BA6GDKEBT6K3X7Q",
+      "display_name": "distributed-inboxes-c100-42",
+      "name": "instance-01M5CDAMSY6BA6GDKEBT6K3X7Q"
+    },
+    {
+      "agent_id": "01M5CDAMT34FVSMZZXBQWPEAHS",
+      "display_name": "distributed-inboxes-c100-43",
+      "name": "instance-01M5CDAMT34FVSMZZXBQWPEAHS"
+    },
+    {
+      "agent_id": "01M5CDAMT9JK04YTM5ZH4GWN1G",
+      "display_name": "distributed-inboxes-c100-44",
+      "name": "instance-01M5CDAMT9JK04YTM5ZH4GWN1G"
+    },
+    {
+      "agent_id": "01M5CDAMTF74NBJRRTQWBE77WM",
+      "display_name": "distributed-inboxes-c100-45",
+      "name": "instance-01M5CDAMTF74NBJRRTQWBE77WM"
+    },
+    {
+      "agent_id": "01M5CDAMTMSWHJF3T8K9A0BBCB",
+      "display_name": "distributed-inboxes-c100-46",
+      "name": "instance-01M5CDAMTMSWHJF3T8K9A0BBCB"
+    },
+    {
+      "agent_id": "01M5CDAMTVV05365NQRD3MPKQB",
+      "display_name": "distributed-inboxes-c100-47",
+      "name": "instance-01M5CDAMTVV05365NQRD3MPKQB"
+    },
+    {
+      "agent_id": "01M5CDAMV19R5B5DTG2AB0NHVA",
+      "display_name": "distributed-inboxes-c100-48",
+      "name": "instance-01M5CDAMV19R5B5DTG2AB0NHVA"
+    },
+    {
+      "agent_id": "01M5CDAMV62WZGF5JMEHCG85JB",
+      "display_name": "distributed-inboxes-c100-49",
+      "name": "instance-01M5CDAMV62WZGF5JMEHCG85JB"
+    },
+    {
+      "agent_id": "01M5CDAMVDC2JZ19HF9B5J9975",
+      "display_name": "distributed-inboxes-c100-50",
+      "name": "instance-01M5CDAMVDC2JZ19HF9B5J9975"
+    },
+    {
+      "agent_id": "01M5CDAMVMJ2XG26ZTPWJCYFM8",
+      "display_name": "distributed-inboxes-c100-51",
+      "name": "instance-01M5CDAMVMJ2XG26ZTPWJCYFM8"
+    },
+    {
+      "agent_id": "01M5CDAMVSMCYHA2TXYTQJBRXF",
+      "display_name": "distributed-inboxes-c100-52",
+      "name": "instance-01M5CDAMVSMCYHA2TXYTQJBRXF"
+    },
+    {
+      "agent_id": "01M5CDAMW0V5XFRGHQZ640BGA4",
+      "display_name": "distributed-inboxes-c100-53",
+      "name": "instance-01M5CDAMW0V5XFRGHQZ640BGA4"
+    },
+    {
+      "agent_id": "01M5CDAMW55HNV29PWMK4JJYPG",
+      "display_name": "distributed-inboxes-c100-54",
+      "name": "instance-01M5CDAMW55HNV29PWMK4JJYPG"
+    },
+    {
+      "agent_id": "01M5CDAMWACRMFM7M9JQ67XXVQ",
+      "display_name": "distributed-inboxes-c100-55",
+      "name": "instance-01M5CDAMWACRMFM7M9JQ67XXVQ"
+    },
+    {
+      "agent_id": "01M5CDAMWH364QMQFMH7NYWXS0",
+      "display_name": "distributed-inboxes-c100-56",
+      "name": "instance-01M5CDAMWH364QMQFMH7NYWXS0"
+    },
+    {
+      "agent_id": "01M5CDAMX4Y9SQ45K36J3PRR98",
+      "display_name": "distributed-inboxes-c100-57",
+      "name": "instance-01M5CDAMX4Y9SQ45K36J3PRR98"
+    },
+    {
+      "agent_id": "01M5CDAMXA2ZSVM7Q91TVBASG0",
+      "display_name": "distributed-inboxes-c100-58",
+      "name": "instance-01M5CDAMXA2ZSVM7Q91TVBASG0"
+    },
+    {
+      "agent_id": "01M5CDAMXF7622Z7Z2K9APSSAP",
+      "display_name": "distributed-inboxes-c100-59",
+      "name": "instance-01M5CDAMXF7622Z7Z2K9APSSAP"
+    },
+    {
+      "agent_id": "01M5CDAMXNAF4TJ0ZHEF2VAHYZ",
+      "display_name": "distributed-inboxes-c100-60",
+      "name": "instance-01M5CDAMXNAF4TJ0ZHEF2VAHYZ"
+    },
+    {
+      "agent_id": "01M5CDAMXV0QKHBPRCN70TCEHY",
+      "display_name": "distributed-inboxes-c100-61",
+      "name": "instance-01M5CDAMXV0QKHBPRCN70TCEHY"
+    },
+    {
+      "agent_id": "01M5CDAMY0TE9Z4R6DDANWP86P",
+      "display_name": "distributed-inboxes-c100-62",
+      "name": "instance-01M5CDAMY0TE9Z4R6DDANWP86P"
+    },
+    {
+      "agent_id": "01M5CDAMY6SBNH4BN5AW77V4RR",
+      "display_name": "distributed-inboxes-c100-63",
+      "name": "instance-01M5CDAMY6SBNH4BN5AW77V4RR"
+    },
+    {
+      "agent_id": "01M5CDAMYBXAFHYB1J3YFR4YD5",
+      "display_name": "distributed-inboxes-c100-64",
+      "name": "instance-01M5CDAMYBXAFHYB1J3YFR4YD5"
+    },
+    {
+      "agent_id": "01M5CDAMYH80JR4A99CB23QAVX",
+      "display_name": "distributed-inboxes-c100-65",
+      "name": "instance-01M5CDAMYH80JR4A99CB23QAVX"
+    },
+    {
+      "agent_id": "01M5CDAMYP4CZYSVQT6VGTQSJB",
+      "display_name": "distributed-inboxes-c100-66",
+      "name": "instance-01M5CDAMYP4CZYSVQT6VGTQSJB"
+    },
+    {
+      "agent_id": "01M5CDAMYXW9FB9D950819D8X5",
+      "display_name": "distributed-inboxes-c100-67",
+      "name": "instance-01M5CDAMYXW9FB9D950819D8X5"
+    },
+    {
+      "agent_id": "01M5CDAMZ2EQNJ7ADKSJGQV4HJ",
+      "display_name": "distributed-inboxes-c100-68",
+      "name": "instance-01M5CDAMZ2EQNJ7ADKSJGQV4HJ"
+    },
+    {
+      "agent_id": "01M5CDAMZ9J2HM4KSRGPJ8J8MH",
+      "display_name": "distributed-inboxes-c100-69",
+      "name": "instance-01M5CDAMZ9J2HM4KSRGPJ8J8MH"
+    },
+    {
+      "agent_id": "01M5CDAMZG81W61DQJCB2ADGPF",
+      "display_name": "distributed-inboxes-c100-70",
+      "name": "instance-01M5CDAMZG81W61DQJCB2ADGPF"
+    },
+    {
+      "agent_id": "01M5CDAMZP5FKWATF9MA0WBDWV",
+      "display_name": "distributed-inboxes-c100-71",
+      "name": "instance-01M5CDAMZP5FKWATF9MA0WBDWV"
+    },
+    {
+      "agent_id": "01M5CDAMZY8PXSJV9D671JDGGY",
+      "display_name": "distributed-inboxes-c100-72",
+      "name": "instance-01M5CDAMZY8PXSJV9D671JDGGY"
+    },
+    {
+      "agent_id": "01M5CDAN04CSXGVQ941SMQSS6B",
+      "display_name": "distributed-inboxes-c100-73",
+      "name": "instance-01M5CDAN04CSXGVQ941SMQSS6B"
+    },
+    {
+      "agent_id": "01M5CDAN0A14QQ32WY8F2KYPMQ",
+      "display_name": "distributed-inboxes-c100-74",
+      "name": "instance-01M5CDAN0A14QQ32WY8F2KYPMQ"
+    },
+    {
+      "agent_id": "01M5CDAN0HYF9B8NC4CT4J539D",
+      "display_name": "distributed-inboxes-c100-75",
+      "name": "instance-01M5CDAN0HYF9B8NC4CT4J539D"
+    },
+    {
+      "agent_id": "01M5CDAN0T9DV6ZWJFBQ67FH76",
+      "display_name": "distributed-inboxes-c100-76",
+      "name": "instance-01M5CDAN0T9DV6ZWJFBQ67FH76"
+    },
+    {
+      "agent_id": "01M5CDAN11MZ33WZSQFM1GJ4QS",
+      "display_name": "distributed-inboxes-c100-77",
+      "name": "instance-01M5CDAN11MZ33WZSQFM1GJ4QS"
+    },
+    {
+      "agent_id": "01M5CDAN1732TVSBTKRT7RZQF4",
+      "display_name": "distributed-inboxes-c100-78",
+      "name": "instance-01M5CDAN1732TVSBTKRT7RZQF4"
+    },
+    {
+      "agent_id": "01M5CDAN1E9HXP80NZGFP7R7Q6",
+      "display_name": "distributed-inboxes-c100-79",
+      "name": "instance-01M5CDAN1E9HXP80NZGFP7R7Q6"
+    },
+    {
+      "agent_id": "01M5CDAN1MAYPQZ916FNEND37F",
+      "display_name": "distributed-inboxes-c100-80",
+      "name": "instance-01M5CDAN1MAYPQZ916FNEND37F"
+    },
+    {
+      "agent_id": "01M5CDAN1VJ5MTMC8ZSRM13RE1",
+      "display_name": "distributed-inboxes-c100-81",
+      "name": "instance-01M5CDAN1VJ5MTMC8ZSRM13RE1"
+    },
+    {
+      "agent_id": "01M5CDAN21ZG4YWMRQ2N2RHZ00",
+      "display_name": "distributed-inboxes-c100-82",
+      "name": "instance-01M5CDAN21ZG4YWMRQ2N2RHZ00"
+    },
+    {
+      "agent_id": "01M5CDAN28WWESZKW2HM6N325P",
+      "display_name": "distributed-inboxes-c100-83",
+      "name": "instance-01M5CDAN28WWESZKW2HM6N325P"
+    },
+    {
+      "agent_id": "01M5CDAN2E8NACBVWESPVBSF8J",
+      "display_name": "distributed-inboxes-c100-84",
+      "name": "instance-01M5CDAN2E8NACBVWESPVBSF8J"
+    },
+    {
+      "agent_id": "01M5CDAN2P57528KXQS02HPAB0",
+      "display_name": "distributed-inboxes-c100-85",
+      "name": "instance-01M5CDAN2P57528KXQS02HPAB0"
+    },
+    {
+      "agent_id": "01M5CDAN2WY70BSRGQ7DAJS8MS",
+      "display_name": "distributed-inboxes-c100-86",
+      "name": "instance-01M5CDAN2WY70BSRGQ7DAJS8MS"
+    },
+    {
+      "agent_id": "01M5CDAN32ZAXY2VAN5ZD4G4BW",
+      "display_name": "distributed-inboxes-c100-87",
+      "name": "instance-01M5CDAN32ZAXY2VAN5ZD4G4BW"
+    },
+    {
+      "agent_id": "01M5CDAN387836SAWGSGR69K8E",
+      "display_name": "distributed-inboxes-c100-88",
+      "name": "instance-01M5CDAN387836SAWGSGR69K8E"
+    },
+    {
+      "agent_id": "01M5CDAN3E982P1WBAR63R7TWS",
+      "display_name": "distributed-inboxes-c100-89",
+      "name": "instance-01M5CDAN3E982P1WBAR63R7TWS"
+    },
+    {
+      "agent_id": "01M5CDAN3K5HAEKE10Z9C7W5NM",
+      "display_name": "distributed-inboxes-c100-90",
+      "name": "instance-01M5CDAN3K5HAEKE10Z9C7W5NM"
+    },
+    {
+      "agent_id": "01M5CDAN3SKHEQWNSHPVK1J8EM",
+      "display_name": "distributed-inboxes-c100-91",
+      "name": "instance-01M5CDAN3SKHEQWNSHPVK1J8EM"
+    },
+    {
+      "agent_id": "01M5CDAN3ZVMM6M6AVP4PM32EV",
+      "display_name": "distributed-inboxes-c100-92",
+      "name": "instance-01M5CDAN3ZVMM6M6AVP4PM32EV"
+    },
+    {
+      "agent_id": "01M5CDAN459M7R0HDXV41Y4F4Y",
+      "display_name": "distributed-inboxes-c100-93",
+      "name": "instance-01M5CDAN459M7R0HDXV41Y4F4Y"
+    },
+    {
+      "agent_id": "01M5CDAN4C2NDJAF8E634KF7S9",
+      "display_name": "distributed-inboxes-c100-94",
+      "name": "instance-01M5CDAN4C2NDJAF8E634KF7S9"
+    },
+    {
+      "agent_id": "01M5CDAN4JTJBBC5YCJDKCG8BK",
+      "display_name": "distributed-inboxes-c100-95",
+      "name": "instance-01M5CDAN4JTJBBC5YCJDKCG8BK"
+    },
+    {
+      "agent_id": "01M5CDAN4QQWRKBBGR423EGJZS",
+      "display_name": "distributed-inboxes-c100-96",
+      "name": "instance-01M5CDAN4QQWRKBBGR423EGJZS"
+    },
+    {
+      "agent_id": "01M5CDAN4X912769HRD06V3W93",
+      "display_name": "distributed-inboxes-c100-97",
+      "name": "instance-01M5CDAN4X912769HRD06V3W93"
+    },
+    {
+      "agent_id": "01M5CDAN53NYRHCC7JEWB18WEH",
+      "display_name": "distributed-inboxes-c100-98",
+      "name": "instance-01M5CDAN53NYRHCC7JEWB18WEH"
+    },
+    {
+      "agent_id": "01M5CDAN58H4M8486XRHQZ851M",
+      "display_name": "distributed-inboxes-c100-99",
+      "name": "instance-01M5CDAN58H4M8486XRHQZ851M"
+    }
+  ],
+  "all_receiver_inboxes_empty_with_verified_acked_heads": true,
+  "command": [
+    "/home/nzsn/Repos/Cooperators/target/release/coop",
+    "--root",
+    "/tmp/ctb-e8tmg7md",
+    "daemon",
+    "run",
+    "--http-addr",
+    "127.0.0.1:0"
+  ],
+  "contiguous_sequences": true,
+  "correctness_passed": true,
+  "daemon_exit_after_termination": -15,
+  "durable_records": 14985,
+  "hash_chains_verified": true,
+  "inbox_heads": {
+    "01M5CDAMJGSD1FXMT3VYJP9T9T": 169,
+    "01M5CDAMJPHQSA7FBA3RQQ2T7N": 144,
+    "01M5CDAMJT9E3J7EZW6TBNF2R8": 140,
+    "01M5CDAMK26Y6NPRFY4FC8CK1C": 147,
+    "01M5CDAMK7N9P90MJ9NG8JYNC6": 146,
+    "01M5CDAMKBX03NCGVZ1Q9ZY2P2": 148,
+    "01M5CDAMKH87V4E9K8ENY5A905": 158,
+    "01M5CDAMKP08VDQ573P9YFK9F3": 147,
+    "01M5CDAMKVYN2Z3R926HG36CA2": 175,
+    "01M5CDAMKZFTMFWT3297CDF2JA": 160,
+    "01M5CDAMM6CRXQVK5QBBTEAN0G": 150,
+    "01M5CDAMMBHX6JGMD4MD9NEE3Q": 133,
+    "01M5CDAMMHQQTTFBKYTST6A2C3": 142,
+    "01M5CDAMMPHXQEJHAJW8FN8CDG": 143,
+    "01M5CDAMMW0XNGS3HM4H73DRTV": 138,
+    "01M5CDAMN1Y3R0VQF98J1GXHTT": 155,
+    "01M5CDAMN7CVWFSJSYT1K2MG7Y": 147,
+    "01M5CDAMNCBHGFSPRR5SWNJ2E8": 150,
+    "01M5CDAMNHWK70ZG4B42DWES4M": 159,
+    "01M5CDAMNQK11MRQ4DTKTJV1GQ": 179,
+    "01M5CDAMNXG1FH7TZ0WV75TB25": 131,
+    "01M5CDAMP2S9D61MW8AMF07AMZ": 152,
+    "01M5CDAMP7JHMXXSSB6N1N65MN": 167,
+    "01M5CDAMPC3EFF2VVZCYM6VNTV": 146,
+    "01M5CDAMPH2QZDJQPKHR9XCDYV": 148,
+    "01M5CDAMQ3QFPBHMZCCB29ZNJ6": 141,
+    "01M5CDAMQ8Z70YB3PWJSEMQJG9": 162,
+    "01M5CDAMQERX1NFM8NBP78TJK8": 123,
+    "01M5CDAMQKCA69K3GQZEMJZMVM": 147,
+    "01M5CDAMQRPMK92R1YKA2WDFZW": 144,
+    "01M5CDAMQXA53GWSJR98AS48Q0": 128,
+    "01M5CDAMR30PSG6R1JX9D65BK9": 135,
+    "01M5CDAMR9NXV8V27GSY48Y7GP": 163,
+    "01M5CDAMRDJ4EDA6HTAEPJFT5T": 147,
+    "01M5CDAMRK7NS9QNZQRF4YT2Q7": 137,
+    "01M5CDAMRSGE3BFRY8T862439Q": 148,
+    "01M5CDAMRYWX7HBPFA2E7G9N2Y": 158,
+    "01M5CDAMS3Y7ATSTW5HS4GBZZ1": 161,
+    "01M5CDAMS9EEH0P4M4XECRPZ03": 144,
+    "01M5CDAMSFXRGMZEQZJ3ENFYVB": 142,
+    "01M5CDAMSM5JRNNCRR4V3Z9BB0": 162,
+    "01M5CDAMSTJHKK10Y33M0D1EFC": 170,
+    "01M5CDAMSY6BA6GDKEBT6K3X7Q": 165,
+    "01M5CDAMT34FVSMZZXBQWPEAHS": 156,
+    "01M5CDAMT9JK04YTM5ZH4GWN1G": 160,
+    "01M5CDAMTF74NBJRRTQWBE77WM": 149,
+    "01M5CDAMTMSWHJF3T8K9A0BBCB": 143,
+    "01M5CDAMTVV05365NQRD3MPKQB": 139,
+    "01M5CDAMV19R5B5DTG2AB0NHVA": 158,
+    "01M5CDAMV62WZGF5JMEHCG85JB": 170,
+    "01M5CDAMVDC2JZ19HF9B5J9975": 147,
+    "01M5CDAMVMJ2XG26ZTPWJCYFM8": 178,
+    "01M5CDAMVSMCYHA2TXYTQJBRXF": 142,
+    "01M5CDAMW0V5XFRGHQZ640BGA4": 163,
+    "01M5CDAMW55HNV29PWMK4JJYPG": 152,
+    "01M5CDAMWACRMFM7M9JQ67XXVQ": 137,
+    "01M5CDAMWH364QMQFMH7NYWXS0": 154,
+    "01M5CDAMX4Y9SQ45K36J3PRR98": 145,
+    "01M5CDAMXA2ZSVM7Q91TVBASG0": 168,
+    "01M5CDAMXF7622Z7Z2K9APSSAP": 143,
+    "01M5CDAMXNAF4TJ0ZHEF2VAHYZ": 142,
+    "01M5CDAMXV0QKHBPRCN70TCEHY": 143,
+    "01M5CDAMY0TE9Z4R6DDANWP86P": 146,
+    "01M5CDAMY6SBNH4BN5AW77V4RR": 141,
+    "01M5CDAMYBXAFHYB1J3YFR4YD5": 156,
+    "01M5CDAMYH80JR4A99CB23QAVX": 150,
+    "01M5CDAMYP4CZYSVQT6VGTQSJB": 137,
+    "01M5CDAMYXW9FB9D950819D8X5": 145,
+    "01M5CDAMZ2EQNJ7ADKSJGQV4HJ": 141,
+    "01M5CDAMZ9J2HM4KSRGPJ8J8MH": 170,
+    "01M5CDAMZG81W61DQJCB2ADGPF": 158,
+    "01M5CDAMZP5FKWATF9MA0WBDWV": 137,
+    "01M5CDAMZY8PXSJV9D671JDGGY": 141,
+    "01M5CDAN04CSXGVQ941SMQSS6B": 166,
+    "01M5CDAN0A14QQ32WY8F2KYPMQ": 155,
+    "01M5CDAN0HYF9B8NC4CT4J539D": 140,
+    "01M5CDAN0T9DV6ZWJFBQ67FH76": 148,
+    "01M5CDAN11MZ33WZSQFM1GJ4QS": 155,
+    "01M5CDAN1732TVSBTKRT7RZQF4": 141,
+    "01M5CDAN1E9HXP80NZGFP7R7Q6": 168,
+    "01M5CDAN1MAYPQZ916FNEND37F": 148,
+    "01M5CDAN1VJ5MTMC8ZSRM13RE1": 151,
+    "01M5CDAN21ZG4YWMRQ2N2RHZ00": 141,
+    "01M5CDAN28WWESZKW2HM6N325P": 134,
+    "01M5CDAN2E8NACBVWESPVBSF8J": 151,
+    "01M5CDAN2P57528KXQS02HPAB0": 141,
+    "01M5CDAN2WY70BSRGQ7DAJS8MS": 147,
+    "01M5CDAN32ZAXY2VAN5ZD4G4BW": 159,
+    "01M5CDAN387836SAWGSGR69K8E": 148,
+    "01M5CDAN3E982P1WBAR63R7TWS": 153,
+    "01M5CDAN3K5HAEKE10Z9C7W5NM": 153,
+    "01M5CDAN3SKHEQWNSHPVK1J8EM": 140,
+    "01M5CDAN3ZVMM6M6AVP4PM32EV": 141,
+    "01M5CDAN459M7R0HDXV41Y4F4Y": 155,
+    "01M5CDAN4C2NDJAF8E634KF7S9": 138,
+    "01M5CDAN4JTJBBC5YCJDKCG8BK": 163,
+    "01M5CDAN4QQWRKBBGR423EGJZS": 162,
+    "01M5CDAN4X912769HRD06V3W93": 147,
+    "01M5CDAN53NYRHCC7JEWB18WEH": 136,
+    "01M5CDAN58H4M8486XRHQZ851M": 142
+  },
+  "label": "distributed-inboxes-c100",
+  "pid": 569294,
+  "receipt_count": 14985,
+  "receipt_payload_and_identity_match": true,
+  "root": "/tmp/ctb-e8tmg7md",
+  "running_executable_sha256": "32d5b650e8768407d297165eb350c295ab0b7aa0da14272fcee3948765383488",
+  "start_utc": "2026-10-20T10:22:17.642929+00:00",
+  "unique_receipts": 14985,
+  "verified_deliveries_and_acks": 14985,
+  "warmup_fully_delivered_and_acked_before_measurement": 1453
+}

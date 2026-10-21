@@ -1,0 +1,62 @@
+{
+  "agents": [
+    {
+      "agent_id": "01M5CE0R0FYF5Q4RKFQV6710Q5",
+      "display_name": "distributed-inboxes-c008-0",
+      "name": "instance-01M5CE0R0FYF5Q4RKFQV6710Q5"
+    },
+    {
+      "agent_id": "01M5CE0R0T46E12JZ7XYJCYG5T",
+      "display_name": "distributed-inboxes-c008-1",
+      "name": "instance-01M5CE0R0T46E12JZ7XYJCYG5T"
+    },
+    {
+      "agent_id": "01M5CE0R0Z4AF7HPZTADHVTX38",
+      "display_name": "distributed-inboxes-c008-2",
+      "name": "instance-01M5CE0R0Z4AF7HPZTADHVTX38"
+    },
+    {
+      "agent_id": "01M5CE0R19Q77NJ9PQQVS8G48Q",
+      "display_name": "distributed-inboxes-c008-3",
+      "name": "instance-01M5CE0R19Q77NJ9PQQVS8G48Q"
+    },
+    {
+      "agent_id": "01M5CE0R1JDXMHHTV8NVF2JETV",
+      "display_name": "distributed-inboxes-c008-4",
+      "name": "instance-01M5CE0R1JDXMHHTV8NVF2JETV"
+    },
+    {
+      "agent_id": "01M5CE0R1QNC0VXVP7Q691MJ8K",
+      "display_name": "distributed-inboxes-c008-5",
+      "name": "instance-01M5CE0R1QNC0VXVP7Q691MJ8K"
+    },
+    {
+      "agent_id": "01M5CE0R213D8Q9BQPVKQCBJ55",
+      "display_name": "distributed-inboxes-c008-6",
+      "name": "instance-01M5CE0R213D8Q9BQPVKQCBJ55"
+    },
+    {
+      "agent_id": "01M5CE0R2DPM1N68TE2EQ8ED4B",
+      "display_name": "distributed-inboxes-c008-7",
+      "name": "instance-01M5CE0R2DPM1N68TE2EQ8ED4B"
+    }
+  ],
+  "command": [
+    "/home/nzsn/Repos/Cooperators/target/release/coop",
+    "--root",
+    "/tmp/ctn-579178-1792492462058535040",
+    "daemon",
+    "run",
+    "--http-addr",
+    "off"
+  ],
+  "correctness_passed": true,
+  "errors": [],
+  "http": "off",
+  "label": "distributed-inboxes-c008",
+  "pid": 579341,
+  "root": "/tmp/ctn-579178-1792492462058535040",
+  "running_executable_sha256": "32d5b650e8768407d297165eb350c295ab0b7aa0da14272fcee3948765383488",
+  "start_utc": "2026-10-20T10:34:22.058Z",
+  "stop": "SIGTERM; signal: 15 (SIGTERM)"
+}

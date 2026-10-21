@@ -1,0 +1,30 @@
+{
+  "agents": [
+    {
+      "agent_id": "01M5C95QQREEB98V2A3K9F8KTS",
+      "display_name": "append-uds-0",
+      "name": "instance-01M5C95QQREEB98V2A3K9F8KTS"
+    }
+  ],
+  "command": [
+    "/home/nzsn/Repos/Cooperators/target/release/coop",
+    "--root",
+    "/tmp/ctb-dpo3cg9p",
+    "daemon",
+    "run",
+    "--http-addr",
+    "127.0.0.1:0"
+  ],
+  "contiguous_sequences": true,
+  "correctness_passed": true,
+  "daemon_exit_after_termination": -15,
+  "durable_records": 3437,
+  "label": "append-uds",
+  "pid": 509114,
+  "receipt_count": 3437,
+  "receipt_payload_and_identity_match": true,
+  "root": "/tmp/ctb-dpo3cg9p",
+  "running_executable_sha256": "c6d1047a8a4d9b0094274151c9658a101ed018ce07f82d66ed9fb512eb285321",
+  "start_utc": "2026-10-20T09:09:42.732949+00:00",
+  "unique_receipts": 3437
+}

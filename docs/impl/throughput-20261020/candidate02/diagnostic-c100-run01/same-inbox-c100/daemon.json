@@ -1,0 +1,20 @@
+{
+  "command": [
+    "/home/nzsn/Repos/Cooperators/target/release/coop",
+    "--root",
+    "/tmp/ctb-rvkvfet3",
+    "daemon",
+    "run",
+    "--http-addr",
+    "127.0.0.1:0"
+  ],
+  "correctness_passed": false,
+  "daemon_exit_after_termination": -15,
+  "error": "UDS send_message: {'jsonrpc': '2.0', 'id': 177, 'error': {'code': -32003, 'message': 'inbox for \"instance-01M5CCW77PF3FASVK0SRCYJPD0\" is full (pending 10000 messages, 4847580 bytes; limits 10000 messages, 67108864 bytes)', 'data': {'code': 'RESOURCE_EXHAUSTED'}}}",
+  "label": "same-inbox-c100",
+  "pid": 567931,
+  "root": "/tmp/ctb-rvkvfet3",
+  "running_executable_sha256": "32d5b650e8768407d297165eb350c295ab0b7aa0da14272fcee3948765383488",
+  "start_utc": "2026-10-20T10:14:24.474427+00:00",
+  "warmup_fully_delivered_and_acked_before_measurement": 4898
+}

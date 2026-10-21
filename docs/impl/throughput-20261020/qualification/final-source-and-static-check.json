@@ -1,0 +1,11 @@
+{
+  "additional_batch_crash_test_sha256": "76294bd8f2b386ecb0613077239d19c8542c84bbce71397b7d70e3ba8836604e",
+  "failures": [],
+  "markdown_documents_checked": 8,
+  "markdown_file_links_checked": 53,
+  "matching_core_source_and_build_manifest_entries": 24,
+  "matching_original_qualification_test_files": 22,
+  "passed": true,
+  "python_files_parsed": 14,
+  "release_binary_sha256": "32d5b650e8768407d297165eb350c295ab0b7aa0da14272fcee3948765383488"
+}

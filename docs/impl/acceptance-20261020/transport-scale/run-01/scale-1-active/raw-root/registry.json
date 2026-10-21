@@ -1,0 +1,14 @@
+{
+  "v": 1,
+  "agents": {
+    "instance-01M5C961QJ6PQ9DC54T7AYR5E3": {
+      "agent_id": "01M5C961QJ6PQ9DC54T7AYR5E3",
+      "token_hash": "sha256:03a935dee685101d5fa60bbf6537dec4db786d1dcfda90f8d20326d7f66ed6f0",
+      "kind": "benchmark",
+      "capabilities": [],
+      "registered_at": "2026-10-20T09:09:53.010Z",
+      "display_name": "scale-1-active-0",
+      "launch_key_hash": "sha256:03a935dee685101d5fa60bbf6537dec4db786d1dcfda90f8d20326d7f66ed6f0"
+    }
+  }
+}

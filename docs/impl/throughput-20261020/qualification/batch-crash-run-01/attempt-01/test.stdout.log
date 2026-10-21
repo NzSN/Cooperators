@@ -1,0 +1,9 @@
+
+running 4 tests
+test batch_crash_child ... ok
+test process_kill_after_batch_receipts_recovers_every_receipt_and_dedupe ... ok
+test process_kill_after_partial_batch_failure_repairs_tail_and_preserves_prefix ... ok
+test process_kill_before_batch_covering_sync_preserves_acknowledged_prefix ... ok
+
+test result: ok. 4 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.71s
+

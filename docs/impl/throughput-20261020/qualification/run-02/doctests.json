@@ -1,0 +1,17 @@
+{
+  "command": [
+    "cargo",
+    "test",
+    "--offline",
+    "--locked",
+    "--doc"
+  ],
+  "COOP_REQUIRE_UDS": "1",
+  "CARGO_BUILD_JOBS": "2",
+  "started_utc": "2026-10-20T10:25:01.784201+00:00",
+  "ended_utc": "2026-10-20T10:25:02.154701+00:00",
+  "exit_code": 0,
+  "passed": 0,
+  "ignored": 0,
+  "socket_skips_present": false
+}
