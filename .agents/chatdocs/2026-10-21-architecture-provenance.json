@@ -1,0 +1,26 @@
+{
+  "document": "2026-10-21-architecture.html",
+  "title": "Architecture of the Cooperators broker",
+  "date": "2026-10-21",
+  "type": "architecture description",
+  "basis": "direct source inspection",
+  "source_commit": "ce043b9",
+  "sources": [
+    "src/lib.rs",
+    "src/server.rs",
+    "src/inbox_writer.rs",
+    "src/arrivals/mod.rs",
+    "src/host/mod.rs",
+    "src/mcp.rs",
+    "src/paths.rs",
+    "docs/design/0001-cooperatorsd-broker.md",
+    "docs/design/0003-durable-inbox-group-commit.md",
+    "docs/design/0004-arrival-notifications-and-agent-activation.md",
+    "docs/impl/arrivals-20261021/README.md",
+    "docs/impl/arrivals-20261021/HANDOFF.md",
+    "TASKS.md",
+    "CONTEXT.md"
+  ],
+  "tests_run": false,
+  "notes": "Descriptive report; no runtime tests or model checks were executed. Performance figures quote docs/impl reports. Supersedes the uncommitted docs/ARCHITECTURE.md draft produced in the same session, which was removed."
+}
