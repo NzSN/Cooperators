@@ -4,4 +4,5 @@
 /docs/impl/generated-fault-mbt/** -text
 /docs/impl/acceptance-20261020/** -text
 /docs/impl/throughput-20261020/** -text
+/docs/impl/arrivals-20261021/** -text
 /.agents/chatdocs/** -text

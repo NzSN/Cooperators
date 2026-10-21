@@ -45,7 +45,10 @@ pub fn child_main(root: &Path) -> ExitCode {
     let result = tokio::runtime::Runtime::new().and_then(|rt| {
         rt.block_on(server::run_with_options(
             root,
-            ServerOptions { http_addr: None },
+            ServerOptions {
+                http_addr: None,
+                enable_arrivals: false,
+            },
         ))
     });
     match result {

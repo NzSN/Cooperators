@@ -1,0 +1,12 @@
+   Compiling cooperators v0.1.0 (/home/nzsn/Repos/Cooperators)
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 18.06s
+     Running tests/arrival_faults.rs (target/debug/deps/arrival_faults-efe6c95279375353)
+
+running 4 tests
+test subscription_sync_failure_fences_mutation_until_reopen_and_recovers_client_key ... ok
+test recovery_sync_failure_never_publishes_uncertain_feed_indexes ... ok
+test uncertain_feed_sync_replays_complete_notice_before_retry_and_isolates_recipient ... ok
+test uncertain_ack_is_quarantined_and_recovered_before_success ... ok
+
+test result: ok. 4 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.23s
+

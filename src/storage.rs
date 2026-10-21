@@ -55,8 +55,9 @@
 //! without touching records or disk. Actual reopen/replay reconciles those bytes.
 
 use std::fs::{self, File, OpenOptions};
-use std::io::{self, Seek, SeekFrom, Write};
+use std::io::{self, BufRead, BufReader, Read, Seek, SeekFrom, Write};
 use std::marker::PhantomData;
+use std::os::unix::fs::OpenOptionsExt;
 use std::path::{Path, PathBuf};
 
 use serde::de::DeserializeOwned;
@@ -105,6 +106,17 @@ impl<T> ReplayReport<T> {
     pub fn was_truncated(&self) -> bool {
         self.truncated_bytes > 0
     }
+}
+
+/// Replay diagnostics without retaining a second copy of every record.
+#[derive(Debug, Clone, PartialEq, Eq)]
+pub struct ReplaySummary {
+    pub record_count: u64,
+    pub seq_head: u64,
+    pub last_hash: String,
+    pub truncated_bytes: u64,
+    pub last_valid_offset: u64,
+    pub trailing_newline_missing: bool,
 }
 
 /// Receipt returned after a durable append.
@@ -210,6 +222,87 @@ impl<T: ChainRecord> LogFile<T> {
     /// Torn-tail diagnostics and offsets refer only to the active segment.
     pub fn read_segments(path: impl AsRef<Path>) -> Result<ReplayReport<T>, LogError> {
         read_stream(path.as_ref(), false).map(|(report, _)| report)
+    }
+
+    /// Opens and recovers a stream while visiting one validated record at a time.
+    ///
+    /// Build indexes privately in `visitor` and publish them only after this
+    /// method succeeds: its final recovery sync can still fail after visitation.
+    pub fn open_streaming(
+        path: impl Into<PathBuf>,
+        visitor: impl FnMut(&T) -> Result<(), LogError>,
+    ) -> Result<(Self, ReplaySummary), LogError> {
+        Self::open_streaming_internal(path.into(), None, visitor)
+    }
+
+    /// Streaming counterpart of [`Self::open_rotating`].
+    pub fn open_rotating_streaming(
+        path: impl Into<PathBuf>,
+        threshold: u64,
+        visitor: impl FnMut(&T) -> Result<(), LogError>,
+    ) -> Result<(Self, ReplaySummary), LogError> {
+        if threshold == 0 {
+            return Err(io::Error::new(
+                io::ErrorKind::InvalidInput,
+                "rotation threshold must be positive",
+            )
+            .into());
+        }
+        Self::open_streaming_internal(path.into(), Some(threshold), visitor)
+    }
+
+    /// Validates and visits records without creating, repairing or syncing files.
+    pub fn read_segments_streaming(
+        path: impl AsRef<Path>,
+        visitor: impl FnMut(&T) -> Result<(), LogError>,
+    ) -> Result<ReplaySummary, LogError> {
+        read_stream_visiting(path.as_ref(), false, visitor).map(|(report, _)| report)
+    }
+
+    fn open_streaming_internal(
+        path: PathBuf,
+        rotation_bytes: Option<u64>,
+        visitor: impl FnMut(&T) -> Result<(), LogError>,
+    ) -> Result<(Self, ReplaySummary), LogError> {
+        if let Some(parent) = path.parent() {
+            create_directories_durable(parent)?;
+        }
+        let (report, active_start_seq) = read_stream_visiting(&path, true, visitor)?;
+        let existed = path.exists();
+        let mut file = OpenOptions::new()
+            .read(true)
+            .write(true)
+            .create(true)
+            .truncate(false)
+            .mode(0o600)
+            .open(&path)?;
+        if !existed {
+            sync_parent_directory(&path)?;
+        }
+        if report.truncated_bytes > 0 {
+            file.set_len(report.last_valid_offset)?;
+        }
+        #[cfg(feature = "mbt-injection")]
+        crate::faults::reach(&path, crate::faults::FaultPoint::BeforeRecoverySync)?;
+        file.sync_all()?;
+        file.seek(SeekFrom::End(0))?;
+        let next_seq = report
+            .seq_head
+            .checked_add(1)
+            .ok_or_else(|| LogError::InvalidRecord("log exhausts sequence numbers".into()))?;
+        let log = Self {
+            path,
+            file,
+            next_seq,
+            last_hash: report.last_hash.clone(),
+            needs_newline: report.trailing_newline_missing,
+            record_count: report.record_count,
+            recovery_required: false,
+            rotation_bytes,
+            active_start_seq,
+            marker: PhantomData,
+        };
+        Ok((log, report))
     }
 
     fn open_internal(
@@ -591,6 +684,145 @@ pub fn segment_paths(path: impl AsRef<Path>) -> io::Result<Vec<PathBuf>> {
         segments.push(path.to_path_buf());
     }
     Ok(segments)
+}
+
+fn create_directories_durable(path: &Path) -> io::Result<()> {
+    let mut missing = Vec::new();
+    let mut current = path;
+    while !current.as_os_str().is_empty() && !current.exists() {
+        missing.push(current.to_path_buf());
+        current = current.parent().unwrap_or_else(|| Path::new(""));
+    }
+    for directory in missing.into_iter().rev() {
+        match fs::create_dir(&directory) {
+            Ok(()) => {}
+            Err(error) if error.kind() == io::ErrorKind::AlreadyExists => {}
+            Err(error) => return Err(error),
+        }
+        File::open(&directory)?.sync_all()?;
+        sync_parent_directory(&directory)?;
+    }
+    Ok(())
+}
+
+fn only_newlines(reader: &mut impl Read) -> io::Result<bool> {
+    let mut buffer = [0u8; 4096];
+    loop {
+        let count = reader.read(&mut buffer)?;
+        if count == 0 {
+            return Ok(true);
+        }
+        if buffer[..count].iter().any(|byte| *byte != b'\n') {
+            return Ok(false);
+        }
+    }
+}
+
+fn read_stream_visiting<T: ChainRecord>(
+    path: &Path,
+    allow_missing: bool,
+    mut visitor: impl FnMut(&T) -> Result<(), LogError>,
+) -> Result<(ReplaySummary, u64), LogError> {
+    let paths = segment_paths(path)?;
+    if paths.is_empty() && !allow_missing {
+        return Err(io::Error::new(io::ErrorKind::NotFound, "log stream does not exist").into());
+    }
+    let mut summary = ReplaySummary {
+        record_count: 0,
+        seq_head: 0,
+        last_hash: GENESIS_HASH.to_string(),
+        truncated_bytes: 0,
+        last_valid_offset: 0,
+        trailing_newline_missing: false,
+    };
+    let mut active_start = 1;
+    let mut line = Vec::new();
+    for segment in paths {
+        let active = segment == path;
+        let mut reader = BufReader::new(File::open(&segment)?);
+        let segment_bytes = reader.get_ref().metadata()?.len();
+        let start_seq = summary
+            .seq_head
+            .checked_add(1)
+            .ok_or_else(|| LogError::InvalidRecord("log exhausts sequence numbers".into()))?;
+        let before_count = summary.record_count;
+        let mut last_valid = 0u64;
+        let mut offset = 0u64;
+        let mut truncated = 0u64;
+        let mut missing_newline = false;
+        loop {
+            line.clear();
+            let read = reader.read_until(b'\n', &mut line)?;
+            if read == 0 {
+                break;
+            }
+            offset += read as u64;
+            let newline = line.last() == Some(&b'\n');
+            if newline {
+                line.pop();
+            }
+            let expected_seq = summary
+                .seq_head
+                .checked_add(1)
+                .ok_or_else(|| LogError::InvalidRecord("log exhausts sequence numbers".into()))?;
+            let decoded = if line.is_empty() {
+                Err("empty line inside log".to_string())
+            } else {
+                decode_record::<T>(&line, &summary.last_hash, expected_seq)
+            };
+            match decoded {
+                Ok((record, hash)) => {
+                    visitor(&record)?;
+                    summary.record_count += 1;
+                    summary.seq_head = expected_seq;
+                    summary.last_hash = hash;
+                    last_valid = offset;
+                    missing_newline = !newline;
+                }
+                Err(reason) => {
+                    if only_newlines(&mut reader)? {
+                        truncated = segment_bytes.saturating_sub(last_valid);
+                        break;
+                    }
+                    return Err(LogError::Corrupt {
+                        line: usize::try_from(summary.record_count + 1).unwrap_or(usize::MAX),
+                        reason,
+                    });
+                }
+            }
+        }
+        if active {
+            summary.truncated_bytes = truncated;
+            summary.last_valid_offset = last_valid;
+            summary.trailing_newline_missing = missing_newline;
+        } else {
+            let name = segment
+                .file_name()
+                .and_then(|name| name.to_str())
+                .unwrap_or("");
+            let expected = format!(
+                "{:020}-{:020}-{}.jsonl",
+                start_seq,
+                summary.seq_head,
+                summary.last_hash.strip_prefix("sha256:").unwrap_or("")
+            );
+            if summary.record_count == before_count
+                || truncated > 0
+                || missing_newline
+                || name != expected
+            {
+                return Err(LogError::Corrupt {
+                    line: usize::try_from(before_count + 1).unwrap_or(usize::MAX),
+                    reason: format!("sealed segment integrity failure: {}", segment.display()),
+                });
+            }
+            active_start = summary
+                .seq_head
+                .checked_add(1)
+                .ok_or_else(|| LogError::InvalidRecord("log exhausts sequence numbers".into()))?;
+        }
+    }
+    Ok((summary, active_start))
 }
 
 fn read_stream<T: ChainRecord>(

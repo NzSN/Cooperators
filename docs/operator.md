@@ -1,5 +1,66 @@
 # Operator guide
 
+## Document and task arrivals
+
+Arrival notifications are opt-in. The first enabled start promotes the bus
+registry to V2 so older binaries refuse the new source-record format before
+replaying it. Identity IDs and credential hashes are preserved. An upgraded
+root remains V2; rollback to an older broker uses a coherent pre-upgrade backup.
+
+```sh
+./target/release/coop --root /path/to/bus daemon run --http-addr off --enable-arrivals
+```
+
+For a manually registered agent, use the same `COOP_TOKEN` across these calls:
+
+```sh
+./target/release/coop --root /path/to/bus arrivals subscribe \
+  --client-key review-queue-v1 --queue reviews
+./target/release/coop --root /path/to/bus arrivals subscribe \
+  --client-key architecture-v1 --document architecture
+./target/release/coop --root /path/to/bus arrivals wait --timeout 30
+./target/release/coop --root /path/to/bus arrivals ack --cursor '<next_cursor>'
+```
+
+Subscriptions match exact names and include current state by default. Use
+`--future-only` to omit catch-up. Wait is a peek; arrival ACK is durable and
+independent of ordinary messages. Cursors are bound to the bus and agent
+identity. Task notices signal possible work; only a successful task claim
+grants a fenced lease.
+
+Managed hosts enroll a fresh identity, keep a private resume configuration and
+journal outside the broker root, and activate an exact provider session:
+
+```sh
+./target/release/coop --root /path/to/bus host run --provider codex \
+  --workspace /path/to/project --display-name reviewer --queue reviews
+# Alternative managed host:
+./target/release/coop --root /path/to/bus host run --provider claude \
+  --workspace /path/to/project --display-name reviewer --document architecture
+./target/release/coop host status --config '/path/printed/by/host/run.json'
+./target/release/coop host resume --config '/path/printed/by/host/run.json'
+```
+
+The host command prints the private configuration's path, binding and status;
+it does not print its credentials. Resume uses the saved identity and exact
+session. A new independent `host run` creates a new identity. The managed MCP
+frontend reserves arrival wait/ACK and identity mutation for the controller;
+the model gets `coop_confirm_activation` and `coop_resolve_arrivals` instead.
+
+Runtime output and operator input are newline-delimited JSON. Approval events
+remain pending until an explicit response for that request. Send one response
+through stdin or `host approval --config ... --request-id ... --response ...`.
+`host retry` explicitly releases a bounded retry budget after attention is
+required; `host shutdown` stops the owned controller and provider process.
+Provider-specific responses must use that adapter's protocol shape.
+
+The implementation's [qualification record](impl/arrivals-20261021/README.md)
+separates deterministic protocol checks from real provider-session checks.
+Claude's current modern MCP discovery compatibility issue remains recorded in
+the [installed-client baseline](impl/acceptance-20261020/README.md); compatibility
+environment overrides, when needed, are explicit per-host `--env KEY=VALUE`
+settings rather than edits to global client configuration.
+
 This guide covers running `cooperatorsd`, its on-disk layout, configuration,
 recovery behavior, dead-letter inspection, backup/restore, and health/metrics.
 The protocol and semantics are specified in

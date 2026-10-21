@@ -10,6 +10,8 @@ use serde_json::{json, Value};
 
 use cooperators::{client, mcp, paths, server};
 
+mod host_cli;
+
 /// Environment variable read when `--token` is absent.
 const TOKEN_ENV: &str = "COOP_TOKEN";
 
@@ -54,6 +56,16 @@ enum Command {
         /// Repeatable human label; routing identity remains unique
         #[arg(long, default_value = "agent")]
         display_name: String,
+        /// Enable arrivals when dispatching against an embedded root
+        #[arg(long, requires = "embedded")]
+        enable_arrivals: bool,
+        /// Private IPC socket of this managed session's host bridge
+        #[arg(long, requires_all = ["resume", "host_bus_id", "host_agent_id"], conflicts_with = "embedded")]
+        host_control: Option<PathBuf>,
+        #[arg(long, requires = "host_control")]
+        host_bus_id: Option<String>,
+        #[arg(long, requires = "host_control")]
+        host_agent_id: Option<String>,
     },
     /// Register a new agent name (or rotate an existing token)
     Register {
@@ -105,6 +117,16 @@ enum Command {
         #[arg(long)]
         cursor: String,
     },
+    /// Manage the separate durable document/task arrival feed
+    Arrivals {
+        #[command(subcommand)]
+        command: ArrivalCommand,
+    },
+    /// Run and inspect a managed agent activation bridge
+    Host {
+        #[command(subcommand)]
+        command: host_cli::HostCommand,
+    },
     /// Record a presence heartbeat
     Heartbeat,
     /// List registered agents
@@ -125,6 +147,50 @@ enum DaemonCommand {
         /// (default: 127.0.0.1:7420, or $COOP_HTTP_ADDR)
         #[arg(long, value_name = "ADDR")]
         http_addr: Option<String>,
+        /// Upgrade this root to support durable arrival notifications
+        #[arg(long)]
+        enable_arrivals: bool,
+    },
+}
+
+#[derive(Debug, Subcommand)]
+enum ArrivalCommand {
+    /// Subscribe to one exact document or queue name
+    Subscribe {
+        #[arg(long)]
+        client_key: String,
+        #[arg(long, conflicts_with = "queue", required_unless_present = "queue")]
+        document: Option<String>,
+        #[arg(
+            long,
+            conflicts_with = "document",
+            required_unless_present = "document"
+        )]
+        queue: Option<String>,
+        /// Omit the initial current-state catch-up
+        #[arg(long)]
+        future_only: bool,
+    },
+    /// Stop future notifications from a subscription
+    Unsubscribe {
+        #[arg(long)]
+        subscription_id: String,
+    },
+    /// List subscriptions and the stable bus identity
+    List,
+    /// Peek at arrivals without acknowledging them
+    Wait {
+        #[arg(long)]
+        cursor: Option<String>,
+        #[arg(long, default_value_t = 30)]
+        timeout: u64,
+        #[arg(long, default_value_t = 64)]
+        limit: usize,
+    },
+    /// Durably acknowledge arrivals through a returned cursor
+    Ack {
+        #[arg(long)]
+        cursor: String,
     },
 }
 
@@ -135,7 +201,11 @@ async fn main() -> ExitCode {
 
     match cli.command {
         Command::Daemon {
-            command: DaemonCommand::Run { http_addr },
+            command:
+                DaemonCommand::Run {
+                    http_addr,
+                    enable_arrivals,
+                },
         } => {
             let http_addr = match resolve_http_addr(http_addr) {
                 Ok(address) => address,
@@ -144,7 +214,10 @@ async fn main() -> ExitCode {
                     return ExitCode::from(2);
                 }
             };
-            let options = server::ServerOptions { http_addr };
+            let options = server::ServerOptions {
+                http_addr,
+                enable_arrivals,
+            };
             match server::run_with_options(&root, options).await {
                 Ok(()) => ExitCode::SUCCESS,
                 Err(error) => {
@@ -158,10 +231,16 @@ async fn main() -> ExitCode {
             resume,
             kind,
             display_name,
+            enable_arrivals,
+            host_control,
+            host_bus_id,
+            host_agent_id,
         } => {
             let token = token_option(&cli.token);
             let backend = if embedded {
-                match server::DaemonState::owned(server::DaemonConfig::new(root.clone())) {
+                let mut config = server::DaemonConfig::new(root.clone());
+                config.enable_arrivals = enable_arrivals;
+                match server::DaemonState::owned(config) {
                     Ok(state) => mcp::Backend::embedded(Arc::new(state)),
                     Err(error) => {
                         eprintln!("coop mcp-stdio: initialize bus root: {error}");
@@ -171,7 +250,32 @@ async fn main() -> ExitCode {
             } else {
                 mcp::Backend::uds(paths::socket_path(&root))
             };
-            let handler = if resume {
+            let handler = if let Some(socket) = host_control {
+                let Some(token) = token else {
+                    eprintln!("coop mcp-stdio: managed mode requires COOP_TOKEN");
+                    return ExitCode::from(2);
+                };
+                let secret = match std::env::var("COOP_HOST_CONTROL_SECRET") {
+                    Ok(secret) if !secret.is_empty() => secret,
+                    _ => {
+                        eprintln!("coop mcp-stdio: managed mode requires COOP_HOST_CONTROL_SECRET");
+                        return ExitCode::from(2);
+                    }
+                };
+                let control = cooperators::host_control::HostControlClient::new(
+                    socket,
+                    secret,
+                    host_bus_id.expect("Clap requires bus id"),
+                    host_agent_id.expect("Clap requires agent id"),
+                );
+                match mcp::CoopMcpHandler::managed_stdio(backend, token, control).await {
+                    Ok(handler) => handler,
+                    Err(error) => {
+                        eprintln!("coop mcp-stdio: managed binding failed: {}", error.message);
+                        return ExitCode::FAILURE;
+                    }
+                }
+            } else if resume {
                 mcp::CoopMcpHandler::stdio(backend, token)
             } else {
                 match mcp::CoopMcpHandler::fresh_stdio(backend, kind, display_name, Vec::new())
@@ -196,6 +300,7 @@ async fn main() -> ExitCode {
             Ok(value) => print_json(&value),
             Err(error) => report("status", &error),
         },
+        Command::Host { command } => host_cli::run(root, cli.token.clone(), command).await,
         Command::Register {
             name,
             kind,
@@ -271,6 +376,63 @@ async fn main() -> ExitCode {
                 json!({"token": token, "cursor": cursor}),
             )
             .await
+        }
+        Command::Arrivals { command } => {
+            let token = match require_token(&cli.token) {
+                Ok(token) => token,
+                Err(code) => return code,
+            };
+            let (method, mut params, timeout) = match command {
+                ArrivalCommand::Subscribe {
+                    client_key,
+                    document,
+                    queue,
+                    future_only,
+                } => {
+                    let (resource, kinds) = match (document, queue) {
+                        (Some(name), None) => (
+                            json!({"type":"document","name":name}),
+                            json!(["doc.published", "doc.updated"]),
+                        ),
+                        (None, Some(name)) => (
+                            json!({"type":"queue","name":name}),
+                            json!(["queue.task_available"]),
+                        ),
+                        _ => {
+                            eprintln!("coop arrivals: select exactly one --document or --queue");
+                            return ExitCode::from(2);
+                        }
+                    };
+                    (
+                        "subscribe_arrivals",
+                        json!({"client_key":client_key,"resource":resource,"event_kinds":kinds,"catch_up":!future_only}),
+                        30,
+                    )
+                }
+                ArrivalCommand::Unsubscribe { subscription_id } => (
+                    "unsubscribe_arrivals",
+                    json!({"subscription_id":subscription_id}),
+                    30,
+                ),
+                ArrivalCommand::List => ("list_arrival_subscriptions", json!({}), 30),
+                ArrivalCommand::Wait {
+                    cursor,
+                    timeout,
+                    limit,
+                } => (
+                    "wait_arrivals",
+                    json!({"cursor":cursor,"timeout_s":timeout,"limit":limit}),
+                    timeout.saturating_add(15),
+                ),
+                ArrivalCommand::Ack { cursor } => ("ack_arrivals", json!({"cursor":cursor}), 30),
+            };
+            params["token"] = Value::String(token);
+            match client::call_with_timeout(&root, method, params, Duration::from_secs(timeout))
+                .await
+            {
+                Ok(value) => print_json(&value),
+                Err(error) => report("arrivals", &error),
+            }
         }
         Command::Heartbeat => {
             let token = match require_token(&cli.token) {

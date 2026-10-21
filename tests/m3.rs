@@ -728,7 +728,7 @@ async fn http_tools_list_matches_the_stdio_catalog() {
     let root = temp.path().join("root");
     let mut client = HttpDriver::start(&root).await;
     let wire = client.tools_list().await;
-    assert_eq!(wire.len(), 23, "HTTP tools/list exposes the full surface");
+    assert_eq!(wire.len(), 28, "HTTP tools/list exposes the full surface");
     let catalog = mcp::tool_catalog();
     for expected in &catalog {
         let wire_tool = wire
@@ -807,7 +807,11 @@ async fn http_requires_bearer_and_rejects_bad_tokens() {
 #[tokio::test]
 async fn tools_list_exposes_every_method_with_matching_schemas() {
     let catalog = mcp::tool_catalog();
-    assert_eq!(catalog.len(), 23, "broker and instance tools are present");
+    assert_eq!(
+        catalog.len(),
+        28,
+        "broker, instance and arrival tools are present"
+    );
     let names: Vec<&str> = catalog.iter().map(|tool| tool.name.as_ref()).collect();
     for spec in TOOL_SPECS {
         assert!(
@@ -1113,7 +1117,7 @@ async fn mcp_stdio_subprocess_roundtrip_over_pipes() {
         .await;
     let tools = process.read_response(2).await;
     let wire_tools = tools["result"]["tools"].as_array().expect("tools array");
-    assert_eq!(wire_tools.len(), 23);
+    assert_eq!(wire_tools.len(), 28);
     let expected = mcp::tool_catalog();
     for expected_tool in &expected {
         let wire = wire_tools

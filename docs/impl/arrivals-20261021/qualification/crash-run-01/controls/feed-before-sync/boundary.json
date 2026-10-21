@@ -1,0 +1,104 @@
+{
+  "ack_success": null,
+  "bus_id": "01M5EJPC9BJ841KBVXN9ZMQMKD",
+  "default_page_after_ack": null,
+  "expected_delivery_ids": [
+    "sha256:ca820d3a569fdf5ce383650b9a8638457b2cbbfdf1fa265712c88e6dcca76eaa"
+  ],
+  "feed_disk_records": [
+    {
+      "delivery_id": "sha256:ca820d3a569fdf5ce383650b9a8638457b2cbbfdf1fa265712c88e6dcca76eaa",
+      "kind": "doc.published",
+      "obligation": {
+        "hash": "sha256:9d445cfd091ae3b091028be783bcea8e72afd01a210a826baa407531e3bee9f6",
+        "id": "sha256:85255318dc8ce44b5657894346c482a8e78efc454373531b524584779d4a667a",
+        "item_index": 0,
+        "journal_name": "plan",
+        "journal_type": "document",
+        "seq": 1
+      },
+      "prev_hash": "sha256:0000000000000000000000000000000000000000000000000000000000000000",
+      "recipient_agent_id": "01M5EJPC9V5RHA4GW3MWDXE5VC",
+      "resource": {
+        "name": "plan",
+        "type": "document",
+        "version": 1
+      },
+      "seq": 1,
+      "source": {
+        "hash": "sha256:9d445cfd091ae3b091028be783bcea8e72afd01a210a826baa407531e3bee9f6",
+        "name": "plan",
+        "seq": 1,
+        "stream": "document"
+      },
+      "subscription_ids": [
+        "01M5EJPCA0NDVCCQ05T3S7W78E"
+      ],
+      "v": 1
+    }
+  ],
+  "hook": {
+    "bytes_requested": 750,
+    "bytes_written": 750,
+    "bytes_written_known": true,
+    "point": null,
+    "seq": 1,
+    "stage": "BeforeSync",
+    "sync_attempted": false,
+    "sync_succeeded": false
+  },
+  "mode": "feed-before-sync",
+  "pending_call_returned_before_kill": false,
+  "prior_ack_success": null,
+  "recipient_agent_id": "01M5EJPC9V5RHA4GW3MWDXE5VC",
+  "source_head": 1,
+  "source_success_receipt": {
+    "blob": null,
+    "head_version": 1,
+    "mime": "text/plain",
+    "name": "plan",
+    "seq": 1,
+    "storage": "inline",
+    "title": "",
+    "ts": "2026-10-21T06:34:34.181Z",
+    "version": 1
+  },
+  "sources": [
+    {
+      "actor_id": "01M5EJPC9PD65F0XPRW45WZR95",
+      "actor_name": "author",
+      "blob": null,
+      "body": {
+        "mime": "text/plain",
+        "text": "crash control version one"
+      },
+      "doc": "plan",
+      "expires_at_ms": null,
+      "fence": null,
+      "kind": "doc_published",
+      "lease_id": null,
+      "lease_ttl_s": null,
+      "mime": "text/plain",
+      "notification_intent": {
+        "routes": [
+          {
+            "agent_id": "01M5EJPC9V5RHA4GW3MWDXE5VC",
+            "subscription_ids": [
+              "01M5EJPCA0NDVCCQ05T3S7W78E"
+            ]
+          }
+        ],
+        "v": 1
+      },
+      "prev_hash": "sha256:0000000000000000000000000000000000000000000000000000000000000000",
+      "previous_version": null,
+      "reason": null,
+      "seq": 1,
+      "title": "",
+      "truncated_bytes": null,
+      "ts": "2026-10-21T06:34:34.181Z",
+      "version": 1
+    }
+  ],
+  "subscription_id": "01M5EJPCA0NDVCCQ05T3S7W78E"
+}

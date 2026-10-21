@@ -1,0 +1,42 @@
+{
+  "arguments": [
+    "--root",
+    "/home/nzsn/Repos/Cooperators/docs/impl/arrivals-20261021/qualification/crash-run-01/controls/preupgrade-refusal/root",
+    "daemon",
+    "run",
+    "--http-addr",
+    "off"
+  ],
+  "child_reaped": true,
+  "exit_code": 1,
+  "exit_status": "exit status: 1",
+  "no_socket_created": true,
+  "program": "/tmp/cooperators-arrival-preupgrade-edcbc923/coop",
+  "program_sha256": "32d5b650e8768407d297165eb350c295ab0b7aa0da14272fcee3948765383488",
+  "registry_identical": true,
+  "signal": null,
+  "source_files": [
+    {
+      "after_sha256": "aeec968648a520369524c0db69eb17cd163e33ee4dde74fa8d75008144c658ab",
+      "before_sha256": "aeec968648a520369524c0db69eb17cd163e33ee4dde74fa8d75008144c658ab",
+      "bytes": 491,
+      "identical": true,
+      "path": "docs/guard.jsonl"
+    },
+    {
+      "after_sha256": "4cfb92c3aea625a88436d8559e585d9d1553e079284f9ee1906bc61912da722c",
+      "before_sha256": "4cfb92c3aea625a88436d8559e585d9d1553e079284f9ee1906bc61912da722c",
+      "bytes": 19,
+      "identical": true,
+      "path": "queues/guard.jsonl"
+    },
+    {
+      "after_sha256": "4cfb92c3aea625a88436d8559e585d9d1553e079284f9ee1906bc61912da722c",
+      "before_sha256": "4cfb92c3aea625a88436d8559e585d9d1553e079284f9ee1906bc61912da722c",
+      "bytes": 19,
+      "identical": true,
+      "path": "agents/01M5EJP6QNTTHQ43A01SWE2W6M/inbox.jsonl"
+    }
+  ],
+  "stderr": "coop daemon: initialize daemon state: internal error: unsupported registry version 2 in /home/nzsn/Repos/Cooperators/docs/impl/arrivals-20261021/qualification/crash-run-01/controls/preupgrade-refusal/root/registry.json\n"
+}

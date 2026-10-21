@@ -24,6 +24,8 @@
 //! - [`paths`] — root/socket resolution and layout creation.
 //! - [`id`] — ULID and RFC 3339 helpers.
 
+mod arrival_api;
+pub mod arrivals;
 pub mod channels;
 pub mod client;
 pub mod docs;
@@ -31,6 +33,8 @@ pub mod envelope;
 pub mod error;
 #[cfg(feature = "mbt-injection")]
 pub mod faults;
+pub mod host;
+pub mod host_control;
 pub mod id;
 mod inbox_writer;
 pub mod leases;

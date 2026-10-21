@@ -1,0 +1,73 @@
+{
+  "ack_success": null,
+  "bus_id": "01M5EJP8PW4EQX9XFNKH951B15",
+  "default_page_after_ack": null,
+  "expected_delivery_ids": [
+    "sha256:874bf00a80daaae14726510a2033fbf65bf0f3daf2d74b01fa68b9fb497b4d8e"
+  ],
+  "feed_disk_records": [],
+  "hook": {
+    "bytes_requested": 0,
+    "bytes_written": 0,
+    "bytes_written_known": true,
+    "point": "BeforeRecordWrite",
+    "seq": null,
+    "stage": "Reached",
+    "sync_attempted": false,
+    "sync_succeeded": false
+  },
+  "mode": "source-before-feed",
+  "pending_call_returned_before_kill": false,
+  "prior_ack_success": null,
+  "recipient_agent_id": "01M5EJP8Q8MHDTCDMGANXZK7QG",
+  "source_head": 1,
+  "source_success_receipt": {
+    "blob": null,
+    "head_version": 1,
+    "mime": "text/plain",
+    "name": "plan",
+    "seq": 1,
+    "storage": "inline",
+    "title": "",
+    "ts": "2026-10-21T06:34:30.512Z",
+    "version": 1
+  },
+  "sources": [
+    {
+      "actor_id": "01M5EJP8Q4AYF39VXPW4D3QA0G",
+      "actor_name": "author",
+      "blob": null,
+      "body": {
+        "mime": "text/plain",
+        "text": "crash control version one"
+      },
+      "doc": "plan",
+      "expires_at_ms": null,
+      "fence": null,
+      "kind": "doc_published",
+      "lease_id": null,
+      "lease_ttl_s": null,
+      "mime": "text/plain",
+      "notification_intent": {
+        "routes": [
+          {
+            "agent_id": "01M5EJP8Q8MHDTCDMGANXZK7QG",
+            "subscription_ids": [
+              "01M5EJP8QCKKPPYRP8ZXFNF9AY"
+            ]
+          }
+        ],
+        "v": 1
+      },
+      "prev_hash": "sha256:0000000000000000000000000000000000000000000000000000000000000000",
+      "previous_version": null,
+      "reason": null,
+      "seq": 1,
+      "title": "",
+      "truncated_bytes": null,
+      "ts": "2026-10-21T06:34:30.512Z",
+      "version": 1
+    }
+  ],
+  "subscription_id": "01M5EJP8QCKKPPYRP8ZXFNF9AY"
+}

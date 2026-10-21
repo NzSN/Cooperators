@@ -1,0 +1,27 @@
+   Compiling cooperators v0.1.0 (/home/nzsn/Repos/Cooperators/docs/impl/arrivals-20261021/qualification/crash-run-01/source-snapshot-02)
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 14.77s
+     Running tests/arrival_crash.rs (target/debug/deps/arrival_crash-9b313d16a961a4ab)
+
+running 6 tests
+test arrival_crash_child ... ok
+test preupgrade_binary_refuses_v2_before_repairing_source_files ... ok
+test process_kill_after_ack_success_preserves_default_and_historical_cursors ... ok
+test process_kill_after_source_commit_before_feed_write_recovers_exact_arrival ... ok
+test process_kill_before_ack_sync_preserves_prior_acknowledged_prefix ... ok
+test process_kill_before_feed_sync_recovers_complete_row_without_duplicate ... ok
+
+test result: ok. 6 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 7.65s
+
+     Running tests/storage_streaming.rs (target/debug/deps/storage_streaming-83a8121ed88b4cf9)
+
+running 7 tests
+test streaming_invalid_middle_and_corrupt_seal_are_fatal_without_mutation ... ok
+test streaming_missing_final_newline_is_preserved_then_separated_on_append ... ok
+test streaming_read_does_not_create_missing_logs_or_directories ... ok
+test streaming_recovery_sync_failure_cannot_publish_a_recovered_handle ... ok
+test streaming_replay_preserves_order_hashes_offsets_and_append_position ... ok
+test streaming_torn_active_tail_is_read_only_until_open_and_repaired_before_append ... ok
+test streaming_visitor_error_is_propagated_without_repair_or_usable_log ... ok
+
+test result: ok. 7 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.11s
+

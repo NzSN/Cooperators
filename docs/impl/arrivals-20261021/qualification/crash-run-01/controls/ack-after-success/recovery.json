@@ -1,0 +1,87 @@
+{
+  "complete_existing_feed_deduped_without_append": true,
+  "default_page": {
+    "acked_cursor": "arrival:01M5EJP6Y2WFXB6X5HW4PNFTXH:01M5EJP6YE2X9J1ZHDY40WGJ8K:1",
+    "agent_id": "01M5EJP6YE2X9J1ZHDY40WGJ8K",
+    "bus_id": "01M5EJP6Y2WFXB6X5HW4PNFTXH",
+    "next_cursor": "arrival:01M5EJP6Y2WFXB6X5HW4PNFTXH:01M5EJP6YE2X9J1ZHDY40WGJ8K:1",
+    "notices": [],
+    "timed_out": true
+  },
+  "exact_delivery_count": true,
+  "feed_head": 1,
+  "feed_last_hash": "sha256:11794489c05918f7f9198ac81d56fcdb80c9b67f077b7e9dd11ec6a03e463520",
+  "historical_page": {
+    "acked_cursor": "arrival:01M5EJP6Y2WFXB6X5HW4PNFTXH:01M5EJP6YE2X9J1ZHDY40WGJ8K:1",
+    "agent_id": "01M5EJP6YE2X9J1ZHDY40WGJ8K",
+    "bus_id": "01M5EJP6Y2WFXB6X5HW4PNFTXH",
+    "next_cursor": "arrival:01M5EJP6Y2WFXB6X5HW4PNFTXH:01M5EJP6YE2X9J1ZHDY40WGJ8K:1",
+    "notices": [
+      {
+        "delivery_id": "sha256:28e14190ead00c1a05f8e0efa175535f076a67e248f2c84069618f7a2fd631d8",
+        "kind": "doc.published",
+        "obligation": {
+          "hash": "sha256:688c382253a72354d3da0688d5271534a96694f22ab1d8258b3b6d18200028bc",
+          "id": "sha256:f8975f29805b6dd3220a7775a0bfbb4a970ae3f45f2b78e6c6eb42726e501894",
+          "item_index": 0,
+          "journal_name": "plan",
+          "journal_type": "document",
+          "seq": 1
+        },
+        "prev_hash": "sha256:0000000000000000000000000000000000000000000000000000000000000000",
+        "recipient_agent_id": "01M5EJP6YE2X9J1ZHDY40WGJ8K",
+        "resource": {
+          "name": "plan",
+          "type": "document",
+          "version": 1
+        },
+        "seq": 1,
+        "source": {
+          "hash": "sha256:688c382253a72354d3da0688d5271534a96694f22ab1d8258b3b6d18200028bc",
+          "name": "plan",
+          "seq": 1,
+          "stream": "document"
+        },
+        "subscription_ids": [
+          "01M5EJP6YJBHQTW76AN7HZRXWN"
+        ],
+        "v": 1
+      }
+    ],
+    "timed_out": false
+  },
+  "process_kill_only_not_power_loss": true,
+  "recovered_feed_records": [
+    {
+      "delivery_id": "sha256:28e14190ead00c1a05f8e0efa175535f076a67e248f2c84069618f7a2fd631d8",
+      "kind": "doc.published",
+      "obligation": {
+        "hash": "sha256:688c382253a72354d3da0688d5271534a96694f22ab1d8258b3b6d18200028bc",
+        "id": "sha256:f8975f29805b6dd3220a7775a0bfbb4a970ae3f45f2b78e6c6eb42726e501894",
+        "item_index": 0,
+        "journal_name": "plan",
+        "journal_type": "document",
+        "seq": 1
+      },
+      "prev_hash": "sha256:0000000000000000000000000000000000000000000000000000000000000000",
+      "recipient_agent_id": "01M5EJP6YE2X9J1ZHDY40WGJ8K",
+      "resource": {
+        "name": "plan",
+        "type": "document",
+        "version": 1
+      },
+      "seq": 1,
+      "source": {
+        "hash": "sha256:688c382253a72354d3da0688d5271534a96694f22ab1d8258b3b6d18200028bc",
+        "name": "plan",
+        "seq": 1,
+        "stream": "document"
+      },
+      "subscription_ids": [
+        "01M5EJP6YJBHQTW76AN7HZRXWN"
+      ],
+      "v": 1
+    }
+  ],
+  "source_bytes_preserved": true
+}

@@ -1,0 +1,1123 @@
+{
+  "format": 1,
+  "enumeration_seed": 262145,
+  "generator": "all ordered pairs, case = 8 * first + second; no PRNG",
+  "test_source": "tests/arrival_model.rs",
+  "test_source_sha256": "0578d31f43232d2f000a82c37359ef07a4552b51804110c353b8e2ede00b0422",
+  "status": "passed",
+  "bounds": {
+    "groups": 2,
+    "traces_per_group": 64,
+    "generated_operations_per_trace": 2,
+    "broker_live_recipient_identities": 2,
+    "broker_document_versions_max": 3,
+    "bridge_arrival_notices_max": 4,
+    "bridge_wake_notice_limit": 2,
+    "bridge_simultaneous_claims_max": 3
+  },
+  "groups": {
+    "broker": {
+      "alphabet": [
+        "toggle_a",
+        "toggle_b",
+        "mutate",
+        "restart",
+        "drain_ack_a",
+        "drain_ack_b",
+        "reject_future_ack",
+        "reject_cross_identity"
+      ],
+      "cases": [
+        {
+          "case": 0,
+          "pair": [
+            "toggle_a",
+            "toggle_a"
+          ],
+          "replay_filter": "broker:0"
+        },
+        {
+          "case": 1,
+          "pair": [
+            "toggle_a",
+            "toggle_b"
+          ],
+          "replay_filter": "broker:1"
+        },
+        {
+          "case": 2,
+          "pair": [
+            "toggle_a",
+            "mutate"
+          ],
+          "replay_filter": "broker:2"
+        },
+        {
+          "case": 3,
+          "pair": [
+            "toggle_a",
+            "restart"
+          ],
+          "replay_filter": "broker:3"
+        },
+        {
+          "case": 4,
+          "pair": [
+            "toggle_a",
+            "drain_ack_a"
+          ],
+          "replay_filter": "broker:4"
+        },
+        {
+          "case": 5,
+          "pair": [
+            "toggle_a",
+            "drain_ack_b"
+          ],
+          "replay_filter": "broker:5"
+        },
+        {
+          "case": 6,
+          "pair": [
+            "toggle_a",
+            "reject_future_ack"
+          ],
+          "replay_filter": "broker:6"
+        },
+        {
+          "case": 7,
+          "pair": [
+            "toggle_a",
+            "reject_cross_identity"
+          ],
+          "replay_filter": "broker:7"
+        },
+        {
+          "case": 8,
+          "pair": [
+            "toggle_b",
+            "toggle_a"
+          ],
+          "replay_filter": "broker:8"
+        },
+        {
+          "case": 9,
+          "pair": [
+            "toggle_b",
+            "toggle_b"
+          ],
+          "replay_filter": "broker:9"
+        },
+        {
+          "case": 10,
+          "pair": [
+            "toggle_b",
+            "mutate"
+          ],
+          "replay_filter": "broker:10"
+        },
+        {
+          "case": 11,
+          "pair": [
+            "toggle_b",
+            "restart"
+          ],
+          "replay_filter": "broker:11"
+        },
+        {
+          "case": 12,
+          "pair": [
+            "toggle_b",
+            "drain_ack_a"
+          ],
+          "replay_filter": "broker:12"
+        },
+        {
+          "case": 13,
+          "pair": [
+            "toggle_b",
+            "drain_ack_b"
+          ],
+          "replay_filter": "broker:13"
+        },
+        {
+          "case": 14,
+          "pair": [
+            "toggle_b",
+            "reject_future_ack"
+          ],
+          "replay_filter": "broker:14"
+        },
+        {
+          "case": 15,
+          "pair": [
+            "toggle_b",
+            "reject_cross_identity"
+          ],
+          "replay_filter": "broker:15"
+        },
+        {
+          "case": 16,
+          "pair": [
+            "mutate",
+            "toggle_a"
+          ],
+          "replay_filter": "broker:16"
+        },
+        {
+          "case": 17,
+          "pair": [
+            "mutate",
+            "toggle_b"
+          ],
+          "replay_filter": "broker:17"
+        },
+        {
+          "case": 18,
+          "pair": [
+            "mutate",
+            "mutate"
+          ],
+          "replay_filter": "broker:18"
+        },
+        {
+          "case": 19,
+          "pair": [
+            "mutate",
+            "restart"
+          ],
+          "replay_filter": "broker:19"
+        },
+        {
+          "case": 20,
+          "pair": [
+            "mutate",
+            "drain_ack_a"
+          ],
+          "replay_filter": "broker:20"
+        },
+        {
+          "case": 21,
+          "pair": [
+            "mutate",
+            "drain_ack_b"
+          ],
+          "replay_filter": "broker:21"
+        },
+        {
+          "case": 22,
+          "pair": [
+            "mutate",
+            "reject_future_ack"
+          ],
+          "replay_filter": "broker:22"
+        },
+        {
+          "case": 23,
+          "pair": [
+            "mutate",
+            "reject_cross_identity"
+          ],
+          "replay_filter": "broker:23"
+        },
+        {
+          "case": 24,
+          "pair": [
+            "restart",
+            "toggle_a"
+          ],
+          "replay_filter": "broker:24"
+        },
+        {
+          "case": 25,
+          "pair": [
+            "restart",
+            "toggle_b"
+          ],
+          "replay_filter": "broker:25"
+        },
+        {
+          "case": 26,
+          "pair": [
+            "restart",
+            "mutate"
+          ],
+          "replay_filter": "broker:26"
+        },
+        {
+          "case": 27,
+          "pair": [
+            "restart",
+            "restart"
+          ],
+          "replay_filter": "broker:27"
+        },
+        {
+          "case": 28,
+          "pair": [
+            "restart",
+            "drain_ack_a"
+          ],
+          "replay_filter": "broker:28"
+        },
+        {
+          "case": 29,
+          "pair": [
+            "restart",
+            "drain_ack_b"
+          ],
+          "replay_filter": "broker:29"
+        },
+        {
+          "case": 30,
+          "pair": [
+            "restart",
+            "reject_future_ack"
+          ],
+          "replay_filter": "broker:30"
+        },
+        {
+          "case": 31,
+          "pair": [
+            "restart",
+            "reject_cross_identity"
+          ],
+          "replay_filter": "broker:31"
+        },
+        {
+          "case": 32,
+          "pair": [
+            "drain_ack_a",
+            "toggle_a"
+          ],
+          "replay_filter": "broker:32"
+        },
+        {
+          "case": 33,
+          "pair": [
+            "drain_ack_a",
+            "toggle_b"
+          ],
+          "replay_filter": "broker:33"
+        },
+        {
+          "case": 34,
+          "pair": [
+            "drain_ack_a",
+            "mutate"
+          ],
+          "replay_filter": "broker:34"
+        },
+        {
+          "case": 35,
+          "pair": [
+            "drain_ack_a",
+            "restart"
+          ],
+          "replay_filter": "broker:35"
+        },
+        {
+          "case": 36,
+          "pair": [
+            "drain_ack_a",
+            "drain_ack_a"
+          ],
+          "replay_filter": "broker:36"
+        },
+        {
+          "case": 37,
+          "pair": [
+            "drain_ack_a",
+            "drain_ack_b"
+          ],
+          "replay_filter": "broker:37"
+        },
+        {
+          "case": 38,
+          "pair": [
+            "drain_ack_a",
+            "reject_future_ack"
+          ],
+          "replay_filter": "broker:38"
+        },
+        {
+          "case": 39,
+          "pair": [
+            "drain_ack_a",
+            "reject_cross_identity"
+          ],
+          "replay_filter": "broker:39"
+        },
+        {
+          "case": 40,
+          "pair": [
+            "drain_ack_b",
+            "toggle_a"
+          ],
+          "replay_filter": "broker:40"
+        },
+        {
+          "case": 41,
+          "pair": [
+            "drain_ack_b",
+            "toggle_b"
+          ],
+          "replay_filter": "broker:41"
+        },
+        {
+          "case": 42,
+          "pair": [
+            "drain_ack_b",
+            "mutate"
+          ],
+          "replay_filter": "broker:42"
+        },
+        {
+          "case": 43,
+          "pair": [
+            "drain_ack_b",
+            "restart"
+          ],
+          "replay_filter": "broker:43"
+        },
+        {
+          "case": 44,
+          "pair": [
+            "drain_ack_b",
+            "drain_ack_a"
+          ],
+          "replay_filter": "broker:44"
+        },
+        {
+          "case": 45,
+          "pair": [
+            "drain_ack_b",
+            "drain_ack_b"
+          ],
+          "replay_filter": "broker:45"
+        },
+        {
+          "case": 46,
+          "pair": [
+            "drain_ack_b",
+            "reject_future_ack"
+          ],
+          "replay_filter": "broker:46"
+        },
+        {
+          "case": 47,
+          "pair": [
+            "drain_ack_b",
+            "reject_cross_identity"
+          ],
+          "replay_filter": "broker:47"
+        },
+        {
+          "case": 48,
+          "pair": [
+            "reject_future_ack",
+            "toggle_a"
+          ],
+          "replay_filter": "broker:48"
+        },
+        {
+          "case": 49,
+          "pair": [
+            "reject_future_ack",
+            "toggle_b"
+          ],
+          "replay_filter": "broker:49"
+        },
+        {
+          "case": 50,
+          "pair": [
+            "reject_future_ack",
+            "mutate"
+          ],
+          "replay_filter": "broker:50"
+        },
+        {
+          "case": 51,
+          "pair": [
+            "reject_future_ack",
+            "restart"
+          ],
+          "replay_filter": "broker:51"
+        },
+        {
+          "case": 52,
+          "pair": [
+            "reject_future_ack",
+            "drain_ack_a"
+          ],
+          "replay_filter": "broker:52"
+        },
+        {
+          "case": 53,
+          "pair": [
+            "reject_future_ack",
+            "drain_ack_b"
+          ],
+          "replay_filter": "broker:53"
+        },
+        {
+          "case": 54,
+          "pair": [
+            "reject_future_ack",
+            "reject_future_ack"
+          ],
+          "replay_filter": "broker:54"
+        },
+        {
+          "case": 55,
+          "pair": [
+            "reject_future_ack",
+            "reject_cross_identity"
+          ],
+          "replay_filter": "broker:55"
+        },
+        {
+          "case": 56,
+          "pair": [
+            "reject_cross_identity",
+            "toggle_a"
+          ],
+          "replay_filter": "broker:56"
+        },
+        {
+          "case": 57,
+          "pair": [
+            "reject_cross_identity",
+            "toggle_b"
+          ],
+          "replay_filter": "broker:57"
+        },
+        {
+          "case": 58,
+          "pair": [
+            "reject_cross_identity",
+            "mutate"
+          ],
+          "replay_filter": "broker:58"
+        },
+        {
+          "case": 59,
+          "pair": [
+            "reject_cross_identity",
+            "restart"
+          ],
+          "replay_filter": "broker:59"
+        },
+        {
+          "case": 60,
+          "pair": [
+            "reject_cross_identity",
+            "drain_ack_a"
+          ],
+          "replay_filter": "broker:60"
+        },
+        {
+          "case": 61,
+          "pair": [
+            "reject_cross_identity",
+            "drain_ack_b"
+          ],
+          "replay_filter": "broker:61"
+        },
+        {
+          "case": 62,
+          "pair": [
+            "reject_cross_identity",
+            "reject_future_ack"
+          ],
+          "replay_filter": "broker:62"
+        },
+        {
+          "case": 63,
+          "pair": [
+            "reject_cross_identity",
+            "reject_cross_identity"
+          ],
+          "replay_filter": "broker:63"
+        }
+      ],
+      "prefix": [
+        "subscribe_a(catch_up=true)",
+        "subscribe_b(catch_up=true)",
+        "publish_document_v1(projection_deferred)"
+      ],
+      "suffix": [
+        "recover_with_projector",
+        "fair_drain_ack_a",
+        "fair_drain_ack_b",
+        "reject_future_ack",
+        "reject_cross_identity",
+        "restart_with_projector",
+        "fair_drain_ack_a",
+        "fair_drain_ack_b",
+        "check_immutable_source_routes",
+        "shutdown_projector"
+      ]
+    },
+    "bridge": {
+      "alphabet": [
+        "arrival",
+        "restart",
+        "rebind",
+        "schedule",
+        "begin_claim",
+        "finish_empty",
+        "finish_adopted",
+        "resolve"
+      ],
+      "cases": [
+        {
+          "case": 0,
+          "pair": [
+            "arrival",
+            "arrival"
+          ],
+          "replay_filter": "bridge:0"
+        },
+        {
+          "case": 1,
+          "pair": [
+            "arrival",
+            "restart"
+          ],
+          "replay_filter": "bridge:1"
+        },
+        {
+          "case": 2,
+          "pair": [
+            "arrival",
+            "rebind"
+          ],
+          "replay_filter": "bridge:2"
+        },
+        {
+          "case": 3,
+          "pair": [
+            "arrival",
+            "schedule"
+          ],
+          "replay_filter": "bridge:3"
+        },
+        {
+          "case": 4,
+          "pair": [
+            "arrival",
+            "begin_claim"
+          ],
+          "replay_filter": "bridge:4"
+        },
+        {
+          "case": 5,
+          "pair": [
+            "arrival",
+            "finish_empty"
+          ],
+          "replay_filter": "bridge:5"
+        },
+        {
+          "case": 6,
+          "pair": [
+            "arrival",
+            "finish_adopted"
+          ],
+          "replay_filter": "bridge:6"
+        },
+        {
+          "case": 7,
+          "pair": [
+            "arrival",
+            "resolve"
+          ],
+          "replay_filter": "bridge:7"
+        },
+        {
+          "case": 8,
+          "pair": [
+            "restart",
+            "arrival"
+          ],
+          "replay_filter": "bridge:8"
+        },
+        {
+          "case": 9,
+          "pair": [
+            "restart",
+            "restart"
+          ],
+          "replay_filter": "bridge:9"
+        },
+        {
+          "case": 10,
+          "pair": [
+            "restart",
+            "rebind"
+          ],
+          "replay_filter": "bridge:10"
+        },
+        {
+          "case": 11,
+          "pair": [
+            "restart",
+            "schedule"
+          ],
+          "replay_filter": "bridge:11"
+        },
+        {
+          "case": 12,
+          "pair": [
+            "restart",
+            "begin_claim"
+          ],
+          "replay_filter": "bridge:12"
+        },
+        {
+          "case": 13,
+          "pair": [
+            "restart",
+            "finish_empty"
+          ],
+          "replay_filter": "bridge:13"
+        },
+        {
+          "case": 14,
+          "pair": [
+            "restart",
+            "finish_adopted"
+          ],
+          "replay_filter": "bridge:14"
+        },
+        {
+          "case": 15,
+          "pair": [
+            "restart",
+            "resolve"
+          ],
+          "replay_filter": "bridge:15"
+        },
+        {
+          "case": 16,
+          "pair": [
+            "rebind",
+            "arrival"
+          ],
+          "replay_filter": "bridge:16"
+        },
+        {
+          "case": 17,
+          "pair": [
+            "rebind",
+            "restart"
+          ],
+          "replay_filter": "bridge:17"
+        },
+        {
+          "case": 18,
+          "pair": [
+            "rebind",
+            "rebind"
+          ],
+          "replay_filter": "bridge:18"
+        },
+        {
+          "case": 19,
+          "pair": [
+            "rebind",
+            "schedule"
+          ],
+          "replay_filter": "bridge:19"
+        },
+        {
+          "case": 20,
+          "pair": [
+            "rebind",
+            "begin_claim"
+          ],
+          "replay_filter": "bridge:20"
+        },
+        {
+          "case": 21,
+          "pair": [
+            "rebind",
+            "finish_empty"
+          ],
+          "replay_filter": "bridge:21"
+        },
+        {
+          "case": 22,
+          "pair": [
+            "rebind",
+            "finish_adopted"
+          ],
+          "replay_filter": "bridge:22"
+        },
+        {
+          "case": 23,
+          "pair": [
+            "rebind",
+            "resolve"
+          ],
+          "replay_filter": "bridge:23"
+        },
+        {
+          "case": 24,
+          "pair": [
+            "schedule",
+            "arrival"
+          ],
+          "replay_filter": "bridge:24"
+        },
+        {
+          "case": 25,
+          "pair": [
+            "schedule",
+            "restart"
+          ],
+          "replay_filter": "bridge:25"
+        },
+        {
+          "case": 26,
+          "pair": [
+            "schedule",
+            "rebind"
+          ],
+          "replay_filter": "bridge:26"
+        },
+        {
+          "case": 27,
+          "pair": [
+            "schedule",
+            "schedule"
+          ],
+          "replay_filter": "bridge:27"
+        },
+        {
+          "case": 28,
+          "pair": [
+            "schedule",
+            "begin_claim"
+          ],
+          "replay_filter": "bridge:28"
+        },
+        {
+          "case": 29,
+          "pair": [
+            "schedule",
+            "finish_empty"
+          ],
+          "replay_filter": "bridge:29"
+        },
+        {
+          "case": 30,
+          "pair": [
+            "schedule",
+            "finish_adopted"
+          ],
+          "replay_filter": "bridge:30"
+        },
+        {
+          "case": 31,
+          "pair": [
+            "schedule",
+            "resolve"
+          ],
+          "replay_filter": "bridge:31"
+        },
+        {
+          "case": 32,
+          "pair": [
+            "begin_claim",
+            "arrival"
+          ],
+          "replay_filter": "bridge:32"
+        },
+        {
+          "case": 33,
+          "pair": [
+            "begin_claim",
+            "restart"
+          ],
+          "replay_filter": "bridge:33"
+        },
+        {
+          "case": 34,
+          "pair": [
+            "begin_claim",
+            "rebind"
+          ],
+          "replay_filter": "bridge:34"
+        },
+        {
+          "case": 35,
+          "pair": [
+            "begin_claim",
+            "schedule"
+          ],
+          "replay_filter": "bridge:35"
+        },
+        {
+          "case": 36,
+          "pair": [
+            "begin_claim",
+            "begin_claim"
+          ],
+          "replay_filter": "bridge:36"
+        },
+        {
+          "case": 37,
+          "pair": [
+            "begin_claim",
+            "finish_empty"
+          ],
+          "replay_filter": "bridge:37"
+        },
+        {
+          "case": 38,
+          "pair": [
+            "begin_claim",
+            "finish_adopted"
+          ],
+          "replay_filter": "bridge:38"
+        },
+        {
+          "case": 39,
+          "pair": [
+            "begin_claim",
+            "resolve"
+          ],
+          "replay_filter": "bridge:39"
+        },
+        {
+          "case": 40,
+          "pair": [
+            "finish_empty",
+            "arrival"
+          ],
+          "replay_filter": "bridge:40"
+        },
+        {
+          "case": 41,
+          "pair": [
+            "finish_empty",
+            "restart"
+          ],
+          "replay_filter": "bridge:41"
+        },
+        {
+          "case": 42,
+          "pair": [
+            "finish_empty",
+            "rebind"
+          ],
+          "replay_filter": "bridge:42"
+        },
+        {
+          "case": 43,
+          "pair": [
+            "finish_empty",
+            "schedule"
+          ],
+          "replay_filter": "bridge:43"
+        },
+        {
+          "case": 44,
+          "pair": [
+            "finish_empty",
+            "begin_claim"
+          ],
+          "replay_filter": "bridge:44"
+        },
+        {
+          "case": 45,
+          "pair": [
+            "finish_empty",
+            "finish_empty"
+          ],
+          "replay_filter": "bridge:45"
+        },
+        {
+          "case": 46,
+          "pair": [
+            "finish_empty",
+            "finish_adopted"
+          ],
+          "replay_filter": "bridge:46"
+        },
+        {
+          "case": 47,
+          "pair": [
+            "finish_empty",
+            "resolve"
+          ],
+          "replay_filter": "bridge:47"
+        },
+        {
+          "case": 48,
+          "pair": [
+            "finish_adopted",
+            "arrival"
+          ],
+          "replay_filter": "bridge:48"
+        },
+        {
+          "case": 49,
+          "pair": [
+            "finish_adopted",
+            "restart"
+          ],
+          "replay_filter": "bridge:49"
+        },
+        {
+          "case": 50,
+          "pair": [
+            "finish_adopted",
+            "rebind"
+          ],
+          "replay_filter": "bridge:50"
+        },
+        {
+          "case": 51,
+          "pair": [
+            "finish_adopted",
+            "schedule"
+          ],
+          "replay_filter": "bridge:51"
+        },
+        {
+          "case": 52,
+          "pair": [
+            "finish_adopted",
+            "begin_claim"
+          ],
+          "replay_filter": "bridge:52"
+        },
+        {
+          "case": 53,
+          "pair": [
+            "finish_adopted",
+            "finish_empty"
+          ],
+          "replay_filter": "bridge:53"
+        },
+        {
+          "case": 54,
+          "pair": [
+            "finish_adopted",
+            "finish_adopted"
+          ],
+          "replay_filter": "bridge:54"
+        },
+        {
+          "case": 55,
+          "pair": [
+            "finish_adopted",
+            "resolve"
+          ],
+          "replay_filter": "bridge:55"
+        },
+        {
+          "case": 56,
+          "pair": [
+            "resolve",
+            "arrival"
+          ],
+          "replay_filter": "bridge:56"
+        },
+        {
+          "case": 57,
+          "pair": [
+            "resolve",
+            "restart"
+          ],
+          "replay_filter": "bridge:57"
+        },
+        {
+          "case": 58,
+          "pair": [
+            "resolve",
+            "rebind"
+          ],
+          "replay_filter": "bridge:58"
+        },
+        {
+          "case": 59,
+          "pair": [
+            "resolve",
+            "schedule"
+          ],
+          "replay_filter": "bridge:59"
+        },
+        {
+          "case": 60,
+          "pair": [
+            "resolve",
+            "begin_claim"
+          ],
+          "replay_filter": "bridge:60"
+        },
+        {
+          "case": 61,
+          "pair": [
+            "resolve",
+            "finish_empty"
+          ],
+          "replay_filter": "bridge:61"
+        },
+        {
+          "case": 62,
+          "pair": [
+            "resolve",
+            "finish_adopted"
+          ],
+          "replay_filter": "bridge:62"
+        },
+        {
+          "case": 63,
+          "pair": [
+            "resolve",
+            "resolve"
+          ],
+          "replay_filter": "bridge:63"
+        }
+      ],
+      "prefix": [
+        "receive_queue_arrival_1",
+        "schedule_exact_generation_wake",
+        "confirm_activation",
+        "begin_claim"
+      ],
+      "suffix": [
+        "finish_all_outstanding_claims_unproven",
+        "ensure_pending_input_and_active_wake",
+        "begin_older_claim",
+        "begin_newer_claim",
+        "finish_newer_claim_adopted",
+        "finish_older_claim_empty",
+        "reject_resolution_using_stale_empty",
+        "begin_fresh_claim",
+        "receive_new_arrival_before_claim_reply",
+        "finish_fresh_claim_empty",
+        "resolve_old_batch_leaving_new_input",
+        "rebind_next_generation",
+        "reject_old_resolution",
+        "reject_old_claim_context",
+        "restart",
+        "fair_schedule_empty_claim_resolve_until_pending_empty",
+        "restart_check_empty_pending_and_claims"
+      ]
+    }
+  },
+  "qualified_log": "cargo-test-02.log",
+  "qualified_result": {
+    "tests_passed": 2,
+    "broker_traces_passed": 64,
+    "bridge_traces_passed": 64,
+    "elapsed_seconds": 9.7,
+    "counterexamples": []
+  },
+  "checkout_head_when_recorded": "edcbc92372c9efc45c1a83c31f7d23d8ea11be64"
+}

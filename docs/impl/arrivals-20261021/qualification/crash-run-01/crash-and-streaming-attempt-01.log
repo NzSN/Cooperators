@@ -1,0 +1,36 @@
+   Compiling cooperators v0.1.0 (/home/nzsn/Repos/Cooperators/docs/impl/arrivals-20261021/qualification/crash-run-01/source-snapshot)
+error[E0425]: cannot find function `managed_hidden` in this scope
+   --> src/mcp.rs:572:23
+    |
+572 |         if managed && managed_hidden(tool_name) {
+    |                       ^^^^^^^^^^^^^^ not found in this scope
+
+error[E0425]: cannot find function `managed_hidden` in this scope
+   --> src/mcp.rs:541:34
+    |
+541 |             tools.retain(|tool| !managed_hidden(tool.name.as_ref()));
+    |                                  ^^^^^^^^^^^^^^ not found in this scope
+
+error[E0425]: cannot find function `schema_resolve_arrivals` in this scope
+    --> src/mcp.rs:542:146
+     |
+ 542 |             tools.push(Tool::new("coop_resolve_arrivals", "Record dispositions for the exact arrival batch in this managed wake.", schema_object(schema_resolve_arrivals())));
+     |                                                                                                                                                  ^^^^^^^^^^^^^^^^^^^^^^^
+...
+1075 | fn schema_subscribe_arrivals() -> Value {
+     | --------------------------------------- similarly named function `schema_subscribe_arrivals` defined here
+     |
+help: a function with a similar name exists
+     |
+ 542 -             tools.push(Tool::new("coop_resolve_arrivals", "Record dispositions for the exact arrival batch in this managed wake.", schema_object(schema_resolve_arrivals())));
+ 542 +             tools.push(Tool::new("coop_resolve_arrivals", "Record dispositions for the exact arrival batch in this managed wake.", schema_object(schema_subscribe_arrivals())));
+     |
+
+error[E0425]: cannot find function `schema_confirm_activation` in this scope
+   --> src/mcp.rs:543:154
+    |
+543 | ...ving its pending work.", schema_object(schema_confirm_activation())));
+    |                                           ^^^^^^^^^^^^^^^^^^^^^^^^^ not found in this scope
+
+For more information about this error, try `rustc --explain E0425`.
+error: could not compile `cooperators` (lib) due to 4 previous errors

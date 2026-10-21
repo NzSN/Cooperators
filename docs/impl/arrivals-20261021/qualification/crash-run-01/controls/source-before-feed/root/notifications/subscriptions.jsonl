@@ -1,0 +1,1 @@
+{"v":1,"seq":1,"prev_hash":"sha256:0000000000000000000000000000000000000000000000000000000000000000","kind":"subscription_created","agent_id":"01M5EJP8Q8MHDTCDMGANXZK7QG","subscription_id":"01M5EJP8QCKKPPYRP8ZXFNF9AY","request":{"client_key":"crash-plan","resource":{"type":"document","name":"plan"},"event_kinds":["doc.published","doc.updated"],"catch_up":false}}

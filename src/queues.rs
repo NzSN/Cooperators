@@ -14,10 +14,15 @@
 use std::collections::{BTreeSet, HashMap, HashSet};
 use std::fs;
 use std::path::{Path, PathBuf};
+use std::sync::Arc;
 
 use serde::{Deserialize, Serialize};
 use serde_json::Value;
 
+use crate::arrivals::{
+    ArrivalKind, ArrivalReference, ArrivalResource, ArrivalService, CatchUpSnapshot,
+    NotificationIntent, SourceCoordinate,
+};
 use crate::error::{BrokerError, ErrorCode};
 use crate::id;
 use crate::registry::AgentIdentity;
@@ -72,6 +77,9 @@ pub struct QueueEvent {
     pub history: Option<Vec<AttemptRecord>>,
     #[serde(default)]
     pub truncated_bytes: Option<u64>,
+    /// Recipients captured before enqueue/requeue commits.
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub notification_intent: Option<NotificationIntent>,
 }
 
 impl ChainRecord for QueueEvent {
@@ -184,6 +192,8 @@ pub(crate) struct QueueRuntime {
     pub created_seq: u64,
     pub created_at: String,
     pub tasks: HashMap<String, TaskState>,
+    /// Latest committed source boundary for a bounded current-state catch-up.
+    pub source: Option<SourceCoordinate>,
 }
 
 impl QueueRuntime {
@@ -192,6 +202,7 @@ impl QueueRuntime {
             created_seq: 0,
             created_at: String::new(),
             tasks: HashMap::new(),
+            source: None,
         }
     }
 
@@ -347,6 +358,7 @@ fn base_event(kind: &str, queue: &str) -> QueueEvent {
         reason: None,
         history: None,
         truncated_bytes: None,
+        notification_intent: None,
     }
 }
 
@@ -360,13 +372,19 @@ fn open_queue(
     validate_queue_name(queue)?;
     let path = queue_path(root, queue);
     let (mut log, report) =
-        LogFile::open_rotating(&path, rotation_bytes).map_err(BrokerError::from)?;
+        LogFile::<QueueEvent>::open_rotating(&path, rotation_bytes).map_err(BrokerError::from)?;
     let truncated_bytes = report.truncated_bytes;
     let last_valid_offset = report.last_valid_offset;
     let was_truncated = report.was_truncated();
     let mut runtime = QueueRuntime::empty();
-    for event in &report.records {
-        apply_event(&mut runtime, event)?;
+    for (index, event) in report.records.iter().enumerate() {
+        // The next verified hash link already identifies this record.
+        let source_hash = report
+            .records
+            .get(index + 1)
+            .map(|next| next.prev_hash.as_str())
+            .unwrap_or(&report.last_hash);
+        apply_event(&mut runtime, event, source_hash)?;
     }
     if was_truncated {
         let mut recovery = base_event("recovery", queue);
@@ -374,7 +392,8 @@ fn open_queue(
         recovery.reason = Some(format!(
             "truncated_bytes={truncated_bytes}, last_valid_offset={last_valid_offset}"
         ));
-        log.append(&mut recovery)?;
+        let receipt = log.append(&mut recovery)?;
+        apply_event(&mut runtime, &recovery, &receipt.hash)?;
     }
     Ok((log, runtime))
 }
@@ -444,7 +463,11 @@ pub(crate) fn load_all_queues(
     Ok((logs, states))
 }
 
-fn apply_event(runtime: &mut QueueRuntime, event: &QueueEvent) -> Result<(), BrokerError> {
+fn apply_event(
+    runtime: &mut QueueRuntime,
+    event: &QueueEvent,
+    source_hash: &str,
+) -> Result<(), BrokerError> {
     match event.kind.as_str() {
         "queue_created" => {
             if runtime.created_seq == 0 {
@@ -577,6 +600,12 @@ fn apply_event(runtime: &mut QueueRuntime, event: &QueueEvent) -> Result<(), Bro
             )))
         }
     }
+    runtime.source = Some(SourceCoordinate {
+        stream: "queue".to_string(),
+        name: event.queue.clone(),
+        seq: event.seq,
+        hash: source_hash.to_string(),
+    });
     Ok(())
 }
 
@@ -593,6 +622,8 @@ fn expire_queue_leases(
     runtime: &mut QueueRuntime,
     now_ms: u64,
     rotation_bytes: u64,
+    arrivals: Option<&Arc<ArrivalService>>,
+    notification_intent: Option<NotificationIntent>,
 ) -> Result<u64, BrokerError> {
     let expired: Vec<String> = runtime
         .tasks
@@ -628,6 +659,7 @@ fn expire_queue_leases(
             event
         } else {
             let mut event = base_event("task_requeued", queue);
+            event.notification_intent = notification_intent.clone();
             event.reason = Some("lease_expired".to_string());
             event.attempt = Some(next_attempt);
             event
@@ -641,8 +673,9 @@ fn expire_queue_leases(
         event.agent_name = Some(lease.agent_name.clone());
         event.expires_at_ms = Some(lease.expires_at_ms);
         event.lease_ttl_s = Some(lease.ttl_s);
-        log.append(&mut event)?;
-        apply_event(runtime, &event)?;
+        let receipt = log.append(&mut event)?;
+        announce_queue_commit(arrivals, queue, receipt.seq, &receipt.hash);
+        apply_event(runtime, &event, &receipt.hash)?;
         if dead {
             let record = DeadLetterRecord {
                 seq: 0,
@@ -661,6 +694,22 @@ fn expire_queue_leases(
         count += 1;
     }
     Ok(count)
+}
+
+fn announce_queue_commit(
+    arrivals: Option<&Arc<ArrivalService>>,
+    queue: &str,
+    seq: u64,
+    hash: &str,
+) {
+    if let Some(arrivals) = arrivals {
+        arrivals.source_committed(SourceCoordinate {
+            stream: "queue".to_string(),
+            name: queue.to_string(),
+            seq,
+            hash: hash.to_string(),
+        });
+    }
 }
 
 fn append_dead_letter(
@@ -744,6 +793,51 @@ fn project_missing_dead_letters(
 }
 
 impl DaemonState {
+    /// Captures at most one current-state hint while the caller holds
+    /// `send_lock`; an advisory count never reserves or selects a task.
+    pub(crate) async fn queue_arrival_snapshot(
+        &self,
+        queue: &str,
+    ) -> Result<Option<CatchUpSnapshot>, BrokerError> {
+        if !self.ensure_queue_loaded(queue).await? {
+            return Ok(None);
+        }
+        let states = self.queue_states.lock().await;
+        let Some(runtime) = states.get(queue) else {
+            return Ok(None);
+        };
+        let ready_count = runtime
+            .tasks
+            .values()
+            .filter(|task| task.phase == TaskPhase::Pending)
+            .count() as u64;
+        Ok(runtime.source.clone().map(|source| CatchUpSnapshot {
+            source,
+            resource: ArrivalReference::Queue {
+                name: queue.to_string(),
+                cause: "current".to_string(),
+                task_id: None,
+                ready_count: Some(ready_count),
+            },
+            kind: ArrivalKind::QueueTaskAvailable,
+        }))
+    }
+
+    fn capture_queue_arrival_routes(
+        &self,
+        queue: &str,
+    ) -> Result<Option<NotificationIntent>, BrokerError> {
+        match &self.arrivals {
+            Some(arrivals) => arrivals.capture_routes(
+                &ArrivalResource::Queue {
+                    name: queue.to_string(),
+                },
+                ArrivalKind::QueueTaskAvailable,
+            ),
+            None => Ok(None),
+        }
+    }
+
     /// Ensures a queue's log and replay state are loaded. Returns false when
     /// the queue does not exist.
     async fn ensure_queue_loaded(&self, queue: &str) -> Result<bool, BrokerError> {
@@ -782,7 +876,8 @@ impl DaemonState {
         let (mut log, mut runtime) = open_queue(&self.root, queue, self.config.log_rotation_bytes)?;
         let mut event = base_event("queue_created", queue);
         let receipt = log.append(&mut event)?;
-        apply_event(&mut runtime, &event)?;
+        announce_queue_commit(self.arrivals.as_ref(), &queue, receipt.seq, &receipt.hash);
+        apply_event(&mut runtime, &event, &receipt.hash)?;
         self.queues.lock().await.insert(queue.to_string(), log);
         self.queue_states
             .lock()
@@ -820,16 +915,18 @@ impl DaemonState {
             .get_mut(queue)
             .ok_or_else(|| BrokerError::internal("queue log vanished"))?;
         let mut event = base_event("task_enqueued", queue);
+        event.notification_intent = self.capture_queue_arrival_routes(queue)?;
         event.task_id = Some(task_id.clone());
         event.payload = Some(payload);
         event.max_attempts = Some(max_attempts);
         event.attempts = Some(0);
         let receipt = log.append(&mut event)?;
+        announce_queue_commit(self.arrivals.as_ref(), &queue, receipt.seq, &receipt.hash);
         let mut states = self.queue_states.lock().await;
         let runtime = states
             .get_mut(queue)
             .ok_or_else(|| BrokerError::internal("queue state vanished"))?;
-        apply_event(runtime, &event)?;
+        apply_event(runtime, &event, log.last_hash())?;
         Ok(EnqueueReceipt {
             queue: queue.to_string(),
             task_id,
@@ -876,6 +973,8 @@ impl DaemonState {
             runtime,
             now_ms,
             self.config.log_rotation_bytes,
+            self.arrivals.as_ref(),
+            self.capture_queue_arrival_routes(queue)?,
         )?;
 
         let task = runtime.pending_task().cloned().ok_or_else(|| {
@@ -900,7 +999,8 @@ impl DaemonState {
         event.expires_at_ms = Some(expires_at_ms);
         event.lease_ttl_s = Some(lease_ttl_s);
         let receipt = log.append(&mut event)?;
-        apply_event(runtime, &event)?;
+        announce_queue_commit(self.arrivals.as_ref(), &queue, receipt.seq, &receipt.hash);
+        apply_event(runtime, &event, log.last_hash())?;
         let fence = receipt.seq;
         let lease = runtime
             .tasks
@@ -949,6 +1049,8 @@ impl DaemonState {
             runtime,
             now_ms,
             self.config.log_rotation_bytes,
+            self.arrivals.as_ref(),
+            self.capture_queue_arrival_routes(queue)?,
         )?;
         let task = runtime
             .tasks
@@ -982,8 +1084,9 @@ impl DaemonState {
         event.agent_name = Some(lease.agent_name.clone());
         event.expires_at_ms = Some(expires_at_ms);
         event.lease_ttl_s = Some(lease.ttl_s);
-        log.append(&mut event)?;
-        apply_event(runtime, &event)?;
+        let receipt = log.append(&mut event)?;
+        announce_queue_commit(self.arrivals.as_ref(), &queue, receipt.seq, &receipt.hash);
+        apply_event(runtime, &event, &receipt.hash)?;
         Ok(RenewLeaseReceipt {
             lease_id: lease.lease_id,
             kind: "task".to_string(),
@@ -1023,6 +1126,8 @@ impl DaemonState {
             runtime,
             now_ms,
             self.config.log_rotation_bytes,
+            self.arrivals.as_ref(),
+            self.capture_queue_arrival_routes(&queue)?,
         )?;
         let task = runtime
             .tasks
@@ -1064,7 +1169,13 @@ impl DaemonState {
         event.outcome = Some(outcome.clone());
         event.receipt = receipt;
         let append_receipt = log.append(&mut event)?;
-        apply_event(runtime, &event)?;
+        announce_queue_commit(
+            self.arrivals.as_ref(),
+            &queue,
+            append_receipt.seq,
+            &append_receipt.hash,
+        );
+        apply_event(runtime, &event, log.last_hash())?;
         Ok(CompleteTaskReceipt {
             queue,
             task_id: task.task_id,
@@ -1109,6 +1220,8 @@ impl DaemonState {
             runtime,
             now_ms,
             self.config.log_rotation_bytes,
+            self.arrivals.as_ref(),
+            self.capture_queue_arrival_routes(&queue)?,
         )?;
         let task = runtime
             .tasks
@@ -1154,6 +1267,7 @@ impl DaemonState {
             event
         } else {
             let mut event = base_event("task_requeued", &queue);
+            event.notification_intent = self.capture_queue_arrival_routes(&queue)?;
             event.reason = Some(format!("failed: {reason}"));
             event.attempt = Some(next_attempt);
             event
@@ -1168,7 +1282,13 @@ impl DaemonState {
         event.expires_at_ms = Some(lease.expires_at_ms);
         event.lease_ttl_s = Some(lease.ttl_s);
         let append_receipt = log.append(&mut event)?;
-        apply_event(runtime, &event)?;
+        announce_queue_commit(
+            self.arrivals.as_ref(),
+            &queue,
+            append_receipt.seq,
+            &append_receipt.hash,
+        );
+        apply_event(runtime, &event, log.last_hash())?;
         let dead_letter_seq = if dead {
             Some(
                 append_dead_letter(
@@ -1248,6 +1368,8 @@ impl DaemonState {
                 runtime,
                 now_ms,
                 self.config.log_rotation_bytes,
+                self.arrivals.as_ref(),
+                self.capture_queue_arrival_routes(&queue)?,
             )?;
             project_missing_dead_letters(
                 &self.root,
@@ -1282,6 +1404,8 @@ impl DaemonState {
             runtime,
             u64::MAX,
             self.config.log_rotation_bytes,
+            self.arrivals.as_ref(),
+            self.capture_queue_arrival_routes(queue)?,
         )
     }
 }

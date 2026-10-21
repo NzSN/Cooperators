@@ -1,0 +1,12 @@
+
+running 7 tests
+test runner_surfaces_individual_approval_requests_and_retains_pending_notices ... ok
+test runner_reconciles_uncertain_acceptance_without_an_extra_submission ... ok
+test trusted_proxy_claim_context_authenticates_and_cannot_be_forged ... ok
+test restarted_receipt_loop_acks_replayed_cursor_before_waiting ... ok
+test inconsistent_empty_page_and_full_journal_withhold_ack_and_require_attention ... ok
+test runner_coalesces_busy_receipts_and_preserves_next_batch_and_exact_session ... ok
+test receipt_loop_syncs_local_journal_before_ack_and_retries_lost_ack ... ok
+
+test result: ok. 7 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 1.06s
+

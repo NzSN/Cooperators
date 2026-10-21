@@ -1,0 +1,15 @@
+{
+  "v": 2,
+  "required_features": [
+    "arrival_notifications_v1"
+  ],
+  "agents": {
+    "author": {
+      "agent_id": "01M5EJP6QNTTHQ43A01SWE2W6M",
+      "token_hash": "sha256:ea4e67ecf1f23aadfbdfd3fc7c5240fe6401c1246d2bac251bf393c01555985d",
+      "kind": "agent",
+      "capabilities": [],
+      "registered_at": "2026-10-21T06:34:28.469Z"
+    }
+  }
+}

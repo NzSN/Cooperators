@@ -1,0 +1,22 @@
+
+running 17 tests
+test full_receive_and_oversized_wake_preserve_all_due_notices ... ok
+test bounded_wakes_are_immutable_and_conflicting_resolutions_are_rejected ... ok
+test adopted_work_requires_continuation_and_keeps_the_hint_for_a_later_wake ... ok
+test binding_generation_fences_resolution_and_prevents_pending_redirection ... ok
+test confirmation_after_resolution_rejects_before_appending_an_invalid_journal_event ... ok
+test queue_empty_proof_cannot_cover_a_new_received_generation_or_another_wake ... ok
+test known_busy_time_pauses_observation_and_nonce_expiry ... ok
+test activation_challenges_enforce_purpose_expiry_and_reconnection ... ok
+test busy_permission_and_offline_do_not_discard_receipts_or_storm_wakes ... ok
+test adoption_and_uncertain_claim_invalidate_earlier_empty_proofs ... ok
+test canonical_lock_survives_release_and_rejects_duplicate_and_broker_paths ... ok
+test receipt_survives_restart_and_torn_tail_without_resetting_cursor ... ok
+test restart_keeps_unknown_in_flight_claims_fenced_until_exact_result_reconciles ... ok
+test unknown_host_acceptance_reconciles_same_wake_and_replays_after_restart ... ok
+test successful_transport_without_observation_exhausts_five_attempts ... ok
+test uncertain_receive_sync_withholds_a_receipt_until_actual_recovery ... ok
+test keyed_claim_admission_and_result_retries_are_durable_and_bounded ... ok
+
+test result: ok. 17 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.29s
+

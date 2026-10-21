@@ -24,6 +24,10 @@ use std::path::{Path, PathBuf};
 use serde::{Deserialize, Serialize};
 use serde_json::json;
 
+use crate::arrivals::{
+    ArrivalKind, ArrivalReference, ArrivalResource, CatchUpSnapshot, NotificationIntent,
+    SourceCoordinate,
+};
 use crate::envelope::Body;
 use crate::error::{BrokerError, ErrorCode};
 use crate::id;
@@ -74,6 +78,9 @@ pub struct DocEvent {
     pub reason: Option<String>,
     #[serde(default)]
     pub truncated_bytes: Option<u64>,
+    /// Recipients captured under the source mutation order, before commit.
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub notification_intent: Option<NotificationIntent>,
 }
 
 impl ChainRecord for DocEvent {
@@ -138,6 +145,8 @@ pub(crate) struct DocRuntime {
     pub claim: Option<DocClaim>,
     /// Latest claim/expiry/release sequence. A stale holder's fence is lower.
     pub fence: u64,
+    /// Pins the current immutable version to the record that published it.
+    pub arrival_snapshot: Option<CatchUpSnapshot>,
 }
 
 impl DocRuntime {
@@ -150,6 +159,7 @@ impl DocRuntime {
             updated_at: String::new(),
             claim: None,
             fence: 0,
+            arrival_snapshot: None,
         }
     }
 
@@ -306,6 +316,7 @@ fn base_event(kind: &str, doc: &str, identity: &AgentIdentity) -> DocEvent {
         lease_ttl_s: None,
         reason: None,
         truncated_bytes: None,
+        notification_intent: None,
     }
 }
 
@@ -387,13 +398,20 @@ fn open_doc(
     validate_doc_name(name)?;
     let path = doc_path(root, name);
     let (mut log, report) =
-        LogFile::open_rotating(&path, rotation_bytes).map_err(BrokerError::from)?;
+        LogFile::<DocEvent>::open_rotating(&path, rotation_bytes).map_err(BrokerError::from)?;
     let truncated_bytes = report.truncated_bytes;
     let last_valid_offset = report.last_valid_offset;
     let was_truncated = report.was_truncated();
     let mut runtime = DocRuntime::empty();
-    for event in &report.records {
-        apply_event(&mut runtime, event)?;
+    for (index, event) in report.records.iter().enumerate() {
+        // Replay already verified every hash. Reuse the following link (or
+        // committed head) rather than hashing retained bodies a second time.
+        let source_hash = report
+            .records
+            .get(index + 1)
+            .map(|next| next.prev_hash.as_str())
+            .unwrap_or(&report.last_hash);
+        apply_event(&mut runtime, event, source_hash)?;
     }
     if was_truncated {
         let mut recovery = base_event(
@@ -480,7 +498,11 @@ pub(crate) fn load_all_docs(
     Ok((logs, states))
 }
 
-fn apply_event(runtime: &mut DocRuntime, event: &DocEvent) -> Result<(), BrokerError> {
+fn apply_event(
+    runtime: &mut DocRuntime,
+    event: &DocEvent,
+    source_hash: &str,
+) -> Result<(), BrokerError> {
     match event.kind.as_str() {
         "doc_published" | "doc_updated" => {
             let version_number = event
@@ -502,6 +524,23 @@ fn apply_event(runtime: &mut DocRuntime, event: &DocEvent) -> Result<(), BrokerE
                 runtime.head = version_number;
                 runtime.title = event.title.clone().unwrap_or_default();
                 runtime.updated_at = event.ts.clone();
+                runtime.arrival_snapshot = Some(CatchUpSnapshot {
+                    source: SourceCoordinate {
+                        stream: "document".to_string(),
+                        name: event.doc.clone(),
+                        seq: event.seq,
+                        hash: source_hash.to_string(),
+                    },
+                    resource: ArrivalReference::Document {
+                        name: event.doc.clone(),
+                        version: version_number,
+                    },
+                    kind: if event.kind == "doc_published" {
+                        ArrivalKind::DocPublished
+                    } else {
+                        ArrivalKind::DocUpdated
+                    },
+                });
             }
             if runtime.created_seq == 0 && event.kind == "doc_published" {
                 runtime.created_seq = event.seq;
@@ -584,6 +623,50 @@ fn conflict_claimed(claim: &DocClaim, head_version: u64) -> BrokerError {
 }
 
 impl DaemonState {
+    /// Captures the current version while the caller holds `send_lock`.
+    /// Claim/release events do not change this immutable content reference.
+    pub(crate) async fn document_arrival_snapshot(
+        &self,
+        name: &str,
+    ) -> Result<Option<CatchUpSnapshot>, BrokerError> {
+        if !self.ensure_doc_loaded(name).await? {
+            return Ok(None);
+        }
+        Ok(self
+            .doc_states
+            .lock()
+            .await
+            .get(name)
+            .and_then(|runtime| runtime.arrival_snapshot.clone()))
+    }
+
+    fn capture_document_arrival_routes(
+        &self,
+        name: &str,
+        kind: ArrivalKind,
+    ) -> Result<Option<NotificationIntent>, BrokerError> {
+        match &self.arrivals {
+            Some(arrivals) => arrivals.capture_routes(
+                &ArrivalResource::Document {
+                    name: name.to_string(),
+                },
+                kind,
+            ),
+            None => Ok(None),
+        }
+    }
+
+    fn announce_document_commit(&self, name: &str, seq: u64, hash: &str) {
+        if let Some(arrivals) = &self.arrivals {
+            arrivals.source_committed(SourceCoordinate {
+                stream: "document".to_string(),
+                name: name.to_string(),
+                seq,
+                hash: hash.to_string(),
+            });
+        }
+    }
+
     async fn ensure_doc_loaded(&self, name: &str) -> Result<bool, BrokerError> {
         validate_doc_name(name)?;
         if self.doc_states.lock().await.contains_key(name) {
@@ -631,8 +714,9 @@ impl DaemonState {
         event.lease_ttl_s = Some(claim.ttl_s);
         event.reason = Some("lease_expired".to_string());
         event.version = Some(runtime.head);
-        log.append(&mut event)?;
-        apply_event(runtime, &event)?;
+        let receipt = log.append(&mut event)?;
+        self.announce_document_commit(&name, receipt.seq, &receipt.hash);
+        apply_event(runtime, &event, &receipt.hash)?;
         Ok(true)
     }
 
@@ -678,13 +762,16 @@ impl DaemonState {
         let body = Body::new(mime.to_string(), body.text);
         let (inline, blob, storage) = encode_body(&self.root, &body)?;
         let mut event = base_event("doc_published", name, identity);
+        event.notification_intent =
+            self.capture_document_arrival_routes(name, ArrivalKind::DocPublished)?;
         event.version = Some(1);
         event.title = Some(title.unwrap_or_default());
         event.mime = Some(mime.to_string());
         event.body = inline;
         event.blob = blob.clone();
         let receipt = log.append(&mut event)?;
-        apply_event(&mut runtime, &event)?;
+        self.announce_document_commit(&name, receipt.seq, &receipt.hash);
+        apply_event(&mut runtime, &event, &receipt.hash)?;
         self.docs.lock().await.insert(name.to_string(), log);
         self.doc_states
             .lock()
@@ -785,6 +872,8 @@ impl DaemonState {
         let previous_title = runtime.title.clone();
         let head = runtime.head;
         let mut event = base_event("doc_updated", name, identity);
+        event.notification_intent =
+            self.capture_document_arrival_routes(name, ArrivalKind::DocUpdated)?;
         event.version = Some(head + 1);
         event.previous_version = Some(head);
         event.title = Some(title.unwrap_or(previous_title));
@@ -796,7 +885,8 @@ impl DaemonState {
             event.fence = Some(claim.fence);
         }
         let receipt = log.append(&mut event)?;
-        apply_event(runtime, &event)?;
+        self.announce_document_commit(&name, receipt.seq, &receipt.hash);
+        apply_event(runtime, &event, &receipt.hash)?;
         Ok(DocWriteReceipt {
             name: name.to_string(),
             version: head + 1,
@@ -854,7 +944,8 @@ impl DaemonState {
         event.expires_at_ms = Some(expires_at_ms);
         event.lease_ttl_s = Some(lease_ttl_s);
         let receipt = log.append(&mut event)?;
-        apply_event(runtime, &event)?;
+        self.announce_document_commit(&name, receipt.seq, &receipt.hash);
+        apply_event(runtime, &event, &receipt.hash)?;
         Ok(ClaimDocReceipt {
             name: name.to_string(),
             lease_id,
@@ -897,8 +988,9 @@ impl DaemonState {
         event.lease_id = Some(claim.lease_id.clone());
         event.expires_at_ms = Some(expires_at_ms);
         event.lease_ttl_s = Some(claim.ttl_s);
-        log.append(&mut event)?;
-        apply_event(runtime, &event)?;
+        let receipt = log.append(&mut event)?;
+        self.announce_document_commit(&name, receipt.seq, &receipt.hash);
+        apply_event(runtime, &event, &receipt.hash)?;
         let new_claim = runtime
             .claim
             .clone()
@@ -957,7 +1049,8 @@ impl DaemonState {
         event.lease_id = Some(claim.lease_id.clone());
         event.fence = Some(claim.fence);
         let receipt = log.append(&mut event)?;
-        apply_event(runtime, &event)?;
+        self.announce_document_commit(&name, receipt.seq, &receipt.hash);
+        apply_event(runtime, &event, &receipt.hash)?;
         Ok(ReleaseDocReceipt {
             name,
             lease_id: claim.lease_id,

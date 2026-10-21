@@ -1,0 +1,21 @@
+{
+  "scope": "LogFile streaming regression controls, including rotating and nonrotating replay",
+  "passed": 7,
+  "failed": 0,
+  "feature": "mbt-injection",
+  "source_manifest": "../crash-run-01/source-freeze-02.json",
+  "source_snapshot": "../crash-run-01/source-snapshot-02",
+  "command": "../crash-run-01/command-02.json",
+  "log": "storage-streaming-frozen.log",
+  "source_test_sha256": "039202785160597bd6a88485ef1e08fec8e543dc5a92a286397043a4c62fe0ed",
+  "preliminary_current_tree_log": "storage-streaming-attempt-01.log",
+  "controls": [
+    "ordered replay and append position with active-segment offsets and chain heads",
+    "read-only missing stream creates no files or directories",
+    "read-only torn-tail inspection then active-tail repair preserving sealed files",
+    "missing newline recovery and subsequent append separation",
+    "invalid middle chain and corrupt sealed segment fatal without mutation",
+    "visitor error propagates without usable recovered handle",
+    "recovery sync failure after private visitation returns error, then real reopen recovers"
+  ]
+}

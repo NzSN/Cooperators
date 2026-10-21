@@ -1,0 +1,22 @@
+{
+  "COOP_PREUPGRADE_BINARY": "/tmp/cooperators-arrival-preupgrade-edcbc923/coop",
+  "COOP_REQUIRE_UDS": "1",
+  "command": [
+    "cargo",
+    "test",
+    "--offline",
+    "--locked",
+    "--lib",
+    "--bins",
+    "--tests",
+    "--features",
+    "mbt-injection"
+  ],
+  "elapsed_seconds": 71.93652367591858,
+  "exit_code": 101,
+  "failed": 2,
+  "ignored": 0,
+  "passed": 70,
+  "socket_skip_present": false,
+  "started_unix": 1792565528.2207174
+}

@@ -82,3 +82,18 @@ overall performance acceptance remains open. Retained failures, single-sender
 overhead, and distributed/client workload limits are part of the report.
 Other outstanding work is the modern MCP compatibility correction and full
 startup/replay performance.
+
+## Arrival notifications and managed hosts — 2026-10-21
+
+Implementation follows [design 0004](docs/design/0004-arrival-notifications-and-agent-activation.md).
+The broker now has an explicit V2 upgrade guard, source-embedded recipient
+intent, exact subscriptions with catch-up, a separate durable arrival feed,
+and replayable projection. The host bridge journals receipt before broker ACK,
+binds one identity to an exact provider session, and handles observations,
+resolutions, continuations and per-request approvals through private IPC.
+
+Managed Codex App Server and Claude duplex host-mode adapters and launcher are
+implemented. Deterministic protocol tests and scoped crash/fault gates have
+passed; real provider-session activation and the final aggregate qualification
+remain open. See the [implementation record](docs/impl/arrivals-20261021/README.md)
+for the accepted scope, results and remaining gates.

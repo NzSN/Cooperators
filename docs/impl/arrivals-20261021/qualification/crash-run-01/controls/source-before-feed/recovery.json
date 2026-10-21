@@ -1,0 +1,118 @@
+{
+  "complete_existing_feed_deduped_without_append": false,
+  "default_page": {
+    "acked_cursor": "arrival:01M5EJP8PW4EQX9XFNKH951B15:01M5EJP8Q8MHDTCDMGANXZK7QG:0",
+    "agent_id": "01M5EJP8Q8MHDTCDMGANXZK7QG",
+    "bus_id": "01M5EJP8PW4EQX9XFNKH951B15",
+    "next_cursor": "arrival:01M5EJP8PW4EQX9XFNKH951B15:01M5EJP8Q8MHDTCDMGANXZK7QG:1",
+    "notices": [
+      {
+        "delivery_id": "sha256:874bf00a80daaae14726510a2033fbf65bf0f3daf2d74b01fa68b9fb497b4d8e",
+        "kind": "doc.published",
+        "obligation": {
+          "hash": "sha256:a0af1ee55b6f56733fcde65df3bcc1983eae08525e7cb5fe84877d6cf2064d9e",
+          "id": "sha256:16af04866279fd9e19d0b2e8ad1ba0a8daaed9019b53ff532d68bbf3a904c18e",
+          "item_index": 0,
+          "journal_name": "plan",
+          "journal_type": "document",
+          "seq": 1
+        },
+        "prev_hash": "sha256:0000000000000000000000000000000000000000000000000000000000000000",
+        "recipient_agent_id": "01M5EJP8Q8MHDTCDMGANXZK7QG",
+        "resource": {
+          "name": "plan",
+          "type": "document",
+          "version": 1
+        },
+        "seq": 1,
+        "source": {
+          "hash": "sha256:a0af1ee55b6f56733fcde65df3bcc1983eae08525e7cb5fe84877d6cf2064d9e",
+          "name": "plan",
+          "seq": 1,
+          "stream": "document"
+        },
+        "subscription_ids": [
+          "01M5EJP8QCKKPPYRP8ZXFNF9AY"
+        ],
+        "v": 1
+      }
+    ],
+    "timed_out": false
+  },
+  "exact_delivery_count": true,
+  "feed_head": 1,
+  "feed_last_hash": "sha256:24f373903c649c7f978542d9223cfc06ff93f8fc16f075a28dda9841bf985354",
+  "historical_page": {
+    "acked_cursor": "arrival:01M5EJP8PW4EQX9XFNKH951B15:01M5EJP8Q8MHDTCDMGANXZK7QG:0",
+    "agent_id": "01M5EJP8Q8MHDTCDMGANXZK7QG",
+    "bus_id": "01M5EJP8PW4EQX9XFNKH951B15",
+    "next_cursor": "arrival:01M5EJP8PW4EQX9XFNKH951B15:01M5EJP8Q8MHDTCDMGANXZK7QG:1",
+    "notices": [
+      {
+        "delivery_id": "sha256:874bf00a80daaae14726510a2033fbf65bf0f3daf2d74b01fa68b9fb497b4d8e",
+        "kind": "doc.published",
+        "obligation": {
+          "hash": "sha256:a0af1ee55b6f56733fcde65df3bcc1983eae08525e7cb5fe84877d6cf2064d9e",
+          "id": "sha256:16af04866279fd9e19d0b2e8ad1ba0a8daaed9019b53ff532d68bbf3a904c18e",
+          "item_index": 0,
+          "journal_name": "plan",
+          "journal_type": "document",
+          "seq": 1
+        },
+        "prev_hash": "sha256:0000000000000000000000000000000000000000000000000000000000000000",
+        "recipient_agent_id": "01M5EJP8Q8MHDTCDMGANXZK7QG",
+        "resource": {
+          "name": "plan",
+          "type": "document",
+          "version": 1
+        },
+        "seq": 1,
+        "source": {
+          "hash": "sha256:a0af1ee55b6f56733fcde65df3bcc1983eae08525e7cb5fe84877d6cf2064d9e",
+          "name": "plan",
+          "seq": 1,
+          "stream": "document"
+        },
+        "subscription_ids": [
+          "01M5EJP8QCKKPPYRP8ZXFNF9AY"
+        ],
+        "v": 1
+      }
+    ],
+    "timed_out": false
+  },
+  "process_kill_only_not_power_loss": true,
+  "recovered_feed_records": [
+    {
+      "delivery_id": "sha256:874bf00a80daaae14726510a2033fbf65bf0f3daf2d74b01fa68b9fb497b4d8e",
+      "kind": "doc.published",
+      "obligation": {
+        "hash": "sha256:a0af1ee55b6f56733fcde65df3bcc1983eae08525e7cb5fe84877d6cf2064d9e",
+        "id": "sha256:16af04866279fd9e19d0b2e8ad1ba0a8daaed9019b53ff532d68bbf3a904c18e",
+        "item_index": 0,
+        "journal_name": "plan",
+        "journal_type": "document",
+        "seq": 1
+      },
+      "prev_hash": "sha256:0000000000000000000000000000000000000000000000000000000000000000",
+      "recipient_agent_id": "01M5EJP8Q8MHDTCDMGANXZK7QG",
+      "resource": {
+        "name": "plan",
+        "type": "document",
+        "version": 1
+      },
+      "seq": 1,
+      "source": {
+        "hash": "sha256:a0af1ee55b6f56733fcde65df3bcc1983eae08525e7cb5fe84877d6cf2064d9e",
+        "name": "plan",
+        "seq": 1,
+        "stream": "document"
+      },
+      "subscription_ids": [
+        "01M5EJP8QCKKPPYRP8ZXFNF9AY"
+      ],
+      "v": 1
+    }
+  ],
+  "source_bytes_preserved": true
+}

@@ -1,0 +1,182 @@
+{
+  "scope": "Unix process SIGKILL and reopen recovery; no power-loss or device-cache qualification",
+  "baseline_head": "edcbc92372c9efc45c1a83c31f7d23d8ea11be64",
+  "final_source_manifest": "source-freeze-02.json",
+  "final_source_snapshot": "source-snapshot-02",
+  "final_command": "command-02.json",
+  "attempts": [
+    {
+      "attempt": 1,
+      "exit_code": 101,
+      "status": "compile failed while snapshot captured concurrent incomplete MCP edits",
+      "log": "crash-and-streaming-attempt-01.log",
+      "source_manifest": "source-freeze.json",
+      "source_snapshot": "source-snapshot"
+    },
+    {
+      "attempt": 2,
+      "exit_code": 0,
+      "status": "passed",
+      "arrival_tests": 6,
+      "streaming_tests": 7,
+      "log": "crash-and-streaming-attempt-02.log"
+    }
+  ],
+  "actual_process_kill_controls": [
+    {
+      "mode": "source-before-feed",
+      "signal": 9,
+      "child_reaped": true,
+      "program_sha256": "2af8faa03d2ff3f689a0dde9642d1a7983cb37d8885aae1bf7a215ba8e051da9",
+      "bus_id": "01M5EJP8PW4EQX9XFNKH951B15",
+      "recipient_agent_id": "01M5EJP8Q8MHDTCDMGANXZK7QG",
+      "subscription_id": "01M5EJP8QCKKPPYRP8ZXFNF9AY",
+      "expected_delivery_ids": [
+        "sha256:874bf00a80daaae14726510a2033fbf65bf0f3daf2d74b01fa68b9fb497b4d8e"
+      ],
+      "feed_rows_before_kill": 0,
+      "feed_rows_after_recovery": 1,
+      "prior_ack_success": null,
+      "ack_success": null,
+      "recovered_acked_cursor": "arrival:01M5EJP8PW4EQX9XFNKH951B15:01M5EJP8Q8MHDTCDMGANXZK7QG:0",
+      "recovered_default_count": 1,
+      "historical_count": 1,
+      "hook": {
+        "bytes_requested": 0,
+        "bytes_written": 0,
+        "bytes_written_known": true,
+        "point": "BeforeRecordWrite",
+        "seq": null,
+        "stage": "Reached",
+        "sync_attempted": false,
+        "sync_succeeded": false
+      }
+    },
+    {
+      "mode": "feed-before-sync",
+      "signal": 9,
+      "child_reaped": true,
+      "program_sha256": "2af8faa03d2ff3f689a0dde9642d1a7983cb37d8885aae1bf7a215ba8e051da9",
+      "bus_id": "01M5EJPC9BJ841KBVXN9ZMQMKD",
+      "recipient_agent_id": "01M5EJPC9V5RHA4GW3MWDXE5VC",
+      "subscription_id": "01M5EJPCA0NDVCCQ05T3S7W78E",
+      "expected_delivery_ids": [
+        "sha256:ca820d3a569fdf5ce383650b9a8638457b2cbbfdf1fa265712c88e6dcca76eaa"
+      ],
+      "feed_rows_before_kill": 1,
+      "feed_rows_after_recovery": 1,
+      "prior_ack_success": null,
+      "ack_success": null,
+      "recovered_acked_cursor": "arrival:01M5EJPC9BJ841KBVXN9ZMQMKD:01M5EJPC9V5RHA4GW3MWDXE5VC:0",
+      "recovered_default_count": 1,
+      "historical_count": 1,
+      "hook": {
+        "bytes_requested": 750,
+        "bytes_written": 750,
+        "bytes_written_known": true,
+        "point": null,
+        "seq": 1,
+        "stage": "BeforeSync",
+        "sync_attempted": false,
+        "sync_succeeded": false
+      }
+    },
+    {
+      "mode": "ack-after-success",
+      "signal": 9,
+      "child_reaped": true,
+      "program_sha256": "2af8faa03d2ff3f689a0dde9642d1a7983cb37d8885aae1bf7a215ba8e051da9",
+      "bus_id": "01M5EJP6Y2WFXB6X5HW4PNFTXH",
+      "recipient_agent_id": "01M5EJP6YE2X9J1ZHDY40WGJ8K",
+      "subscription_id": "01M5EJP6YJBHQTW76AN7HZRXWN",
+      "expected_delivery_ids": [
+        "sha256:28e14190ead00c1a05f8e0efa175535f076a67e248f2c84069618f7a2fd631d8"
+      ],
+      "feed_rows_before_kill": 1,
+      "feed_rows_after_recovery": 1,
+      "prior_ack_success": {
+        "agent_id": "01M5EJP6YE2X9J1ZHDY40WGJ8K",
+        "bus_id": "01M5EJP6Y2WFXB6X5HW4PNFTXH",
+        "cursor": "arrival:01M5EJP6Y2WFXB6X5HW4PNFTXH:01M5EJP6YE2X9J1ZHDY40WGJ8K:1"
+      },
+      "ack_success": {
+        "agent_id": "01M5EJP6YE2X9J1ZHDY40WGJ8K",
+        "bus_id": "01M5EJP6Y2WFXB6X5HW4PNFTXH",
+        "cursor": "arrival:01M5EJP6Y2WFXB6X5HW4PNFTXH:01M5EJP6YE2X9J1ZHDY40WGJ8K:1"
+      },
+      "recovered_acked_cursor": "arrival:01M5EJP6Y2WFXB6X5HW4PNFTXH:01M5EJP6YE2X9J1ZHDY40WGJ8K:1",
+      "recovered_default_count": 0,
+      "historical_count": 1,
+      "hook": null
+    },
+    {
+      "mode": "ack-before-sync",
+      "signal": 9,
+      "child_reaped": true,
+      "program_sha256": "2af8faa03d2ff3f689a0dde9642d1a7983cb37d8885aae1bf7a215ba8e051da9",
+      "bus_id": "01M5EJPAHRPCMDN36FV1VCT0E0",
+      "recipient_agent_id": "01M5EJPAJ4JZE5SRNAQ9S9070T",
+      "subscription_id": "01M5EJPAJ71BWXVGW32KRMGWMW",
+      "expected_delivery_ids": [
+        "sha256:6b51fa29641017ef081ae8948d07bc647b2e2b4ebfdc0774bba4104770106b4f",
+        "sha256:93027e7393fc3aa0bd90971dbd2ced9721011677f752f10bbfd3be874a9c005e"
+      ],
+      "feed_rows_before_kill": 2,
+      "feed_rows_after_recovery": 2,
+      "prior_ack_success": {
+        "agent_id": "01M5EJPAJ4JZE5SRNAQ9S9070T",
+        "bus_id": "01M5EJPAHRPCMDN36FV1VCT0E0",
+        "cursor": "arrival:01M5EJPAHRPCMDN36FV1VCT0E0:01M5EJPAJ4JZE5SRNAQ9S9070T:1"
+      },
+      "ack_success": null,
+      "recovered_acked_cursor": "arrival:01M5EJPAHRPCMDN36FV1VCT0E0:01M5EJPAJ4JZE5SRNAQ9S9070T:2",
+      "recovered_default_count": 0,
+      "historical_count": 2,
+      "hook": {
+        "bytes_requested": 192,
+        "bytes_written": 192,
+        "bytes_written_known": true,
+        "point": null,
+        "seq": 2,
+        "stage": "BeforeSync",
+        "sync_attempted": false,
+        "sync_succeeded": false
+      }
+    }
+  ],
+  "preupgrade_guard": {
+    "passed": true,
+    "program": "/tmp/cooperators-arrival-preupgrade-edcbc923/coop",
+    "program_sha256": "32d5b650e8768407d297165eb350c295ab0b7aa0da14272fcee3948765383488",
+    "required_preserved_binary_sha256": "32d5b650e8768407d297165eb350c295ab0b7aa0da14272fcee3948765383488",
+    "exit_code": 1,
+    "stderr": "coop daemon: initialize daemon state: internal error: unsupported registry version 2 in /home/nzsn/Repos/Cooperators/docs/impl/arrivals-20261021/qualification/crash-run-01/controls/preupgrade-refusal/root/registry.json\n",
+    "source_files": [
+      {
+        "after_sha256": "aeec968648a520369524c0db69eb17cd163e33ee4dde74fa8d75008144c658ab",
+        "before_sha256": "aeec968648a520369524c0db69eb17cd163e33ee4dde74fa8d75008144c658ab",
+        "bytes": 491,
+        "identical": true,
+        "path": "docs/guard.jsonl"
+      },
+      {
+        "after_sha256": "4cfb92c3aea625a88436d8559e585d9d1553e079284f9ee1906bc61912da722c",
+        "before_sha256": "4cfb92c3aea625a88436d8559e585d9d1553e079284f9ee1906bc61912da722c",
+        "bytes": 19,
+        "identical": true,
+        "path": "queues/guard.jsonl"
+      },
+      {
+        "after_sha256": "4cfb92c3aea625a88436d8559e585d9d1553e079284f9ee1906bc61912da722c",
+        "before_sha256": "4cfb92c3aea625a88436d8559e585d9d1553e079284f9ee1906bc61912da722c",
+        "bytes": 19,
+        "identical": true,
+        "path": "agents/01M5EJP6QNTTHQ43A01SWE2W6M/inbox.jsonl"
+      }
+    ],
+    "registry_identical": true,
+    "no_socket_created": true,
+    "child_reaped": true
+  },
+  "plaintext_token_fields_in_runtime_evidence": []
+}

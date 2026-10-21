@@ -1,0 +1,36 @@
+   Compiling cooperators v0.1.0 (/home/nzsn/Repos/Cooperators)
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 14.24s
+     Running tests/host_bridge.rs (target/debug/deps/host_bridge-3cf29f741b55e43c)
+
+running 15 tests
+test full_receive_and_oversized_wake_preserve_all_due_notices ... ok
+test binding_generation_fences_resolution_and_prevents_pending_redirection ... ok
+test canonical_lock_survives_release_and_rejects_duplicate_and_broker_paths ... ok
+test adopted_work_requires_continuation_and_keeps_the_hint_for_a_later_wake ... ok
+test bounded_wakes_are_immutable_and_conflicting_resolutions_are_rejected ... ok
+test activation_challenges_enforce_purpose_expiry_and_reconnection ... ok
+test queue_empty_proof_cannot_cover_a_new_received_generation_or_another_wake ... ok
+test known_busy_time_pauses_observation_and_nonce_expiry ... ok
+test confirmation_after_resolution_rejects_before_appending_an_invalid_journal_event ... ok
+test busy_permission_and_offline_do_not_discard_receipts_or_storm_wakes ... ok
+test receipt_survives_restart_and_torn_tail_without_resetting_cursor ... ok
+test adoption_and_uncertain_claim_invalidate_earlier_empty_proofs ... ok
+test unknown_host_acceptance_reconciles_same_wake_and_replays_after_restart ... ok
+test uncertain_receive_sync_withholds_a_receipt_until_actual_recovery ... ok
+test successful_transport_without_observation_exhausts_five_attempts ... ok
+
+test result: ok. 15 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.09s
+
+     Running tests/host_runtime.rs (target/debug/deps/host_runtime-3ad0edf83bc17edd)
+
+running 7 tests
+test runner_surfaces_individual_approval_requests_and_retains_pending_notices ... ok
+test restarted_receipt_loop_acks_replayed_cursor_before_waiting ... ok
+test runner_reconciles_uncertain_acceptance_without_an_extra_submission ... ok
+test trusted_proxy_claim_context_authenticates_and_cannot_be_forged ... ok
+test inconsistent_empty_page_and_full_journal_withhold_ack_and_require_attention ... ok
+test runner_coalesces_busy_receipts_and_preserves_next_batch_and_exact_session ... ok
+test receipt_loop_syncs_local_journal_before_ack_and_retries_lost_ack ... ok
+
+test result: ok. 7 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 1.02s
+

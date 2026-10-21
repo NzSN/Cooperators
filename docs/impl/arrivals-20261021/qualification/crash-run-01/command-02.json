@@ -1,0 +1,25 @@
+{
+  "cwd": "/home/nzsn/Repos/Cooperators",
+  "argv": [
+    "cargo",
+    "test",
+    "--offline",
+    "--locked",
+    "--manifest-path",
+    "/home/nzsn/Repos/Cooperators/docs/impl/arrivals-20261021/qualification/crash-run-01/source-snapshot-02/Cargo.toml",
+    "--features",
+    "mbt-injection",
+    "--test",
+    "arrival_crash",
+    "--test",
+    "storage_streaming",
+    "--",
+    "--nocapture",
+    "--test-threads=1"
+  ],
+  "environment": {
+    "CARGO_TARGET_DIR": "/home/nzsn/Repos/Cooperators/target",
+    "COOP_ARRIVAL_CRASH_EVIDENCE_DIR": "/home/nzsn/Repos/Cooperators/docs/impl/arrivals-20261021/qualification/crash-run-01/controls",
+    "COOP_PREUPGRADE_BINARY": "/tmp/cooperators-arrival-preupgrade-edcbc923/coop"
+  }
+}

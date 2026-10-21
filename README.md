@@ -13,6 +13,10 @@ replay results are in the [2026-10-20 acceptance baseline](docs/impl/acceptance-
 The subsequent [durable inbox group-commit report](docs/impl/throughput-20261020/README.md)
 records the implementation, correctness qualification, shared-inbox throughput
 gains, and remaining performance target misses.
+The [arrival notification and agent activation design](docs/design/0004-arrival-notifications-and-agent-activation.md)
+is implemented behind an explicit root upgrade. Its
+[implementation record](docs/impl/arrivals-20261021/README.md) distinguishes
+broker/bridge checks from pending real provider-session qualification.
 
 ## What v1 provides
 
@@ -21,8 +25,11 @@ gains, and remaining performance target misses.
 - Channels with replayable cursors.
 - Work queues with leases, fencing tokens, retries, and dead letters.
 - Versioned documents with compare-and-swap updates and exclusive edit leases.
-- 23 MCP tools prefixed `coop_*`, exposed identically over stdio and
+- 28 MCP tools prefixed `coop_*`, exposed identically over ordinary stdio and
   streamable HTTP.
+- Optional durable document/queue arrival subscriptions, separate peek/ACK
+  feeds, and managed Codex/Claude host bridges. Managed sessions expose local
+  activation/resolve tools and reserve feed consumption for their bridge.
 - Per-inbox backpressure, `/healthz`, and bearer-protected Prometheus
   `/metrics` on the HTTP listener.
 

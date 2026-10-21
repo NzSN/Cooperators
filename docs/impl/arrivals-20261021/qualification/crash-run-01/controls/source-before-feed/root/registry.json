@@ -1,0 +1,22 @@
+{
+  "v": 2,
+  "required_features": [
+    "arrival_notifications_v1"
+  ],
+  "agents": {
+    "author": {
+      "agent_id": "01M5EJP8Q4AYF39VXPW4D3QA0G",
+      "token_hash": "sha256:ed96a12fb3a59c2ab53005841d2a26a9327059ddc1ca20b7c9428e33eb519cd4",
+      "kind": "agent",
+      "capabilities": [],
+      "registered_at": "2026-10-21T06:34:30.500Z"
+    },
+    "recipient": {
+      "agent_id": "01M5EJP8Q8MHDTCDMGANXZK7QG",
+      "token_hash": "sha256:c26e6278d63c048702a105afc9ac43925dd6e4ae6956c2648c12da13fb9853ef",
+      "kind": "agent",
+      "capabilities": [],
+      "registered_at": "2026-10-21T06:34:30.504Z"
+    }
+  }
+}

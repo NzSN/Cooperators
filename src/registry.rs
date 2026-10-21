@@ -23,8 +23,14 @@ use crate::id;
 use crate::server::DaemonState;
 use crate::storage::sha256_hex;
 
-/// On-disk registry schema version.
+/// Original on-disk registry schema version, retained for disabled roots.
 pub const REGISTRY_VERSION: u16 = 1;
+
+/// Registry format that fences binaries unable to hash annotated source events.
+pub const ARRIVALS_REGISTRY_VERSION: u16 = 2;
+
+/// Required feature understood by this binary.
+pub const ARRIVALS_REQUIRED_FEATURE: &str = "arrival_notifications_v1";
 
 /// File name of the registry below the bus root.
 pub const REGISTRY_FILE: &str = "registry.json";
@@ -108,6 +114,8 @@ pub struct AgentMetadata {
 #[derive(Debug, Serialize, Deserialize)]
 struct RegistryFile {
     v: u16,
+    #[serde(default, skip_serializing_if = "Vec::is_empty")]
+    required_features: Vec<String>,
     #[serde(default)]
     agents: BTreeMap<String, AgentRecord>,
     #[serde(default, skip_serializing_if = "BTreeSet::is_empty")]
@@ -118,6 +126,11 @@ struct RegistryFile {
 #[derive(Debug)]
 pub struct Registry {
     path: PathBuf,
+    format_version: u16,
+    required_features: Vec<String>,
+    /// Any uncertain activation I/O requires reopening, even when replacement
+    /// of the registry may already have succeeded.
+    activation_fenced: bool,
     agents: BTreeMap<String, AgentRecord>,
     /// token digest -> name
     tokens: HashMap<String, String>,
@@ -133,25 +146,55 @@ impl Registry {
     /// when the file does not exist.
     pub fn load(root: &Path) -> Result<Self, BrokerError> {
         let path = root.join(REGISTRY_FILE);
-        let (agents, revoked_token_hashes) = match fs::read(&path) {
-            Ok(bytes) => {
-                let file: RegistryFile = serde_json::from_slice(&bytes).map_err(|error| {
-                    BrokerError::internal(format!("invalid {}: {error}", path.display()))
-                })?;
-                if file.v != REGISTRY_VERSION {
-                    return Err(BrokerError::internal(format!(
-                        "unsupported registry version {} in {}",
+        let (format_version, required_features, agents, revoked_token_hashes) =
+            match fs::read(&path) {
+                Ok(bytes) => {
+                    let file: RegistryFile = serde_json::from_slice(&bytes).map_err(|error| {
+                        BrokerError::internal(format!("invalid {}: {error}", path.display()))
+                    })?;
+                    if file.v != REGISTRY_VERSION && file.v != ARRIVALS_REGISTRY_VERSION {
+                        return Err(BrokerError::internal(format!(
+                            "unsupported registry version {} in {}",
+                            file.v,
+                            path.display()
+                        )));
+                    }
+                    for feature in &file.required_features {
+                        if feature != ARRIVALS_REQUIRED_FEATURE {
+                            return Err(BrokerError::internal(format!(
+                                "unsupported required registry feature {feature:?} in {}",
+                                path.display()
+                            )));
+                        }
+                    }
+                    let arrivals_required = file
+                        .required_features
+                        .iter()
+                        .any(|feature| feature == ARRIVALS_REQUIRED_FEATURE);
+                    if (file.v == REGISTRY_VERSION && !file.required_features.is_empty())
+                        || (file.v == ARRIVALS_REGISTRY_VERSION && !arrivals_required)
+                    {
+                        return Err(BrokerError::internal(format!(
+                            "registry version {} has incompatible required_features in {}",
+                            file.v,
+                            path.display()
+                        )));
+                    }
+                    (
                         file.v,
-                        path.display()
-                    )));
+                        file.required_features,
+                        file.agents,
+                        file.revoked_token_hashes,
+                    )
                 }
-                (file.agents, file.revoked_token_hashes)
-            }
-            Err(error) if error.kind() == io::ErrorKind::NotFound => {
-                (BTreeMap::new(), BTreeSet::new())
-            }
-            Err(error) => return Err(error.into()),
-        };
+                Err(error) if error.kind() == io::ErrorKind::NotFound => (
+                    REGISTRY_VERSION,
+                    Vec::new(),
+                    BTreeMap::new(),
+                    BTreeSet::new(),
+                ),
+                Err(error) => return Err(error.into()),
+            };
 
         if path.exists() {
             let metadata = fs::metadata(&path)?;
@@ -162,6 +205,9 @@ impl Registry {
 
         let mut registry = Self {
             path,
+            format_version,
+            required_features,
+            activation_fenced: false,
             agents,
             tokens: HashMap::new(),
             ids: HashMap::new(),
@@ -170,6 +216,68 @@ impl Registry {
         };
         registry.reindex()?;
         Ok(registry)
+    }
+
+    /// Loaded format, preserved by registration, rotation and retirement.
+    pub fn format_version(&self) -> u16 {
+        self.format_version
+    }
+
+    pub fn required_features(&self) -> &[String] {
+        &self.required_features
+    }
+
+    pub fn arrivals_enabled(&self) -> bool {
+        self.format_version == ARRIVALS_REGISTRY_VERSION
+            && self
+                .required_features
+                .iter()
+                .any(|feature| feature == ARRIVALS_REQUIRED_FEATURE)
+    }
+
+    /// Retired identities remain reserved and terminate arrival obligations.
+    pub fn retired_agent_ids(&self) -> BTreeSet<String> {
+        self.agents
+            .values()
+            .filter(|record| record.retired)
+            .map(|record| record.agent_id.clone())
+            .collect()
+    }
+
+    pub(crate) fn check_activation_ready(&self) -> Result<(), BrokerError> {
+        if self.activation_fenced {
+            return Err(BrokerError::internal(
+                "arrival activation requires registry reopen after uncertain I/O",
+            ));
+        }
+        Ok(())
+    }
+
+    pub(crate) fn root_path(&self) -> &Path {
+        self.path.parent().unwrap_or_else(|| Path::new("."))
+    }
+
+    pub(crate) fn fence_activation(&mut self) {
+        self.activation_fenced = true;
+    }
+
+    /// Called only after stable metadata and its directory entries are synced.
+    /// On failure preserve the new format in memory and keep the fence: an
+    /// unsuccessful directory sync does not prove rename failed.
+    pub(crate) fn promote_arrivals(&mut self) -> Result<(), BrokerError> {
+        self.activation_fenced = true;
+        self.format_version = ARRIVALS_REGISTRY_VERSION;
+        if !self
+            .required_features
+            .iter()
+            .any(|feature| feature == ARRIVALS_REQUIRED_FEATURE)
+        {
+            self.required_features
+                .push(ARRIVALS_REQUIRED_FEATURE.to_string());
+        }
+        self.write_snapshot()?;
+        self.activation_fenced = false;
+        Ok(())
     }
 
     /// Number of registered agents.
@@ -224,6 +332,7 @@ impl Registry {
         capabilities: Option<Vec<String>>,
         old_token: Option<&str>,
     ) -> Result<Registration, BrokerError> {
+        self.check_activation_ready()?;
         validate_name(&name)?;
         if self.ids.contains_key(&name) {
             return Err(BrokerError::application(
@@ -323,6 +432,7 @@ impl Registry {
         display_name: String,
         capabilities: Option<Vec<String>>,
     ) -> Result<Enrollment, BrokerError> {
+        self.check_activation_ready()?;
         validate_launch_key(&launch_key)?;
         validate_kind(&kind)?;
         validate_name(&display_name)?;
@@ -389,6 +499,7 @@ impl Registry {
     /// Permanently retires the authenticated identity. Its ID, alias, launch
     /// association and all revoked credential hashes remain reserved on disk.
     pub fn retire(&mut self, token: &str) -> Result<AgentMetadata, BrokerError> {
+        self.check_activation_ready()?;
         let identity = self.authenticate(token).ok_or_else(|| {
             BrokerError::application(ErrorCode::Unauthenticated, "invalid agent token")
         })?;
@@ -490,6 +601,11 @@ impl Registry {
     }
 
     fn save(&self) -> Result<(), BrokerError> {
+        self.check_activation_ready()?;
+        self.write_snapshot()
+    }
+
+    fn write_snapshot(&self) -> Result<(), BrokerError> {
         let parent = self.path.parent().unwrap_or_else(|| Path::new("."));
         fs::create_dir_all(parent)?;
         let sequence = TEMP_COUNTER.fetch_add(1, Ordering::Relaxed);
@@ -500,7 +616,8 @@ impl Registry {
             sequence
         ));
         let file = RegistryFile {
-            v: REGISTRY_VERSION,
+            v: self.format_version,
+            required_features: self.required_features.clone(),
             agents: self.agents.clone(),
             revoked_token_hashes: self.revoked_token_hashes.clone(),
         };
@@ -556,7 +673,12 @@ impl DaemonState {
 
     /// Revokes a credential and permanently reserves its instance identity.
     pub async fn retire_agent(&self, token: &str) -> Result<AgentMetadata, BrokerError> {
-        self.registry.write().await.retire(token)
+        let _serial = self.send_lock.lock().await;
+        let metadata = self.registry.write().await.retire(token)?;
+        if let Some(arrivals) = &self.arrivals {
+            arrivals.retire_agent(&metadata.agent_id);
+        }
+        Ok(metadata)
     }
 
     /// Reads canonical instance metadata without returning any secret.

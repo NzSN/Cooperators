@@ -1,0 +1,15 @@
+   Compiling cooperators v0.1.0 (/home/nzsn/Repos/Cooperators)
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 10.78s
+     Running tests/arrival_sources.rs (target/debug/deps/arrival_sources-dd5f62f44bec07a5)
+
+running 7 tests
+test historical_document_and_queue_hashes_omit_absent_intent ... ok
+test disabled_source_writes_keep_the_historical_shape ... ok
+test queue_intent_covers_enqueue_failure_and_forced_expiry_without_granting_ownership ... ok
+test uncertain_subscription_commit_fences_document_and_queue_arrivals_until_reopen ... ok
+test queue_catch_up_is_one_current_hint_and_empty_queues_have_none ... ok
+test document_intent_is_immutable_and_catch_up_pins_content_across_replay ... ok
+test on_demand_and_sweeper_expiry_capture_queue_arrival_routes ... ok
+
+test result: ok. 7 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 1.31s
+

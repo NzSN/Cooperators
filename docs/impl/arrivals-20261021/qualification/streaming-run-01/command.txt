@@ -1,0 +1,1 @@
+cargo test --offline --locked --features mbt-injection --test storage_streaming -- --nocapture --test-threads=1

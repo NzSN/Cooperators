@@ -1,0 +1,32 @@
+   Compiling cooperators v0.1.0 (/home/nzsn/Repos/Cooperators)
+warning: unused import: `ResolveArrivalsRequest`
+  --> src/host_control.rs:25:58
+   |
+25 |     ClaimAttempt, ClaimResult, ConfirmActivationRequest, ResolveArrivalsRequest, SharedHostBridge,
+   |                                                          ^^^^^^^^^^^^^^^^^^^^^^
+   |
+   = note: `#[warn(unused_imports)]` (part of `#[warn(unused)]`) on by default
+
+warning: `cooperators` (lib) generated 1 warning (run `cargo fix --lib -p cooperators` to apply 1 suggestion)
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 13.72s
+     Running tests/host_adapters.rs (target/debug/deps/host_adapters-f13161b52adeaeb3)
+
+running 15 tests
+test claude_permission_before_echo_remains_reconcilable_without_resubmission ... ok
+test claude_uses_persistent_host_mode_exact_session_and_explicit_approval ... ok
+test codex_reconciliation_does_not_treat_unrelated_turn_as_wake_acceptance ... ok
+test claude_wrong_session_and_stale_generation_never_get_a_second_wake ... ok
+test claude_new_session_uses_bound_uuid_without_resume_or_fork ... ok
+test codex_approval_is_retained_until_operator_answers_that_request ... ok
+test codex_bootstrap_creates_exact_thread_without_a_model_turn_and_reaps_child ... ok
+test codex_initializes_exact_thread_and_fences_binding_and_generation ... ok
+test codex_busy_state_never_starts_or_steers_a_turn ... ok
+test codex_wrong_thread_workspace_and_malformed_stream_fail_closed ... ok
+test codex_bootstrap_and_resume_failure_reap_children ... ok
+test oversized_or_invalid_runtime_frames_stop_further_submissions ... ok
+test claude_never_claims_unknown_write_or_restart_as_acceptance ... ok
+test codex_lost_response_reconciles_exact_wake_from_history_after_restart ... ok
+test codex_approval_survives_timeout_and_bounded_diagnostic_overflow ... ok
+
+test result: ok. 15 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 1.12s
+

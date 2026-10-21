@@ -1,0 +1,2 @@
+{"seq":1,"prev_hash":"sha256:0000000000000000000000000000000000000000000000000000000000000000","ts":"2026-10-21T06:34:28.476Z","kind":"doc_published","doc":"guard","version":1,"previous_version":null,"actor_id":"01M5EJP6QNTTHQ43A01SWE2W6M","actor_name":"author","title":"","mime":"text/plain","body":{"mime":"text/plain","text":"preserve source bytes"},"blob":null,"lease_id":null,"fence":null,"expires_at_ms":null,"lease_ttl_s":null,"reason":null,"truncated_bytes":null}
+{"torn_guard_tail":

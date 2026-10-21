@@ -1,0 +1,17 @@
+    Blocking waiting for file lock on artifact directory
+   Compiling cooperators v0.1.0 (/home/nzsn/Repos/Cooperators)
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 4.68s
+     Running tests/arrival_service.rs (target/debug/deps/arrival_service-110a3bf84489c32f)
+
+running 8 tests
+test limits_reject_excess_subscriptions_and_matching_recipients_before_commit ... ok
+test client_keys_are_identity_scoped_durable_and_never_recreate_catchup ... ok
+test cursors_are_independent_bound_to_bus_and_identity_and_cannot_skip_head ... ok
+test route_capture_survives_unsubscribe_and_retirement_is_terminal ... ok
+test catchup_watermark_never_suppresses_earlier_live_source_obligations ... ok
+test full_feed_does_not_block_healthy_recipient_or_reorder_source ... ok
+test source_scan_stops_at_validated_committed_head_and_handles_rotation ... ok
+test replay_recovers_source_to_feed_gap_and_dedupes_after_ack ... ok
+
+test result: ok. 8 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 1.10s
+

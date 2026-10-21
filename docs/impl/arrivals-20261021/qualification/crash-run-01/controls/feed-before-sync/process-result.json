@@ -1,0 +1,17 @@
+{
+  "arguments": [
+    "--exact",
+    "arrival_crash_child",
+    "--nocapture",
+    "--test-threads=1"
+  ],
+  "child_reaped": true,
+  "exit_code": null,
+  "exit_status": "signal: 9 (SIGKILL)",
+  "mode": "feed-before-sync",
+  "pid": 713,
+  "program": "/home/nzsn/Repos/Cooperators/target/debug/deps/arrival_crash-9b313d16a961a4ab",
+  "program_sha256": "2af8faa03d2ff3f689a0dde9642d1a7983cb37d8885aae1bf7a215ba8e051da9",
+  "signal": 9,
+  "success": false
+}

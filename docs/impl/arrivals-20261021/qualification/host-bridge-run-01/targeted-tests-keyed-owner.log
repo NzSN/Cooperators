@@ -1,0 +1,13 @@
+   Compiling cooperators v0.1.0 (/home/nzsn/Repos/Cooperators)
+error[E0583]: file not found for module `host_cli`
+  --> src/main.rs:13:1
+   |
+13 | mod host_cli;
+   | ^^^^^^^^^^^^^
+   |
+   = help: to create the module `host_cli`, create file "src/host_cli.rs" or "src/host_cli/mod.rs"
+   = note: if there is a `mod host_cli` elsewhere in the crate already, import it with `use crate::...` instead
+
+For more information about this error, try `rustc --explain E0583`.
+error: could not compile `cooperators` (bin "coop") due to 1 previous error
+warning: build failed, waiting for other jobs to finish...

@@ -51,6 +51,8 @@ use tower_service::Service;
 
 use crate::client::{self, ClientError};
 use crate::error::ErrorCode;
+use crate::host::ClaimResult;
+use crate::host_control::HostControlClient;
 use crate::rpc::{self, RpcError, RpcRequest, RpcResponse};
 use crate::server::{self, ConnectionSession, DaemonState};
 use crate::VERSION;
@@ -223,6 +225,36 @@ pub const TOOL_SPECS: &[ToolSpec] = &[
         description: "Return daemon version, pid, uptime, root, and per-log sequence heads.",
         schema: schema_get_status,
     },
+    ToolSpec {
+        tool: "coop_subscribe_arrivals",
+        method: "subscribe_arrivals",
+        description: "Subscribe this identity to durable document or queue arrivals, with optional current-state catch-up.",
+        schema: schema_subscribe_arrivals,
+    },
+    ToolSpec {
+        tool: "coop_unsubscribe_arrivals",
+        method: "unsubscribe_arrivals",
+        description: "Remove a subscription for future events; already committed arrivals remain due.",
+        schema: schema_unsubscribe_arrivals,
+    },
+    ToolSpec {
+        tool: "coop_list_arrival_subscriptions",
+        method: "list_arrival_subscriptions",
+        description: "List this identity's arrival subscriptions and stable bus identity.",
+        schema: schema_heartbeat,
+    },
+    ToolSpec {
+        tool: "coop_wait_arrivals",
+        method: "wait_arrivals",
+        description: "Long-poll the separate arrival feed without advancing its durable acknowledgment cursor.",
+        schema: schema_wait_arrivals,
+    },
+    ToolSpec {
+        tool: "coop_ack_arrivals",
+        method: "ack_arrivals",
+        description: "Durably acknowledge this identity's arrival feed through a bound cursor.",
+        schema: schema_ack,
+    },
 ];
 
 /// Finds the tool spec for an MCP tool name.
@@ -254,6 +286,43 @@ fn schema_object(value: Value) -> JsonObject {
         Value::Object(object) => object,
         other => panic!("tool schema must be a JSON object, got {other}"),
     }
+}
+
+fn managed_hidden(tool: &str) -> bool {
+    matches!(
+        tool,
+        "coop_wait_arrivals" | "coop_ack_arrivals" | "coop_register_agent" | "coop_retire_agent"
+    )
+}
+
+fn schema_resolve_arrivals() -> Value {
+    json!({
+        "type":"object",
+        "properties":{
+            "wake_id":{"type":"string","minLength":1},
+            "generation":{"type":"integer","minimum":1},
+            "decisions":{"type":"array","maxItems":64,"items":{
+                "type":"object","properties":{
+                    "delivery_id":{"type":"string","minLength":1},
+                    "disposition":{"type":"string","enum":["document_read","document_superseded","queue_drained","work_adopted"]},
+                    "newer_version":{"type":"integer","minimum":1},
+                    "policy":{"type":"string"},"task_id":{"type":"string"}
+                },"required":["delivery_id","disposition"],"additionalProperties":false
+            }},
+            "continuation":{"type":"boolean","default":true}
+        },"required":["wake_id","generation","decisions"],"additionalProperties":false
+    })
+}
+
+fn schema_confirm_activation() -> Value {
+    json!({
+        "type":"object","properties":{
+            "binding_id":{"type":"string","minLength":1},
+            "generation":{"type":"integer","minimum":1},
+            "nonce":{"type":"string","minLength":1},
+            "wake_id":{"type":["string","null"]}
+        },"required":["binding_id","generation","nonce"],"additionalProperties":false
+    })
 }
 
 // ---------------------------------------------------------------------------
@@ -313,7 +382,7 @@ impl Backend {
 
 fn deadline_for(method: &str, params: &Value) -> Duration {
     let seconds = match method {
-        "wait_message" => params
+        "wait_message" | "wait_arrivals" => params
             .get("timeout_s")
             .and_then(Value::as_u64)
             .unwrap_or(30)
@@ -415,6 +484,7 @@ pub struct CoopMcpHandler {
     auth: AuthMode,
     /// Per-call serialized-argument cap, applied to stdio calls.
     max_message_bytes: usize,
+    host_control: Option<HostControlClient>,
 }
 
 impl CoopMcpHandler {
@@ -467,6 +537,7 @@ impl CoopMcpHandler {
             token: Arc::new(RwLock::new(token)),
             auth: AuthMode::Captured,
             max_message_bytes,
+            host_control: None,
         }
     }
 
@@ -477,7 +548,52 @@ impl CoopMcpHandler {
             token: Arc::new(RwLock::new(None)),
             auth: AuthMode::HttpHeader,
             max_message_bytes: usize::MAX,
+            host_control: None,
         }
+    }
+
+    /// Managed stdio preserves the enrolled identity and sends observation/
+    /// resolution to the bridge process through its launch-scoped IPC socket.
+    pub async fn managed_stdio(
+        backend: Backend,
+        token: String,
+        control: HostControlClient,
+    ) -> Result<Self, RpcError> {
+        let metadata = backend
+            .call("instance_metadata", json!({"token":token}))
+            .await?;
+        let subscriptions = backend
+            .call("list_arrival_subscriptions", json!({"token":token}))
+            .await?;
+        if metadata["agent_id"].as_str() != Some(control.agent_id())
+            || subscriptions["bus_id"].as_str() != Some(control.bus_id())
+            || subscriptions["agent_id"].as_str() != Some(control.agent_id())
+        {
+            return Err(RpcError::invalid_params(
+                "managed MCP credential does not match its bridge binding",
+            ));
+        }
+        let mut handler = Self::stdio(backend, Some(token));
+        handler.host_control = Some(control);
+        Ok(handler)
+    }
+
+    fn visible_catalog(&self) -> Vec<Tool> {
+        let mut tools = cached_tool_catalog().to_vec();
+        if self.host_control.is_some() {
+            tools.retain(|tool| !managed_hidden(tool.name.as_ref()));
+            tools.push(Tool::new(
+                "coop_resolve_arrivals",
+                "Record dispositions for the exact arrival batch in this managed wake.",
+                schema_object(schema_resolve_arrivals()),
+            ));
+            tools.push(Tool::new(
+                "coop_confirm_activation",
+                "Confirm this binding's activation nonce without resolving its pending work.",
+                schema_object(schema_confirm_activation()),
+            ));
+        }
+        tools
     }
 
     /// Current captured token (stdio mode).
@@ -503,14 +619,33 @@ impl CoopMcpHandler {
         arguments: Option<JsonObject>,
         http_token: Option<String>,
     ) -> CallToolResponse {
-        let Some(spec) = spec_for_tool(tool_name) else {
+        let managed = self.host_control.is_some();
+        if managed && managed_hidden(tool_name) {
+            return tool_error(
+                rpc::METHOD_NOT_FOUND,
+                "tool is owned by the managed host",
+                "METHOD_NOT_FOUND",
+            )
+            .into();
+        }
+        let local_method = if managed {
+            match tool_name {
+                "coop_resolve_arrivals" => Some("resolve"),
+                "coop_confirm_activation" => Some("confirm"),
+                _ => None,
+            }
+        } else {
+            None
+        };
+        let spec = spec_for_tool(tool_name);
+        if spec.is_none() && local_method.is_none() {
             return tool_error(
                 rpc::METHOD_NOT_FOUND,
                 format!("tool not found: {tool_name}"),
                 "METHOD_NOT_FOUND",
             )
             .into();
-        };
+        }
 
         let token = match self.auth {
             AuthMode::Captured => self.token.read().await.clone(),
@@ -538,13 +673,85 @@ impl CoopMcpHandler {
         }
 
         let mut params = Value::Object(arguments);
+        if let Some(method) = local_method {
+            return match self
+                .host_control
+                .as_ref()
+                .expect("managed mode")
+                .call(method, params)
+                .await
+            {
+                Ok(value) => CallToolResult::structured(value).into(),
+                Err(error) => {
+                    CallToolResult::structured_error(canonical_error(&error.into_rpc_error()))
+                        .into()
+                }
+            };
+        }
+        let spec = spec.expect("known broker tool");
         if let Some(token) = token {
             if let Value::Object(map) = &mut params {
-                map.entry("token").or_insert(Value::String(token));
+                if managed {
+                    map.insert("token".into(), Value::String(token));
+                } else {
+                    map.entry("token").or_insert(Value::String(token));
+                }
             }
         }
 
-        match self.backend.call(spec.method, params).await {
+        let queue = params
+            .get("queue")
+            .and_then(Value::as_str)
+            .map(str::to_owned);
+        let claim_context = if spec.method == "claim_task" {
+            if let (Some(control), Some(queue)) = (&self.host_control, &queue) {
+                match control.call("begin_claim", json!({"queue":queue})).await {
+                    Ok(context) => Some(context),
+                    Err(error) => {
+                        return CallToolResult::structured_error(canonical_error(
+                            &error.into_rpc_error(),
+                        ))
+                        .into()
+                    }
+                }
+            } else {
+                None
+            }
+        } else {
+            None
+        };
+        let result = self.backend.call(spec.method, params).await;
+        if let (Some(control), Some(context), Some(queue)) = (
+            &self.host_control,
+            claim_context.filter(|value| !value.is_null()),
+            queue,
+        ) {
+            let outcome = match &result {
+                Ok(value) => value
+                    .pointer("/task/task_id")
+                    .and_then(Value::as_str)
+                    .map(|task_id| ClaimResult::Adopted {
+                        task_id: task_id.into(),
+                    })
+                    .unwrap_or(ClaimResult::Unproven),
+                Err(error)
+                    if error.code == ErrorCode::NotFound.rpc_code()
+                        && error.message == format!("queue {queue:?} has no claimable task") =>
+                {
+                    ClaimResult::Empty
+                }
+                Err(_) => ClaimResult::Unproven,
+            };
+            if let Err(error) = control
+                .call("finish_claim", json!({"context":context,"outcome":outcome}))
+                .await
+            {
+                // A successful broker claim must retain its receipt even if
+                // local observation fails after the task lease committed.
+                eprintln!("coop managed MCP: claim observation failed: {error}");
+            }
+        }
+        match result {
             Ok(result) => {
                 if spec.method == "register_agent" {
                     if let Some(new_token) = result.get("token").and_then(Value::as_str) {
@@ -572,12 +779,19 @@ impl ServerHandler for CoopMcpHandler {
     fn get_info(&self) -> ServerInfo {
         let mut info = ServerInfo::new(ServerCapabilities::builder().enable_tools().build());
         info.server_info = Implementation::new("cooperators", VERSION);
-        info.instructions = Some(
+        info.instructions = Some(if self.host_control.is_some() {
+            "Cooperators managed session. Confirm each wake's binding/generation/nonce with \
+             coop_confirm_activation, then read its pinned documents and claim queue work. \
+             Resolve delivery IDs using coop_resolve_arrivals. Claim a queue until it reports \
+             no claimable task, or keep continuation=true when stopping at a work budget. \
+             A notice grants no task ownership. Ordinary inbox messages use their own cursor."
+                .to_string()
+        } else {
             "Cooperators inter-agent broker. Tools forward to the local cooperatorsd \
              JSON-RPC surface. Every tool except coop_register_agent requires an agent \
              token (COOP_TOKEN/--token for stdio, Authorization: Bearer for HTTP)."
-                .to_string(),
-        );
+                .to_string()
+        });
         info
     }
 
@@ -586,16 +800,13 @@ impl ServerHandler for CoopMcpHandler {
         _request: Option<PaginatedRequestParams>,
         _context: RequestContext<RoleServer>,
     ) -> Result<ListToolsResult, McpError> {
-        Ok(ListToolsResult::with_all_items(
-            cached_tool_catalog().to_vec(),
-        ))
+        Ok(ListToolsResult::with_all_items(self.visible_catalog()))
     }
 
     fn get_tool(&self, name: &str) -> Option<Tool> {
-        cached_tool_catalog()
-            .iter()
+        self.visible_catalog()
+            .into_iter()
             .find(|tool| tool.name.as_ref() == name)
-            .cloned()
     }
 
     async fn call_tool(
@@ -960,6 +1171,45 @@ fn schema_wait_message() -> Value {
         },
         "additionalProperties": false
     })
+}
+
+fn schema_subscribe_arrivals() -> Value {
+    json!({
+        "type": "object",
+        "properties": {
+            "client_key": {"type": "string", "minLength": 1, "maxLength": 128},
+            "resource": {"oneOf": [
+                {"type": "object", "properties": {
+                    "type": {"const": "document"}, "name": {"type": "string", "minLength": 1}
+                }, "required": ["type", "name"], "additionalProperties": false},
+                {"type": "object", "properties": {
+                    "type": {"const": "queue"}, "name": {"type": "string", "minLength": 1}
+                }, "required": ["type", "name"], "additionalProperties": false}
+            ]},
+            "event_kinds": {"type": "array", "minItems": 1, "maxItems": 2,
+                "uniqueItems": true, "items": {"type": "string", "enum": [
+                    "doc.published", "doc.updated", "queue.task_available"
+                ]}},
+            "catch_up": {"type": "boolean", "default": true}
+        },
+        "required": ["client_key", "resource", "event_kinds"],
+        "additionalProperties": false
+    })
+}
+
+fn schema_unsubscribe_arrivals() -> Value {
+    json!({
+        "type": "object",
+        "properties": {"subscription_id": {"type": "string", "minLength": 1}},
+        "required": ["subscription_id"],
+        "additionalProperties": false
+    })
+}
+
+fn schema_wait_arrivals() -> Value {
+    let mut schema = schema_wait_message();
+    schema["properties"]["limit"] = json!({"type": "integer", "minimum": 1, "maximum": 64});
+    schema
 }
 
 fn schema_ack() -> Value {

@@ -1,0 +1,152 @@
+   Compiling cooperators v0.1.0 (/home/nzsn/Repos/Cooperators)
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 38.73s
+     Running unittests src/lib.rs (target/debug/deps/cooperators-1055665b3bb76ef8)
+
+running 9 tests
+test id::tests::rfc3339_format_is_stable ... ok
+test id::tests::generated_ulids_are_valid ... ok
+test id::tests::ulid_time_encoding_matches_spec_vector ... ok
+test registry::tests::token_hash_is_sha256_and_tokens_are_128_bits ... ok
+test server::tests::ndjson_request_response_framing_over_an_in_process_stream ... ok
+test server::tests::notifications_produce_no_response ... ok
+test server::tests::dispatch_handles_ping_echo_and_unknown_methods ... ok
+test server::tests::status_reports_identity_and_an_empty_head_map ... ok
+test registry::tests::registry_roundtrip_keeps_only_token_hashes ... ok
+
+test result: ok. 9 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.01s
+
+     Running unittests src/main.rs (target/debug/deps/coop-08293c786d76e464)
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running tests/arrival_crash.rs (target/debug/deps/arrival_crash-90691e864b5008d4)
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running tests/arrival_faults.rs (target/debug/deps/arrival_faults-dec57fa609102063)
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running tests/arrival_migration.rs (target/debug/deps/arrival_migration-caf6b8b2c2a13d42)
+
+running 10 tests
+test wire_defaults_and_kind_names_match_the_arrival_contract ... ok
+test stable_id_tuples_are_versioned_unambiguous_and_scope_every_coordinate ... ok
+test historical_source_hashes_omit_absent_notification_intent ... ok
+test v2_missing_or_incompatible_metadata_fails_without_replacing_it ... ok
+test unknown_required_features_and_invalid_format_combinations_fail_early ... ok
+test disabled_root_keeps_v1_without_notification_artifacts ... ok
+test metadata_before_v2_is_reused_without_changing_bus_identity ... ok
+test directory_failure_also_requires_reopen_and_does_not_promote ... ok
+test promotion_failure_fences_retry_and_mutations_until_real_reopen ... ok
+test promotion_preserves_identities_and_all_following_saves_preserve_v2 ... ok
+
+test result: ok. 10 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.03s
+
+     Running tests/arrival_model.rs (target/debug/deps/arrival_model-41e642f2d0955099)
+
+running 2 tests
+test generated_bridge_pairs_preserve_generations_claims_and_new_arrivals ... ok
+test generated_broker_pairs_preserve_intent_feeds_and_ack_boundaries ... ok
+
+test result: ok. 2 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 5.36s
+
+     Running tests/arrival_service.rs (target/debug/deps/arrival_service-110a3bf84489c32f)
+
+running 9 tests
+test limits_reject_excess_subscriptions_and_matching_recipients_before_commit ... ok
+test client_keys_are_identity_scoped_durable_and_never_recreate_catchup ... ok
+test route_capture_survives_unsubscribe_and_retirement_is_terminal ... ok
+test cursors_are_independent_bound_to_bus_and_identity_and_cannot_skip_head ... ok
+test catchup_watermark_never_suppresses_earlier_live_source_obligations ... ok
+test full_feed_does_not_block_healthy_recipient_or_reorder_source ... ok
+test source_scan_stops_at_validated_committed_head_and_handles_rotation ... ok
+test replay_recovers_source_to_feed_gap_and_dedupes_after_ack ... ok
+test sparse_feed_pages_recover_rotated_history_and_resume_from_old_anchor ... ok
+
+test result: ok. 9 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.85s
+
+     Running tests/arrival_sources.rs (target/debug/deps/arrival_sources-ef01e96a563ada1c)
+
+running 6 tests
+test historical_document_and_queue_hashes_omit_absent_intent ... ok
+test disabled_source_writes_keep_the_historical_shape ... ok
+test queue_intent_covers_enqueue_failure_and_forced_expiry_without_granting_ownership ... ok
+test queue_catch_up_is_one_current_hint_and_empty_queues_have_none ... ok
+test document_intent_is_immutable_and_catch_up_pins_content_across_replay ... ok
+test on_demand_and_sweeper_expiry_capture_queue_arrival_routes ... ok
+
+test result: ok. 6 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 1.21s
+
+     Running tests/batch_crash.rs (target/debug/deps/batch_crash-dc784b21868b8008)
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running tests/enrollment_retry.rs (target/debug/deps/enrollment_retry-5e0877596efa1604)
+
+running 1 test
+test lost_enrollment_reply_retries_same_key_and_keeps_one_durable_identity ... ok
+
+test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.04s
+
+     Running tests/envelope.rs (target/debug/deps/envelope-d0b6a7fe1c639341)
+
+running 4 tests
+test envelope_serde_roundtrip_preserves_every_design_field ... ok
+test new_envelope_has_ulid_timestamp_and_genesis_link ... ok
+test optional_fields_accept_absence_and_serialize_as_null ... ok
+test validation_rejects_draft_and_malformed_records ... ok
+
+test result: ok. 4 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running tests/error.rs (target/debug/deps/error-557fe0f0719ed6cf)
+
+running 1 test
+test taxonomy_maps_to_distinct_server_reserved_jsonrpc_codes ... ok
+
+test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running tests/host_adapters.rs (target/debug/deps/host_adapters-f13161b52adeaeb3)
+
+running 15 tests
+test codex_busy_state_never_starts_or_steers_a_turn ... ok
+test codex_initializes_exact_thread_and_fences_binding_and_generation ... ok
+test codex_bootstrap_creates_exact_thread_without_a_model_turn_and_reaps_child ... ok
+test claude_uses_persistent_host_mode_exact_session_and_explicit_approval ... ok
+test claude_permission_before_echo_remains_reconcilable_without_resubmission ... ok
+test claude_new_session_uses_bound_uuid_without_resume_or_fork ... ok
+test codex_approval_is_retained_until_operator_answers_that_request ... ok
+test claude_wrong_session_and_stale_generation_never_get_a_second_wake ... FAILED
+test codex_reconciliation_does_not_treat_unrelated_turn_as_wake_acceptance ... ok
+test codex_wrong_thread_workspace_and_malformed_stream_fail_closed ... ok
+test codex_bootstrap_and_resume_failure_reap_children ... ok
+test oversized_or_invalid_runtime_frames_stop_further_submissions ... ok
+test claude_never_claims_unknown_write_or_restart_as_acceptance ... ok
+test codex_lost_response_reconciles_exact_wake_from_history_after_restart ... ok
+test codex_approval_survives_timeout_and_bounded_diagnostic_overflow ... ok
+
+failures:
+
+---- claude_wrong_session_and_stale_generation_never_get_a_second_wake stdout ----
+
+thread 'claude_wrong_session_and_stale_generation_never_get_a_second_wake' (53825) panicked at tests/host_adapters.rs:727:5:
+assertion `left == right` failed
+  left: WaitingForPermission
+ right: Offline
+note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
+
+
+failures:
+    claude_wrong_session_and_stale_generation_never_get_a_second_wake
+
+test result: FAILED. 14 passed; 1 failed; 0 ignored; 0 measured; 0 filtered out; finished in 1.12s
+
+error: test failed, to rerun pass `--test host_adapters`

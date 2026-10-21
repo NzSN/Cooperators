@@ -38,6 +38,10 @@ use tokio::io::{AsyncBufReadExt, AsyncRead, AsyncWrite, AsyncWriteExt, BufReader
 use tokio::net::{UnixListener, UnixStream};
 use tokio::sync::{Mutex, RwLock};
 
+use crate::arrivals::{
+    self, ArrivalLimits, ArrivalService, SourceCoordinate,
+    SubscribeArrivalsRequest,
+};
 use crate::channels::ChannelLog;
 use crate::docs::{self, DocEvent, DocRuntime};
 use crate::envelope::Body;
@@ -55,7 +59,7 @@ use crate::storage::LogFile;
 use crate::VERSION;
 
 /// Methods that require a valid agent token.
-const AUTHENTICATED_METHODS: [&str; 19] = [
+const AUTHENTICATED_METHODS: [&str; 24] = [
     "send_message",
     "wait_message",
     "ack",
@@ -75,6 +79,11 @@ const AUTHENTICATED_METHODS: [&str; 19] = [
     "release_doc",
     "read_doc",
     "list_docs",
+    "subscribe_arrivals",
+    "unsubscribe_arrivals",
+    "list_arrival_subscriptions",
+    "wait_arrivals",
+    "ack_arrivals",
 ];
 
 /// Default per-inbox pending-message limit (design §9/§10).
@@ -121,6 +130,10 @@ pub struct DaemonConfig {
     /// Maximum serialized-size upper bound for requests waiting in one writer
     /// queue, excluding the active batch.
     pub write_queue_bytes: u64,
+    /// Opt in to the irreversible arrival-capable root format upgrade.
+    pub enable_arrivals: bool,
+    /// Separate arrival subscription/feed bounds.
+    pub arrival_limits: ArrivalLimits,
 }
 
 impl DaemonConfig {
@@ -142,6 +155,8 @@ impl DaemonConfig {
             write_batch_delay: Duration::from_micros(250),
             write_queue_messages: 1024,
             write_queue_bytes: 8 * 1024 * 1024,
+            enable_arrivals: false,
+            arrival_limits: ArrivalLimits::default(),
         }
     }
 }
@@ -159,7 +174,8 @@ pub struct DaemonState {
     pub(crate) registry: RwLock<Registry>,
     pub(crate) presence: Mutex<Presence>,
     pub(crate) inboxes: Arc<InboxStore>,
-    pub(crate) send_lock: Mutex<()>,
+    pub(crate) arrivals: Option<Arc<ArrivalService>>,
+    pub(crate) send_lock: Arc<Mutex<()>>,
     pub(crate) channel_logs: Mutex<HashMap<String, ChannelLog>>,
     /// Open queue logs, one per queue name (design §7).
     pub(crate) queues: Mutex<HashMap<String, LogFile<QueueEvent>>>,
@@ -182,6 +198,10 @@ impl DaemonState {
         let lease = Arc::new(acquire_root_lease(&config.root)?);
         let mut state = Self::with_config(config)?;
         state.inboxes.set_owner(Arc::clone(&lease));
+        if let Some(arrivals) = &state.arrivals {
+            arrivals.set_owner(Arc::clone(&lease));
+            arrivals.start_projection();
+        }
         state._root_lease = Some(lease);
         Ok(state)
     }
@@ -199,7 +219,21 @@ impl DaemonState {
     /// the `#presence` channel before returning.
     pub fn with_config(config: DaemonConfig) -> Result<Self, BrokerError> {
         paths::ensure_layout(&config.root)?;
-        let registry = Registry::load(&config.root)?;
+        let mut registry = Registry::load(&config.root)?;
+        // Validate/activate the format guard before any log recovery can repair
+        // source files containing fields that an older binary cannot hash.
+        let arrival_meta =
+            arrivals::migration::prepare(&config.root, &mut registry, config.enable_arrivals)?;
+        let arrivals = arrival_meta
+            .map(|meta| {
+                ArrivalService::open(
+                    &config.root,
+                    meta,
+                    config.arrival_limits.clone(),
+                    registry.retired_agent_ids(),
+                )
+            })
+            .transpose()?;
         let (mut inboxes, dedupe) = messaging::load_all_inboxes(&config.root)?;
         for record in registry.records() {
             if !inboxes.contains_key(&record.agent_id) {
@@ -220,6 +254,25 @@ impl DaemonState {
             queues::load_all_queues(&config.root, config.log_rotation_bytes)?;
         let (docs, doc_states) = docs::load_all_docs(&config.root, config.log_rotation_bytes)?;
 
+        if let Some(arrivals) = &arrivals {
+            for (name, log) in &queues {
+                arrivals.register_source_head(SourceCoordinate {
+                    stream: "queue".into(),
+                    name: name.clone(),
+                    seq: log.seq_head(),
+                    hash: log.last_hash().into(),
+                });
+            }
+            for (name, log) in &docs {
+                arrivals.register_source_head(SourceCoordinate {
+                    stream: "document".into(),
+                    name: name.clone(),
+                    seq: log.seq_head(),
+                    hash: log.last_hash().into(),
+                });
+            }
+        }
+
         let mut presence = Presence::default();
         let now_ms = id::unix_millis();
         for (name, record) in registry.records_with_names() {
@@ -235,7 +288,8 @@ impl DaemonState {
             registry: RwLock::new(registry),
             presence: Mutex::new(presence),
             inboxes,
-            send_lock: Mutex::new(()),
+            arrivals,
+            send_lock: Arc::new(Mutex::new(())),
             channel_logs: Mutex::new(channel_logs),
             queues: Mutex::new(queues),
             queue_states: Mutex::new(queue_states),
@@ -374,12 +428,15 @@ pub fn bind(root: &Path) -> io::Result<(UnixListener, PathBuf)> {
 pub struct ServerOptions {
     /// Streamable-HTTP MCP listen address; `None` disables the endpoint.
     pub http_addr: Option<SocketAddr>,
+    /// Explicitly activate durable arrival notifications for this root.
+    pub enable_arrivals: bool,
 }
 
 impl Default for ServerOptions {
     fn default() -> Self {
         Self {
             http_addr: crate::mcp::DEFAULT_HTTP_ADDR.parse().ok(),
+            enable_arrivals: false,
         }
     }
 }
@@ -394,7 +451,8 @@ pub async fn run(root: &Path) -> io::Result<()> {
 /// The HTTP listener is best-effort: a port already in use degrades the
 /// daemon to UDS-only instead of taking the broker down.
 pub async fn run_with_options(root: &Path, options: ServerOptions) -> io::Result<()> {
-    let config = DaemonConfig::new(root.to_path_buf());
+    let mut config = DaemonConfig::new(root.to_path_buf());
+    config.enable_arrivals = options.enable_arrivals;
     let state = Arc::new(DaemonState::owned(config).map_err(|error| match error {
         BrokerError::Io(error) => error,
         error => io::Error::other(format!("initialize daemon state: {error}")),
@@ -431,7 +489,12 @@ pub async fn run_with_options(root: &Path, options: ServerOptions) -> io::Result
         state.set_http_listener(false);
     }
 
-    serve(listener, state).await
+    let result = serve(listener, Arc::clone(&state)).await;
+    state
+        .shutdown_arrivals()
+        .await
+        .map_err(|error| io::Error::other(format!("shutdown arrival writers: {error}")))?;
+    result
 }
 
 /// Accepts connections and spawns one task per client.
@@ -579,6 +642,59 @@ async fn route(
                         .await
                         .map_err(BrokerError::into_rpc_error)?;
                     to_value(receipt)
+                }
+                "subscribe_arrivals" => {
+                    let params: SubscribeArrivalsRequest = parse_params(&request.params)?;
+                    to_value(
+                        state
+                            .subscribe_arrivals(&identity, params)
+                            .await
+                            .map_err(BrokerError::into_rpc_error)?,
+                    )
+                }
+                "unsubscribe_arrivals" => {
+                    let params: UnsubscribeArrivalsParams = parse_params(&request.params)?;
+                    to_value(
+                        state
+                            .unsubscribe_arrivals(&identity, params.subscription_id)
+                            .await
+                            .map_err(BrokerError::into_rpc_error)?,
+                    )
+                }
+                "list_arrival_subscriptions" => to_value(
+                    state
+                        .list_arrival_subscriptions(&identity)
+                        .await
+                        .map_err(BrokerError::into_rpc_error)?,
+                ),
+                "wait_arrivals" => {
+                    let params: WaitArrivalsParams = parse_params(&request.params)?;
+                    let timeout_s = params.timeout_s.unwrap_or(30);
+                    if timeout_s > 600 {
+                        return Err(RpcError::invalid_params(
+                            "timeout_s must be at most 600 seconds",
+                        ));
+                    }
+                    to_value(
+                        state
+                            .wait_arrivals(
+                                &identity,
+                                params.cursor.as_deref(),
+                                Duration::from_secs(timeout_s),
+                                params.limit.unwrap_or(64),
+                            )
+                            .await
+                            .map_err(BrokerError::into_rpc_error)?,
+                    )
+                }
+                "ack_arrivals" => {
+                    let params: AckParams = parse_params(&request.params)?;
+                    to_value(
+                        state
+                            .ack_arrivals(&identity, params.cursor)
+                            .await
+                            .map_err(BrokerError::into_rpc_error)?,
+                    )
                 }
                 "heartbeat" => {
                     let heartbeat = state
@@ -886,6 +1002,21 @@ struct WaitParams {
 #[derive(Debug, Deserialize)]
 struct AckParams {
     cursor: String,
+}
+
+#[derive(Debug, Deserialize)]
+struct UnsubscribeArrivalsParams {
+    subscription_id: String,
+}
+
+#[derive(Debug, Deserialize)]
+struct WaitArrivalsParams {
+    #[serde(default)]
+    cursor: Option<String>,
+    #[serde(default)]
+    timeout_s: Option<u64>,
+    #[serde(default)]
+    limit: Option<usize>,
 }
 
 #[derive(Debug, Deserialize)]
