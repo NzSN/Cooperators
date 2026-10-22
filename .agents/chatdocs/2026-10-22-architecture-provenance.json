@@ -1,0 +1,63 @@
+{
+  "document": "2026-10-22-architecture.html",
+  "title": "Architecture of the Cooperators broker",
+  "date": "2026-10-22",
+  "type": "architecture description",
+  "basis": "direct source inspection and retained qualification evidence",
+  "source_commit": "3bb638dc559cf11846f0e12eb46359f823b164f1",
+  "previous_edition": "2026-10-21-architecture.html",
+  "sources": [
+    "src/lib.rs",
+    "src/server.rs",
+    "src/inbox_writer.rs",
+    "src/arrivals/mod.rs",
+    "src/host/adapters.rs",
+    "src/host_cli.rs",
+    "src/mcp.rs",
+    "src/paths.rs",
+    "tests/host_adapters.rs",
+    "docs/design/0001-cooperatorsd-broker.md",
+    "docs/design/0003-durable-inbox-group-commit.md",
+    "docs/design/0004-arrival-notifications-and-agent-activation.md",
+    "docs/impl/arrivals-20261021/README.md",
+    "docs/impl/arrivals-20261021/HANDOFF.md",
+    "docs/impl/arrivals-20261021/qualification/resume-run-01/README.md",
+    "README.md",
+    "TASKS.md",
+    "CONTEXT.md"
+  ],
+  "tests_run": true,
+  "current_commit_results": [
+    {
+      "command": "cargo test --offline --locked --test host_adapters",
+      "passed": 17,
+      "failed": 0
+    },
+    {
+      "command": "cargo test --offline --locked --features mbt-injection --test host_adapters",
+      "passed": 17,
+      "failed": 0
+    },
+    {
+      "command": "rustfmt --edition 2021 --check src/host/adapters.rs",
+      "passed": true
+    }
+  ],
+  "retained_parent_evidence": {
+    "commit": "1e00af47d33e48bae9bc726f38f427bec272dbc0",
+    "normal_tests": {
+      "passed": 181,
+      "failed": 0
+    },
+    "injection_tests": {
+      "passed": 230,
+      "failed": 0
+    },
+    "arrival_bridge_traces": 128,
+    "generated_mbt_traces": 63,
+    "scoped_real_codex_acceptance": true,
+    "note": "Retained upstream evidence; not rerun as a full campaign at 3bb638d."
+  },
+  "performance_validation_run": false,
+  "notes": "Functional architecture edition. The 2026-10-21 page remains preserved. wslview launch is a presentation action, not independent visual inspection."
+}

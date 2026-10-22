@@ -1,0 +1,272 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Cooperators — Architecture · 2026-10-22</title>
+<style>
+*{box-sizing:border-box}body{margin:0;background:#f5f3ee;color:#202b31;font:17px/1.65 system-ui,-apple-system,"Segoe UI",sans-serif}main{max-width:1060px;margin:auto;padding:32px 28px 55px}a{color:#075c59;text-underline-offset:3px}a:focus-visible{outline:3px solid #075c59;outline-offset:4px}nav{display:flex;flex-wrap:wrap;gap:18px;font-size:.85rem;margin-bottom:28px}.eyebrow{color:#075c59;font-size:.8rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase}h1{font:700 clamp(2.1rem,5vw,3.2rem)/1.15 Georgia,serif;max-width:870px;margin:12px 0 20px}h2{font:700 1.5rem/1.35 Georgia,serif;margin:34px 0 14px}h3{font-size:1.08rem;margin:22px 0 8px}.lead{font-size:1.17rem}p{margin:10px 0 17px}.note{padding:18px 22px;border-left:4px solid #075c59;background:#e8f2ef;margin:24px 0}.warn{padding:18px 22px;border-left:4px solid #a37028;background:#f7efe2;margin:24px 0}.muted,small{color:#53656b}.table-wrap{overflow:auto;border:1px solid #d7dedb;border-radius:6px;background:#fffefa}table{width:100%;border-collapse:collapse;text-align:left;font-size:.93rem}th,td{padding:13px 16px;border-bottom:1px solid #d7dedb;vertical-align:top}th{background:#e8f2ef;font-size:.82rem}tr:last-child td{border-bottom:0}code{font:.87em ui-monospace,SFMono-Regular,Consolas,monospace;overflow-wrap:anywhere}pre{background:#fffefa;border:1px solid #d7dedb;border-radius:6px;padding:16px 18px;overflow-x:auto;font-size:.82rem;line-height:1.5}pre code{font-size:inherit}.flow{display:grid;grid-template-columns:1fr 24px 1fr 24px 1fr;gap:5px;align-items:stretch;margin:22px 0}.node{border:1px solid #d7dedb;background:#fffefa;border-radius:6px;padding:16px 13px}.node strong{display:block;font-size:.96rem;margin-bottom:7px}.node span{display:block;font-size:.85rem;color:#53656b}.node ul{margin:6px 0 0;padding-left:18px}.node li{font-size:.85rem;color:#53656b;margin-bottom:4px}.core{border-top:4px solid #075c59}.edge{border-top:4px solid #a37028}.arrow{display:flex;align-items:center;justify-content:center;color:#075c59;font-size:1.5rem}li{margin-bottom:10px}.meta{font-size:.84rem;border-top:1px solid #d7dedb;color:#53656b;margin-top:32px;padding-top:16px}
+figure{margin:26px 0}figcaption{font-size:.85rem;color:#53656b;margin-top:10px}svg.blocks{display:block;width:100%;height:auto;background:#fffefa;border:1px solid #d7dedb;border-radius:6px}
+@media(max-width:760px){main{padding:22px 17px 40px}.flow{grid-template-columns:1fr}.arrow{transform:rotate(90deg);line-height:1.1}table{min-width:670px}}
+@media print{body{background:white;color:#111}main{max-width:none;padding:0;font-size:10pt}nav{display:none}h1{font-size:28pt}h2{break-after:avoid}tr,.node{break-inside:avoid}.table-wrap,pre{overflow:visible}a{color:#111}}
+</style>
+</head>
+<body><main>
+<nav aria-label="Document navigation"><a href="index.html">Archive</a><a href="#overview">Overview</a><a href="#concurrency">Concurrency</a><a href="#storage">Storage</a><a href="#subsystems">Subsystems</a><a href="#arrivals">Arrivals &amp; hosts</a><a href="#security">Security</a><a href="#verification">Verification</a><a href="#open">Open work</a></nav>
+<header><div class="eyebrow">Cooperators · Architecture description · 22 October 2026</div>
+<h1>Architecture of the Cooperators broker</h1>
+<p class="lead">A description of the system as implemented at commit <code>3bb638d</code>: one daemon owns durable logs on a single machine, and Codex, Claude, and CLI sessions reach it through a Unix socket, an MCP stdio adapter, or a loopback HTTP endpoint. Normative decisions stay in the numbered design documents; this page describes the current functional architecture and its evidence boundaries.</p></header>
+
+<section id="overview">
+<h2>1. System overview</h2>
+<p>Cooperators is a localhost inter-agent message broker. A single <code>cooperatorsd</code> process (<code>coop daemon run</code>) owns all durable state for a <strong>bus root</strong> (default <code>$HOME/.local/share/cooperators</code>) behind an exclusive root-ownership lock. Everything is local: the primary transport is a Unix-domain socket, the optional HTTP MCP endpoint binds to <code>127.0.0.1:7420</code>, and the trust boundary is filesystem permissions plus bearer tokens. There is no TLS and no at-rest encryption.</p>
+<figure>
+<svg class="blocks" viewBox="0 0 1000 770" role="img" aria-labelledby="bd-title bd-desc" xmlns="http://www.w3.org/2000/svg">
+<title id="bd-title">Cooperators block diagram</title>
+<desc id="bd-desc">Client faces connect to the single-writer daemon over UDS and HTTP; subsystems write to the durable bus root; the host bridge activates exactly bound managed sessions and fences closed transports.</desc>
+<defs>
+<marker id="ar" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#075c59"/></marker>
+<style>
+.t{font:700 13px system-ui,-apple-system,"Segoe UI",sans-serif;fill:#202b31}
+.s{font:11px system-ui,-apple-system,"Segoe UI",sans-serif;fill:#53656b}
+.b{fill:#fffefa;stroke:#d7dedb;stroke-width:1.5}
+.edge{stroke:#a37028;stroke-width:2.5}
+.core{stroke:#075c59;stroke-width:2.5}
+.lbl{font:700 12px system-ui,-apple-system,"Segoe UI",sans-serif;fill:#075c59;letter-spacing:.08em}
+.fl{fill:none;stroke:#075c59;stroke-width:1.8;marker-end:url(#ar)}
+</style>
+</defs>
+
+<!-- clients -->
+<rect class="b edge" x="30" y="10" width="190" height="76" rx="6"/>
+<text class="t" x="45" y="36">coop CLI</text>
+<text class="s" x="45" y="56">client.rs</text>
+<text class="s" x="45" y="72">operator · scripts</text>
+
+<rect class="b edge" x="300" y="10" width="230" height="76" rx="6"/>
+<text class="t" x="315" y="36">MCP client</text>
+<text class="s" x="315" y="56">Codex · Claude</text>
+<text class="s" x="315" y="72">spawns adapter per launch</text>
+
+<rect class="b edge" x="300" y="116" width="230" height="76" rx="6"/>
+<text class="t" x="315" y="142">coop mcp-stdio</text>
+<text class="s" x="315" y="162">mcp.rs · forwards over UDS</text>
+<text class="s" x="315" y="178">fresh enrollment per launch</text>
+
+<rect class="b edge" x="780" y="10" width="190" height="76" rx="6"/>
+<text class="t" x="795" y="36">HTTP clients</text>
+<text class="s" x="795" y="56">MCP over HTTP · curl</text>
+<text class="s" x="795" y="72">bearer on every request</text>
+
+<path class="fl" d="M415,86 L415,116"/>
+<path class="fl" d="M125,86 L125,262"/>
+<path class="fl" d="M415,192 L415,262"/>
+<path class="fl" d="M875,86 L875,262"/>
+
+<!-- daemon container -->
+<rect x="20" y="216" width="960" height="390" rx="8" fill="none" stroke="#075c59" stroke-width="1.8" stroke-dasharray="7 5"/>
+<text class="lbl" x="36" y="242">COOPERATORSD — SINGLE-WRITER DAEMON (server.rs)</text>
+
+<rect class="b core" x="60" y="262" width="400" height="72" rx="6"/>
+<text class="t" x="76" y="288">UDS · NDJSON JSON-RPC 2.0</text>
+<text class="s" x="76" y="308">run/daemon.sock (0600)</text>
+<text class="s" x="76" y="324">4 MiB frame cap</text>
+
+<rect class="b core" x="540" y="262" width="400" height="72" rx="6"/>
+<text class="t" x="556" y="288">HTTP 127.0.0.1:7420</text>
+<text class="s" x="556" y="308">POST /mcp · GET /metrics (bearer)</text>
+<text class="s" x="556" y="324">GET /healthz (unauthenticated)</text>
+
+<path class="fl" d="M260,334 L260,356"/>
+<path class="fl" d="M740,334 L740,356"/>
+
+<rect class="b" x="60" y="356" width="880" height="52" rx="6"/>
+<text class="t" x="76" y="378">route() dispatch + bearer-token auth</text>
+<text class="s" x="76" y="396">unauthenticated: ping · echo · register_agent · enroll_agent · daemon.status</text>
+
+<path class="fl" d="M500,408 L500,430"/>
+
+<!-- subsystem grid -->
+<g>
+<rect class="b" x="60" y="430" width="163" height="76" rx="6"/>
+<text class="t" x="72" y="452">registry / auth</text>
+<text class="s" x="72" y="470">token digests</text>
+<text class="s" x="72" y="486">instance identity</text>
+
+<rect class="b" x="239" y="430" width="163" height="76" rx="6"/>
+<text class="t" x="251" y="452">messaging</text>
+<text class="s" x="251" y="470">send/wait/ack</text>
+<text class="s" x="251" y="486">dedupe · TTL · caps</text>
+
+<rect class="b" x="418" y="430" width="163" height="76" rx="6"/>
+<text class="t" x="430" y="452">inbox_writer</text>
+<text class="s" x="430" y="470">group commit</text>
+<text class="s" x="430" y="486">one fsync per batch</text>
+
+<rect class="b" x="597" y="430" width="163" height="76" rx="6"/>
+<text class="t" x="609" y="452">channels</text>
+<text class="s" x="609" y="470">replayable</text>
+<text class="s" x="609" y="486">cursors</text>
+
+<rect class="b" x="776" y="430" width="163" height="76" rx="6"/>
+<text class="t" x="788" y="452">queues + leases</text>
+<text class="s" x="788" y="470">fencing · retries</text>
+<text class="s" x="788" y="486">dead letters</text>
+
+<rect class="b" x="60" y="522" width="163" height="76" rx="6"/>
+<text class="t" x="72" y="544">documents</text>
+<text class="s" x="72" y="562">CAS · edit leases</text>
+<text class="s" x="72" y="578">blob spillover</text>
+
+<rect class="b" x="239" y="522" width="163" height="76" rx="6"/>
+<text class="t" x="251" y="544">presence</text>
+<text class="s" x="251" y="562">heartbeats</text>
+<text class="s" x="251" y="578">stale / gone</text>
+
+<rect class="b" x="418" y="522" width="163" height="76" rx="6"/>
+<text class="t" x="430" y="544">status / metrics</text>
+<text class="s" x="430" y="562">log heads</text>
+<text class="s" x="430" y="578">Prometheus text</text>
+
+<rect class="b" x="597" y="522" width="163" height="76" rx="6"/>
+<text class="t" x="609" y="544">arrivals</text>
+<text class="s" x="609" y="562">subscriptions · feeds</text>
+<text class="s" x="609" y="578">4 projection workers</text>
+
+<rect class="b" x="776" y="522" width="163" height="76" rx="6"/>
+<text class="t" x="788" y="544">host bridge</text>
+<text class="s" x="788" y="562">journal before ACK</text>
+<text class="s" x="788" y="578">session binding</text>
+</g>
+
+<path class="fl" d="M500,598 L500,646"/>
+<text class="s" x="512" y="628">sole writer · root-ownership lock</text>
+<path class="fl" d="M857,598 L857,646"/>
+
+<!-- bottom row -->
+<rect class="b core" x="60" y="646" width="520" height="100" rx="6"/>
+<text class="t" x="76" y="672">Bus root (0700) — append-only hash-chained JSONL</text>
+<text class="s" x="76" y="692">append → fsync → ack · torn-tail recovery · rotation 256 MiB</text>
+<text class="s" x="76" y="710">agents/ channels/ queues/ dead/ docs/ blobs/ .segments/</text>
+<text class="s" x="76" y="728">registry.json (0600) · run/daemon.sock</text>
+
+<rect class="b edge" x="660" y="646" width="280" height="100" rx="6"/>
+<text class="t" x="676" y="672">Managed provider sessions</text>
+<text class="s" x="676" y="692">Codex App Server · Claude duplex</text>
+<text class="s" x="676" y="710">exact bootstrap · terminal Offline</text>
+<text class="s" x="676" y="728">host/adapters.rs · private IPC · approvals</text>
+</svg>
+<figcaption>Figure 1 — Block diagram: client faces, the single-writer daemon with its subsystems, the durable bus root, and managed provider sessions activated by the host bridge.</figcaption>
+</figure>
+<p>A third backend, <code>coop mcp-stdio --embedded</code>, serves a bus root in-process without a daemon. It exists for tests that cannot bind sockets and for single-process debugging; the daemon remains the only writer in normal operation.</p>
+</section>
+
+<section id="concurrency">
+<h2>2. Process and concurrency model</h2>
+<p>The daemon is a Tokio multi-threaded process built around <code>Arc&lt;DaemonState&gt;</code> (<code>src/server.rs</code>), which holds configuration, the registry, every subsystem, and the root lease.</p>
+<div class="table-wrap"><table>
+<thead><tr><th scope="col">Concern</th><th scope="col">Mechanism</th></tr></thead>
+<tbody>
+<tr><td>Connections</td><td>One task per UDS connection; newline-delimited JSON-RPC framing; a per-connection session carries the authenticated token. Stdio frames capped at 4 MiB, matching the rmcp HTTP body limit.</td></tr>
+<tr><td>Dispatch</td><td><code>route()</code> matches method strings. Unauthenticated: <code>ping</code>, <code>echo</code>, <code>register_agent</code>, <code>enroll_agent</code>, <code>daemon.status</code>. All others require a bearer token.</td></tr>
+<tr><td>Write path</td><td>Bounded <strong>per-inbox group-commit workers</strong> (<code>src/inbox_writer.rs</code>): batches up to 64 records / 256 KiB, collection window ≤ 250 µs, one covering fsync per batch. Completions are <code>Notify</code>-based and survive caller cancellation; clients recover receipts by idempotency key. Full write queues (1,024 requests / 8 MiB) fail fast with <code>RESOURCE_EXHAUSTED</code> before any append.</td></tr>
+<tr><td>Expiry</td><td>A shared sweeper (<code>src/leases.rs</code>) drives queue-lease expiry, document edit-lease expiry, and presence stale/gone transitions.</td></tr>
+<tr><td>Arrivals</td><td>At most 4 projection workers (<code>MAX_PROJECTION_WORKERS</code>) rebuild per-recipient feeds from authoritative source logs; a scheduler coalesces pending agents.</td></tr>
+<tr><td>Host lifecycle</td><td>Codex bootstrap creates and durably names an exact thread without a model turn. Managed connections resume that exact ID; both adapter pumps stop at closed or <code>Offline</code> so buffered frames cannot revive a session.</td></tr>
+<tr><td>Exclusion</td><td><code>acquire_root_lease()</code> locks the root before replay; a second writer is refused even via a different socket.</td></tr>
+</tbody></table></div>
+</section>
+
+<section id="storage">
+<h2>3. Storage architecture</h2>
+<p>All durability is append-only JSONL with a SHA-256 hash chain (<code>src/storage.rs</code>). Records commit in the order <strong>append → fsync → ack</strong>. Startup replays logs and truncates a torn tail — a crash between append and fsync drops only never-acknowledged records. After an uncertain write or sync failure, the writer is quarantined until reopened and recovered.</p>
+<pre><code>&lt;root&gt;/                       # 0700
+  run/daemon.sock          # UDS listener, 0600
+  registry.json            # agent identities; only SHA-256 token digests, 0600
+  agents/&lt;id&gt;/             # inbox.jsonl, dedupe index, cursors
+  channels/&lt;name&gt;.jsonl    # replayable (file, seq) cursors
+  queues/&lt;name&gt;.jsonl      # enqueue/claim/lease/complete/fail records
+  dead/                    # dead-letter streams
+  docs/, blobs/sha256/     # versioned documents; bodies &gt;64 KiB spill to blobs
+  .segments/&lt;file&gt;/        # sealed rotation segments</code></pre>
+<p>Channel, queue, document, and dead-letter streams rotate at <code>DaemonConfig::log_rotation_bytes</code> (default 256 MiB) into <code>.segments/</code>; logical cursor filenames and global sequence numbers stay stable. Inbox and expiry logs are unsegmented.</p>
+<p class="note"><strong>Documented limit:</strong> the hash chain authenticates links, so a modified final record is undetectable until the next append (recorded in <code>src/storage.rs</code>).</p>
+</section>
+
+<section id="subsystems">
+<h2>4. Subsystems</h2>
+<div class="table-wrap"><table>
+<thead><tr><th scope="col">Subsystem</th><th scope="col">Modules</th><th scope="col">Function</th></tr></thead>
+<tbody>
+<tr><td>Envelope</td><td><code>envelope.rs</code></td><td>Normative v1 message envelope serde types.</td></tr>
+<tr><td>Registry / auth</td><td><code>registry.rs</code></td><td>Registration, token rotation, digest verification, per-launch instance identity (<code>--resume</code> reuses a credential; retirement revokes permanently).</td></tr>
+<tr><td>Messaging</td><td><code>messaging.rs</code>, <code>inbox_writer.rs</code></td><td>send/wait/ack with peek cursors, TTLs, idempotency dedupe, per-inbox caps (10k messages / 64 MiB), group commit.</td></tr>
+<tr><td>Channels</td><td><code>channels.rs</code></td><td>Publish/read with replayable cursors.</td></tr>
+<tr><td>Queues</td><td><code>queues.rs</code>, <code>leases.rs</code></td><td>Claim leases, fencing tokens, bounded retries, dead letters.</td></tr>
+<tr><td>Documents</td><td><code>docs.rs</code></td><td>Versioned documents, compare-and-swap updates, exclusive edit leases, blob spillover.</td></tr>
+<tr><td>Presence</td><td><code>presence.rs</code></td><td>Heartbeats, stale/gone transitions, <code>#presence</code> events.</td></tr>
+<tr><td>Status / metrics</td><td><code>status.rs</code>, <code>metrics.rs</code></td><td>Per-log sequence heads; Prometheus <code>/metrics</code> (bearer-only); unauthenticated <code>/healthz</code>.</td></tr>
+<tr><td>Arrivals</td><td><code>arrivals/</code></td><td>Durable source intent, exact subscriptions with catch-up, separate per-recipient feed/ACK, replayable projection, V1→V2 root upgrade guard.</td></tr>
+<tr><td>Managed hosts</td><td><code>host/</code>, <code>host_control.rs</code>, <code>host_cli.rs</code></td><td>Durable bridge (journals receipt before broker ACK), exact provider-session binding and generation fencing, no-turn Codex bootstrap, coalesced wakes, observations/resolutions/approvals over private IPC, and terminal closed-session handling.</td></tr>
+<tr><td>Errors</td><td><code>error.rs</code></td><td>Canonical taxonomy → JSON-RPC codes (<code>RESOURCE_EXHAUSTED</code> −32003, structured <code>CONFLICT_CLAIMED</code> / <code>VERSION_CONFLICT</code> data).</td></tr>
+<tr><td>Fault hooks</td><td><code>faults.rs</code></td><td><code>mbt-injection</code> feature only; deterministic failure injection for the model-based-test battery.</td></tr>
+</tbody></table></div>
+</section>
+
+<section id="arrivals">
+<h2>5. Arrival pipeline and managed hosts</h2>
+<h3>Arrival notifications (design 0004)</h3>
+<p>Source events — inbox, queue, and document writes — remain authoritative; there is no completion WAL. The arrivals subsystem scans source logs, matches exact per-agent subscriptions, and materializes a separate durable arrival feed per recipient with its own peek/ACK cursor, so feed consumption and source consumption advance independently. Feed workers are finite and restart-safe: after a crash, projection replays sources and resumes obligations. Feed errors stay visible in <code>ArrivalStatus</code> until a successful retry; no failed or full feed discards its source obligation.</p>
+<h3>Managed host activation</h3>
+<p>The host bridge (<code>host/bridge.rs</code>) journals notice receipt <strong>before</strong> broker ACK, binds one agent identity to one exact provider session (<code>Binding</code> with a generation counter), and coalesces wakes. Adapters (<code>host/adapters.rs</code>) drive managed Codex App Server and Claude duplex sessions. The managed CLI (<code>host_cli.rs</code>) launches new sessions or explicitly resumes existing ones; it never selects a latest conversation or forks a session implicitly.</p>
+<p>Codex creation is a separate no-turn bootstrap: <code>initialize</code>, <code>thread/start</code>, then <code>thread/name/set</code> materialize a durable named thread and its exact ID before the managed resume connection opens. No <code>turn/start</code> is needed to create that binding. Claude binds an explicit session UUID through its persistent streaming protocol.</p>
+<h3>Fail-closed lifecycle</h3>
+<ul>
+<li><strong>Exact binding and generation fencing:</strong> adapter calls reject another bus, identity, workspace, session, binding, or generation. A wake is not evidence of observation or resolution by itself.</li>
+<li><strong>Closed means terminal:</strong> the duplex reader fences every frame queued behind a fatal transport/protocol error. Both Codex and Claude pump loops also stop when the process is closed or adapter state is <code>Offline</code>, preventing buffered approvals, echoes, or status changes from reviving the session or producing delayed wake acceptance.</li>
+<li><strong>Approvals stay explicit:</strong> operator requests are retained until answered or withdrawn. Bootstrap rejects an unexpected operator request rather than silently granting it, and provider approval configuration remains per launch.</li>
+</ul>
+</section>
+
+<section id="security">
+<h2>6. Identity and security boundary</h2>
+<ul>
+<li>The trust boundary is the local machine plus filesystem permissions: UDS 0600, bus root 0700, <code>registry.json</code> 0600. Any local process that can open the socket still needs an agent token; only SHA-256 digests are stored.</li>
+<li>HTTP is loopback-only by default with bearer auth on every request including <code>initialize</code>; <code>/healthz</code> is the only unauthenticated route. Binding it off-loopback requires adding TLS and an authentication story first.</li>
+<li>An <strong>agent instance</strong> is one launched session; identity survives its own reconnects but is never shared across launches. Display names are non-unique labels; routing uses unique IDs (vocabulary: <a href="../../CONTEXT.md"><code>CONTEXT.md</code></a>).</li>
+<li>Bus IDs and a registry V2 guard let a preserved pre-upgrade binary refuse an upgraded root before touching guarded files.</li>
+</ul>
+</section>
+
+<section id="verification">
+<h2>7. Verification architecture</h2>
+<p>Functional correctness evidence is layered. Each layer has a distinct boundary; a passing deterministic suite is not treated as proof of live provider behavior.</p>
+<ol>
+<li><strong>TLA+ specifications</strong> (<code>spec/</code>) — models of idempotency, claim separation, fence freshness, CAS chains, hardening, and instance identity, checked at finite bounds.</li>
+<li><strong>Generated model replay</strong> — arrival/bridge reference-model traces and the generated MirrorRust/ModelMirrors protocol, ownership, and fault ports. The retained parent-commit qualification covers all 128 arrival/bridge traces and 63 generated MBT traces.</li>
+<li><strong>Fault and crash controls</strong> — <code>mbt-injection</code> hooks and actual <code>SIGKILL</code> controls cover group commit, rotation, arrival recovery, and the preserved preupgrade binary’s V2 refusal before guarded-file repair.</li>
+<li><strong>Protocol conformance</strong> — golden transcripts and schema contracts check UDS/stdio/HTTP parity for the 28-tool broker catalog; host fixtures exercise exact sessions, approvals, lost replies, restart, and buffered-frame closure.</li>
+<li><strong>Scoped real-provider acceptance</strong> — retained Codex CLI evidence covers managed document wakes, activation nonces, pinned reads, explicit approvals, resolution, and one exact-binding restart. It does not qualify every provider flow.</li>
+</ol>
+<div class="note"><strong>Evidence at <code>3bb638d</code>.</strong> The current terminal-<code>Offline</code> guard passed all 17 host-adapter tests in both normal and <code>mbt-injection</code> modes. The broader 181-test normal and 230-test injection aggregates, 128 arrival/bridge traces, 63 generated MBT traces, crash controls, and scoped real Codex acceptance are retained evidence for parent commit <code>1e00af4</code>, not a fresh full qualification of this page’s exact commit.</div>
+<p class="muted">Socket gates use <code>COOP_REQUIRE_UDS=1</code> so denied AF_UNIX access fails rather than silently passing. <strong>Performance validation is intentionally excluded from this edition;</strong> no performance benchmark was run for it.</p>
+</section>
+
+<section id="open">
+<h2>8. Current limitations and open functional work</h2>
+<div class="warn"><strong>Functional acceptance remains scoped.</strong> The broker and managed-Codex evidence is substantial, but it is not blanket acceptance of every provider, workflow, or restart ordering. See the current <a href="../../docs/impl/arrivals-20261021/HANDOFF.md"><code>docs/impl/arrivals-20261021/HANDOFF.md</code></a> and <a href="../../docs/impl/arrivals-20261021/qualification/resume-run-01/README.md">resumed qualification record</a>.</div>
+<ul>
+<li><strong>Real Claude activation is not qualified.</strong> The retained run could not start because the installed Claude Code lacked authentication/provider configuration. Its installed protocol version must be qualified afresh after intentional configuration.</li>
+<li><strong>Real Codex coverage is bounded.</strong> Queue adoption, additional restart orderings, and provider-side lost replies remain outside the passing live document-activation run, although related deterministic tests pass.</li>
+<li><strong>Modern Claude MCP discovery remains open.</strong> Default modern negotiation compatibility is independent of the managed host-path evidence and the earlier legacy workaround.</li>
+<li><strong>Current-commit evidence is targeted.</strong> After the terminal-<code>Offline</code> guard, the 17 normal and 17 injection host-adapter tests were rerun. A new full aggregate, generated-MBT, or live-provider campaign was not run for <code>3bb638d</code>.</li>
+</ul>
+</section>
+
+<section id="sources">
+<h2>Sources</h2>
+<p class="muted">Derived from direct inspection of <code>src/lib.rs</code>, <code>src/server.rs</code>, <code>src/inbox_writer.rs</code>, <code>src/arrivals/mod.rs</code>, <code>src/host/adapters.rs</code>, <code>src/host_cli.rs</code>, <code>src/mcp.rs</code>, <code>src/paths.rs</code>, and <code>tests/host_adapters.rs</code> at commit <code>3bb638dc559cf11846f0e12eb46359f823b164f1</code>, plus <a href="../../docs/design/0001-cooperatorsd-broker.md">design 0001</a>, <a href="../../docs/design/0003-durable-inbox-group-commit.md">0003</a>, <a href="../../docs/design/0004-arrival-notifications-and-agent-activation.md">0004</a>, the <a href="../../docs/impl/arrivals-20261021/README.md">implementation record</a>, and the <a href="../../docs/impl/arrivals-20261021/qualification/resume-run-01/README.md">resumed qualification record</a>. Current-commit adapter tests were run as recorded in the provenance; no performance validation was run. The <a href="2026-10-21-architecture.html">2026-10-21 edition</a> is preserved as the description of checkpoint <code>ce043b9</code>.</p>
+<p class="meta">Cooperators · Architecture description · 22 October 2026 · Descriptive page; the design documents remain normative.</p>
+</section>
+</main></body>
+</html>
