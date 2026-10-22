@@ -66,8 +66,9 @@ is claimed. The execution record identifies the actual ModelMirrors executable
 ## Prerequisites
 
 - `apalache-mc` on `PATH` (used directly for trace generation — see below).
-- `MIRROR_BIN` pointing at a built ModelMirrors executable (used as the replay
-  server over stdio; no sockets needed).
+- `MIRROR_BIN` pointing at a built `Mirrors` executable (renamed from
+  `ModelMirrors`; used as the replay server over stdio, with no sockets needed
+  for the client connection).
 - Offline cargo: `cargo build --offline --locked` (the lockfile pins only
   registry crates already extracted on this machine).
 
@@ -75,7 +76,7 @@ is claimed. The execution record identifies the actual ModelMirrors executable
 
 ```bash
 cd spec/mbt
-MIRROR_BIN=/path/to/ModelMirrors cargo run --offline --locked   # generate + replay
+MIRROR_BIN=/path/to/Mirrors cargo run --offline --locked   # generate + replay
 MIRROR_BIN=... cargo run --offline --locked -- --skip-gen       # replay committed traces only
 MIRROR_BIN=... cargo run --offline --locked -- --skip-gen --suite writers
 MIRROR_BIN=... cargo run --offline --locked -- --skip-gen --suite protocol

@@ -529,7 +529,7 @@ fn main() -> ExitCode {
     let bin = match std::env::var("MIRROR_BIN") {
         Ok(b) if !b.is_empty() => b,
         _ => {
-            eprintln!("MIRROR_BIN not set; set it to the ModelMirrors binary");
+            eprintln!("MIRROR_BIN not set; set it to the Mirrors binary (formerly ModelMirrors)");
             return ExitCode::FAILURE;
         }
     };
