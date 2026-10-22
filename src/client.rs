@@ -1,20 +1,17 @@
-//! Minimal UDS JSON-RPC client used by the `coop` CLI.
+//! Compatibility helpers over the shared broker client transport.
 //!
 //! [`call`] keeps the original five-second deadline for short requests.
 //! Long-polling callers use [`call_with_timeout`] (root-relative) or
 //! [`call_at`] (explicit socket) with a deadline that covers the wait.
 
-use std::io;
 use std::path::Path;
 use std::time::Duration;
 
-use serde_json::{json, Value};
-use tokio::io::{AsyncBufReadExt, AsyncWriteExt, BufReader};
-use tokio::net::UnixStream;
+use serde_json::Value;
 
 use crate::error::ErrorCode;
-use crate::paths;
-use crate::rpc::{RpcError, RpcResponse};
+use crate::rpc::RpcError;
+pub use crate::transport::{BrokerClient, Endpoint, HttpsOptions};
 
 /// Default deadline for short JSON-RPC calls.
 pub const DEFAULT_TIMEOUT: Duration = Duration::from_secs(5);
@@ -30,6 +27,12 @@ pub enum ClientError {
     Protocol(String),
     /// The daemon returned a JSON-RPC error.
     Rpc(RpcError),
+    /// HTTPS connection or TLS setup failed before a usable response.
+    RemoteTransport(String),
+    /// A non-success status without automatically following or retrying it.
+    HttpStatus(u16),
+    /// A mutation may have committed. Retry only with its durable operation ID.
+    OutcomeUnknown(String),
 }
 
 impl ClientError {
@@ -39,6 +42,8 @@ impl ClientError {
             Self::Rpc(error) => ErrorCode::from_rpc_code(error.code),
             Self::Unreachable(_) | Self::Timeout => Some(ErrorCode::DaemonUnreachable),
             Self::Protocol(_) => None,
+            Self::OutcomeUnknown(_) => Some(ErrorCode::OutcomeUnknown),
+            Self::RemoteTransport(_) | Self::HttpStatus(_) => Some(ErrorCode::DaemonUnreachable),
         }
     }
 }
@@ -50,6 +55,9 @@ impl std::fmt::Display for ClientError {
             Self::Timeout => formatter.write_str("daemon unreachable: request timed out"),
             Self::Protocol(message) => write!(formatter, "protocol error: {message}"),
             Self::Rpc(error) => write!(formatter, "rpc error {}: {}", error.code, error.message),
+            Self::RemoteTransport(detail) => write!(formatter, "HTTPS transport failed: {detail}"),
+            Self::HttpStatus(status) => write!(formatter, "broker returned HTTP status {status}"),
+            Self::OutcomeUnknown(detail) => write!(formatter, "broker outcome unknown: {detail}"),
         }
     }
 }
@@ -68,7 +76,9 @@ pub async fn call_with_timeout(
     params: Value,
     deadline: Duration,
 ) -> Result<Value, ClientError> {
-    call_at(&paths::socket_path(root), method, params, deadline).await
+    crate::transport::for_root(root)
+        .call(method, params, deadline)
+        .await
 }
 
 /// Calls one JSON-RPC method on an explicit socket path with an explicit
@@ -79,39 +89,7 @@ pub async fn call_at(
     params: Value,
     deadline: Duration,
 ) -> Result<Value, ClientError> {
-    let mut stream = UnixStream::connect(socket)
+    BrokerClient::uds(socket)
+        .call(method, params, deadline)
         .await
-        .map_err(ClientError::Unreachable)?;
-
-    let request = json!({
-        "jsonrpc": "2.0",
-        "id": "cli",
-        "method": method,
-        "params": params,
-    });
-    let mut encoded =
-        serde_json::to_vec(&request).map_err(|error| ClientError::Protocol(error.to_string()))?;
-    encoded.push(b'\n');
-    stream
-        .write_all(&encoded)
-        .await
-        .map_err(ClientError::Unreachable)?;
-    stream.flush().await.map_err(ClientError::Unreachable)?;
-
-    let mut reader = BufReader::new(stream);
-    let mut line = String::new();
-    match tokio::time::timeout(deadline, reader.read_line(&mut line)).await {
-        Err(_) => Err(ClientError::Timeout),
-        Ok(Err(error)) => Err(ClientError::Unreachable(error)),
-        Ok(Ok(0)) => Err(ClientError::Unreachable(io::Error::new(
-            io::ErrorKind::UnexpectedEof,
-            "daemon closed the connection without a response",
-        ))),
-        Ok(Ok(_)) => {
-            let response: RpcResponse =
-                serde_json::from_str(line.trim_end_matches(['\r', '\n']))
-                    .map_err(|error| ClientError::Protocol(error.to_string()))?;
-            response.into_result().map_err(ClientError::Rpc)
-        }
-    }
 }

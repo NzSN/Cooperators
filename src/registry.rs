@@ -31,6 +31,23 @@ pub const ARRIVALS_REGISTRY_VERSION: u16 = 2;
 
 /// Required feature understood by this binary.
 pub const ARRIVALS_REQUIRED_FEATURE: &str = "arrival_notifications_v1";
+pub const NETWORK_REGISTRY_VERSION: u16 = 3;
+pub const NETWORK_REQUIRED_FEATURE: &str = "network_authority_v1";
+
+#[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize)]
+#[serde(deny_unknown_fields)]
+pub struct NetworkGrant {
+    pub principal_id: String,
+    pub principal_generation: u64,
+    pub expires_at_ms: u64,
+}
+
+#[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize)]
+#[serde(deny_unknown_fields)]
+pub struct NetworkMeta {
+    pub bus_id: String,
+    pub operation_epoch: String,
+}
 
 /// File name of the registry below the bus root.
 pub const REGISTRY_FILE: &str = "registry.json";
@@ -64,6 +81,8 @@ pub struct AgentRecord {
     /// Retirement permanently reserves this identity and routing name.
     #[serde(default, skip_serializing_if = "std::ops::Not::not")]
     pub retired: bool,
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub network_grant: Option<NetworkGrant>,
 }
 
 /// Authenticated identity handed to method handlers.
@@ -120,6 +139,8 @@ struct RegistryFile {
     agents: BTreeMap<String, AgentRecord>,
     #[serde(default, skip_serializing_if = "BTreeSet::is_empty")]
     revoked_token_hashes: BTreeSet<String>,
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    network: Option<NetworkMeta>,
 }
 
 /// In-memory registry backed by `registry.json`.
@@ -128,6 +149,7 @@ pub struct Registry {
     path: PathBuf,
     format_version: u16,
     required_features: Vec<String>,
+    network: Option<NetworkMeta>,
     /// Any uncertain activation I/O requires reopening, even when replacement
     /// of the registry may already have succeeded.
     activation_fenced: bool,
@@ -146,13 +168,16 @@ impl Registry {
     /// when the file does not exist.
     pub fn load(root: &Path) -> Result<Self, BrokerError> {
         let path = root.join(REGISTRY_FILE);
-        let (format_version, required_features, agents, revoked_token_hashes) =
+        let (format_version, required_features, agents, revoked_token_hashes, network) =
             match fs::read(&path) {
                 Ok(bytes) => {
                     let file: RegistryFile = serde_json::from_slice(&bytes).map_err(|error| {
                         BrokerError::internal(format!("invalid {}: {error}", path.display()))
                     })?;
-                    if file.v != REGISTRY_VERSION && file.v != ARRIVALS_REGISTRY_VERSION {
+                    if file.v != REGISTRY_VERSION
+                        && file.v != ARRIVALS_REGISTRY_VERSION
+                        && file.v != NETWORK_REGISTRY_VERSION
+                    {
                         return Err(BrokerError::internal(format!(
                             "unsupported registry version {} in {}",
                             file.v,
@@ -160,7 +185,9 @@ impl Registry {
                         )));
                     }
                     for feature in &file.required_features {
-                        if feature != ARRIVALS_REQUIRED_FEATURE {
+                        if feature != ARRIVALS_REQUIRED_FEATURE
+                            && feature != NETWORK_REQUIRED_FEATURE
+                        {
                             return Err(BrokerError::internal(format!(
                                 "unsupported required registry feature {feature:?} in {}",
                                 path.display()
@@ -171,8 +198,18 @@ impl Registry {
                         .required_features
                         .iter()
                         .any(|feature| feature == ARRIVALS_REQUIRED_FEATURE);
+                    let network_required = file
+                        .required_features
+                        .iter()
+                        .any(|f| f == NETWORK_REQUIRED_FEATURE);
                     if (file.v == REGISTRY_VERSION && !file.required_features.is_empty())
-                        || (file.v == ARRIVALS_REGISTRY_VERSION && !arrivals_required)
+                        || (file.v == ARRIVALS_REGISTRY_VERSION
+                            && (!arrivals_required || network_required))
+                        || (file.v == NETWORK_REGISTRY_VERSION
+                            && (!network_required || file.network.is_none()))
+                        || (file.v != NETWORK_REGISTRY_VERSION
+                            && (file.network.is_some()
+                                || file.agents.values().any(|a| a.network_grant.is_some())))
                     {
                         return Err(BrokerError::internal(format!(
                             "registry version {} has incompatible required_features in {}",
@@ -180,11 +217,17 @@ impl Registry {
                             path.display()
                         )));
                     }
+                    if file.network.as_ref().is_some_and(|meta| {
+                        !id::is_ulid(&meta.bus_id) || !id::is_ulid(&meta.operation_epoch)
+                    }) {
+                        return Err(BrokerError::internal("invalid network root identity"));
+                    }
                     (
                         file.v,
                         file.required_features,
                         file.agents,
                         file.revoked_token_hashes,
+                        file.network,
                     )
                 }
                 Err(error) if error.kind() == io::ErrorKind::NotFound => (
@@ -192,6 +235,7 @@ impl Registry {
                     Vec::new(),
                     BTreeMap::new(),
                     BTreeSet::new(),
+                    None,
                 ),
                 Err(error) => return Err(error.into()),
             };
@@ -207,6 +251,7 @@ impl Registry {
             path,
             format_version,
             required_features,
+            network,
             activation_fenced: false,
             agents,
             tokens: HashMap::new(),
@@ -228,7 +273,7 @@ impl Registry {
     }
 
     pub fn arrivals_enabled(&self) -> bool {
-        self.format_version == ARRIVALS_REGISTRY_VERSION
+        self.format_version >= ARRIVALS_REGISTRY_VERSION
             && self
                 .required_features
                 .iter()
@@ -266,7 +311,7 @@ impl Registry {
     /// unsuccessful directory sync does not prove rename failed.
     pub(crate) fn promote_arrivals(&mut self) -> Result<(), BrokerError> {
         self.activation_fenced = true;
-        self.format_version = ARRIVALS_REGISTRY_VERSION;
+        self.format_version = self.format_version.max(ARRIVALS_REGISTRY_VERSION);
         if !self
             .required_features
             .iter()
@@ -290,6 +335,51 @@ impl Registry {
         self.len() == 0
     }
 
+    pub fn network_meta(&self) -> Option<&NetworkMeta> {
+        self.network.as_ref()
+    }
+
+    pub(crate) fn promote_network(&mut self, bus_id: String) -> Result<NetworkMeta, BrokerError> {
+        self.check_activation_ready()?;
+        if let Some(meta) = &self.network {
+            if meta.bus_id != bus_id {
+                return Err(BrokerError::internal(
+                    "network and arrival bus identities conflict",
+                ));
+            }
+            return Ok(meta.clone());
+        }
+        self.activation_fenced = true;
+        let meta = NetworkMeta {
+            bus_id,
+            operation_epoch: id::new_ulid()?,
+        };
+        self.network = Some(meta.clone());
+        self.format_version = NETWORK_REGISTRY_VERSION;
+        self.required_features.push(NETWORK_REQUIRED_FEATURE.into());
+        self.write_snapshot()?;
+        self.activation_fenced = false;
+        Ok(meta)
+    }
+
+    pub fn network_grant(&self, agent_id: &str) -> Option<&NetworkGrant> {
+        self.ids
+            .get(agent_id)
+            .and_then(|name| self.agents.get(name))
+            .and_then(|a| a.network_grant.as_ref())
+    }
+
+    pub(crate) fn network_issued(&self, principal_id: &str) -> usize {
+        self.agents
+            .values()
+            .filter(|a| {
+                a.network_grant
+                    .as_ref()
+                    .is_some_and(|g| g.principal_id == principal_id)
+            })
+            .count()
+    }
+
     /// Iterates over persisted records in name order.
     pub fn records(&self) -> impl Iterator<Item = &AgentRecord> {
         self.agents.values().filter(|record| !record.retired)
@@ -311,6 +401,13 @@ impl Registry {
         let digest = token_hash(token);
         let name = self.tokens.get(&digest)?;
         let record = self.agents.get(name)?;
+        if record
+            .network_grant
+            .as_ref()
+            .is_some_and(|grant| grant.expires_at_ms <= id::unix_millis())
+        {
+            return None;
+        }
         Some(identity_of(name, record))
     }
 
@@ -391,6 +488,7 @@ impl Registry {
             .get(&name)
             .and_then(|old| old.launch_key_hash.clone());
 
+        let network_grant = self.agents.get(&name).and_then(|a| a.network_grant.clone());
         self.agents.insert(
             name.clone(),
             AgentRecord {
@@ -402,6 +500,7 @@ impl Registry {
                 display_name,
                 launch_key_hash,
                 retired: false,
+                network_grant,
             },
         );
 
@@ -432,6 +531,31 @@ impl Registry {
         display_name: String,
         capabilities: Option<Vec<String>>,
     ) -> Result<Enrollment, BrokerError> {
+        self.enroll_scoped(launch_key, kind, display_name, capabilities, None)
+    }
+
+    pub(crate) fn enroll_network(
+        &mut self,
+        launch_key: String,
+        kind: String,
+        display_name: String,
+        capabilities: Option<Vec<String>>,
+        grant: NetworkGrant,
+    ) -> Result<Enrollment, BrokerError> {
+        if self.network.is_none() {
+            return Err(BrokerError::internal("network root activation required"));
+        }
+        self.enroll_scoped(launch_key, kind, display_name, capabilities, Some(grant))
+    }
+
+    fn enroll_scoped(
+        &mut self,
+        launch_key: String,
+        kind: String,
+        display_name: String,
+        capabilities: Option<Vec<String>>,
+        network_grant: Option<NetworkGrant>,
+    ) -> Result<Enrollment, BrokerError> {
         self.check_activation_ready()?;
         validate_launch_key(&launch_key)?;
         validate_kind(&kind)?;
@@ -441,6 +565,29 @@ impl Registry {
         let digest = token_hash(&launch_key);
         if let Some(name) = self.launches.get(&digest) {
             let record = self.agents.get(name).expect("indexed launch exists");
+            if record
+                .network_grant
+                .as_ref()
+                .map(|g| (&g.principal_id, g.principal_generation))
+                != network_grant
+                    .as_ref()
+                    .map(|g| (&g.principal_id, g.principal_generation))
+            {
+                return Err(BrokerError::application(
+                    ErrorCode::Unauthenticated,
+                    "launch proof belongs to another enrollment principal",
+                ));
+            }
+            if record
+                .network_grant
+                .as_ref()
+                .is_some_and(|g| g.expires_at_ms <= id::unix_millis())
+            {
+                return Err(BrokerError::application(
+                    ErrorCode::Unauthenticated,
+                    "instance credential expired; explicit renewal required",
+                ));
+            }
             if record.retired {
                 return Err(launch_conflict(record, name, "instance is retired"));
             }
@@ -485,6 +632,7 @@ impl Registry {
             display_name: Some(display_name),
             launch_key_hash: Some(digest),
             retired: false,
+            network_grant,
         };
         let response = enrollment_of(&name, &record, launch_key, false);
         self.agents.insert(name.clone(), record);
@@ -620,6 +768,7 @@ impl Registry {
             required_features: self.required_features.clone(),
             agents: self.agents.clone(),
             revoked_token_hashes: self.revoked_token_hashes.clone(),
+            network: self.network.clone(),
         };
         let bytes = serde_json::to_vec_pretty(&file)
             .map_err(|error| BrokerError::internal(format!("serialize registry: {error}")))?;

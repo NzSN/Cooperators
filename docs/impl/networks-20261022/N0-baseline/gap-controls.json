@@ -1,0 +1,29 @@
+{
+  "binary_sha256": "ad96a75923c421c62dd891fd765ab750ef43cd63b426f7ceb073e3d8f8488b9f",
+  "same_rpc_correlation_does_not_dedupe_enqueue": {
+    "task_ids": [
+      "01M5HGCY1W5ZZSXKVHFA739NFG",
+      "01M5HGCY1WSWPNSP5N5TBTS27K"
+    ],
+    "distinct": true
+  },
+  "lost_claim_reply_then_fresh_claim": {
+    "source_first_task": "01M5HGCY1W5ZZSXKVHFA739NFG",
+    "second_receipt_task": "01M5HGCY1WSWPNSP5N5TBTS27K",
+    "different_task": true
+  },
+  "ordinary_ack_restart": {
+    "messages_before_restart": 0,
+    "messages_after_restart": 1,
+    "acked_cursor_after_restart": "0"
+  },
+  "http_body_credential": {
+    "http_status": 200,
+    "result_agent_id": "01M5HGCY1VVVS0TK5W3DMZ7S3A",
+    "header_agent_id": "01M5HGCY1VJD4QSG2EJ33TA7GH",
+    "body_agent_id": "01M5HGCY1VVVS0TK5W3DMZ7S3A",
+    "body_selected_other_principal": true
+  },
+  "lan_host_status": 403,
+  "scope": "Pre-network source observations on one disposable local root; no provider or WAN qualification."
+}

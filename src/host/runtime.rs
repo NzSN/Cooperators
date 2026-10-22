@@ -178,6 +178,18 @@ fn client_error(error: crate::client::ClientError) -> BrokerError {
             }
         },
         crate::client::ClientError::Protocol(detail) => BrokerError::invalid(detail),
+        crate::client::ClientError::RemoteTransport(detail) => {
+            BrokerError::application(ErrorCode::DaemonUnreachable, detail)
+        }
+        crate::client::ClientError::HttpStatus(status) => BrokerError::application(
+            ErrorCode::DaemonUnreachable,
+            format!("broker HTTP request rejected with status {status}"),
+        ),
+        crate::client::ClientError::OutcomeUnknown(detail) => BrokerError::application_with_data(
+            ErrorCode::OutcomeUnknown,
+            detail,
+            json!({"outcome":"unknown","automatic_retry":false}),
+        ),
     }
 }
 

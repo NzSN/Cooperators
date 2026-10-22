@@ -71,7 +71,10 @@ pub fn prepare(
         Err(BrokerError::Io(error)) if error.kind() == io::ErrorKind::NotFound => {
             let meta = ArrivalMeta {
                 v: ARRIVAL_META_VERSION,
-                bus_id: id::new_ulid()?,
+                bus_id: match registry.network_meta() {
+                    Some(meta) => meta.bus_id.clone(),
+                    None => id::new_ulid()?,
+                },
             };
             persist_meta(&directory, &path, &meta)?;
             meta

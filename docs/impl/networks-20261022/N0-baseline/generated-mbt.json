@@ -1,0 +1,10 @@
+{
+  "exit_code": 0,
+  "source": "isolated source export at 27d6e90",
+  "protocol_traces": 34,
+  "writer_traces": 5,
+  "fault_traces": 24,
+  "failures": 0,
+  "rotation_crash_controls": 2,
+  "scope": "Generated baseline replay only; no network extension coverage."
+}

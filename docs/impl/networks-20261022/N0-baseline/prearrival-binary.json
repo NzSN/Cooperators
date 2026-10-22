@@ -1,0 +1,6 @@
+{
+  "source": "edcbc923",
+  "sha256": "61a9e4a48af9c2ff75961a8b38d5325e434312f65255965d63a0a17963f6d073",
+  "build": "cargo build --offline --locked --release",
+  "path": "/tmp/coop-prearrival-network/target/release/coop"
+}

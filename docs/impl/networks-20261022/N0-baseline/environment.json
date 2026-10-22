@@ -1,0 +1,11 @@
+{
+  "os": "Linux-6.18.54.1-microsoft-standard-WSL2-x86_64-with-glibc2.43",
+  "python": "3.14.4 (main, Aug 20 2026, 10:41:58) [GCC 15.2.0]",
+  "rustc": "rustc 1.99.1 (58cf8f9c3 2026-10-13)",
+  "cargo": "cargo 1.99.1 (5f94df478 2026-08-27)",
+  "socket_probe_in_sandbox": {
+    "uds": "EPERM",
+    "tcp": "EPERM"
+  },
+  "scope": "Local baseline; real-socket commands run through explicit sandbox escalation. No cross-machine qualification."
+}

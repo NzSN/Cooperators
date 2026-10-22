@@ -1,0 +1,19 @@
+{
+  "status": "stopped at explicit user request",
+  "implementation_gate": "N2 incomplete",
+  "diagnostic_checks": [
+    {
+      "command": "cargo check --offline --locked --all-targets",
+      "log": "coop-network-n2-entry-check.log",
+      "exit_code": 0,
+      "source_pin": null
+    },
+    {
+      "command": "cargo check --offline --locked --all-targets",
+      "log": "coop-network-n2-bounds.log",
+      "exit_code": 0,
+      "source_pin": null
+    }
+  ],
+  "scope": "Diagnostic compile checks before the final startup-policy guard; no final checkpoint build, N2 security/migration acceptance, or full N2 regression. No builds/tests run after stop request."
+}

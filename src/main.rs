@@ -22,6 +22,23 @@ const TOKEN_ENV: &str = "COOP_TOKEN";
     about = "Localhost inter-agent communication broker"
 )]
 struct Cli {
+    /// Remote HTTPS broker origin. Defaults to COOP_ENDPOINT for client commands.
+    #[arg(long, global = true, conflicts_with_all = ["root", "profile"])]
+    endpoint: Option<String>,
+    /// Named profile from a JSON profiles file.
+    #[arg(long, global = true, conflicts_with = "root")]
+    profile: Option<String>,
+    #[arg(long, global = true, requires = "profile")]
+    profile_file: Option<PathBuf>,
+    /// Additional CA PEM for a directly selected HTTPS endpoint.
+    #[arg(long, global = true, conflicts_with = "profile")]
+    ca_cert: Option<PathBuf>,
+    /// Explicit HTTPS proxy; inherited proxy settings are not used.
+    #[arg(long, global = true, conflicts_with = "profile")]
+    proxy: Option<String>,
+    /// Pin the bus identity when selecting a remote origin directly.
+    #[arg(long, global = true, conflicts_with = "profile")]
+    expected_bus_id: Option<String>,
     /// Bus root directory. Overridden by COOPERATORS_HOME when that is set.
     #[arg(long, global = true, value_name = "DIR")]
     root: Option<PathBuf>,
@@ -150,6 +167,9 @@ enum DaemonCommand {
         /// Upgrade this root to support durable arrival notifications
         #[arg(long)]
         enable_arrivals: bool,
+        /// Explicitly activate network authority using a private JSON policy.
+        #[arg(long)]
+        network_config: Option<PathBuf>,
     },
 }
 
@@ -196,8 +216,15 @@ enum ArrivalCommand {
 
 #[tokio::main]
 async fn main() -> ExitCode {
-    let cli = Cli::parse();
+    let mut cli = Cli::parse();
     let root = paths::resolve_root(cli.root.as_deref());
+    let broker = match resolve_client(&mut cli, &root) {
+        Ok(client) => client,
+        Err(error) => {
+            eprintln!("coop: {error}");
+            return ExitCode::from(2);
+        }
+    };
 
     match cli.command {
         Command::Daemon {
@@ -205,6 +232,7 @@ async fn main() -> ExitCode {
                 DaemonCommand::Run {
                     http_addr,
                     enable_arrivals,
+                    network_config,
                 },
         } => {
             let http_addr = match resolve_http_addr(http_addr) {
@@ -218,7 +246,17 @@ async fn main() -> ExitCode {
                 http_addr,
                 enable_arrivals,
             };
-            match server::run_with_options(&root, options).await {
+            let policy = match network_config
+                .map(|path| cooperators::network::NetworkPolicy::load(&path))
+                .transpose()
+            {
+                Ok(policy) => policy,
+                Err(error) => {
+                    eprintln!("coop daemon: {error}");
+                    return ExitCode::from(2);
+                }
+            };
+            match server::run_with_network_policy(&root, options, policy).await {
                 Ok(()) => ExitCode::SUCCESS,
                 Err(error) => {
                     eprintln!("coop daemon: {error}");
@@ -247,6 +285,8 @@ async fn main() -> ExitCode {
                         return ExitCode::FAILURE;
                     }
                 }
+            } else if matches!(broker.endpoint(), client::Endpoint::Https(_)) {
+                mcp::Backend::remote(broker.clone())
             } else {
                 mcp::Backend::uds(paths::socket_path(&root))
             };
@@ -278,8 +318,17 @@ async fn main() -> ExitCode {
             } else if resume {
                 mcp::CoopMcpHandler::stdio(backend, token)
             } else {
-                match mcp::CoopMcpHandler::fresh_stdio(backend, kind, display_name, Vec::new())
-                    .await
+                let credential = matches!(broker.endpoint(), client::Endpoint::Https(_))
+                    .then_some(token)
+                    .flatten();
+                match mcp::CoopMcpHandler::fresh_stdio_authorized(
+                    backend,
+                    kind,
+                    display_name,
+                    Vec::new(),
+                    credential,
+                )
+                .await
                 {
                     Ok(handler) => handler,
                     Err(error) => {
@@ -296,7 +345,14 @@ async fn main() -> ExitCode {
                 }
             }
         }
-        Command::Status => match client::call(&root, "daemon.status", json!({})).await {
+        Command::Status => match broker
+            .call(
+                "daemon.status",
+                json!({"token":token_option(&cli.token)}),
+                client::DEFAULT_TIMEOUT,
+            )
+            .await
+        {
             Ok(value) => print_json(&value),
             Err(error) => report("status", &error),
         },
@@ -314,7 +370,7 @@ async fn main() -> ExitCode {
             if let Some(token) = token_option(&cli.token) {
                 params["token"] = Value::String(token);
             }
-            call_and_print(&root, "register", "register_agent", params).await
+            call_and_print(&broker, "register", "register_agent", params).await
         }
         Command::Send {
             to,
@@ -347,7 +403,7 @@ async fn main() -> ExitCode {
             if let Some(ttl) = ttl {
                 params["ttl_s"] = json!(ttl);
             }
-            call_and_print(&root, "send", "send_message", params).await
+            call_and_print(&broker, "send", "send_message", params).await
         }
         Command::Wait { cursor, timeout } => {
             let token = match require_token(&cli.token) {
@@ -359,7 +415,7 @@ async fn main() -> ExitCode {
                 params["cursor"] = Value::String(cursor);
             }
             let deadline = Duration::from_secs(timeout.saturating_add(15).max(5));
-            match client::call_with_timeout(&root, "wait_message", params, deadline).await {
+            match broker.call("wait_message", params, deadline).await {
                 Ok(value) => print_json(&value),
                 Err(error) => report("wait", &error),
             }
@@ -370,7 +426,7 @@ async fn main() -> ExitCode {
                 Err(code) => return code,
             };
             call_and_print(
-                &root,
+                &broker,
                 "ack",
                 "ack",
                 json!({"token": token, "cursor": cursor}),
@@ -427,7 +483,8 @@ async fn main() -> ExitCode {
                 ArrivalCommand::Ack { cursor } => ("ack_arrivals", json!({"cursor":cursor}), 30),
             };
             params["token"] = Value::String(token);
-            match client::call_with_timeout(&root, method, params, Duration::from_secs(timeout))
+            match broker
+                .call(method, params, Duration::from_secs(timeout))
                 .await
             {
                 Ok(value) => print_json(&value),
@@ -439,7 +496,7 @@ async fn main() -> ExitCode {
                 Ok(token) => token,
                 Err(code) => return code,
             };
-            call_and_print(&root, "heartbeat", "heartbeat", json!({"token": token})).await
+            call_and_print(&broker, "heartbeat", "heartbeat", json!({"token": token})).await
         }
         Command::Agents { include_stale } => {
             let token = match require_token(&cli.token) {
@@ -447,7 +504,7 @@ async fn main() -> ExitCode {
                 Err(code) => return code,
             };
             call_and_print(
-                &root,
+                &broker,
                 "agents",
                 "list_agents",
                 json!({"token": token, "include_stale": include_stale}),
@@ -458,15 +515,108 @@ async fn main() -> ExitCode {
 }
 
 async fn call_and_print(
-    root: &std::path::Path,
+    client: &client::BrokerClient,
     label: &str,
     method: &str,
     params: Value,
 ) -> ExitCode {
-    match client::call(root, method, params).await {
+    match client.call(method, params, client::DEFAULT_TIMEOUT).await {
         Ok(value) => print_json(&value),
         Err(error) => report(label, &error),
     }
+}
+
+fn resolve_client(
+    cli: &mut Cli,
+    root: &std::path::Path,
+) -> Result<client::BrokerClient, client::ClientError> {
+    let daemon = matches!(&cli.command, Command::Daemon { .. });
+    if daemon {
+        if cli.endpoint.is_some()
+            || cli.profile.is_some()
+            || cli.ca_cert.is_some()
+            || cli.proxy.is_some()
+            || cli.expected_bus_id.is_some()
+        {
+            return Err(client::ClientError::Protocol(
+                "remote client options cannot select a daemon root".into(),
+            ));
+        }
+        return Ok(client::BrokerClient::uds(paths::socket_path(root)));
+    }
+    let endpoint = cli.endpoint.clone().or_else(|| {
+        std::env::var("COOP_ENDPOINT")
+            .ok()
+            .filter(|v| !v.is_empty())
+    });
+    if cli.root.is_some() && (endpoint.is_some() || cli.profile.is_some()) {
+        return Err(client::ClientError::Protocol(
+            "do not combine a broker root with a remote endpoint/profile".into(),
+        ));
+    }
+    if endpoint.is_some() || cli.profile.is_some() {
+        if matches!(&cli.command, Command::McpStdio { embedded: true, .. }) {
+            return Err(client::ClientError::Protocol(
+                "embedded mode cannot select a remote endpoint".into(),
+            ));
+        }
+        if matches!(&cli.command, Command::Host { .. }) {
+            return Err(client::ClientError::Protocol(
+                "remote managed hosts have not passed their activation gate".into(),
+            ));
+        }
+    }
+    if let Some(name) = &cli.profile {
+        if endpoint.is_some() {
+            return Err(client::ClientError::Protocol(
+                "endpoint and named profile conflict".into(),
+            ));
+        }
+        let file = cli.profile_file.clone().unwrap_or_else(|| {
+            PathBuf::from(std::env::var_os("HOME").unwrap_or_default())
+                .join(".config/cooperators/profiles.json")
+        });
+        let profile = cooperators::transport::profile::load_profile(&file, name)?;
+        if token_option(&cli.token).is_none() {
+            cli.token = Some(profile.token);
+        }
+        return Ok(profile.client);
+    }
+    if let Some(endpoint) = endpoint {
+        if matches!(&cli.command, Command::McpStdio { embedded: true, .. }) {
+            return Err(client::ClientError::Protocol(
+                "embedded mode cannot select a remote endpoint".into(),
+            ));
+        }
+        if matches!(&cli.command, Command::Host { .. }) {
+            return Err(client::ClientError::Protocol(
+                "remote managed hosts have not passed their activation gate".into(),
+            ));
+        }
+        let client = client::BrokerClient::https(
+            &endpoint,
+            client::HttpsOptions {
+                ca_pem: cli
+                    .ca_cert
+                    .as_ref()
+                    .map(std::fs::read)
+                    .transpose()
+                    .map_err(client::ClientError::Unreachable)?,
+                proxy: cli.proxy.clone(),
+                ..Default::default()
+            },
+        )?;
+        return match &cli.expected_bus_id {
+            Some(bus_id) => client.with_expected_bus_id(bus_id.clone()),
+            None => Ok(client),
+        };
+    }
+    if cli.ca_cert.is_some() || cli.proxy.is_some() || cli.expected_bus_id.is_some() {
+        return Err(client::ClientError::Protocol(
+            "TLS/proxy options require a remote endpoint".into(),
+        ));
+    }
+    Ok(client::BrokerClient::uds(paths::socket_path(root)))
 }
 
 fn print_json(value: &Value) -> ExitCode {

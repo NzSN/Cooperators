@@ -1,0 +1,9 @@
+{
+  "final_gap_controls": "gap-controls.json",
+  "harness_corrections_before_final_run": [
+    "Restored execute permission on copied baseline binary.",
+    "Supplied required native send_message.kind field.",
+    "Read claim receipt task.task_id using its actual schema."
+  ],
+  "scope": "Setup/harness failures, not product acceptance failures. Final observations came from a new disposable root."
+}

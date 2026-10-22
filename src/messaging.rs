@@ -420,9 +420,24 @@ impl DaemonState {
         cursor: Option<&str>,
         timeout_duration: Duration,
     ) -> Result<WaitBatch, BrokerError> {
+        self.wait_message_limited(agent_id, cursor, timeout_duration, None)
+            .await
+    }
+
+    pub(crate) async fn wait_message_limited(
+        &self,
+        agent_id: &str,
+        cursor: Option<&str>,
+        timeout_duration: Duration,
+        byte_limit: Option<usize>,
+    ) -> Result<WaitBatch, BrokerError> {
         let explicit_start = cursor.map(parse_cursor).transpose()?;
         let deadline = Instant::now() + timeout_duration;
-        let batch_limit = self.config.wait_batch_limit.max(1);
+        let batch_limit = self
+            .config
+            .wait_batch_limit
+            .max(1)
+            .min(if byte_limit.is_some() { 64 } else { usize::MAX });
 
         let mut start = 0u64;
         let mut initialized = false;
@@ -439,6 +454,7 @@ impl DaemonState {
 
                 let now_ms = inbox_now(&self.root);
                 let mut messages = Vec::new();
+                let mut encoded_bytes = 0usize;
                 let mut scanned_seq = start;
                 let first = inbox.records.partition_point(|record| record.seq <= start);
                 for record in &inbox.records[first..] {
@@ -448,10 +464,27 @@ impl DaemonState {
                     // Expired records are still durable backlog until ack.
                     // Expose the scanned prefix so an expired-only inbox can
                     // be acknowledged without skipping an unreturned message.
-                    scanned_seq = record.seq;
                     if inbox.is_expired(&record.id, now_ms) {
+                        scanned_seq = record.seq;
                         continue;
                     }
+                    if let Some(maximum) = byte_limit {
+                        let size = crate::rpc::bounded_json_size(
+                            record,
+                            maximum.saturating_sub(encoded_bytes),
+                        );
+                        let Some(size) = size else {
+                            if messages.is_empty() {
+                                return Err(BrokerError::application(
+                                    ErrorCode::ResourceExhausted,
+                                    "next inbox record exceeds remote page budget",
+                                ));
+                            }
+                            break;
+                        };
+                        encoded_bytes = encoded_bytes.saturating_add(size + 1);
+                    }
+                    scanned_seq = record.seq;
                     messages.push(record.clone());
                 }
                 let next_seq = scanned_seq;

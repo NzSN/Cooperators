@@ -133,6 +133,12 @@ pub struct DaemonConfig {
     pub enable_arrivals: bool,
     /// Separate arrival subscription/feed bounds.
     pub arrival_limits: ArrivalLimits,
+    /// Experimental native remote read adapter. Off until explicitly selected
+    /// by an isolated fixture or the later network policy activation path.
+    pub remote_read_only: bool,
+    /// Explicit approved-principal policy; activates the incompatible network
+    /// root format before source-log recovery. A client connection never does.
+    pub network_policy: Option<crate::network::NetworkPolicy>,
 }
 
 impl DaemonConfig {
@@ -156,6 +162,8 @@ impl DaemonConfig {
             write_queue_bytes: 8 * 1024 * 1024,
             enable_arrivals: false,
             arrival_limits: ArrivalLimits::default(),
+            remote_read_only: false,
+            network_policy: None,
         }
     }
 }
@@ -174,6 +182,7 @@ pub struct DaemonState {
     pub(crate) presence: Mutex<Presence>,
     pub(crate) inboxes: Arc<InboxStore>,
     pub(crate) arrivals: Option<Arc<ArrivalService>>,
+    pub(crate) network: Option<Arc<crate::network::NetworkRuntime>>,
     pub(crate) send_lock: Arc<Mutex<()>>,
     pub(crate) channel_logs: Mutex<HashMap<String, ChannelLog>>,
     /// Open queue logs, one per queue name (design §7).
@@ -219,10 +228,33 @@ impl DaemonState {
     pub fn with_config(config: DaemonConfig) -> Result<Self, BrokerError> {
         paths::ensure_layout(&config.root)?;
         let mut registry = Registry::load(&config.root)?;
+        if registry.network_meta().is_some() && config.network_policy.is_none() {
+            return Err(BrokerError::invalid("an activated network root requires its approved policy on every reopen"));
+        }
         // Validate/activate the format guard before any log recovery can repair
         // source files containing fields that an older binary cannot hash.
         let arrival_meta =
             arrivals::migration::prepare(&config.root, &mut registry, config.enable_arrivals)?;
+        let network = if let Some(policy) = &config.network_policy {
+            policy.validate()?;
+            let bus_id = match (&arrival_meta, registry.network_meta()) {
+                (Some(arrival), Some(network)) if arrival.bus_id != network.bus_id => {
+                    return Err(BrokerError::internal(
+                        "network and arrival bus identities conflict",
+                    ))
+                }
+                (Some(arrival), _) => arrival.bus_id.clone(),
+                (_, Some(network)) => network.bus_id.clone(),
+                _ => id::new_ulid()?,
+            };
+            let meta = registry.promote_network(bus_id)?;
+            Some(Arc::new(crate::network::NetworkRuntime::new(
+                policy.clone(),
+                meta,
+            )?))
+        } else {
+            None
+        };
         let arrivals = arrival_meta
             .map(|meta| {
                 ArrivalService::open(
@@ -288,6 +320,7 @@ impl DaemonState {
             presence: Mutex::new(presence),
             inboxes,
             arrivals,
+            network,
             send_lock: Arc::new(Mutex::new(())),
             channel_logs: Mutex::new(channel_logs),
             queues: Mutex::new(queues),
@@ -307,6 +340,10 @@ impl DaemonState {
     /// Active daemon configuration (TTLs, batch limit).
     pub fn config(&self) -> &DaemonConfig {
         &self.config
+    }
+
+    pub fn network(&self) -> Option<&Arc<crate::network::NetworkRuntime>> {
+        self.network.as_ref()
     }
 
     /// Seconds since this daemon state was constructed.
@@ -344,6 +381,12 @@ impl DaemonState {
 #[derive(Debug, Default)]
 pub struct ConnectionSession {
     token: Option<String>,
+}
+
+impl ConnectionSession {
+    pub(crate) fn authenticated(token: String) -> Self {
+        Self { token: Some(token) }
+    }
 }
 
 /// Exclusive ownership of a bus root, released by the kernel on process exit.
@@ -450,8 +493,27 @@ pub async fn run(root: &Path) -> io::Result<()> {
 /// The HTTP listener is best-effort: a port already in use degrades the
 /// daemon to UDS-only instead of taking the broker down.
 pub async fn run_with_options(root: &Path, options: ServerOptions) -> io::Result<()> {
+    run_with_network_policy(root, options, None).await
+}
+
+pub async fn run_with_network_policy(
+    root: &Path,
+    options: ServerOptions,
+    policy: Option<crate::network::NetworkPolicy>,
+) -> io::Result<()> {
+    if policy.is_some()
+        && options
+            .http_addr
+            .is_none_or(|address| !address.ip().is_loopback())
+    {
+        return Err(io::Error::new(
+            io::ErrorKind::InvalidInput,
+            "network mode requires a loopback HTTP backend behind a same-host verified TLS ingress",
+        ));
+    }
     let mut config = DaemonConfig::new(root.to_path_buf());
     config.enable_arrivals = options.enable_arrivals;
+    config.network_policy = policy;
     let state = Arc::new(DaemonState::owned(config).map_err(|error| match error {
         BrokerError::Io(error) => error,
         error => io::Error::other(format!("initialize daemon state: {error}")),
@@ -480,6 +542,9 @@ pub async fn run_with_options(root: &Path, options: ServerOptions) -> io::Result
                 });
             }
             Err(error) => {
+                if state.network().is_some() {
+                    return Err(error);
+                }
                 state.set_http_listener(false);
                 eprintln!("coop daemon: MCP HTTP listener {address} unavailable: {error}");
             }
@@ -509,6 +574,37 @@ pub async fn serve(listener: UnixListener, state: Arc<DaemonState>) -> io::Resul
 
 /// Dispatches one request. Returns `None` for notifications.
 pub async fn dispatch(
+    state: &Arc<DaemonState>,
+    session: &mut ConnectionSession,
+    request: RpcRequest,
+) -> Option<RpcResponse> {
+    if state.network().is_some() {
+        if let Ok(token) = request_token(&request.params, session) {
+            let scoped = {
+                let registry = state.registry.read().await;
+                registry
+                    .authenticate(&token)
+                    .is_some_and(|id| registry.network_grant(&id.agent_id).is_some())
+            };
+            if scoped {
+                let id = request.id.clone().unwrap_or(Value::Null);
+                let result =
+                    crate::network::call_remote(state, &token, &request.method, request.params)
+                        .await;
+                if request.is_notification {
+                    return None;
+                }
+                return Some(match result {
+                    Ok(value) => RpcResponse::success(id, value),
+                    Err(error) => RpcResponse::failure(id, error),
+                });
+            }
+        }
+    }
+    dispatch_trusted(state, session, request).await
+}
+
+pub(crate) async fn dispatch_trusted(
     state: &Arc<DaemonState>,
     session: &mut ConnectionSession,
     request: RpcRequest,

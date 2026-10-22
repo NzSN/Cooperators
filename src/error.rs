@@ -29,11 +29,14 @@ pub enum ErrorCode {
     ConflictClaimed,
     LeaseLost,
     DaemonUnreachable,
+    Forbidden,
+    OutcomeUnknown,
+    IdempotencyConflict,
 }
 
 impl ErrorCode {
     /// Every code, in table order.
-    pub const ALL: [Self; 9] = [
+    pub const ALL: [Self; 12] = [
         Self::Unauthenticated,
         Self::NotFound,
         Self::ResourceExhausted,
@@ -43,6 +46,9 @@ impl ErrorCode {
         Self::ConflictClaimed,
         Self::LeaseLost,
         Self::DaemonUnreachable,
+        Self::Forbidden,
+        Self::OutcomeUnknown,
+        Self::IdempotencyConflict,
     ];
 
     /// Stable symbolic name used in logs and JSON-RPC `error.data.code`.
@@ -57,6 +63,9 @@ impl ErrorCode {
             Self::ConflictClaimed => "CONFLICT_CLAIMED",
             Self::LeaseLost => "LEASE_LOST",
             Self::DaemonUnreachable => "DAEMON_UNREACHABLE",
+            Self::Forbidden => "FORBIDDEN",
+            Self::OutcomeUnknown => "OUTCOME_UNKNOWN",
+            Self::IdempotencyConflict => "IDEMPOTENCY_CONFLICT",
         }
     }
 
@@ -72,6 +81,9 @@ impl ErrorCode {
             Self::ConflictClaimed => -32007,
             Self::LeaseLost => -32008,
             Self::DaemonUnreachable => -32009,
+            Self::Forbidden => -32010,
+            Self::OutcomeUnknown => -32011,
+            Self::IdempotencyConflict => -32012,
         }
     }
 
@@ -87,6 +99,9 @@ impl ErrorCode {
             Self::ConflictClaimed => "resource is claimed by another agent",
             Self::LeaseLost => "lease lost",
             Self::DaemonUnreachable => "daemon unreachable",
+            Self::Forbidden => "permission denied",
+            Self::OutcomeUnknown => "operation outcome unknown",
+            Self::IdempotencyConflict => "operation identity conflicts with original input",
         }
     }
 

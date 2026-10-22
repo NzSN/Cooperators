@@ -8,6 +8,29 @@
 use serde::{Deserialize, Serialize};
 use serde_json::{json, Value};
 
+/// Count JSON bytes without allocating a response-sized buffer; abort at cap.
+pub(crate) fn bounded_json_size<T: serde::Serialize>(value: &T, maximum: usize) -> Option<usize> {
+    struct Counter {
+        count: usize,
+        maximum: usize,
+    }
+    impl std::io::Write for Counter {
+        fn write(&mut self, bytes: &[u8]) -> std::io::Result<usize> {
+            if bytes.len() > self.maximum.saturating_sub(self.count) {
+                return Err(std::io::Error::other("JSON budget exceeded"));
+            }
+            self.count += bytes.len();
+            Ok(bytes.len())
+        }
+        fn flush(&mut self) -> std::io::Result<()> {
+            Ok(())
+        }
+    }
+    let mut counter = Counter { count: 0, maximum };
+    serde_json::to_writer(&mut counter, value).ok()?;
+    Some(counter.count)
+}
+
 use crate::error::ErrorCode;
 
 /// JSON-RPC protocol version implemented here.

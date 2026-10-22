@@ -22,7 +22,7 @@ fn taxonomy_maps_to_distinct_server_reserved_jsonrpc_codes() {
         assert_eq!(ErrorCode::from_name(code.as_str()), Some(code));
         assert_eq!(code.to_string(), code.as_str());
     }
-    assert_eq!(codes.len(), 9);
+    assert_eq!(codes.len(), 12);
     assert_eq!(ErrorCode::from_rpc_code(-32601), None);
     assert_eq!(ErrorCode::from_name("NOPE"), None);
 }

@@ -1,0 +1,9 @@
+{
+  "command": "COOP_REQUIRE_UDS=1 COOP_PREUPGRADE_BINARY=<pinned-prearrival> cargo test --offline --locked --all-targets --features mbt-injection -- --nocapture",
+  "exit_code": 0,
+  "source": "isolated source export at 27d6e90",
+  "passed": 230,
+  "failed": 0,
+  "ignored": 1,
+  "skips_reported": 0
+}

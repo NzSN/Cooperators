@@ -41,6 +41,7 @@ pub mod leases;
 pub mod mcp;
 pub mod messaging;
 pub mod metrics;
+pub mod network;
 pub mod paths;
 pub mod presence;
 pub mod queues;
@@ -49,6 +50,7 @@ pub mod rpc;
 pub mod server;
 pub mod status;
 pub mod storage;
+pub mod transport;
 
 /// Crate version reported by `ping` and `daemon.status`.
 pub const VERSION: &str = env!("CARGO_PKG_VERSION");

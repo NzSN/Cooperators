@@ -1,0 +1,6 @@
+{
+  "source_commit": "27d6e901a683b2c651f8bbf9a3be017f3a5b22a2",
+  "path": "/tmp/coop-network-baseline/coop",
+  "sha256": "ad96a75923c421c62dd891fd765ab750ef43cd63b426f7ceb073e3d8f8488b9f",
+  "build": "cargo build --offline --locked --release"
+}

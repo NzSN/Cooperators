@@ -358,7 +358,27 @@ fn store_blob(root: &Path, text: &str) -> Result<BlobRef, BrokerError> {
 
 /// Reads and verifies a blob referenced by a document event.
 fn load_blob(root: &Path, blob: &BlobRef) -> Result<String, BrokerError> {
-    let bytes = fs::read(blob_path(root, &blob.sha256))?;
+    load_blob_limited(root, blob, usize::MAX)
+}
+
+fn load_blob_limited(root: &Path, blob: &BlobRef, maximum: usize) -> Result<String, BrokerError> {
+    use std::io::Read;
+    let file = fs::File::open(blob_path(root, &blob.sha256))?;
+    if blob.size > maximum as u64 || file.metadata()?.len() > maximum as u64 {
+        return Err(BrokerError::application(
+            ErrorCode::ResourceExhausted,
+            "document body exceeds remote budget",
+        ));
+    }
+    let mut bytes = Vec::new();
+    file.take((maximum as u64).saturating_add(1))
+        .read_to_end(&mut bytes)?;
+    if bytes.len() > maximum {
+        return Err(BrokerError::application(
+            ErrorCode::ResourceExhausted,
+            "document body exceeds remote budget",
+        ));
+    }
     if bytes.len() as u64 != blob.size {
         return Err(BrokerError::internal(format!(
             "blob {} size mismatch: expected {}, found {}",
@@ -1068,6 +1088,15 @@ impl DaemonState {
         name: &str,
         version: Option<u64>,
     ) -> Result<DocReadResponse, BrokerError> {
+        self.read_doc_limited(name, version, None).await
+    }
+
+    pub(crate) async fn read_doc_limited(
+        &self,
+        name: &str,
+        version: Option<u64>,
+        byte_limit: Option<usize>,
+    ) -> Result<DocReadResponse, BrokerError> {
         validate_doc_name(name)?;
         let _send_guard = self.send_lock.lock().await;
         if !self.ensure_doc_loaded(name).await? {
@@ -1088,16 +1117,30 @@ impl DaemonState {
                 .ok_or_else(|| BrokerError::internal("doc state vanished"))?;
             self.expire_doc_claim(name, log, runtime, now_ms)?;
             let version_number = version.unwrap_or(runtime.head);
-            let version = runtime
-                .versions
-                .get(&version_number)
-                .cloned()
-                .ok_or_else(|| {
-                    BrokerError::application(
-                        ErrorCode::NotFound,
-                        format!("document {name:?} has no version {version_number}"),
-                    )
-                })?;
+            let version = runtime.versions.get(&version_number).ok_or_else(|| {
+                BrokerError::application(
+                    ErrorCode::NotFound,
+                    format!("document {name:?} has no version {version_number}"),
+                )
+            })?;
+            if let Some(maximum) = byte_limit {
+                if crate::rpc::bounded_json_size(
+                    &(&version.title, &version.mime, &version.body),
+                    maximum,
+                )
+                .is_none()
+                    || version
+                        .blob
+                        .as_ref()
+                        .is_some_and(|blob| blob.size > maximum as u64)
+                {
+                    return Err(BrokerError::application(
+                        ErrorCode::ResourceExhausted,
+                        "document version exceeds remote budget",
+                    ));
+                }
+            }
+            let version = version.clone();
             let claim = runtime.claim.as_ref().map(claim_view);
             (
                 version,
@@ -1112,7 +1155,13 @@ impl DaemonState {
         let body = if let Some(body) = version.body {
             body
         } else if let Some(blob) = &version.blob {
-            Body::new(version.mime.clone(), load_blob(&self.root, blob)?)
+            Body::new(
+                version.mime.clone(),
+                match byte_limit {
+                    Some(maximum) => load_blob_limited(&self.root, blob, maximum)?,
+                    None => load_blob(&self.root, blob)?,
+                },
+            )
         } else {
             return Err(BrokerError::internal("document version has no body"));
         };

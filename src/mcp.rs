@@ -340,6 +340,8 @@ pub enum Backend {
     /// Dispatch directly against in-process daemon state (HTTP endpoint and
     /// `mcp-stdio --embedded`).
     Embedded(Arc<DaemonState>),
+    /// Forward over a pooled, verified HTTPS client.
+    Remote(crate::transport::BrokerClient),
 }
 
 impl Backend {
@@ -353,8 +355,16 @@ impl Backend {
         Self::Embedded(state)
     }
 
+    pub fn remote(client: crate::transport::BrokerClient) -> Self {
+        Self::Remote(client)
+    }
+
     async fn call(&self, method: &str, params: Value) -> Result<Value, RpcError> {
         match self {
+            Self::Remote(client) => client
+                .call(method, params.clone(), deadline_for(method, &params))
+                .await
+                .map_err(client_error_to_rpc),
             Self::Uds { socket } => {
                 let deadline = deadline_for(method, &params);
                 client::call_at(socket, method, params, deadline)
@@ -415,6 +425,19 @@ fn client_error_to_rpc(error: ClientError) -> RpcError {
         ClientError::Protocol(message) => RpcError::invalid_request(format!(
             "daemon returned an invalid JSON-RPC response: {message}"
         )),
+        ClientError::RemoteTransport(detail) => {
+            RpcError::application(ErrorCode::DaemonUnreachable, detail)
+        }
+        ClientError::HttpStatus(status) => RpcError::application_with_data(
+            ErrorCode::DaemonUnreachable,
+            "broker HTTP request rejected",
+            json!({"http_status":status}),
+        ),
+        ClientError::OutcomeUnknown(detail) => RpcError::application_with_data(
+            ErrorCode::OutcomeUnknown,
+            detail,
+            json!({"outcome":"unknown","automatic_retry":false}),
+        ),
     }
 }
 
@@ -497,17 +520,28 @@ impl CoopMcpHandler {
         display_name: String,
         capabilities: Vec<String>,
     ) -> Result<Self, RpcError> {
+        Self::fresh_stdio_authorized(backend, kind, display_name, capabilities, None).await
+    }
+
+    pub async fn fresh_stdio_authorized(
+        backend: Backend,
+        kind: String,
+        display_name: String,
+        capabilities: Vec<String>,
+        enrollment_credential: Option<String>,
+    ) -> Result<Self, RpcError> {
         let launch_key =
             crate::registry::new_token().map_err(crate::error::BrokerError::into_rpc_error)?;
-        let params = json!({"launch_key": launch_key, "kind": kind,
+        let mut params = json!({"launch_key": launch_key, "kind": kind,
             "display_name": display_name, "capabilities": capabilities});
+        if let Some(credential) = enrollment_credential {
+            params["token"] = Value::String(credential);
+        }
         let mut attempts = 0;
         let reply = loop {
             match backend.call("enroll_agent", params.clone()).await {
                 Ok(reply) => break reply,
-                Err(error)
-                    if error.code == ErrorCode::DaemonUnreachable.rpc_code() && attempts < 2 =>
-                {
+                Err(error) if matches!(error.code, -32009 | -32011) && attempts < 2 => {
                     attempts += 1;
                     tokio::time::sleep(Duration::from_millis(25)).await;
                 }
@@ -580,6 +614,24 @@ impl CoopMcpHandler {
 
     fn visible_catalog(&self) -> Vec<Tool> {
         let mut tools = cached_tool_catalog().to_vec();
+        if matches!(&self.backend, Backend::Remote(_)) {
+            tools.retain(|tool| {
+                spec_for_tool(tool.name.as_ref()).is_some_and(|spec| {
+                    crate::network::is_read(spec.method) && spec.method != "daemon.status"
+                })
+            });
+        }
+        if self.auth == AuthMode::HttpHeader {
+            if let Backend::Embedded(state) = &self.backend {
+                if state.network().is_some() {
+                    tools.retain(|tool| {
+                        spec_for_tool(tool.name.as_ref()).is_some_and(|s| {
+                            crate::network::is_read(s.method) && s.method != "daemon.status"
+                        })
+                    });
+                }
+            }
+        }
         if self.host_control.is_some() {
             tools.retain(|tool| !managed_hidden(tool.name.as_ref()));
             tools.push(Tool::new(
@@ -691,7 +743,19 @@ impl CoopMcpHandler {
         let spec = spec.expect("known broker tool");
         if let Some(token) = token {
             if let Value::Object(map) = &mut params {
-                if managed {
+                if self.auth == AuthMode::HttpHeader
+                    && map
+                        .get("token")
+                        .is_some_and(|body| body.as_str() != Some(&token))
+                {
+                    return tool_error(
+                        ErrorCode::Forbidden.rpc_code(),
+                        "body credential cannot replace HTTP identity",
+                        "FORBIDDEN",
+                    )
+                    .into();
+                }
+                if managed || self.auth == AuthMode::HttpHeader {
                     map.insert("token".into(), Value::String(token));
                 } else {
                     map.entry("token").or_insert(Value::String(token));
@@ -923,10 +987,16 @@ pub type CoopHttpService = StreamableHttpService<CoopMcpHandler, LocalSessionMan
 /// The service is stateless (SEP-2567) and prefers plain JSON responses; tool
 /// calls never emit notifications, so SSE is unnecessary for this surface.
 pub fn http_service(state: Arc<DaemonState>) -> CoopHttpService {
-    let config = StreamableHttpServerConfig::default()
+    let mut config = StreamableHttpServerConfig::default()
         .with_legacy_session_mode(false)
         .with_json_response(true)
         .with_sse_keep_alive(None);
+    if let Some(network) = state.network() {
+        let policy = network.policy();
+        config = config
+            .with_allowed_hosts(policy.allowed_hosts)
+            .with_allowed_origins(policy.allowed_origins);
+    }
     StreamableHttpService::new(
         move || Ok(CoopMcpHandler::http(Backend::embedded(state.clone()))),
         Arc::new(LocalSessionManager::default()),
@@ -942,18 +1012,38 @@ pub async fn serve_http(listener: TcpListener, state: Arc<DaemonState>) -> io::R
     eprintln!("coop daemon: MCP streamable HTTP on http://{address}/mcp");
     loop {
         let (stream, _peer) = listener.accept().await?;
+        let permit = if let Some(network) = state.network() {
+            match network.connections.clone().try_acquire_owned() {
+                Ok(permit) => Some(permit),
+                Err(_) => {
+                    drop(stream);
+                    continue;
+                }
+            }
+        } else {
+            None
+        };
         let io = hyper_util::rt::TokioIo::new(stream);
         let service = service.clone();
         let state = Arc::clone(&state);
         tokio::spawn(async move {
-            let connection = hyper::server::conn::http1::Builder::new().serve_connection(
-                io,
-                hyper::service::service_fn(move |request| {
-                    let service = service.clone();
-                    let state = Arc::clone(&state);
-                    async move { Ok::<_, Infallible>(handle_http(&service, &state, request).await) }
-                }),
-            );
+            let _connection_permit = permit;
+            let connection =
+                hyper::server::conn::http1::Builder::new()
+                    .timer(hyper_util::rt::TokioTimer::new())
+                    .header_read_timeout(Duration::from_secs(10))
+                    .max_headers(32)
+                    .max_buf_size(64 * 1024)
+                    .serve_connection(
+                        io,
+                        hyper::service::service_fn(move |request| {
+                            let service = service.clone();
+                            let state = Arc::clone(&state);
+                            async move {
+                                Ok::<_, Infallible>(handle_http(&service, &state, request).await)
+                            }
+                        }),
+                    );
             let _ = connection.await;
         });
     }
@@ -973,6 +1063,12 @@ where
 {
     let path = request.uri().path().to_string();
     let response = match path.as_str() {
+        "/v1/rpc" | "/v1/enroll" | "/v1/info" if state.network().is_some() => {
+            crate::network::handle_network_http(state, request).await
+        }
+        "/v1/rpc" if state.config().remote_read_only => {
+            crate::network::handle_native_read(state, request).await
+        }
         "/healthz" => {
             if request.method() != Method::GET {
                 method_not_allowed()
@@ -989,6 +1085,12 @@ where
             }
         }
         "/metrics" => {
+            if state.network().is_some() {
+                return http_json(
+                    StatusCode::NOT_FOUND,
+                    json!({"error":"metrics require the private operator interface"}),
+                );
+            }
             if request.method() != Method::GET {
                 method_not_allowed()
             } else {
@@ -1004,10 +1106,24 @@ where
                 }
             }
         }
+        "/mcp"
+            if state
+                .network()
+                .is_some_and(|network| !network.policy().headers_allowed(request.headers())) =>
+        {
+            http_json(
+                StatusCode::FORBIDDEN,
+                json!({"error":"Host or Origin is not authorized"}),
+            )
+        }
         "/mcp" => match bearer_token(request.headers()) {
             None => unauthorized("missing Authorization: Bearer token"),
             Some(token) => {
-                if state.authenticate(&token).await.is_err() {
+                let authenticated = match state.network() {
+                    Some(network) => network.authenticate(state, &token).await.is_ok(),
+                    None => state.authenticate(&token).await.is_ok(),
+                };
+                if !authenticated {
                     unauthorized("invalid bearer token")
                 } else {
                     let mut service = service.clone();

@@ -1,0 +1,724 @@
+   Compiling proc-macro2 v1.0.107
+   Compiling unicode-ident v1.0.26
+   Compiling quote v1.0.47
+   Compiling libc v0.2.189
+   Compiling cfg-if v1.0.5
+   Compiling pin-project-lite v0.2.17
+   Compiling futures-core v0.3.34
+   Compiling bytes v1.12.1
+   Compiling parking_lot_core v0.9.12
+   Compiling itoa v1.0.18
+   Compiling serde_core v1.0.228
+   Compiling scopeguard v1.2.0
+   Compiling smallvec v1.15.2
+   Compiling futures-sink v0.3.34
+   Compiling memchr v2.8.3
+   Compiling version_check v0.9.5
+   Compiling autocfg v1.5.1
+   Compiling lock_api v0.4.14
+   Compiling typenum v1.20.1
+   Compiling rand_core v0.10.1
+   Compiling zmij v1.0.23
+   Compiling futures-channel v0.3.34
+   Compiling futures-task v0.3.34
+   Compiling futures-io v0.3.34
+   Compiling getrandom v0.4.3
+   Compiling slab v0.4.12
+   Compiling serde v1.0.228
+   Compiling httparse v1.10.1
+   Compiling serde_json v1.0.149
+   Compiling ref-cast v1.0.25
+   Compiling utf8parse v0.2.2
+   Compiling generic-array v0.14.7
+   Compiling anstyle-parse v1.0.0
+   Compiling once_cell v1.21.4
+   Compiling cpufeatures v0.3.0
+   Compiling num-traits v0.2.19
+   Compiling thiserror v2.0.21
+   Compiling colorchoice v1.0.4
+   Compiling anstyle v1.0.14
+   Compiling is_terminal_polyfill v1.70.2
+   Compiling anstyle-query v1.1.5
+   Compiling chacha20 v0.10.2
+   Compiling tracing-core v0.1.36
+   Compiling rmcp v3.2.0
+   Compiling http v1.5.0
+   Compiling heck v0.5.0
+   Compiling strsim v0.11.1
+   Compiling anstream v1.0.0
+   Compiling hashbrown v0.17.1
+   Compiling dyn-clone v1.0.20
+   Compiling equivalent v1.0.2
+   Compiling clap_lex v1.0.0
+   Compiling atomic-waker v1.1.2
+   Compiling httpdate v1.0.3
+   Compiling tower-service v0.3.3
+   Compiling base64 v0.23.0
+   Compiling pastey v0.2.1
+   Compiling cpufeatures v0.2.17
+   Compiling clap_builder v4.6.6
+   Compiling syn v2.0.119
+   Compiling syn v3.0.6
+   Compiling http-body v1.0.1
+   Compiling http-body-util v0.1.3
+   Compiling crypto-common v0.1.7
+   Compiling block-buffer v0.10.4
+   Compiling digest v0.10.7
+   Compiling sha2 v0.10.9
+   Compiling errno v0.3.14
+   Compiling mio v1.2.0
+   Compiling socket2 v0.6.3
+   Compiling signal-hook-registry v1.4.8
+   Compiling parking_lot v0.12.5
+   Compiling uuid v1.26.1
+   Compiling rand v0.10.2
+   Compiling indexmap v2.14.2
+   Compiling futures-macro v0.3.34
+   Compiling thiserror-impl v2.0.21
+   Compiling clap_derive v4.6.4
+   Compiling serde_derive_internals v0.29.1
+   Compiling futures-util v0.3.34
+   Compiling tokio-macros v2.7.0
+   Compiling serde_derive v1.0.228
+   Compiling ref-cast-impl v1.0.25
+   Compiling tracing-attributes v0.1.31
+   Compiling async-trait v0.1.89
+   Compiling schemars_derive v1.2.1
+   Compiling tokio v1.53.1
+   Compiling clap v4.6.6
+   Compiling tracing v0.1.44
+   Compiling chrono v0.4.45
+   Compiling futures-executor v0.3.34
+   Compiling sse-stream v0.2.5
+   Compiling futures v0.3.34
+   Compiling schemars v1.2.1
+   Compiling tokio-util v0.7.18
+   Compiling hyper v1.12.0
+   Compiling tokio-stream v0.1.19
+   Compiling hyper-util v0.1.20
+   Compiling cooperators v0.1.0 (/tmp/coop-network-baseline/Cooperators)
+warning: use of deprecated method `std::sync::atomic::Atomic::<u64>::fetch_update`: renamed to `try_update` for consistency
+   --> src/faults.rs:135:14
+    |
+135 |             .fetch_update(Ordering::Relaxed, Ordering::Relaxed, |old| {
+    |              ^^^^^^^^^^^^
+    |
+    = note: `#[warn(deprecated)]` on by default
+help: replace the use of the deprecated method
+    |
+135 -             .fetch_update(Ordering::Relaxed, Ordering::Relaxed, |old| {
+135 +             .try_update(Ordering::Relaxed, Ordering::Relaxed, |old| {
+    |
+
+warning: `cooperators` (lib) generated 1 warning (run `cargo fix --lib -p cooperators` to apply 1 suggestion)
+warning: `cooperators` (lib test) generated 1 warning (1 duplicate)
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 56.62s
+     Running unittests src/lib.rs (/tmp/coop-network-baseline/Cooperators/target/debug/deps/cooperators-ab01d15fa6918942)
+
+running 9 tests
+test id::tests::rfc3339_format_is_stable ... ok
+test id::tests::generated_ulids_are_valid ... ok
+test id::tests::ulid_time_encoding_matches_spec_vector ... ok
+test registry::tests::registry_roundtrip_keeps_only_token_hashes ... ok
+test registry::tests::token_hash_is_sha256_and_tokens_are_128_bits ... ok
+test server::tests::ndjson_request_response_framing_over_an_in_process_stream ... ok
+test server::tests::notifications_produce_no_response ... ok
+test server::tests::dispatch_handles_ping_echo_and_unknown_methods ... ok
+test server::tests::status_reports_identity_and_an_empty_head_map ... ok
+
+test result: ok. 9 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running unittests src/main.rs (/tmp/coop-network-baseline/Cooperators/target/debug/deps/coop-f69d51bb08feb91f)
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running tests/arrival_crash.rs (/tmp/coop-network-baseline/Cooperators/target/debug/deps/arrival_crash-f1d025eae0a02201)
+
+running 6 tests
+test arrival_crash_child ... ok
+test preupgrade_binary_refuses_v2_before_repairing_source_files ... ok
+test process_kill_after_source_commit_before_feed_write_recovers_exact_arrival ... ok
+test process_kill_after_ack_success_preserves_default_and_historical_cursors ... ok
+test process_kill_before_feed_sync_recovers_complete_row_without_duplicate ... ok
+test process_kill_before_ack_sync_preserves_prior_acknowledged_prefix ... ok
+
+test result: ok. 6 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 3.17s
+
+     Running tests/arrival_faults.rs (/tmp/coop-network-baseline/Cooperators/target/debug/deps/arrival_faults-fb5207284bf2bad8)
+
+running 4 tests
+test subscription_sync_failure_fences_mutation_until_reopen_and_recovers_client_key ... ok
+test recovery_sync_failure_never_publishes_uncertain_feed_indexes ... ok
+test uncertain_feed_sync_replays_complete_notice_before_retry_and_isolates_recipient ... ok
+test uncertain_ack_is_quarantined_and_recovered_before_success ... ok
+
+test result: ok. 4 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.11s
+
+     Running tests/arrival_migration.rs (/tmp/coop-network-baseline/Cooperators/target/debug/deps/arrival_migration-42503f06a023aa8b)
+
+running 10 tests
+test directory_failure_also_requires_reopen_and_does_not_promote ... ok
+test metadata_before_v2_is_reused_without_changing_bus_identity ... ok
+test unknown_required_features_and_invalid_format_combinations_fail_early ... ok
+test historical_source_hashes_omit_absent_notification_intent ... ok
+test stable_id_tuples_are_versioned_unambiguous_and_scope_every_coordinate ... ok
+test promotion_failure_fences_retry_and_mutations_until_real_reopen ... ok
+test disabled_root_keeps_v1_without_notification_artifacts ... ok
+test wire_defaults_and_kind_names_match_the_arrival_contract ... ok
+test v2_missing_or_incompatible_metadata_fails_without_replacing_it ... ok
+test promotion_preserves_identities_and_all_following_saves_preserve_v2 ... ok
+
+test result: ok. 10 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running tests/arrival_model.rs (/tmp/coop-network-baseline/Cooperators/target/debug/deps/arrival_model-065994aaa3e97631)
+
+running 2 tests
+MODEL_TRACE {"case":0,"group":"bridge","pair":["arrival","arrival"],"seed":262145}
+MODEL_TRACE {"case":0,"group":"broker","pair":["toggle_a","toggle_a"],"seed":262145}
+MODEL_TRACE {"case":1,"group":"bridge","pair":["arrival","restart"],"seed":262145}
+MODEL_TRACE {"case":1,"group":"broker","pair":["toggle_a","toggle_b"],"seed":262145}
+MODEL_TRACE {"case":2,"group":"bridge","pair":["arrival","rebind"],"seed":262145}
+MODEL_TRACE {"case":3,"group":"bridge","pair":["arrival","schedule"],"seed":262145}
+MODEL_TRACE {"case":2,"group":"broker","pair":["toggle_a","mutate"],"seed":262145}
+MODEL_TRACE {"case":4,"group":"bridge","pair":["arrival","begin_claim"],"seed":262145}
+MODEL_TRACE {"case":5,"group":"bridge","pair":["arrival","finish_empty"],"seed":262145}
+MODEL_TRACE {"case":6,"group":"bridge","pair":["arrival","finish_adopted"],"seed":262145}
+MODEL_TRACE {"case":3,"group":"broker","pair":["toggle_a","restart"],"seed":262145}
+MODEL_TRACE {"case":7,"group":"bridge","pair":["arrival","resolve"],"seed":262145}
+MODEL_TRACE {"case":8,"group":"bridge","pair":["restart","arrival"],"seed":262145}
+MODEL_TRACE {"case":4,"group":"broker","pair":["toggle_a","drain_ack_a"],"seed":262145}
+MODEL_TRACE {"case":9,"group":"bridge","pair":["restart","restart"],"seed":262145}
+MODEL_TRACE {"case":10,"group":"bridge","pair":["restart","rebind"],"seed":262145}
+MODEL_TRACE {"case":5,"group":"broker","pair":["toggle_a","drain_ack_b"],"seed":262145}
+MODEL_TRACE {"case":11,"group":"bridge","pair":["restart","schedule"],"seed":262145}
+MODEL_TRACE {"case":12,"group":"bridge","pair":["restart","begin_claim"],"seed":262145}
+MODEL_TRACE {"case":6,"group":"broker","pair":["toggle_a","reject_future_ack"],"seed":262145}
+MODEL_TRACE {"case":13,"group":"bridge","pair":["restart","finish_empty"],"seed":262145}
+MODEL_TRACE {"case":14,"group":"bridge","pair":["restart","finish_adopted"],"seed":262145}
+MODEL_TRACE {"case":7,"group":"broker","pair":["toggle_a","reject_cross_identity"],"seed":262145}
+MODEL_TRACE {"case":15,"group":"bridge","pair":["restart","resolve"],"seed":262145}
+MODEL_TRACE {"case":16,"group":"bridge","pair":["rebind","arrival"],"seed":262145}
+MODEL_TRACE {"case":8,"group":"broker","pair":["toggle_b","toggle_a"],"seed":262145}
+MODEL_TRACE {"case":17,"group":"bridge","pair":["rebind","restart"],"seed":262145}
+MODEL_TRACE {"case":18,"group":"bridge","pair":["rebind","rebind"],"seed":262145}
+MODEL_TRACE {"case":9,"group":"broker","pair":["toggle_b","toggle_b"],"seed":262145}
+MODEL_TRACE {"case":19,"group":"bridge","pair":["rebind","schedule"],"seed":262145}
+MODEL_TRACE {"case":20,"group":"bridge","pair":["rebind","begin_claim"],"seed":262145}
+MODEL_TRACE {"case":10,"group":"broker","pair":["toggle_b","mutate"],"seed":262145}
+MODEL_TRACE {"case":21,"group":"bridge","pair":["rebind","finish_empty"],"seed":262145}
+MODEL_TRACE {"case":22,"group":"bridge","pair":["rebind","finish_adopted"],"seed":262145}
+MODEL_TRACE {"case":23,"group":"bridge","pair":["rebind","resolve"],"seed":262145}
+MODEL_TRACE {"case":11,"group":"broker","pair":["toggle_b","restart"],"seed":262145}
+MODEL_TRACE {"case":24,"group":"bridge","pair":["schedule","arrival"],"seed":262145}
+MODEL_TRACE {"case":25,"group":"bridge","pair":["schedule","restart"],"seed":262145}
+MODEL_TRACE {"case":12,"group":"broker","pair":["toggle_b","drain_ack_a"],"seed":262145}
+MODEL_TRACE {"case":26,"group":"bridge","pair":["schedule","rebind"],"seed":262145}
+MODEL_TRACE {"case":27,"group":"bridge","pair":["schedule","schedule"],"seed":262145}
+MODEL_TRACE {"case":28,"group":"bridge","pair":["schedule","begin_claim"],"seed":262145}
+MODEL_TRACE {"case":13,"group":"broker","pair":["toggle_b","drain_ack_b"],"seed":262145}
+MODEL_TRACE {"case":29,"group":"bridge","pair":["schedule","finish_empty"],"seed":262145}
+MODEL_TRACE {"case":30,"group":"bridge","pair":["schedule","finish_adopted"],"seed":262145}
+MODEL_TRACE {"case":14,"group":"broker","pair":["toggle_b","reject_future_ack"],"seed":262145}
+MODEL_TRACE {"case":31,"group":"bridge","pair":["schedule","resolve"],"seed":262145}
+MODEL_TRACE {"case":32,"group":"bridge","pair":["begin_claim","arrival"],"seed":262145}
+MODEL_TRACE {"case":15,"group":"broker","pair":["toggle_b","reject_cross_identity"],"seed":262145}
+MODEL_TRACE {"case":33,"group":"bridge","pair":["begin_claim","restart"],"seed":262145}
+MODEL_TRACE {"case":34,"group":"bridge","pair":["begin_claim","rebind"],"seed":262145}
+MODEL_TRACE {"case":35,"group":"bridge","pair":["begin_claim","schedule"],"seed":262145}
+MODEL_TRACE {"case":16,"group":"broker","pair":["mutate","toggle_a"],"seed":262145}
+MODEL_TRACE {"case":36,"group":"bridge","pair":["begin_claim","begin_claim"],"seed":262145}
+MODEL_TRACE {"case":37,"group":"bridge","pair":["begin_claim","finish_empty"],"seed":262145}
+MODEL_TRACE {"case":38,"group":"bridge","pair":["begin_claim","finish_adopted"],"seed":262145}
+MODEL_TRACE {"case":17,"group":"broker","pair":["mutate","toggle_b"],"seed":262145}
+MODEL_TRACE {"case":39,"group":"bridge","pair":["begin_claim","resolve"],"seed":262145}
+MODEL_TRACE {"case":40,"group":"bridge","pair":["finish_empty","arrival"],"seed":262145}
+MODEL_TRACE {"case":18,"group":"broker","pair":["mutate","mutate"],"seed":262145}
+MODEL_TRACE {"case":41,"group":"bridge","pair":["finish_empty","restart"],"seed":262145}
+MODEL_TRACE {"case":42,"group":"bridge","pair":["finish_empty","rebind"],"seed":262145}
+MODEL_TRACE {"case":43,"group":"bridge","pair":["finish_empty","schedule"],"seed":262145}
+MODEL_TRACE {"case":19,"group":"broker","pair":["mutate","restart"],"seed":262145}
+MODEL_TRACE {"case":44,"group":"bridge","pair":["finish_empty","begin_claim"],"seed":262145}
+MODEL_TRACE {"case":45,"group":"bridge","pair":["finish_empty","finish_empty"],"seed":262145}
+MODEL_TRACE {"case":46,"group":"bridge","pair":["finish_empty","finish_adopted"],"seed":262145}
+MODEL_TRACE {"case":20,"group":"broker","pair":["mutate","drain_ack_a"],"seed":262145}
+MODEL_TRACE {"case":47,"group":"bridge","pair":["finish_empty","resolve"],"seed":262145}
+MODEL_TRACE {"case":48,"group":"bridge","pair":["finish_adopted","arrival"],"seed":262145}
+MODEL_TRACE {"case":49,"group":"bridge","pair":["finish_adopted","restart"],"seed":262145}
+MODEL_TRACE {"case":21,"group":"broker","pair":["mutate","drain_ack_b"],"seed":262145}
+MODEL_TRACE {"case":50,"group":"bridge","pair":["finish_adopted","rebind"],"seed":262145}
+MODEL_TRACE {"case":51,"group":"bridge","pair":["finish_adopted","schedule"],"seed":262145}
+MODEL_TRACE {"case":52,"group":"bridge","pair":["finish_adopted","begin_claim"],"seed":262145}
+MODEL_TRACE {"case":22,"group":"broker","pair":["mutate","reject_future_ack"],"seed":262145}
+MODEL_TRACE {"case":53,"group":"bridge","pair":["finish_adopted","finish_empty"],"seed":262145}
+MODEL_TRACE {"case":54,"group":"bridge","pair":["finish_adopted","finish_adopted"],"seed":262145}
+MODEL_TRACE {"case":55,"group":"bridge","pair":["finish_adopted","resolve"],"seed":262145}
+MODEL_TRACE {"case":23,"group":"broker","pair":["mutate","reject_cross_identity"],"seed":262145}
+MODEL_TRACE {"case":56,"group":"bridge","pair":["resolve","arrival"],"seed":262145}
+MODEL_TRACE {"case":57,"group":"bridge","pair":["resolve","restart"],"seed":262145}
+MODEL_TRACE {"case":58,"group":"bridge","pair":["resolve","rebind"],"seed":262145}
+MODEL_TRACE {"case":24,"group":"broker","pair":["restart","toggle_a"],"seed":262145}
+MODEL_TRACE {"case":59,"group":"bridge","pair":["resolve","schedule"],"seed":262145}
+MODEL_TRACE {"case":60,"group":"bridge","pair":["resolve","begin_claim"],"seed":262145}
+MODEL_TRACE {"case":25,"group":"broker","pair":["restart","toggle_b"],"seed":262145}
+MODEL_TRACE {"case":61,"group":"bridge","pair":["resolve","finish_empty"],"seed":262145}
+MODEL_TRACE {"case":62,"group":"bridge","pair":["resolve","finish_adopted"],"seed":262145}
+MODEL_TRACE {"case":26,"group":"broker","pair":["restart","mutate"],"seed":262145}
+MODEL_TRACE {"case":63,"group":"bridge","pair":["resolve","resolve"],"seed":262145}
+MODEL_COVERAGE group=bridge executed=64 alphabet=8 ordered_pairs=64 explicit_fair_recovery=true
+test generated_bridge_pairs_preserve_generations_claims_and_new_arrivals ... ok
+MODEL_TRACE {"case":27,"group":"broker","pair":["restart","restart"],"seed":262145}
+MODEL_TRACE {"case":28,"group":"broker","pair":["restart","drain_ack_a"],"seed":262145}
+MODEL_TRACE {"case":29,"group":"broker","pair":["restart","drain_ack_b"],"seed":262145}
+MODEL_TRACE {"case":30,"group":"broker","pair":["restart","reject_future_ack"],"seed":262145}
+MODEL_TRACE {"case":31,"group":"broker","pair":["restart","reject_cross_identity"],"seed":262145}
+MODEL_TRACE {"case":32,"group":"broker","pair":["drain_ack_a","toggle_a"],"seed":262145}
+MODEL_TRACE {"case":33,"group":"broker","pair":["drain_ack_a","toggle_b"],"seed":262145}
+MODEL_TRACE {"case":34,"group":"broker","pair":["drain_ack_a","mutate"],"seed":262145}
+MODEL_TRACE {"case":35,"group":"broker","pair":["drain_ack_a","restart"],"seed":262145}
+MODEL_TRACE {"case":36,"group":"broker","pair":["drain_ack_a","drain_ack_a"],"seed":262145}
+MODEL_TRACE {"case":37,"group":"broker","pair":["drain_ack_a","drain_ack_b"],"seed":262145}
+MODEL_TRACE {"case":38,"group":"broker","pair":["drain_ack_a","reject_future_ack"],"seed":262145}
+MODEL_TRACE {"case":39,"group":"broker","pair":["drain_ack_a","reject_cross_identity"],"seed":262145}
+MODEL_TRACE {"case":40,"group":"broker","pair":["drain_ack_b","toggle_a"],"seed":262145}
+MODEL_TRACE {"case":41,"group":"broker","pair":["drain_ack_b","toggle_b"],"seed":262145}
+MODEL_TRACE {"case":42,"group":"broker","pair":["drain_ack_b","mutate"],"seed":262145}
+MODEL_TRACE {"case":43,"group":"broker","pair":["drain_ack_b","restart"],"seed":262145}
+MODEL_TRACE {"case":44,"group":"broker","pair":["drain_ack_b","drain_ack_a"],"seed":262145}
+MODEL_TRACE {"case":45,"group":"broker","pair":["drain_ack_b","drain_ack_b"],"seed":262145}
+MODEL_TRACE {"case":46,"group":"broker","pair":["drain_ack_b","reject_future_ack"],"seed":262145}
+MODEL_TRACE {"case":47,"group":"broker","pair":["drain_ack_b","reject_cross_identity"],"seed":262145}
+MODEL_TRACE {"case":48,"group":"broker","pair":["reject_future_ack","toggle_a"],"seed":262145}
+MODEL_TRACE {"case":49,"group":"broker","pair":["reject_future_ack","toggle_b"],"seed":262145}
+MODEL_TRACE {"case":50,"group":"broker","pair":["reject_future_ack","mutate"],"seed":262145}
+MODEL_TRACE {"case":51,"group":"broker","pair":["reject_future_ack","restart"],"seed":262145}
+MODEL_TRACE {"case":52,"group":"broker","pair":["reject_future_ack","drain_ack_a"],"seed":262145}
+MODEL_TRACE {"case":53,"group":"broker","pair":["reject_future_ack","drain_ack_b"],"seed":262145}
+MODEL_TRACE {"case":54,"group":"broker","pair":["reject_future_ack","reject_future_ack"],"seed":262145}
+MODEL_TRACE {"case":55,"group":"broker","pair":["reject_future_ack","reject_cross_identity"],"seed":262145}
+MODEL_TRACE {"case":56,"group":"broker","pair":["reject_cross_identity","toggle_a"],"seed":262145}
+MODEL_TRACE {"case":57,"group":"broker","pair":["reject_cross_identity","toggle_b"],"seed":262145}
+MODEL_TRACE {"case":58,"group":"broker","pair":["reject_cross_identity","mutate"],"seed":262145}
+MODEL_TRACE {"case":59,"group":"broker","pair":["reject_cross_identity","restart"],"seed":262145}
+MODEL_TRACE {"case":60,"group":"broker","pair":["reject_cross_identity","drain_ack_a"],"seed":262145}
+MODEL_TRACE {"case":61,"group":"broker","pair":["reject_cross_identity","drain_ack_b"],"seed":262145}
+MODEL_TRACE {"case":62,"group":"broker","pair":["reject_cross_identity","reject_future_ack"],"seed":262145}
+MODEL_TRACE {"case":63,"group":"broker","pair":["reject_cross_identity","reject_cross_identity"],"seed":262145}
+MODEL_COVERAGE group=broker executed=64 alphabet=8 ordered_pairs=64 explicit_fair_recovery=true
+test generated_broker_pairs_preserve_intent_feeds_and_ack_boundaries ... ok
+
+test result: ok. 2 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 1.27s
+
+     Running tests/arrival_service.rs (/tmp/coop-network-baseline/Cooperators/target/debug/deps/arrival_service-8c70901d494b8f46)
+
+running 9 tests
+test limits_reject_excess_subscriptions_and_matching_recipients_before_commit ... ok
+test client_keys_are_identity_scoped_durable_and_never_recreate_catchup ... ok
+test route_capture_survives_unsubscribe_and_retirement_is_terminal ... ok
+test cursors_are_independent_bound_to_bus_and_identity_and_cannot_skip_head ... ok
+test catchup_watermark_never_suppresses_earlier_live_source_obligations ... ok
+test full_feed_does_not_block_healthy_recipient_or_reorder_source ... ok
+test source_scan_stops_at_validated_committed_head_and_handles_rotation ... ok
+test replay_recovers_source_to_feed_gap_and_dedupes_after_ack ... ok
+test sparse_feed_pages_recover_rotated_history_and_resume_from_old_anchor ... ok
+
+test result: ok. 9 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.14s
+
+     Running tests/arrival_sources.rs (/tmp/coop-network-baseline/Cooperators/target/debug/deps/arrival_sources-3614e39f45e4ffc8)
+
+running 7 tests
+test historical_document_and_queue_hashes_omit_absent_intent ... ok
+test disabled_source_writes_keep_the_historical_shape ... ok
+test queue_intent_covers_enqueue_failure_and_forced_expiry_without_granting_ownership ... ok
+test document_intent_is_immutable_and_catch_up_pins_content_across_replay ... ok
+test uncertain_subscription_commit_fences_document_and_queue_arrivals_until_reopen ... ok
+test queue_catch_up_is_one_current_hint_and_empty_queues_have_none ... ok
+test on_demand_and_sweeper_expiry_capture_queue_arrival_routes ... ok
+
+test result: ok. 7 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 1.11s
+
+     Running tests/batch_crash.rs (/tmp/coop-network-baseline/Cooperators/target/debug/deps/batch_crash-1fd18e206a12303e)
+
+running 4 tests
+test batch_crash_child ... ok
+test process_kill_after_partial_batch_failure_repairs_tail_and_preserves_prefix ... ok
+test process_kill_before_batch_covering_sync_preserves_acknowledged_prefix ... ok
+test process_kill_after_batch_receipts_recovers_every_receipt_and_dedupe ... ok
+
+test result: ok. 4 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.22s
+
+     Running tests/enrollment_retry.rs (/tmp/coop-network-baseline/Cooperators/target/debug/deps/enrollment_retry-1480d08a391b558c)
+
+running 1 test
+test lost_enrollment_reply_retries_same_key_and_keeps_one_durable_identity ... ok
+
+test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.03s
+
+     Running tests/envelope.rs (/tmp/coop-network-baseline/Cooperators/target/debug/deps/envelope-9abb9b76277cfede)
+
+running 4 tests
+test new_envelope_has_ulid_timestamp_and_genesis_link ... ok
+test envelope_serde_roundtrip_preserves_every_design_field ... ok
+test validation_rejects_draft_and_malformed_records ... ok
+test optional_fields_accept_absence_and_serialize_as_null ... ok
+
+test result: ok. 4 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running tests/error.rs (/tmp/coop-network-baseline/Cooperators/target/debug/deps/error-4d365fa877b6a99d)
+
+running 1 test
+test taxonomy_maps_to_distinct_server_reserved_jsonrpc_codes ... ok
+
+test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running tests/host_adapters.rs (/tmp/coop-network-baseline/Cooperators/target/debug/deps/host_adapters-ed2ed3565323ce35)
+
+running 17 tests
+test claude_wrong_session_and_stale_generation_never_get_a_second_wake ... ok
+test claude_new_session_uses_bound_uuid_without_resume_or_fork ... ok
+test claude_permission_before_echo_remains_reconcilable_without_resubmission ... ok
+test claude_uses_persistent_host_mode_exact_session_and_explicit_approval ... ok
+test codex_busy_state_never_starts_or_steers_a_turn ... ok
+test codex_approval_is_retained_until_operator_answers_that_request ... ok
+test codex_bootstrap_materializes_empty_thread_before_resuming ... ok
+test codex_bootstrap_creates_exact_thread_without_a_model_turn_and_reaps_child ... ok
+test codex_initializes_exact_thread_and_fences_binding_and_generation ... ok
+test codex_reconciliation_does_not_treat_unrelated_turn_as_wake_acceptance ... ok
+test buffered_frames_cannot_revive_a_closed_host ... ok
+test codex_wrong_thread_workspace_and_malformed_stream_fail_closed ... ok
+test codex_bootstrap_and_resume_failure_reap_children ... ok
+test oversized_or_invalid_runtime_frames_stop_further_submissions ... ok
+test claude_never_claims_unknown_write_or_restart_as_acceptance ... ok
+test codex_lost_response_reconciles_exact_wake_from_history_after_restart ... ok
+test codex_approval_survives_timeout_and_bounded_diagnostic_overflow ... ok
+
+test result: ok. 17 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 1.15s
+
+     Running tests/host_bridge.rs (/tmp/coop-network-baseline/Cooperators/target/debug/deps/host_bridge-12de934b1781decf)
+
+running 17 tests
+test full_receive_and_oversized_wake_preserve_all_due_notices ... ok
+test binding_generation_fences_resolution_and_prevents_pending_redirection ... ok
+test queue_empty_proof_cannot_cover_a_new_received_generation_or_another_wake ... ok
+test activation_challenges_enforce_purpose_expiry_and_reconnection ... ok
+test bounded_wakes_are_immutable_and_conflicting_resolutions_are_rejected ... ok
+test confirmation_after_resolution_rejects_before_appending_an_invalid_journal_event ... ok
+test adopted_work_requires_continuation_and_keeps_the_hint_for_a_later_wake ... ok
+test canonical_lock_survives_release_and_rejects_duplicate_and_broker_paths ... ok
+test known_busy_time_pauses_observation_and_nonce_expiry ... ok
+test receipt_survives_restart_and_torn_tail_without_resetting_cursor ... ok
+test busy_permission_and_offline_do_not_discard_receipts_or_storm_wakes ... ok
+test successful_transport_without_observation_exhausts_five_attempts ... ok
+test restart_keeps_unknown_in_flight_claims_fenced_until_exact_result_reconciles ... ok
+test adoption_and_uncertain_claim_invalidate_earlier_empty_proofs ... ok
+test uncertain_receive_sync_withholds_a_receipt_until_actual_recovery ... ok
+test unknown_host_acceptance_reconciles_same_wake_and_replays_after_restart ... ok
+test keyed_claim_admission_and_result_retries_are_durable_and_bounded ... ok
+
+test result: ok. 17 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.01s
+
+     Running tests/host_cli.rs (/tmp/coop-network-baseline/Cooperators/target/debug/deps/host_cli-37948803502a189e)
+
+running 2 tests
+test managed_cli_redacts_bootstrap_error_secrets ... ok
+test managed_cli_runs_and_resumes_exact_binding_without_model_turns ... ok
+
+test result: ok. 2 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.10s
+
+     Running tests/host_control.rs (/tmp/coop-network-baseline/Cooperators/target/debug/deps/host_control-e17e7182526d5766)
+
+running 14 tests
+test host_control_child ... ok
+test public_parent_and_empty_launch_secret_are_rejected ... ok
+test cancelled_unsubmitted_begin_reports_its_retained_context ... ok
+test restarted_frontend_preserves_unreconciled_claims_and_requests_attention ... ok
+test local_rpc_resolves_confirms_and_fences_generation ... ok
+test independent_status_monitors_preserve_inflight_frontend_and_readiness ... ok
+test wrong_secret_bus_and_agent_are_rejected_before_dispatch ... ok
+test immutable_claim_contexts_prevent_forged_and_stale_drain_evidence ... ok
+test independent_process_frontend_reaches_the_existing_bridge_owner ... ok
+test stale_socket_is_recovered_and_active_or_non_socket_paths_are_preserved ... ok
+test restarted_control_server_cannot_adopt_an_unknown_inflight_frontend ... ok
+test exhausted_begin_retries_surface_attention_and_retain_one_context ... ok
+test lost_begin_and_finish_replies_retry_the_same_durable_claim_once ... ok
+test oversized_frames_are_bounded_and_partial_frames_time_out ... ok
+
+test result: ok. 14 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 5.06s
+
+     Running tests/host_runtime.rs (/tmp/coop-network-baseline/Cooperators/target/debug/deps/host_runtime-d89f60446b4fb211)
+
+running 7 tests
+test runner_surfaces_individual_approval_requests_and_retains_pending_notices ... ok
+test runner_reconciles_uncertain_acceptance_without_an_extra_submission ... ok
+test inconsistent_empty_page_and_full_journal_withhold_ack_and_require_attention ... ok
+test restarted_receipt_loop_acks_replayed_cursor_before_waiting ... ok
+test trusted_proxy_claim_context_authenticates_and_cannot_be_forged ... ok
+test runner_coalesces_busy_receipts_and_preserves_next_batch_and_exact_session ... ok
+test receipt_loop_syncs_local_journal_before_ack_and_retries_lost_ack ... ok
+
+test result: ok. 7 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 1.00s
+
+     Running tests/instance_identity.rs (/tmp/coop-network-baseline/Cooperators/target/debug/deps/instance_identity-1072399038181f6f)
+
+running 10 tests
+test enrollment_cannot_reuse_current_or_revoked_legacy_credentials ... ok
+test concurrent_retry_uses_one_actual_id_and_independent_launch_uses_another ... ok
+test existing_v1_registry_deserializes_without_new_fields ... ok
+test invalid_launch_secrets_do_not_create_registry_records ... ok
+test enrollment_retry_with_changed_metadata_is_rejected_without_mutation ... ok
+baseline: two clients using one configured token authenticate as 01M5HFP3TCRNHSWWSJ1SWG11NC; registry records=1
+test same_kind_launches_are_distinct_and_retry_survives_registry_reload ... ok
+test legacy_shared_credential_observes_one_identity ... ok
+test rotated_launch_key_never_revives_and_canonical_metadata_survives ... ok
+test enrolled_instances_keep_message_ack_presence_and_lease_ownership_isolated ... ok
+test retirement_reserves_identity_and_alias_and_revokes_credentials_durably ... ok
+
+test result: ok. 10 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.02s
+
+     Running tests/instance_launch.rs (/tmp/coop-network-baseline/Cooperators/target/debug/deps/instance_launch-1b55cc69378770f2)
+
+running 2 tests
+test embedded_mcp_competitor_cannot_mutate_the_active_instance_root ... ok
+independent MCP PIDs Some(256403)/Some(256437), actual IDs "01M5HFP3WNGZK10V52XDM9R2FM"/"01M5HFP3X5C2XH97GNS3AE5BBJ", current credential hashes "sha256:b89ece1dfd3367a79194049eef7ebfb63d45a6f2aaec28eb102d5eff44bb85a0"/"sha256:ee83e2b18d1987cfa5614001f43bdc138050fc79b43fd34760caff3940bdf44c"
+test two_mcp_processes_sharing_configuration_keep_independent_principals ... ok
+
+test result: ok. 2 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.24s
+
+     Running tests/log_rotation.rs (/tmp/coop-network-baseline/Cooperators/target/debug/deps/log_rotation-ae833333105fcdf9)
+
+running 6 tests
+test status_of_sealed_only_log_is_read_only_and_uses_logical_path ... ok
+test new_system_event_channel_uses_the_configured_rotation_threshold ... ok
+test queue_lease_fences_survive_dotted_log_rotation_and_restart ... ok
+test sealed_only_queue_and_document_are_discovered_on_restart ... ok
+test channel_cursor_and_dedupe_survive_rotation_and_restart ... ok
+test document_versions_and_fences_survive_dotted_log_rotation_and_restart ... ok
+
+test result: ok. 6 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.03s
+
+     Running tests/m1.rs (/tmp/coop-network-baseline/Cooperators/target/debug/deps/m1-c5d1ab394a29cfa5)
+
+running 8 tests
+rpc heartbeat {} failed: RpcError { code: -32001, message: "missing agent token; pass params.token or set COOP_TOKEN", data: Some(Object {"code": String("UNAUTHENTICATED")}) }
+rpc heartbeat {"token":"<redacted-test-credential-001>"} failed: RpcError { code: -32001, message: "invalid agent token", data: Some(Object {"code": String("UNAUTHENTICATED")}) }
+rpc send_message {"kind":"event","text":"must not append","to":"alice","token":"<redacted-test-credential-001>"} failed: RpcError { code: -32001, message: "invalid agent token", data: Some(Object {"code": String("UNAUTHENTICATED")}) }
+rpc register_agent {"kind":"codex","name":"alice"} failed: RpcError { code: -32004, message: "agent name \"alice\" is already registered; supply the existing token to rotate", data: Some(Object {"code": String("CONFLICT")}) }
+rpc heartbeat {"token":"<redacted-test-credential-002>"} failed: RpcError { code: -32001, message: "invalid agent token", data: Some(Object {"code": String("UNAUTHENTICATED")}) }
+test dedupe_returns_original_seq_without_second_append ... ok
+test register_auth_roundtrip_and_wrong_token_rejection ... ok
+test restart_rebuilds_messages_dedupe_and_auth_without_shutdown_hooks ... ok
+test ndjson_session_auth_and_messaging_over_in_process_streams ... ok
+rpc send_message {"kind":"event","text":"x","to":"nobody","token":"<redacted-test-credential-003>"} failed: RpcError { code: -32002, message: "unknown recipient \"nobody\"", data: Some(Object {"code": String("NOT_FOUND")}) }
+rpc wait_message {"cursor":"not-a-cursor","timeout_s":0,"token":"<redacted-test-credential-004>"} failed: RpcError { code: -32602, message: "invalid cursor \"not-a-cursor\"", data: None }
+test send_wait_ack_ordering_and_peek_semantics ... ok
+test ttl_messages_expire_for_waiters_but_survive_in_the_log ... ok
+test presence_stale_transition_and_heartbeat_revival ... ok
+test presence_gone_transition_with_short_ttl ... ok
+
+test result: ok. 8 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.46s
+
+     Running tests/m1_daemon.rs (/tmp/coop-network-baseline/Cooperators/target/debug/deps/m1_daemon-94cc93d09f681dd0)
+
+running 1 test
+test kill_9_restart_preserves_messages_dedupe_and_cli_roundtrip ... ok
+
+test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.11s
+
+     Running tests/m2.rs (/tmp/coop-network-baseline/Cooperators/target/debug/deps/m2-c4775ebc2e3bd510)
+
+running 6 tests
+rpc publish_doc {"name":"plan","text":"again","token":"<redacted-test-credential-005>"} failed: RpcError { code: -32005, message: "document \"plan\" already exists", data: Some(Object {"code": String("EXISTS")}) }
+rpc update_doc {"base_version":2,"name":"plan","text":"# two","token":"<redacted-test-credential-005>"} failed: RpcError { code: -32006, message: "base_version 2 does not match head 1", data: Some(Object {"code": String("VERSION_CONFLICT"), "head_version": Number(1)}) }
+rpc create_queue {"queue":"jobs","token":"<redacted-test-credential-006>"} failed: RpcError { code: -32005, message: "queue \"jobs\" already exists", data: Some(Object {"code": String("EXISTS")}) }
+rpc claim_doc {"lease_ttl_s":30,"name":"plan","token":"<redacted-test-credential-007>"} failed: RpcError { code: -32007, message: "document is claimed by alice until 2026-10-22T09:39:44.923Z", data: Some(Object {"code": String("CONFLICT_CLAIMED"), "expires_at": String("2026-10-22T09:39:44.923Z"), "expires_at_ms": Number(1792661984923), "fence": Number(3), "head_version": Number(2), "holder": Object {"agent_id": String("01M5HFP4NG1REM2ADAM8RNBXDK"), "name": String("alice")}, "holder_agent_id": String("01M5HFP4NG1REM2ADAM8RNBXDK"), "holder_name": String("alice")}) }
+rpc update_doc {"base_version":2,"name":"plan","text":"sneak","token":"<redacted-test-credential-007>"} failed: RpcError { code: -32007, message: "document is claimed by alice until 2026-10-22T09:39:44.923Z", data: Some(Object {"code": String("CONFLICT_CLAIMED"), "expires_at": String("2026-10-22T09:39:44.923Z"), "expires_at_ms": Number(1792661984923), "fence": Number(3), "head_version": Number(2), "holder": Object {"agent_id": String("01M5HFP4NG1REM2ADAM8RNBXDK"), "name": String("alice")}, "holder_agent_id": String("01M5HFP4NG1REM2ADAM8RNBXDK"), "holder_name": String("alice")}) }
+rpc complete_task {"fence":2,"lease_id":"01M5HFP4NKZB3AN80BDDGR54RY","outcome":{"ok":true},"token":"<redacted-test-credential-006>"} failed: RpcError { code: -32008, message: "stale fence 2; current fence is 3", data: Some(Object {"code": String("LEASE_LOST")}) }
+test queue_renew_and_fail_retry_then_dead_letter ... ok
+rpc claim_task {"lease_ttl_s":5,"queue":"restart","token":"<redacted-test-credential-008>"} failed: RpcError { code: -32002, message: "queue \"restart\" has no claimable task", data: Some(Object {"code": String("NOT_FOUND")}) }
+test restart_replays_queue_leases_doc_claims_and_channels ... ok
+rpc read_channel {"channel":"never","cursor":"0","token":"<redacted-test-credential-009>"} failed: RpcError { code: -32002, message: "unknown channel \"never\"", data: Some(Object {"code": String("NOT_FOUND")}) }
+test channel_publish_dedupe_read_and_cursor_replay ... ok
+rpc update_doc {"base_version":2,"fence":3,"lease_id":"01M5HFP4NKGRK8053MV0F301N3","name":"plan","text":"late","token":"<redacted-test-credential-005>"} failed: RpcError { code: -32008, message: "document claim expired; fence advanced", data: Some(Object {"code": String("LEASE_LOST")}) }
+rpc complete_task {"fence":3,"lease_id":"01M5HFP4NKZB3AN80BDDGR54RY","outcome":{"ok":true},"token":"<redacted-test-credential-006>"} failed: RpcError { code: -32008, message: "unknown lease", data: Some(Object {"code": String("LEASE_LOST")}) }
+rpc complete_task {"fence":3,"lease_id":"01M5HFP4NJWRWWBFVCST9X231C","outcome":true,"token":"<redacted-test-credential-010>"} failed: RpcError { code: -32008, message: "lease lost or expired", data: Some(Object {"code": String("LEASE_LOST")}) }
+test restart_after_expiry_requeues_task_and_frees_doc_claim ... ok
+test doc_cas_claim_exclusion_expired_write_and_blob_roundtrip ... ok
+rpc claim_task {"lease_ttl_s":1,"queue":"jobs","token":"<redacted-test-credential-006>"} failed: RpcError { code: -32002, message: "queue \"jobs\" has no claimable task", data: Some(Object {"code": String("NOT_FOUND")}) }
+test queue_claim_expiry_requeue_dead_letter_and_stale_fence ... ok
+
+test result: ok. 6 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 2.12s
+
+     Running tests/m3.rs (/tmp/coop-network-baseline/Cooperators/target/debug/deps/m3-747727a0f581d586)
+
+running 10 tests
+test daemon_status_is_namespaced_as_coop_get_status ... ok
+test tools_list_exposes_every_method_with_matching_schemas ... ok
+test unreachable_daemon_is_a_tool_error_not_a_protocol_error ... ok
+test unknown_tool_is_a_tool_error_with_method_not_found ... ok
+test http_requires_bearer_and_rejects_bad_tokens ... ok
+test http_tools_list_matches_the_stdio_catalog ... ok
+test http_messaging_presence_and_status_roundtrip ... ok
+test golden_transcripts_match_uds_and_mcp_tool_layer ... ok
+test mcp_stdio_subprocess_roundtrip_over_pipes ... ok
+test http_endpoint_parity_in_process ... ok
+
+test result: ok. 10 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.16s
+
+     Running tests/m4.rs (/tmp/coop-network-baseline/Cooperators/target/debug/deps/m4-07306e6782678335)
+
+running 8 tests
+test line_capped_reader_accepts_lines_at_the_limit ... ok
+test line_capped_reader_rejects_a_runaway_line ... ok
+test healthz_is_public_and_metrics_requires_a_bearer_token ... ok
+test stdio_message_cap_returns_resource_exhausted ... ok
+test inbox_byte_cap_rejects_large_messages_without_blocking_small_ones ... ok
+test inbox_message_cap_rejects_senders_until_ack_frees_capacity ... ok
+test metrics_report_inbox_backlog_queues_leases_and_message_heads ... ok
+test dedupe_still_answers_when_the_inbox_is_full ... ok
+
+test result: ok. 8 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.02s
+
+     Running tests/messaging_batch.rs (/tmp/coop-network-baseline/Cooperators/target/debug/deps/messaging_batch-d3d460dc08457b51)
+
+running 16 tests
+test faults::failed_active_write_retains_its_key_but_releases_a_known_queued_key ... ok
+test faults::paused_writer_bounds_queued_requests_separately_from_its_active_batch ... ok
+test oversized_write_queue_request_is_rejected_without_using_inbox_capacity ... ok
+test faults::canceling_a_sender_keeps_its_admitted_write_and_dedupe_result ... ok
+test faults::status_publishes_expiry_head_only_after_its_sync_and_inbox_head_after_both ... ok
+test concurrent_admissions_respect_exact_serialized_inbox_byte_capacity ... ok
+test faults::batched_ttl_records_recover_with_expired_cursor_progress ... ok
+test concurrent_key_retries_across_inboxes_commit_one_message ... ok
+test faults::canceled_writer_holds_root_ownership_through_its_last_sync ... ok
+test concurrent_inbox_sends_have_unique_receipts_and_a_replayable_ordered_chain ... ok
+test concurrent_admissions_respect_inbox_message_capacity ... ok
+test retry_of_committed_key_succeeds_when_inbox_is_full ... ok
+test faults::uncertain_key_cannot_move_to_another_inbox_until_actual_replay ... ok
+test faults::paused_sync_hides_message_and_allows_another_inbox_to_commit ... ok
+test faults::failed_sync_preserves_the_prior_ack_without_publishing_provisional_backlog ... ok
+test faults::expiry_sync_failure_hides_messages_and_retains_uncertain_keys_until_replay ... ok
+
+test result: ok. 16 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.35s
+
+     Running tests/paths.rs (/tmp/coop-network-baseline/Cooperators/target/debug/deps/paths-434689bb9c3e1641)
+
+running 1 test
+test ensure_layout_creates_the_design_directories_with_0700_on_root_and_run ... ok
+
+test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running tests/perf_smoke.rs (/tmp/coop-network-baseline/Cooperators/target/debug/deps/perf_smoke-b85890d78081c32c)
+
+running 1 test
+test perf_smoke_against_design_targets ... ignored, performance smoke; run with --ignored --nocapture in release mode
+
+test result: ok. 0 passed; 0 failed; 1 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running tests/root_ownership.rs (/tmp/coop-network-baseline/Cooperators/target/debug/deps/root_ownership-1ac677d99ed0e7bd)
+
+running 1 test
+test background_writer_retains_root_ownership_after_listener_state_drops ... ok
+
+test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running tests/runtime_faults.rs (/tmp/coop-network-baseline/Cooperators/target/debug/deps/runtime_faults-1cab6b1e4020fa71)
+
+running 5 tests
+test failed_initial_document_creation_can_retry_before_and_after_restart ... ok
+test missing_dead_letter_is_reconciled_once_from_durable_terminal_event ... ok
+test batch_cursor_never_skips_an_unreturned_live_message ... ok
+test expired_inbox_returns_acknowledgeable_progress_after_restart ... ok
+test status_handles_large_final_records_and_does_not_modify_tails ... ok
+
+test result: ok. 5 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.02s
+
+     Running tests/storage.rs (/tmp/coop-network-baseline/Cooperators/target/debug/deps/storage-e11b3447574583f7)
+
+running 6 tests
+test record_hash_excludes_the_prev_hash_member ... ok
+test mid_log_corruption_is_an_error_not_a_tail_truncation ... ok
+test valid_final_record_without_newline_is_preserved ... ok
+test sequencer_is_rebuilt_and_monotonic_across_restart ... ok
+test valid_log_replays_with_an_intact_hash_chain ... ok
+test torn_tail_is_truncated_and_the_log_continues ... ok
+
+test result: ok. 6 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.01s
+
+     Running tests/storage_batch.rs (/tmp/coop-network-baseline/Cooperators/target/debug/deps/storage_batch-de7b8f0c94b71152)
+
+running 9 tests
+test empty_batch_keeps_file_and_durable_head_unchanged ... ok
+test batch_repairs_missing_separator_and_accounts_for_it_once ... ok
+test batch_receipts_bytes_and_chain_match_sequential_appends ... ok
+test faults::sync_failure_keeps_acknowledged_head_and_quarantines_until_reopen ... ok
+test serialization_failure_precedes_all_writes_and_handle_stays_reusable ... ok
+test rotating_batch_preserves_sealed_stream_chain_and_recovery ... ok
+test faults::batch_receipts_wait_for_covering_sync ... ok
+test faults::partial_second_record_recovers_complete_unacknowledged_prefix ... ok
+test faults::recovered_batch_prefix_must_sync_before_open_returns ... ok
+
+test result: ok. 9 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running tests/storage_faults.rs (/tmp/coop-network-baseline/Cooperators/target/debug/deps/storage_faults-35f2518e962c3984)
+
+running 11 tests
+test named_points_are_one_shot_and_do_not_affect_other_boundaries ... ok
+test partial_write_returns_error_with_actual_prefix_on_disk ... ok
+test immediate_sync_failure_leaves_real_complete_record_and_is_path_scoped ... ok
+test partial_failure_quarantines_then_reopen_repairs_before_new_append ... ok
+test pause_exposes_complete_real_bytes_before_receipt_then_performs_real_sync ... ok
+test daemon_initialization_refuses_unsynced_recovered_inbox ... ok
+test recovered_prefix_must_sync_before_open_exposes_records ... ok
+test test_clock_is_scoped_advances_and_unregisters_on_drop ... ok
+test dropping_pause_handle_releases_waiter_with_error ... ok
+test release_can_turn_reached_sync_boundary_into_real_error_result ... ok
+test sync_failure_quarantines_handle_without_mutating_until_reopen ... ok
+
+test result: ok. 11 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running tests/storage_rotation.rs (/tmp/coop-network-baseline/Cooperators/target/debug/deps/storage_rotation-273c4a58d7519be7)
+
+running 7 tests
+test interrupted_archive_rename_recovers_missing_active_without_losing_head ... ok
+test sealed_final_record_corruption_is_fatal_and_read_only ... ok
+test interrupted_empty_active_creation_recovers_without_empty_seal ... ok
+test exact_threshold_and_global_sequence_hash_survive_restart ... ok
+test oversized_record_is_alone_and_next_append_rotates ... ok
+test active_tail_repair_keeps_seals_and_global_head ... ok
+test dotted_names_have_distinct_segment_directories ... ok
+
+test result: ok. 7 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running tests/storage_streaming.rs (/tmp/coop-network-baseline/Cooperators/target/debug/deps/storage_streaming-94fe383cacfa1b2a)
+
+running 7 tests
+test streaming_read_does_not_create_missing_logs_or_directories ... ok
+test streaming_missing_final_newline_is_preserved_then_separated_on_append ... ok
+test streaming_recovery_sync_failure_cannot_publish_a_recovered_handle ... ok
+test streaming_visitor_error_is_propagated_without_repair_or_usable_log ... ok
+test streaming_torn_active_tail_is_read_only_until_open_and_repaired_before_append ... ok
+test streaming_invalid_middle_and_corrupt_seal_are_fatal_without_mutation ... ok
+test streaming_replay_preserves_order_hashes_offsets_and_append_position ... ok
+
+test result: ok. 7 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.01s
+
+     Running tests/uds.rs (/tmp/coop-network-baseline/Cooperators/target/debug/deps/uds-0e63d779ac222cc6)
+
+running 2 tests
+test second_bind_fails_while_the_first_daemon_is_listening ... ok
+test jsonrpc_echo_ping_and_status_over_a_real_uds_socket ... ok
+
+test result: ok. 2 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running unittests examples/replay_baseline.rs (/tmp/coop-network-baseline/Cooperators/target/debug/examples/replay_baseline-b6bda1539417f553)
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running unittests examples/throughput_native.rs (/tmp/coop-network-baseline/Cooperators/target/debug/examples/throughput_native-47b0f5a37a306966)
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
