@@ -55,7 +55,7 @@ Scope: evidence and tool/build setup only.
 
 1. Record checkout HEAD plus hashes of relevant dirty source/model/interface
    files. Record compiler binary/revision, MirrorRust revision, the actual
-   `Mirrors` executable (formerly `ModelMirrors`), build profile, and enabled
+   `mirror` executable (formerly `ModelMirrors`), build profile, and enabled
    features/transports.
 2. Verify offline Cargo resolution. The recorded missing `hyper =1.11.1`
    dependency must be checked again. Resolve any build change explicitly;

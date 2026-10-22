@@ -529,7 +529,7 @@ fn main() -> ExitCode {
     let bin = match std::env::var("MIRROR_BIN") {
         Ok(b) if !b.is_empty() => b,
         _ => {
-            eprintln!("MIRROR_BIN not set; set it to the Mirrors binary (formerly ModelMirrors)");
+            eprintln!("MIRROR_BIN not set; set it to the mirror binary (formerly ModelMirrors)");
             return ExitCode::FAILURE;
         }
     };
@@ -717,6 +717,9 @@ fn run_fault_profiles(bin: &str, home: &Path, selected: Option<&str>) -> Result<
     check
         .arg(home.join("generate_fault_interfaces.py"))
         .arg("--check");
+    if let Some(compiler) = std::env::var_os("MODEL_INTERFACE_GEN") {
+        check.arg("--compiler").arg(compiler);
+    }
     if let Some(profile) = selected {
         check.arg("--profile").arg(profile);
     }
