@@ -729,6 +729,12 @@ impl CodexAppServerAdapter {
     fn pump(&mut self) {
         // A single drain is bounded even if the child is continuously noisy.
         for _ in 0..FRAME_QUEUE {
+            // A fatal/closed session is terminal for this adapter instance.
+            // Frames queued behind the fatal frame must not revive it or
+            // produce delayed wake acceptance.
+            if self.process.closed || self.inner.state == SessionState::Offline {
+                break;
+            }
             match self.process.try_next() {
                 Some(Ok(frame)) => {
                     if let Err(error) = self.frame(frame) {
@@ -1167,6 +1173,12 @@ impl ClaudeHostAdapter {
 
     fn pump(&mut self) {
         for _ in 0..FRAME_QUEUE {
+            // Do not let buffered frames undo a fatal transition. In
+            // particular, a queued approval must not change Offline back to
+            // WaitingForPermission after a wrong-session frame closes the CLI.
+            if self.process.closed || self.inner.state == SessionState::Offline {
+                break;
+            }
             match self.process.try_next() {
                 Some(Ok(frame)) => {
                     if let Err(error) = self.frame(frame) {
