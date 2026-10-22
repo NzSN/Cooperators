@@ -1,10 +1,12 @@
 //! Executable inventory of network methods. Exposure is separately gated.
 
+mod domain;
 mod gateway;
 pub(crate) mod page;
 mod policy;
 mod runtime;
 
+pub(crate) use gateway::remote_method_ready;
 pub use gateway::{call_remote, handle_network_http};
 pub use policy::{DevicePrincipal, NetworkPolicy, Permission};
 pub use runtime::{AuthContext, NetworkRuntime};

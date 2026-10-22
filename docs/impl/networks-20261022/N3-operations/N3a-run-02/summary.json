@@ -1,0 +1,41 @@
+{
+  "scope": "N3a local source qualification; no actual LAN/WAN/provider release claim",
+  "base_commit": "bfbf7534c3ab63a5756321070413415e917e5464",
+  "source_manifests_identical": true,
+  "gates": {
+    "normal": {
+      "passed": true,
+      "passed_tests": 257,
+      "failed_tests": 0,
+      "ignored_tests": 1,
+      "reported_skips": 0,
+      "source_unchanged": true,
+      "duration_seconds": 40.29375767707825
+    },
+    "injection": {
+      "passed": true,
+      "passed_tests": 330,
+      "failed_tests": 0,
+      "ignored_tests": 1,
+      "reported_skips": 0,
+      "source_unchanged": true,
+      "duration_seconds": 52.98981499671936
+    },
+    "generated": {
+      "passed": true,
+      "passed_tests": 0,
+      "failed_tests": 0,
+      "ignored_tests": 0,
+      "reported_skips": 0,
+      "source_unchanged": true,
+      "duration_seconds": 10.125438213348389
+    }
+  },
+  "generated_traces": {
+    "protocol": 34,
+    "writer": 5,
+    "fault": 24
+  },
+  "prior_failed_gate": "../N3a-run-01/injection/receipt.json",
+  "failure_resolution": "Registry recovery test now holds one explicit root lease across constructor attempts; parallel diagnostic reproduced WouldBlock during reacquisition."
+}

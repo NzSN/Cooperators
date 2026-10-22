@@ -13,6 +13,8 @@ fn sample() -> Envelope {
         kind: "request".to_string(),
         reply_to: Some("01J8ZQ6S40TSV4RRFFQ69G5FAV".to_string()),
         idempotency_key: Some("sha256:abc123".to_string()),
+        operation: None,
+        domain_operation: None,
         body: Body::new("text/markdown", "please review"),
         prev_hash: GENESIS_HASH.to_string(),
     }
@@ -67,6 +69,19 @@ fn optional_fields_accept_absence_and_serialize_as_null() {
     let encoded = serde_json::to_value(&decoded).expect("serialize");
     assert!(encoded.get("reply_to").is_some());
     assert!(encoded["reply_to"].is_null());
+}
+
+#[test]
+fn absent_operation_preserves_pre_operation_golden_hash() {
+    // Independently computed from the original v1 field set, excluding prev_hash.
+    assert_eq!(
+        cooperators::storage::hash_record(&sample()).unwrap(),
+        "sha256:72d45fb74874923ae3f4ed2beb54bbede71276305ae1fd2f23e78fbbcee52d0b"
+    );
+    let encoded = serde_json::to_value(sample()).unwrap();
+    assert!(encoded.get("operation").is_none());
+    let replay: Envelope = serde_json::from_value(encoded).unwrap();
+    assert!(replay.operation.is_none());
 }
 
 #[test]

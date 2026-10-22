@@ -15,7 +15,7 @@ use crate::transport::MAX_RPC_BYTES;
 
 use super::{failure, json_response, AuthContext};
 
-const PAGE_BYTES: usize = MAX_RPC_BYTES - 8192;
+const PAGE_BYTES: usize = crate::messaging::REMOTE_INBOX_PAGE_BYTES;
 const PAGE_ITEMS: usize = 64;
 
 /// Shared admission path for native, UDS and MCP scoped credentials.
@@ -47,11 +47,17 @@ pub async fn call_remote(
     if !params.is_object() {
         return Err(RpcError::invalid_params("object params required"));
     }
+    if (matches!(method, "send_message" | "operation_status")
+        || super::domain::is_domain_mutation(method))
+        && remote_method_ready(state, method)
+    {
+        return call_operation(state, token, &context, method, params).await;
+    }
     network
         .authorize(state, &context, method, &params)
         .await
         .map_err(|e| e.into_rpc_error())?;
-    if !remote_method_ready(method) {
+    if !remote_method_ready(state, method) {
         return Err(RpcError::application(
             ErrorCode::Forbidden,
             "method has not passed its remote mutation gate",
@@ -366,8 +372,127 @@ async fn dispatch_read(
     Ok(result.expect("read response serializes"))
 }
 
-pub(super) fn remote_method_ready(method: &str) -> bool {
-    super::is_read(method) && !matches!(method, "echo" | "daemon.status")
+pub(crate) fn remote_method_ready(state: &DaemonState, method: &str) -> bool {
+    if matches!(method, "send_message" | "operation_status") {
+        state
+            .network()
+            .is_some_and(|n| n.policy().enable_operations)
+    } else if super::domain::is_domain_mutation(method) {
+        state
+            .network()
+            .is_some_and(|n| n.policy().enable_resource_operations)
+    } else {
+        super::is_read(method) && !matches!(method, "echo" | "daemon.status")
+    }
+}
+
+async fn call_operation(
+    state: &Arc<DaemonState>,
+    token: &str,
+    context: &AuthContext,
+    method: &str,
+    mut params: Value,
+) -> Result<Value, RpcError> {
+    let network = state.network().expect("activated network");
+    let reference: crate::operations::OperationRef = serde_json::from_value(
+        params
+            .as_object_mut()
+            .unwrap()
+            .remove("operation")
+            .ok_or_else(|| RpcError::invalid_params("durable operation reference required"))?,
+    )
+    .map_err(|_| RpcError::invalid_params("invalid operation reference"))?;
+    let scope = crate::operations::OperationScope {
+        bus_id: network.meta.bus_id.clone(),
+        principal_id: context.principal_id.clone(),
+        agent_id: context.identity.agent_id.clone(),
+    };
+    if super::domain::is_domain_mutation(method) {
+        params = super::domain::normalize(method, &params)?;
+    }
+    let saved_metadata = state
+        .operations
+        .metadata(&scope, &reference)
+        .map_err(|e| e.into_rpc_error())?;
+    let resource = if let Some(saved) = saved_metadata {
+        network
+            .authorize_resource(context, &saved.method, &saved.resource)
+            .map_err(|e| e.into_rpc_error())?;
+        if method != "operation_status" && saved.method != method {
+            return Err(RpcError::application(
+                ErrorCode::IdempotencyConflict,
+                "operation identity conflicts with original method",
+            ));
+        }
+        saved.resource
+    } else if method != "operation_status" {
+        network
+            .authorize(state, context, method, &params)
+            .await
+            .map_err(|e| e.into_rpc_error())?
+    } else {
+        format!("agent:{}", context.identity.agent_id)
+    };
+    let _permit = network
+        .request_permit(&context.principal_id, false)
+        .map_err(|e| e.into_rpc_error())?;
+    if method == "operation_status" {
+        if !params.as_object().unwrap().is_empty() {
+            return Err(RpcError::invalid_params(
+                "operation_status accepts only operation",
+            ));
+        }
+        network
+            .authorize_resource(
+                context,
+                method,
+                &format!("agent:{}", context.identity.agent_id),
+            )
+            .map_err(|e| e.into_rpc_error())?;
+        return state
+            .operations
+            .status(&scope, &reference)
+            .map_err(|e| e.into_rpc_error());
+    }
+    let result = if method == "send_message" {
+        let request = server::parse_remote_send(&params)?;
+        state
+            .send_operation(&context.identity, scope, reference, request)
+            .await
+            .map_err(|e| e.into_rpc_error())
+            .and_then(|value| {
+                serde_json::to_value(value)
+                    .map_err(|_| RpcError::internal("operation receipt serialization failed"))
+            })
+    } else {
+        super::domain::execute(
+            state,
+            &context.identity,
+            crate::operations::OperationContext {
+                scope,
+                operation: reference,
+                method: method.into(),
+                resource: resource.clone(),
+                input: params,
+            },
+        )
+        .await
+    };
+    let current = network
+        .authenticate(state, token)
+        .await
+        .map_err(|e| e.into_rpc_error())?;
+    network
+        .authorize_resource(&current, method, &resource)
+        .map_err(|e| e.into_rpc_error())?;
+    let result = result?;
+    if crate::rpc::bounded_json_size(&result, PAGE_BYTES).is_none() {
+        return Err(RpcError::application(
+            ErrorCode::ResourceExhausted,
+            "remote operation result exceeds response limit",
+        ));
+    }
+    Ok(result)
 }
 
 fn filter_reply(
@@ -528,7 +653,7 @@ where
         };
         return json_response(
             StatusCode::OK,
-            json!({"v":1,"bus_id":network.meta.bus_id,"incarnation":network.incarnation,"operation_epoch":network.meta.operation_epoch,"supported_methods":super::method_contracts().iter().filter(|m|remote_method_ready(&m.method)).map(|m|&m.method).collect::<Vec<_>>(),"limits":{"request_bytes":MAX_RPC_BYTES,"response_bytes":MAX_RPC_BYTES,"wait_s":25,"page_items":64}}),
+            json!({"v":1,"bus_id":network.meta.bus_id,"incarnation":network.incarnation,"operation_epoch":network.meta.operation_epoch,"operation_epoch_expires_at_ms":network.meta.operation_epoch_expires_at_ms,"operation_max_age_ms":86400000u64,"supported_methods":super::method_contracts().iter().filter(|m|remote_method_ready(state,&m.method)).map(|m|&m.method).collect::<Vec<_>>(),"limits":{"request_bytes":MAX_RPC_BYTES,"response_bytes":MAX_RPC_BYTES,"wait_s":25,"page_items":64,"operations_per_epoch":10000}}),
         );
     }
     if request.method() != http::Method::POST {

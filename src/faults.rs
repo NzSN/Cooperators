@@ -43,6 +43,7 @@ pub enum FaultPoint {
     BeforeRegistryReplace,
     AfterRegistryReplace,
     AfterRegistrySync,
+    AfterOperationSyncBeforePublish,
 }
 
 #[derive(Debug, Clone, Copy, PartialEq, Eq)]

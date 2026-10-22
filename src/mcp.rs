@@ -18,6 +18,7 @@
 //! (`send_message` -> `coop_send_message`). The one exception is
 //! `daemon.status` -> `coop_get_status`, matching design §9.
 
+use std::collections::BTreeSet;
 use std::convert::Infallible;
 use std::fmt::Display;
 use std::io;
@@ -55,6 +56,7 @@ use crate::host::ClaimResult;
 use crate::host_control::HostControlClient;
 use crate::rpc::{self, RpcError, RpcRequest, RpcResponse};
 use crate::server::{self, ConnectionSession, DaemonState};
+use crate::transport::is_journaled_mutation;
 use crate::VERSION;
 
 /// Default streamable-HTTP listen address (design §2).
@@ -84,6 +86,12 @@ pub struct ToolSpec {
 
 /// The complete v1 tool surface, in design §9 order.
 pub const TOOL_SPECS: &[ToolSpec] = &[
+    ToolSpec {
+        tool: "coop_operation_status",
+        method: "operation_status",
+        description: "Look up a durable operation owned by this instance without executing it.",
+        schema: schema_operation_status,
+    },
     ToolSpec {
         tool: "coop_instance_metadata",
         method: "instance_metadata",
@@ -488,6 +496,22 @@ fn tool_error(code: i64, message: impl Into<String>, symbolic: &str) -> CallTool
     }))
 }
 
+fn bounded_tool_result(mut result: CallToolResult) -> CallToolResult {
+    if rpc::bounded_json_size(&result, crate::transport::MAX_RPC_BYTES - 1024).is_none() {
+        // Preserve the complete structured outcome while removing optional
+        // duplicate text. Applies equally to new calls and explicit resumes.
+        result.content.clear();
+    }
+    if rpc::bounded_json_size(&result, crate::transport::MAX_RPC_BYTES - 1024).is_none() {
+        return tool_error(
+            ErrorCode::ResourceExhausted.rpc_code(),
+            "MCP response exceeds limit; request a smaller page",
+            "RESOURCE_EXHAUSTED",
+        );
+    }
+    result
+}
+
 // ---------------------------------------------------------------------------
 // Server handler
 // ---------------------------------------------------------------------------
@@ -510,6 +534,8 @@ pub struct CoopMcpHandler {
     /// Per-call serialized-argument cap, applied to stdio calls.
     max_message_bytes: usize,
     host_control: Option<HostControlClient>,
+    operation_journal: Option<crate::transport::journal::OperationJournal>,
+    remote_methods: Arc<std::sync::RwLock<Option<BTreeSet<String>>>>,
 }
 
 impl CoopMcpHandler {
@@ -574,6 +600,8 @@ impl CoopMcpHandler {
             auth: AuthMode::Captured,
             max_message_bytes,
             host_control: None,
+            operation_journal: None,
+            remote_methods: Arc::new(std::sync::RwLock::new(None)),
         }
     }
 
@@ -585,6 +613,8 @@ impl CoopMcpHandler {
             auth: AuthMode::HttpHeader,
             max_message_bytes: usize::MAX,
             host_control: None,
+            operation_journal: None,
+            remote_methods: Arc::new(std::sync::RwLock::new(None)),
         }
     }
 
@@ -614,15 +644,44 @@ impl CoopMcpHandler {
         Ok(handler)
     }
 
+    pub fn with_operation_journal(
+        mut self,
+        journal: crate::transport::journal::OperationJournal,
+    ) -> Self {
+        self.operation_journal = Some(journal);
+        self
+    }
+
+    async fn refresh_remote_methods(&self) -> Result<(), RpcError> {
+        if let Backend::Remote(client) = &self.backend {
+            if let Some(token) = self.captured_token().await {
+                let info = client
+                    .discover_info(Some(&token), CALL_TIMEOUT)
+                    .await
+                    .map_err(client_error_to_rpc)?;
+                *self.remote_methods.write().unwrap() =
+                    Some(info.supported_methods.into_iter().collect());
+            }
+        }
+        Ok(())
+    }
+
     fn visible_catalog(&self) -> Vec<Tool> {
         let mut tools = cached_tool_catalog().to_vec();
         let remote = matches!(&self.backend, Backend::Remote(_))
             || self.auth == AuthMode::HttpHeader
                 && matches!(&self.backend, Backend::Embedded(state) if state.network().is_some());
         if matches!(&self.backend, Backend::Remote(_)) {
+            let methods = self.remote_methods.read().unwrap();
             tools.retain(|tool| {
                 spec_for_tool(tool.name.as_ref()).is_some_and(|spec| {
-                    crate::network::is_read(spec.method) && spec.method != "daemon.status"
+                    methods.as_ref().map_or_else(
+                        || {
+                            crate::network::is_read(spec.method)
+                                && !matches!(spec.method, "daemon.status" | "operation_status")
+                        },
+                        |methods| methods.contains(spec.method),
+                    ) && (!is_journaled_mutation(spec.method) || self.operation_journal.is_some())
                 })
             });
         }
@@ -630,9 +689,8 @@ impl CoopMcpHandler {
             if let Backend::Embedded(state) = &self.backend {
                 if state.network().is_some() {
                     tools.retain(|tool| {
-                        spec_for_tool(tool.name.as_ref()).is_some_and(|s| {
-                            crate::network::is_read(s.method) && s.method != "daemon.status"
-                        })
+                        spec_for_tool(tool.name.as_ref())
+                            .is_some_and(|s| crate::network::remote_method_ready(state, s.method))
                     });
                 }
             }
@@ -650,12 +708,23 @@ impl CoopMcpHandler {
                 schema_object(schema_confirm_activation()),
             ));
         }
+        if self.operation_journal.is_some() && matches!(&self.backend, Backend::Remote(_)) {
+            tools.push(Tool::new("coop_resume_operation",
+                "Resume one saved operation by its local ID, keeping its original intent and identity.",
+                schema_object(json!({"type":"object","properties":{"id":{"type":"string","minLength":26,"maxLength":26}},"required":["id"],"additionalProperties":false}))));
+        }
         if remote {
             for tool in &mut tools {
+                let journaled_mutation = spec_for_tool(tool.name.as_ref())
+                    .is_some_and(|spec| is_journaled_mutation(spec.method));
                 let schema = Arc::make_mut(&mut tool.input_schema);
                 if let Some(properties) =
                     schema.get_mut("properties").and_then(Value::as_object_mut)
                 {
+                    if journaled_mutation {
+                        properties.remove("idempotency_key");
+                        properties.insert("operation".into(), operation_schema());
+                    }
                     match tool.name.as_ref() {
                         "coop_list_docs"
                         | "coop_list_agents"
@@ -682,6 +751,14 @@ impl CoopMcpHandler {
                             }
                         }
                     }
+                }
+                if journaled_mutation && self.auth == AuthMode::HttpHeader {
+                    schema
+                        .entry("required")
+                        .or_insert_with(|| json!([]))
+                        .as_array_mut()
+                        .unwrap()
+                        .push(json!("operation"));
                 }
             }
         }
@@ -730,7 +807,10 @@ impl CoopMcpHandler {
             None
         };
         let spec = spec_for_tool(tool_name);
-        if spec.is_none() && local_method.is_none() {
+        let resume_operation = tool_name == "coop_resume_operation"
+            && self.operation_journal.is_some()
+            && matches!(&self.backend, Backend::Remote(_));
+        if spec.is_none() && local_method.is_none() && !resume_operation {
             return tool_error(
                 rpc::METHOD_NOT_FOUND,
                 format!("tool not found: {tool_name}"),
@@ -765,6 +845,54 @@ impl CoopMcpHandler {
         }
 
         let mut params = Value::Object(arguments);
+        if resume_operation {
+            let Backend::Remote(client) = &self.backend else {
+                unreachable!()
+            };
+            let Some(id) = params
+                .get("id")
+                .and_then(Value::as_str)
+                .filter(|id| crate::id::is_ulid(id))
+            else {
+                return tool_error(
+                    rpc::INVALID_PARAMS,
+                    "saved operation ID required",
+                    "INVALID_PARAMS",
+                )
+                .into();
+            };
+            if params.as_object().unwrap().len() != 1 {
+                return tool_error(
+                    rpc::INVALID_PARAMS,
+                    "resume accepts only the saved operation ID",
+                    "INVALID_PARAMS",
+                )
+                .into();
+            }
+            let Some(token) = token else {
+                return tool_error(
+                    ErrorCode::Unauthenticated.rpc_code(),
+                    "captured identity required",
+                    "UNAUTHENTICATED",
+                )
+                .into();
+            };
+            return match client
+                .submit_operation(
+                    self.operation_journal.as_ref().unwrap(),
+                    id,
+                    &token,
+                    CALL_TIMEOUT,
+                )
+                .await
+            {
+                Ok(result) => bounded_tool_result(CallToolResult::structured(result)).into(),
+                Err(error) => bounded_tool_result(CallToolResult::structured_error(
+                    canonical_error(&client_error_to_rpc(error)),
+                ))
+                .into(),
+            };
+        }
         if let Some(method) = local_method {
             return match self
                 .host_control
@@ -847,7 +975,55 @@ impl CoopMcpHandler {
         } else {
             None
         };
-        let result = self.backend.call(spec.method, params).await;
+        let result = if is_journaled_mutation(spec.method) {
+            if let Backend::Remote(client) = &self.backend {
+                match &self.operation_journal {
+                    None => Err(RpcError::invalid_params(
+                        "remote mutation requires a private operation journal",
+                    )),
+                    Some(journal) => {
+                        if let Some(reference) = params.get("operation").cloned() {
+                            let id = reference.get("id").and_then(Value::as_str).unwrap_or("");
+                            match journal.get(id) {
+                                Ok(entry) => {
+                                    let mut intent = params.clone();
+                                    let object = intent.as_object_mut().unwrap();
+                                    let token = object
+                                        .remove("token")
+                                        .and_then(|v| v.as_str().map(str::to_owned))
+                                        .unwrap_or_default();
+                                    object.remove("operation");
+                                    if entry.method != spec.method
+                                        || entry.intent != intent
+                                        || serde_json::to_value(&entry.operation).ok().as_ref()
+                                            != Some(&reference)
+                                    {
+                                        Err(RpcError::invalid_params(
+                                            "resume must match the persisted operation intent",
+                                        ))
+                                    } else {
+                                        client
+                                            .submit_operation(journal, id, &token, CALL_TIMEOUT)
+                                            .await
+                                            .map_err(client_error_to_rpc)
+                                    }
+                                }
+                                Err(error) => Err(client_error_to_rpc(error)),
+                            }
+                        } else {
+                            client
+                                .call_journaled(journal, spec.method, params, CALL_TIMEOUT)
+                                .await
+                                .map_err(client_error_to_rpc)
+                        }
+                    }
+                }
+            } else {
+                self.backend.call(spec.method, params).await
+            }
+        } else {
+            self.backend.call(spec.method, params).await
+        };
         if let (Some(control), Some(context), Some(queue)) = (
             &self.host_control,
             claim_context.filter(|value| !value.is_null()),
@@ -890,19 +1066,12 @@ impl CoopMcpHandler {
                 if spec.method == "retire_agent" && self.auth == AuthMode::Captured {
                     *self.token.write().await = None;
                 }
-                let result = CallToolResult::structured(result);
-                if rpc::bounded_json_size(&result, crate::transport::MAX_RPC_BYTES - 1024).is_none()
-                {
-                    return tool_error(
-                        ErrorCode::ResourceExhausted.rpc_code(),
-                        "MCP response exceeds limit; request a smaller page",
-                        "RESOURCE_EXHAUSTED",
-                    )
-                    .into();
-                }
-                result.into()
+                bounded_tool_result(CallToolResult::structured(result)).into()
             }
-            Err(error) => CallToolResult::structured_error(canonical_error(&error)).into(),
+            Err(error) => {
+                bounded_tool_result(CallToolResult::structured_error(canonical_error(&error)))
+                    .into()
+            }
         }
     }
 
@@ -937,6 +1106,9 @@ impl ServerHandler for CoopMcpHandler {
         _request: Option<PaginatedRequestParams>,
         _context: RequestContext<RoleServer>,
     ) -> Result<ListToolsResult, McpError> {
+        self.refresh_remote_methods()
+            .await
+            .map_err(|e| McpError::internal_error(e.message, None))?;
         Ok(ListToolsResult::with_all_items(self.visible_catalog()))
     }
 
@@ -1488,6 +1660,17 @@ fn schema_heartbeat() -> Value {
     })
 }
 
+fn operation_schema() -> Value {
+    json!({"type":"object","properties":{
+        "v":{"type":"integer","const":1},"id":{"type":"string","minLength":26,"maxLength":26},
+        "epoch":{"type":"string","minLength":26,"maxLength":26},"not_after_ms":{"type":"integer","minimum":1}
+    },"required":["v","id","epoch","not_after_ms"],"additionalProperties":false})
+}
+
+fn schema_operation_status() -> Value {
+    json!({"type":"object","properties":{"operation":operation_schema()},"required":["operation"],"additionalProperties":false})
+}
+
 fn schema_list_agents() -> Value {
     json!({
         "type": "object",
@@ -1704,4 +1887,203 @@ static TOOL_INDEX: OnceLock<Vec<Tool>> = OnceLock::new();
 /// Cached tool definitions for repeated lookups.
 pub fn cached_tool_catalog() -> &'static [Tool] {
     TOOL_INDEX.get_or_init(tool_catalog)
+}
+
+#[cfg(test)]
+mod domain_client_tests {
+    use super::*;
+    use crate::transport::journal::{OperationJournal, OperationScope};
+
+    struct TempRoot(PathBuf);
+
+    impl TempRoot {
+        fn new() -> Self {
+            let path = std::env::temp_dir().join(format!(
+                "coop-mcp-domain-{}",
+                crate::id::new_ulid().unwrap()
+            ));
+            std::fs::create_dir(&path).unwrap();
+            Self(path)
+        }
+    }
+
+    impl Drop for TempRoot {
+        fn drop(&mut self) {
+            let _ = std::fs::remove_dir_all(&self.0);
+        }
+    }
+
+    fn remote_handler() -> CoopMcpHandler {
+        CoopMcpHandler::stdio(
+            Backend::remote(
+                crate::transport::BrokerClient::https(
+                    "https://localhost:1",
+                    crate::transport::HttpsOptions::default(),
+                )
+                .unwrap(),
+            ),
+            Some("current-credential".into()),
+        )
+    }
+
+    #[test]
+    fn mcp_domain_catalog_requires_journal_and_advertised_method() {
+        let temp = TempRoot::new();
+        let mut handler = remote_handler();
+        *handler.remote_methods.write().unwrap() = Some(
+            TOOL_SPECS
+                .iter()
+                .map(|spec| spec.method.to_owned())
+                .collect(),
+        );
+        for spec in TOOL_SPECS
+            .iter()
+            .filter(|spec| is_journaled_mutation(spec.method))
+        {
+            assert!(
+                handler.get_tool(spec.tool).is_none(),
+                "{} without journal",
+                spec.method
+            );
+        }
+        assert!(handler.get_tool("coop_read_doc").is_some());
+        handler =
+            handler.with_operation_journal(OperationJournal::open(temp.0.join("journal")).unwrap());
+        for spec in TOOL_SPECS
+            .iter()
+            .filter(|spec| is_journaled_mutation(spec.method))
+        {
+            let tool = handler.get_tool(spec.tool).unwrap();
+            assert!(tool.input_schema["properties"].get("operation").is_some());
+            assert!(tool.input_schema["properties"]
+                .get("idempotency_key")
+                .is_none());
+            assert!(!tool
+                .input_schema
+                .get("required")
+                .and_then(Value::as_array)
+                .is_some_and(|required| required.contains(&json!("operation"))));
+        }
+        handler
+            .remote_methods
+            .write()
+            .unwrap()
+            .as_mut()
+            .unwrap()
+            .remove("update_doc");
+        assert!(handler.get_tool("coop_update_doc").is_none());
+        assert!(handler.get_tool("coop_publish_doc").is_some());
+        assert!(handler.get_tool("coop_resume_operation").is_some());
+    }
+
+    #[test]
+    fn mcp_domain_http_schema_requires_explicit_operation_without_changing_local_schema() {
+        let temp = TempRoot::new();
+        let mut config = crate::server::DaemonConfig::new(temp.0.join("root"));
+        config.network_policy = Some(
+            serde_json::from_value(json!({
+                "v":1,"enable_operations":true,"enable_resource_operations":true,
+                "allowed_hosts":["localhost"],"devices":[]
+            }))
+            .unwrap(),
+        );
+        let state = Arc::new(DaemonState::with_config(config).unwrap());
+        let handler = CoopMcpHandler::http(Backend::embedded(state));
+        for spec in TOOL_SPECS
+            .iter()
+            .filter(|spec| is_journaled_mutation(spec.method))
+        {
+            let tool = handler.get_tool(spec.tool).unwrap();
+            assert!(
+                tool.input_schema["required"]
+                    .as_array()
+                    .unwrap()
+                    .contains(&json!("operation")),
+                "{}",
+                spec.method
+            );
+            assert!(tool.input_schema["properties"]
+                .get("idempotency_key")
+                .is_none());
+            let local = (spec.schema)();
+            assert!(
+                local["properties"].get("operation").is_none(),
+                "{} local schema",
+                spec.method
+            );
+        }
+        assert!(handler.get_tool("coop_resume_operation").is_none());
+    }
+
+    #[tokio::test]
+    async fn mcp_domain_full_reference_resume_rejects_cross_method_before_network() {
+        let temp = TempRoot::new();
+        let journal = OperationJournal::open(temp.0.join("journal")).unwrap();
+        let intent = json!({"name":"document","text":"same syntactic arguments"});
+        let entry = journal
+            .prepare(
+                OperationScope {
+                    endpoint: "https://localhost:1/".into(),
+                    bus_id: crate::id::new_ulid().unwrap(),
+                    agent_id: crate::id::new_ulid().unwrap(),
+                },
+                "publish_doc",
+                intent.clone(),
+                &crate::id::new_ulid().unwrap(),
+                crate::id::unix_millis() + 60_000,
+            )
+            .unwrap();
+        let handler = remote_handler().with_operation_journal(journal.clone());
+        let mut params = intent;
+        params["operation"] = serde_json::to_value(&entry.operation).unwrap();
+        let CallToolResponse::Complete(result) = handler
+            .dispatch_tool("coop_update_doc", params.as_object().cloned())
+            .await
+        else {
+            panic!("expected complete tool result");
+        };
+        let result = canonical_tool_result(&result);
+        assert_eq!(result["ok"], false);
+        assert_eq!(result["error"]["code"], rpc::INVALID_PARAMS);
+        assert_eq!(
+            result["error"]["message"],
+            "resume must match the persisted operation intent"
+        );
+        assert_eq!(journal.get(&entry.operation.id).unwrap(), entry);
+    }
+
+    #[tokio::test]
+    async fn mcp_domain_mutations_without_journal_fail_before_network() {
+        let handler = remote_handler();
+        for spec in TOOL_SPECS
+            .iter()
+            .filter(|spec| is_journaled_mutation(spec.method))
+        {
+            let CallToolResponse::Complete(result) = handler.dispatch_tool(spec.tool, None).await
+            else {
+                panic!("expected complete tool result");
+            };
+            let result = canonical_tool_result(&result);
+            assert_eq!(
+                result["error"]["code"],
+                rpc::INVALID_PARAMS,
+                "{}",
+                spec.method
+            );
+            assert_eq!(
+                result["error"]["message"],
+                "remote mutation requires a private operation journal"
+            );
+        }
+    }
+
+    #[test]
+    fn mcp_domain_large_original_or_resumed_receipt_keeps_complete_structured_outcome() {
+        let receipt = json!({"task":{"body":{"mime":"text/plain","text":"x".repeat(2*1024*1024+4096)},"lease_id":"historical-lease","expires_at_ms":123,"fence":1}});
+        let result = bounded_tool_result(CallToolResult::structured(receipt.clone()));
+        assert_eq!(result.structured_content, Some(receipt));
+        assert!(result.content.is_empty());
+        assert_ne!(result.is_error, Some(true));
+        assert!(rpc::bounded_json_size(&result, crate::transport::MAX_RPC_BYTES - 1024).is_some());
+    }
 }

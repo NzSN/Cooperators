@@ -58,7 +58,8 @@ use crate::storage::LogFile;
 use crate::VERSION;
 
 /// Methods that require a valid agent token.
-const AUTHENTICATED_METHODS: [&str; 24] = [
+const AUTHENTICATED_METHODS: [&str; 25] = [
+    "operation_status",
     "send_message",
     "wait_message",
     "ack",
@@ -179,6 +180,7 @@ pub struct DaemonState {
     pub(crate) inboxes: Arc<InboxStore>,
     pub(crate) arrivals: Option<Arc<ArrivalService>>,
     pub(crate) network: Option<Arc<crate::network::NetworkRuntime>>,
+    pub(crate) operations: Arc<crate::operations::OperationStore>,
     pub(crate) send_lock: Arc<Mutex<()>>,
     pub(crate) channel_logs: Mutex<HashMap<String, ChannelLog>>,
     /// Open queue logs, one per queue name (design §7).
@@ -237,7 +239,7 @@ impl DaemonState {
         let arrival_meta =
             arrivals::migration::prepare(&config.root, &mut registry, config.enable_arrivals)?;
         let network = if let Some(policy) = &config.network_policy {
-            let meta = registry.prepare_network()?;
+            let mut meta = registry.prepare_network()?;
             registry.apply_network_policy_generations(
                 &policy
                     .devices
@@ -245,6 +247,12 @@ impl DaemonState {
                     .map(|d| (d.principal_id.clone(), d.generation))
                     .collect::<Vec<_>>(),
             )?;
+            if policy.enable_operations {
+                meta = registry.prepare_operations()?;
+            }
+            if policy.enable_resource_operations {
+                registry.prepare_resource_operations()?;
+            }
             Some(Arc::new(crate::network::NetworkRuntime::new(
                 policy.clone(),
                 meta,
@@ -269,18 +277,35 @@ impl DaemonState {
                 inboxes.insert(record.agent_id.clone(), inbox);
             }
         }
-        let inboxes = Arc::new(InboxStore::new(&config, inboxes, dedupe)?);
-        let presence_log = crate::channels::open_channel_rotating(
-            &config.root,
-            "#presence",
-            config.log_rotation_bytes,
-        )?;
-        let mut channel_logs = HashMap::new();
-        channel_logs.insert("#presence".to_string(), presence_log);
+        let operations = Arc::new(crate::operations::OperationStore::new(
+            network
+                .as_ref()
+                .map_or_else(String::new, |runtime| runtime.meta.bus_id.clone()),
+            network.as_ref().and_then(|runtime| {
+                runtime
+                    .meta
+                    .operation_epoch_expires_at_ms
+                    .map(|expiry| (runtime.meta.operation_epoch.clone(), expiry))
+            }),
+        ));
+        let inboxes = Arc::new(InboxStore::new(
+            &config,
+            inboxes,
+            dedupe,
+            Arc::clone(&operations),
+        )?);
+        let channel_logs =
+            crate::channels::load_all_channels(&config.root, config.log_rotation_bytes)?;
 
         let (queues, queue_states) =
             queues::load_all_queues(&config.root, config.log_rotation_bytes)?;
         let (docs, doc_states) = docs::load_all_docs(&config.root, config.log_rotation_bytes)?;
+        if registry.resource_operations_active() {
+            operations.open_outcomes(&config.root, config.log_rotation_bytes)?;
+        }
+        crate::channels::recover_channel_operations(&channel_logs, &operations)?;
+        queues::recover_queue_operations(&config.root, config.log_rotation_bytes, &operations)?;
+        docs::recover_document_operations(&config.root, &docs, &operations)?;
 
         if let Some(arrivals) = &arrivals {
             for (name, log) in &queues {
@@ -318,6 +343,7 @@ impl DaemonState {
             inboxes,
             arrivals,
             network,
+            operations,
             send_lock: Arc::new(Mutex::new(())),
             channel_logs: Mutex::new(channel_logs),
             queues: Mutex::new(queues),
@@ -720,6 +746,10 @@ async fn route(
         method if AUTHENTICATED_METHODS.contains(&method) => {
             let identity = authenticate_request(state, session, &request.params).await?;
             match method {
+                "operation_status" => Err(RpcError::application(
+                    ErrorCode::Forbidden,
+                    "scoped network identity required",
+                )),
                 "send_message" => {
                     let params: SendParams = parse_params(&request.params)?;
                     let body = parse_body(&params)?;
@@ -1049,6 +1079,54 @@ fn parse_params<T: DeserializeOwned>(params: &Value) -> Result<T, RpcError> {
 
 fn parse_body(params: &SendParams) -> Result<Body, RpcError> {
     parse_body_fields(params.body.as_ref(), params.text.as_deref())
+}
+
+pub(crate) fn parse_remote_send(params: &Value) -> Result<messaging::SendRequest, RpcError> {
+    let object = params
+        .as_object()
+        .ok_or_else(|| RpcError::invalid_params("object params required"))?;
+    for key in object.keys() {
+        if !matches!(
+            key.as_str(),
+            "to" | "kind" | "body" | "text" | "reply_to" | "ttl_s"
+        ) {
+            return Err(RpcError::invalid_params("unsupported remote send parameter; legacy idempotency_key is not a durable operation"));
+        }
+    }
+    if object.contains_key("body") && object.contains_key("text") {
+        return Err(RpcError::invalid_params("choose body or text"));
+    }
+    if let Some(Value::Object(body)) = object.get("body") {
+        if body
+            .keys()
+            .any(|key| !matches!(key.as_str(), "mime" | "text"))
+            || body.get("mime").is_some_and(|v| !v.is_string())
+        {
+            return Err(RpcError::invalid_params("invalid body fields"));
+        }
+    }
+    let params: SendParams = parse_params(params)?;
+    let body = parse_body(&params)?;
+    if params.to.is_empty()
+        || params.to.len() > 256
+        || params.kind.is_empty()
+        || params.kind.len() > 128
+        || params
+            .reply_to
+            .as_ref()
+            .is_some_and(|s| s.is_empty() || s.len() > 256)
+        || params.ttl_s.is_some_and(|n| n == 0 || n > 604800)
+    {
+        return Err(RpcError::invalid_params("remote send bounds exceeded"));
+    }
+    Ok(messaging::SendRequest {
+        to: params.to,
+        kind: params.kind,
+        body,
+        reply_to: params.reply_to,
+        idempotency_key: None,
+        ttl: params.ttl_s.map(Duration::from_secs),
+    })
 }
 
 fn parse_body_fields(body: Option<&Value>, text: Option<&str>) -> Result<Body, RpcError> {

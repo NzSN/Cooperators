@@ -47,12 +47,21 @@ struct Cli {
     #[arg(long, global = true, value_name = "TOKEN")]
     token: Option<String>,
 
+    /// Private local intent journal required for remote mutations.
+    #[arg(long, global = true, value_name = "DIR")]
+    operation_journal: Option<PathBuf>,
+
     #[command(subcommand)]
     command: Command,
 }
 
 #[derive(Debug, Subcommand)]
 enum Command {
+    /// Inspect or deliberately resume durable remote operations.
+    Operations {
+        #[command(subcommand)]
+        command: OperationCommand,
+    },
     /// Run the daemon
     Daemon {
         #[command(subcommand)]
@@ -154,6 +163,14 @@ enum Command {
     },
     /// Print daemon status as JSON
     Status,
+}
+
+#[derive(Debug, Subcommand)]
+enum OperationCommand {
+    /// List persisted intents and outcomes without contacting the broker.
+    List,
+    /// Resubmit the same persisted intent and operation identity.
+    Resume { id: String },
 }
 
 #[derive(Debug, Subcommand)]
@@ -337,11 +354,50 @@ async fn main() -> ExitCode {
                     }
                 }
             };
+            let handler = if let Some(directory) = &cli.operation_journal {
+                match cooperators::transport::journal::OperationJournal::open(directory) {
+                    Ok(journal) => handler.with_operation_journal(journal),
+                    Err(error) => return report("mcp-stdio", &error),
+                }
+            } else {
+                handler
+            };
             match mcp::serve_stdio(handler).await {
                 Ok(()) => ExitCode::SUCCESS,
                 Err(error) => {
                     eprintln!("coop mcp-stdio: {error}");
                     ExitCode::FAILURE
+                }
+            }
+        }
+        Command::Operations { command } => {
+            let Some(directory) = &cli.operation_journal else {
+                return report(
+                    "operations",
+                    &client::ClientError::Protocol("--operation-journal DIR is required".into()),
+                );
+            };
+            let journal = match cooperators::transport::journal::OperationJournal::open(directory) {
+                Ok(journal) => journal,
+                Err(error) => return report("operations", &error),
+            };
+            match command {
+                OperationCommand::List => match journal.list() {
+                    Ok(entries) => print_json(&json!({"operations":entries})),
+                    Err(error) => report("operations", &error),
+                },
+                OperationCommand::Resume { id } => {
+                    let token = match require_token(&cli.token) {
+                        Ok(token) => token,
+                        Err(code) => return code,
+                    };
+                    match broker
+                        .submit_operation(&journal, &id, &token, Duration::from_secs(40))
+                        .await
+                    {
+                        Ok(result) => print_json(&result),
+                        Err(error) => report("operations resume", &error),
+                    }
                 }
             }
         }
@@ -403,7 +459,30 @@ async fn main() -> ExitCode {
             if let Some(ttl) = ttl {
                 params["ttl_s"] = json!(ttl);
             }
-            call_and_print(&broker, "send", "send_message", params).await
+            if matches!(broker.endpoint(), client::Endpoint::Https(_)) {
+                let Some(directory) = &cli.operation_journal else {
+                    return report(
+                        "send",
+                        &client::ClientError::Protocol(
+                            "remote send requires --operation-journal DIR".into(),
+                        ),
+                    );
+                };
+                let journal =
+                    match cooperators::transport::journal::OperationJournal::open(directory) {
+                        Ok(journal) => journal,
+                        Err(error) => return report("send", &error),
+                    };
+                match broker
+                    .call_journaled(&journal, "send_message", params, Duration::from_secs(40))
+                    .await
+                {
+                    Ok(result) => print_json(&result),
+                    Err(error) => report("send", &error),
+                }
+            } else {
+                call_and_print(&broker, "send", "send_message", params).await
+            }
         }
         Command::Wait { cursor, timeout } => {
             let token = match require_token(&cli.token) {

@@ -214,7 +214,7 @@ async fn mcp_rejects_ambiguous_authorization_and_oversized_response_ids() {
 }
 
 #[tokio::test]
-async fn mcp_counts_text_and_structured_copies_against_response_budget() {
+async fn mcp_keeps_full_structured_result_when_duplicate_text_exceeds_budget() {
     let (_temp, state, token, local) = fixture().await;
     let mut policy = state.network().unwrap().policy();
     policy.devices[0]
@@ -254,9 +254,13 @@ async fn mcp_counts_text_and_structured_copies_against_response_budget() {
         panic!("completed tool result required")
     };
     let encoded = serde_json::to_value(result).unwrap();
-    assert_eq!(encoded["isError"], true);
+    assert_eq!(encoded["isError"], false);
+    assert_eq!(encoded["content"], json!([]));
     assert_eq!(
-        encoded["structuredContent"]["data"]["code"],
-        "RESOURCE_EXHAUSTED"
+        encoded["structuredContent"]["body"]["text"],
+        "\"".repeat(800_000)
+    );
+    assert!(
+        serde_json::to_vec(&encoded).unwrap().len() < cooperators::transport::MAX_RPC_BYTES - 1024
     );
 }

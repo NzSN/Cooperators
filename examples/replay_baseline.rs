@@ -309,6 +309,8 @@ fn write_fixture(path: &Path, records: u64) -> Result<String> {
         let mut random = [0u8; 10];
         random[2..].copy_from_slice(&index.to_be_bytes());
         let envelope = Envelope {
+            operation: None,
+            domain_operation: None,
             v: ENVELOPE_VERSION,
             id: cooperators::id::ulid_from_parts(1_792_454_400_000 + index, random),
             seq: index + 1,

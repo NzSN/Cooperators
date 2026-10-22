@@ -22,7 +22,7 @@ args.output.mkdir(parents=True, exist_ok=False)
 
 def manifest():
     paths = [root / "Cargo.toml", root / "Cargo.lock"]
-    for directory in ["src", "tests", "scripts", "spec"]:
+    for directory in ["src", "tests", "scripts", "spec", "examples"]:
         paths.extend(p for p in (root / directory).rglob("*")
                      if p.is_file() and "target" not in p.relative_to(root).parts
                      and "__pycache__" not in p.parts and p.suffix in {".rs", ".py", ".tla", ".cfg", ".json", ".toml", ".lock", ".pem"})

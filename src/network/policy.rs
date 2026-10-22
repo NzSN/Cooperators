@@ -34,6 +34,12 @@ pub struct DevicePrincipal {
 #[serde(deny_unknown_fields)]
 pub struct NetworkPolicy {
     pub v: u16,
+    /// Explicit activation of the incompatible durable-operation source format.
+    #[serde(default)]
+    pub enable_operations: bool,
+    /// Opt in to durable channel, queue, document and lease operations.
+    #[serde(default)]
+    pub enable_resource_operations: bool,
     pub allowed_hosts: Vec<String>,
     #[serde(default)]
     pub allowed_origins: Vec<String>,
@@ -72,6 +78,7 @@ impl NetworkPolicy {
 
     pub fn validate(&self) -> Result<(), BrokerError> {
         if self.v != 1
+            || (self.enable_resource_operations && !self.enable_operations)
             || self.devices.len() > 1024
             || self.allowed_hosts.is_empty()
             || self.allowed_hosts.len() > 32

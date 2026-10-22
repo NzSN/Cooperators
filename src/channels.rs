@@ -11,7 +11,9 @@
 //! preserves this logical stream name across physical segments. Sequence
 //! numbers remain global, so saved cursors continue through rotation.
 
-use std::collections::HashMap;
+use std::collections::{BTreeSet, HashMap};
+use std::fs;
+use std::path::Path;
 use std::sync::Arc;
 use std::time::Duration;
 
@@ -24,6 +26,7 @@ use crate::envelope::{Body, Envelope};
 use crate::error::{BrokerError, ErrorCode};
 use crate::id;
 use crate::messaging::{parse_cursor, validate_channel_name, DAEMON_SENDER};
+use crate::operations::{DomainTicket, OperationOutcome, OperationStore};
 use crate::registry::AgentIdentity;
 use crate::server::DaemonState;
 use crate::storage::{segment_paths, LogFile};
@@ -102,6 +105,15 @@ pub(crate) fn open_channel_rotating(
     channel: &str,
     rotation_bytes: u64,
 ) -> Result<ChannelLog, BrokerError> {
+    open_channel_operation(root, channel, rotation_bytes, None)
+}
+
+fn open_channel_operation(
+    root: &Path,
+    channel: &str,
+    rotation_bytes: u64,
+    operation: Option<&DomainTicket>,
+) -> Result<ChannelLog, BrokerError> {
     validate_channel_name(channel)?;
     let path = root.join("channels").join(format!("{channel}.jsonl"));
     let (mut log, report) =
@@ -124,8 +136,12 @@ pub(crate) fn open_channel_rotating(
         );
         let mut recovery = Envelope::new(DAEMON_SENDER, channel, "recovery", body)
             .map_err(|error| BrokerError::internal(error.to_string()))?;
+        let maintenance = operation.map(DomainTicket::begin_maintenance);
         log.append(&mut recovery)?;
         records.push(recovery);
+        if let Some(maintenance) = maintenance {
+            maintenance.complete();
+        }
     }
 
     let mut dedupe = HashMap::new();
@@ -147,6 +163,106 @@ pub(crate) fn open_channel_rotating(
         notify: Arc::new(Notify::new()),
         dedupe,
     })
+}
+
+/// Loads every logical channel, including streams sealed during a crash.
+pub(crate) fn load_all_channels(
+    root: &Path,
+    rotation_bytes: u64,
+) -> Result<HashMap<String, ChannelLog>, BrokerError> {
+    let directory = root.join("channels");
+    let mut names = BTreeSet::new();
+    match fs::read_dir(&directory) {
+        Ok(entries) => {
+            for entry in entries {
+                let path = entry?.path();
+                if path.extension().and_then(|ext| ext.to_str()) == Some("jsonl") {
+                    if let Some(name) = path.file_stem().and_then(|name| name.to_str()) {
+                        names.insert(name.to_string());
+                    }
+                }
+            }
+        }
+        Err(error) if error.kind() == std::io::ErrorKind::NotFound => {}
+        Err(error) => return Err(error.into()),
+    }
+    match fs::read_dir(directory.join(".segments")) {
+        Ok(entries) => {
+            for entry in entries {
+                let entry = entry?;
+                if !entry.file_type()?.is_dir() {
+                    continue;
+                }
+                let logical = directory.join(entry.file_name());
+                if logical.extension().and_then(|ext| ext.to_str()) == Some("jsonl")
+                    && !segment_paths(&logical)?.is_empty()
+                {
+                    if let Some(name) = logical.file_stem().and_then(|name| name.to_str()) {
+                        names.insert(name.to_string());
+                    }
+                }
+            }
+        }
+        Err(error) if error.kind() == std::io::ErrorKind::NotFound => {}
+        Err(error) => return Err(error.into()),
+    }
+    let mut channels = HashMap::new();
+    for name in names {
+        if validate_channel_name(&name).is_err() {
+            continue;
+        }
+        channels.insert(
+            name.clone(),
+            open_channel_rotating(root, &name, rotation_bytes)?,
+        );
+    }
+    Ok(channels)
+}
+
+pub(crate) fn recover_channel_operations(
+    logs: &HashMap<String, ChannelLog>,
+    operations: &OperationStore,
+) -> Result<(), BrokerError> {
+    for (name, log) in logs {
+        for envelope in &log.records {
+            if envelope.operation.is_some() {
+                return Err(BrokerError::internal(
+                    "inbox operation proof found in channel source",
+                ));
+            }
+            let Some(proof) = &envelope.domain_operation else {
+                continue;
+            };
+            // Historical envelopes identify the sender by name. The embedded
+            // proof retains the authenticated stable scope, without requiring
+            // a still-live registry identity during authoritative replay.
+            proof.verify("publish", &format!("channel:{name}"))?;
+            let result = serde_json::to_value(PublishReceipt {
+                channel: name.clone(),
+                message_id: envelope.id.clone(),
+                seq: envelope.seq,
+                ts: envelope.ts.clone(),
+                duplicate: false,
+                idempotency_key: None,
+                cursor: ChannelCursor::new(name, envelope.seq),
+            })
+            .map_err(|error| BrokerError::internal(format!("channel receipt: {error}")))?;
+            if envelope.validate().is_err()
+                || envelope.kind != "publish"
+                || envelope.to != *name
+                || envelope.idempotency_key.is_some()
+                || proof.completion.is_some()
+                || proof.context.input != json!({"channel":name,"body":envelope.body})
+                || !matches!(&proof.outcome, OperationOutcome::Success(value) if value == &result)
+            {
+                return Err(BrokerError::internal(
+                    "invalid authoritative channel operation proof",
+                ));
+            }
+            operations.recover_domain(proof, proof.outcome.clone())?;
+        }
+    }
+    Ok(())
 }
 
 /// Parses a cursor supplied as JSON or as a compact string.
@@ -212,6 +328,30 @@ impl DaemonState {
         body: Body,
         idempotency_key: Option<String>,
     ) -> Result<PublishReceipt, BrokerError> {
+        self.publish_impl(sender, channel, body, idempotency_key, None)
+            .await
+    }
+
+    /// Caller holds `send_lock` for the independent operation task.
+    pub(crate) async fn publish_operation(
+        &self,
+        sender: &AgentIdentity,
+        channel: &str,
+        body: Body,
+        operation: &DomainTicket,
+    ) -> Result<PublishReceipt, BrokerError> {
+        self.publish_impl(sender, channel, body, None, Some(operation))
+            .await
+    }
+
+    async fn publish_impl(
+        &self,
+        sender: &AgentIdentity,
+        channel: &str,
+        body: Body,
+        idempotency_key: Option<String>,
+        operation: Option<&DomainTicket>,
+    ) -> Result<PublishReceipt, BrokerError> {
         validate_channel_name(channel)?;
         if body.mime.is_empty() {
             return Err(BrokerError::invalid("body.mime must not be empty"));
@@ -220,12 +360,21 @@ impl DaemonState {
             return Err(BrokerError::invalid("idempotency_key must not be empty"));
         }
 
-        let _send_guard = self.send_lock.lock().await;
+        let _send_guard = if operation.is_none() {
+            Some(self.send_lock.lock().await)
+        } else {
+            None
+        };
         let mut logs = self.channel_logs.lock().await;
         if !logs.contains_key(channel) {
             logs.insert(
                 channel.to_string(),
-                open_channel_rotating(&self.root, channel, self.config().log_rotation_bytes)?,
+                open_channel_operation(
+                    &self.root,
+                    channel,
+                    self.config().log_rotation_bytes,
+                    operation,
+                )?,
             );
         }
         let log = logs
@@ -249,6 +398,21 @@ impl DaemonState {
         let mut envelope = Envelope::new(sender.name.clone(), channel, "publish", body)
             .map_err(|error| BrokerError::internal(error.to_string()))?;
         envelope.idempotency_key = idempotency_key.clone();
+        let result = PublishReceipt {
+            channel: channel.to_string(),
+            message_id: envelope.id.clone(),
+            seq: log.log.seq_head() + 1,
+            ts: envelope.ts.clone(),
+            duplicate: false,
+            idempotency_key: idempotency_key.clone(),
+            cursor: ChannelCursor::new(channel, log.log.seq_head() + 1),
+        };
+        if let Some(operation) = operation {
+            let value = serde_json::to_value(&result)
+                .map_err(|error| BrokerError::internal(format!("channel receipt: {error}")))?;
+            envelope.domain_operation = Some(operation.proof(OperationOutcome::Success(value))?);
+            operation.mark_effect_attempt();
+        }
         let receipt = log.log.append(&mut envelope)?;
         log.records.push(envelope.clone());
         if let Some(key) = envelope.idempotency_key.clone() {
@@ -265,15 +429,7 @@ impl DaemonState {
         drop(logs);
         notify.notify_waiters();
 
-        Ok(PublishReceipt {
-            channel: channel.to_string(),
-            message_id: envelope.id,
-            seq: receipt.seq,
-            ts: envelope.ts,
-            duplicate: false,
-            idempotency_key: envelope.idempotency_key,
-            cursor: ChannelCursor::new(channel, receipt.seq),
-        })
+        Ok(result)
     }
 
     /// Reads channel records strictly after `cursor` without advancing server

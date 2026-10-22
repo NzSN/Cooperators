@@ -1,0 +1,14 @@
+{
+  "source_manifest": "/tmp/cooperators-n3a-accepted-source-20261022/source-manifest.json",
+  "binary_path": "/tmp/cooperators-n3a-accepted-source-20261022/coop",
+  "binary_sha256": "2a2f5a0ecee674ea39dfb3f59ce7c3ef39f41d83aca4003eafc75ddf90d74ebd",
+  "build_command": [
+    "cargo",
+    "build",
+    "--offline",
+    "--locked",
+    "--bin",
+    "coop"
+  ],
+  "features": []
+}

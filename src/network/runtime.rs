@@ -92,11 +92,13 @@ impl NetworkRuntime {
         self.check_ready()?;
         let mut current = self.policy.write().unwrap();
         if current.max_connections != policy.max_connections
+            || current.enable_operations != policy.enable_operations
+            || current.enable_resource_operations != policy.enable_resource_operations
             || current.requests_per_principal != policy.requests_per_principal
             || current.polls_per_principal != policy.polls_per_principal
         {
             return Err(BrokerError::invalid(
-                "network capacity changes require restart",
+                "network capacity or operation activation changes require restart",
             ));
         }
         let generations = policy
@@ -438,6 +440,20 @@ impl NetworkRuntime {
             }
             _ => format!("agent:{}", context.identity.agent_id),
         };
+        self.authorize_resource(context, method, &resource)?;
+        Ok(resource)
+    }
+
+    /// Receipt replay uses its original resolved resource, after current
+    /// authentication, so a completed lease or retired recipient does not
+    /// prevent recovering the already committed result.
+    pub fn authorize_resource(
+        &self,
+        context: &AuthContext,
+        method: &str,
+        resource: &str,
+    ) -> Result<(), BrokerError> {
+        self.check_ready()?;
         let policy = self.policy.read().unwrap();
         let device = policy
             .device(&context.principal_id)
@@ -447,10 +463,10 @@ impl NetworkRuntime {
         {
             return Err(unauthenticated());
         }
-        if !policy.allows(&context.principal_id, method, &resource) {
+        if !policy.allows(&context.principal_id, method, resource) {
             return Err(forbidden());
         }
-        Ok(resource)
+        Ok(())
     }
 }
 

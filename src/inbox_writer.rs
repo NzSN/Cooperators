@@ -15,6 +15,7 @@ use crate::messaging::{
     envelope_line_bytes, inbox_now, DedupeEntry, DedupeIndex, Inbox, InboxFiles, InboxState,
     SendReceipt, SendRequest,
 };
+use crate::operations::{OperationProof, OperationRef, OperationScope, OperationStore};
 use crate::registry::AgentIdentity;
 use crate::server::{DaemonConfig, RootLease};
 use crate::status::LogHead;
@@ -45,13 +46,20 @@ fn clone_error(error: &BrokerError) -> BrokerError {
 }
 
 #[derive(Debug, Default)]
-struct Completion {
+pub(crate) struct Completion {
     result: StdMutex<Option<SendResult>>,
     changed: Notify,
 }
 
 impl Completion {
-    fn finish(&self, result: SendResult) {
+    pub(crate) fn operation_status(&self) -> serde_json::Value {
+        match lock(&self.result).as_ref() {
+            None => serde_json::json!({"state":"pending"}),
+            Some(Ok(receipt)) => serde_json::json!({"state":"committed", "result":receipt}),
+            Some(Err(_)) => serde_json::json!({"state":"unknown"}),
+        }
+    }
+    pub(crate) fn finish(&self, result: SendResult) {
         let mut slot = lock(&self.result);
         if slot.is_none() {
             *slot = Some(result);
@@ -60,7 +68,7 @@ impl Completion {
         }
     }
 
-    async fn wait(&self, duplicate: bool) -> SendResult {
+    pub(crate) async fn wait(&self, duplicate: bool) -> SendResult {
         loop {
             let notified = self.changed.notified();
             tokio::pin!(notified);
@@ -159,6 +167,7 @@ pub(crate) struct InboxStore {
     directory: StdMutex<HashMap<String, Arc<InboxHandle>>>,
     creation: Arc<Mutex<()>>,
     dedupe: StdMutex<HashMap<DedupeKey, DedupeState>>,
+    operations: Arc<OperationStore>,
     // Workers hold the store through drain, retaining exclusive root ownership.
     owner: StdMutex<Option<Arc<RootLease>>>,
 }
@@ -168,6 +177,7 @@ impl InboxStore {
         config: &DaemonConfig,
         loaded: HashMap<String, Inbox>,
         dedupe: DedupeIndex,
+        operations: Arc<OperationStore>,
     ) -> Result<Self, BrokerError> {
         if config.write_batch_messages == 0
             || config.write_batch_bytes == 0
@@ -178,12 +188,14 @@ impl InboxStore {
                 "write batch and queue message/byte limits must be positive",
             ));
         }
+        operations.recover_inboxes(&loaded)?;
         let mut directory = HashMap::with_capacity(loaded.len());
         for (agent_id, inbox) in loaded {
             directory.insert(agent_id, Arc::new(InboxHandle::new(inbox)?));
         }
         Ok(Self {
             config: config.clone(),
+            operations,
             directory: StdMutex::new(directory),
             creation: Arc::new(Mutex::new(())),
             dedupe: StdMutex::new(
@@ -257,6 +269,28 @@ impl InboxStore {
         recipient: &AgentIdentity,
         request: SendRequest,
     ) -> SendResult {
+        self.send_inner(sender, recipient, request, None).await
+    }
+
+    pub(crate) async fn send_operation(
+        self: &Arc<Self>,
+        sender: &AgentIdentity,
+        recipient: &AgentIdentity,
+        request: SendRequest,
+        scope: OperationScope,
+        reference: OperationRef,
+    ) -> SendResult {
+        self.send_inner(sender, recipient, request, Some((scope, reference)))
+            .await
+    }
+
+    async fn send_inner(
+        self: &Arc<Self>,
+        sender: &AgentIdentity,
+        recipient: &AgentIdentity,
+        request: SendRequest,
+        operation: Option<(OperationScope, OperationRef)>,
+    ) -> SendResult {
         // Existing global keys remain usable even if the requested recipient's
         // inbox can no longer be opened or admitted for writes.
         let existing = request.idempotency_key.as_ref().and_then(|key| {
@@ -273,12 +307,15 @@ impl InboxStore {
                     to: entry.to,
                     to_agent_id: entry.to_agent_id,
                     idempotency_key: request.idempotency_key,
+                    ts: None,
                 });
             }
             Some(DedupeState::Pending(completion)) => return completion.wait(true).await,
             None => {}
         }
-        let inbox = self.ensure(&recipient.agent_id).await?;
+        let digest = operation
+            .as_ref()
+            .map(|_| crate::operations::send_digest(&recipient.agent_id, &request));
         let mut envelope = Envelope::new(
             sender.name.clone(),
             recipient.name.clone(),
@@ -288,17 +325,59 @@ impl InboxStore {
         .map_err(|error| BrokerError::internal(error.to_string()))?;
         envelope.reply_to = request.reply_to;
         envelope.idempotency_key = request.idempotency_key;
+        if let Some((scope, reference)) = operation {
+            envelope.operation = Some(OperationProof {
+                scope,
+                operation: reference,
+                digest: digest.expect("operation digest"),
+                method: "send_message".into(),
+                resource: format!("inbox:{}", recipient.agent_id),
+                ttl_ms: request
+                    .ttl
+                    .map(|ttl| u64::try_from(ttl.as_millis()).unwrap_or(u64::MAX)),
+                expires_at_ms: request.ttl.map(|_| u64::MAX),
+                result: SendReceipt {
+                    message_id: envelope.id.clone(),
+                    seq: u64::MAX,
+                    duplicate: false,
+                    to: recipient.name.clone(),
+                    to_agent_id: recipient.agent_id.clone(),
+                    idempotency_key: None,
+                    ts: Some(envelope.ts.clone()),
+                },
+            });
+        }
+        if let Some(proof) = &envelope.operation {
+            if let Some(existing) = self
+                .operations
+                .lookup(proof, inbox_now(&self.config.root))?
+            {
+                return existing.wait(false).await;
+            }
+        }
         // Every later sequence fits this decimal width; all chain hashes have
         // the same serialized width. This bounds queued bytes before assignment.
         envelope.seq = u64::MAX;
         envelope.prev_hash = GENESIS_HASH.to_string();
         let bound_bytes = envelope_line_bytes(&envelope);
+        // Remote reads budget one separator byte per message, matching this
+        // JSON-line bound. Include the proof, original result and worst-case
+        // sequence/expiry widths so an accepted remote send is always readable.
+        if envelope.operation.is_some()
+            && bound_bytes > crate::messaging::REMOTE_INBOX_PAGE_BYTES as u64
+        {
+            return Err(BrokerError::application(
+                ErrorCode::ResourceExhausted,
+                "durable message and operation proof exceed the remote inbox page budget",
+            ));
+        }
+        let inbox = self.ensure(&recipient.agent_id).await?;
         let dedupe_key = envelope
             .idempotency_key
             .as_ref()
             .map(|key| (sender.name.clone(), key.clone()));
         let completion = Arc::new(Completion::default());
-        let (wait_for, duplicate, start_worker) = {
+        let (wait_for, duplicate, start_worker) = 'admit: {
             let mut dedupe = lock(&self.dedupe);
             match dedupe_key.as_ref().and_then(|key| dedupe.get(key)) {
                 Some(DedupeState::Committed(entry)) => {
@@ -309,11 +388,20 @@ impl InboxStore {
                         to: entry.to.clone(),
                         to_agent_id: entry.to_agent_id.clone(),
                         idempotency_key: envelope.idempotency_key,
+                        ts: None,
                     });
                 }
                 Some(DedupeState::Pending(pending)) => (pending.clone(), true, false),
                 None => {
                     let mut queue = lock(&inbox.queue);
+                    if let Some(proof) = &envelope.operation {
+                        if let Some(existing) = self
+                            .operations
+                            .lookup(proof, inbox_now(&self.config.root))?
+                        {
+                            break 'admit (existing, false, false);
+                        }
+                    }
                     if let Some(error) = &queue.failed {
                         return Err(clone_error(error));
                     }
@@ -333,6 +421,15 @@ impl InboxStore {
                     }
                     if let Some(key) = &dedupe_key {
                         dedupe.insert(key.clone(), DedupeState::Pending(completion.clone()));
+                    }
+                    if let Some(proof) = &envelope.operation {
+                        if let Some(existing) = self.operations.reserve(
+                            proof,
+                            &completion,
+                            inbox_now(&self.config.root),
+                        )? {
+                            break 'admit (existing, false, false);
+                        }
                     }
                     queue.bytes += bound_bytes;
                     queue.jobs.push_back(WriteJob {
@@ -477,6 +574,11 @@ impl Worker {
     }
 
     fn reject(&self, job: &WriteJob, error: BrokerError) {
+        if let Some(proof) = &job.envelope.operation {
+            self.store
+                .operations
+                .reject_before_effect(proof, &job.completion);
+        }
         if let Some(key) = &job.dedupe_key {
             let mut dedupe = lock(&self.store.dedupe);
             if matches!(dedupe.get(key), Some(DedupeState::Pending(pending)) if Arc::ptr_eq(pending, &job.completion))
@@ -512,6 +614,10 @@ impl Worker {
                 continue;
             };
             envelope.seq = seq;
+            if let Some(proof) = &mut envelope.operation {
+                proof.result.seq = seq;
+                proof.expires_at_ms = proof.ttl_ms.map(|ttl| admitted_at_ms.saturating_add(ttl));
+            }
             // Actual predecessor hashes differ but retain the same width, so
             // this gives the exact persisted size before touching either log.
             envelope.prev_hash = files.log.last_hash().to_string();
@@ -572,6 +678,13 @@ impl Worker {
             });
         }
         let receipts = files.log.append_batch(&mut records)?;
+        #[cfg(feature = "mbt-injection")]
+        if records.iter().any(|envelope| envelope.operation.is_some()) {
+            crate::faults::reach(
+                files.log.path(),
+                crate::faults::FaultPoint::AfterOperationSyncBeforePublish,
+            )?;
+        }
         let mut inbox = self.inbox.state.blocking_lock();
         // Add to current counters: acknowledgments may have changed them
         // since admission, and cannot have covered these unpublished records.
@@ -602,6 +715,7 @@ impl Worker {
                 to: envelope.to.clone(),
                 to_agent_id: job.to_agent_id.clone(),
                 idempotency_key: envelope.idempotency_key,
+                ts: envelope.operation.as_ref().map(|_| envelope.ts.clone()),
             };
             if let Some(key) = &job.dedupe_key {
                 lock(&self.store.dedupe).insert(
@@ -636,7 +750,15 @@ impl Worker {
         for job in self.active.drain(..) {
             // Retain pending keys for uncertain writes. Retrying against
             // another recipient cannot create a second durable message.
-            job.completion.finish(Err(clone_error(&error)));
+            job.completion
+                .finish(Err(if job.envelope.operation.is_some() {
+                    BrokerError::application(
+                        ErrorCode::OutcomeUnknown,
+                        "operation source write is uncertain; authoritative reopen is required",
+                    )
+                } else {
+                    clone_error(&error)
+                }));
         }
     }
 }

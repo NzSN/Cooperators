@@ -1,0 +1,19 @@
+{
+  "scope": "Focused diagnostic logs only; source was changing; not a final N3b gate",
+  "implementation_stopped_by_user": "2026-10-22",
+  "logs": [
+    {
+      "path": "cooperators-n3b-operation-crash-diagnostic-01.log",
+      "sha256": "64196a7e0fce1197f6388cf3127ce2b7b2b1cfa65d85040ec0eb29a4724d60ee"
+    },
+    {
+      "path": "cooperators-n3b-operation-crash-diagnostic-02.log",
+      "sha256": "acbe2e2c4f4a3a806ae1207571a2852d2910a433628735b7836dec8bb314ff94"
+    }
+  ],
+  "known_unfinished": [
+    "Validate interrupted queue creation repair and add its regression",
+    "Finish successful maintenance terminal-outcome regression updates; existing document test still expects previous unknown behavior",
+    "Run final unchanged-source normal, injection and generated replay gates"
+  ]
+}

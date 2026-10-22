@@ -150,6 +150,21 @@ async fn verify_bus(
     expected: &str,
     deadline: Duration,
 ) -> Result<(), ClientError> {
+    let info = discover(client, origin, token, deadline).await?;
+    if info["bus_id"].as_str() != Some(expected) {
+        return Err(ClientError::Protocol(
+            "broker identity does not match selected profile".into(),
+        ));
+    }
+    Ok(())
+}
+
+pub(super) async fn discover(
+    client: &reqwest::Client,
+    origin: &reqwest::Url,
+    token: Option<&str>,
+    deadline: Duration,
+) -> Result<Value, ClientError> {
     let mut request = client
         .get(origin.join("v1/info").expect("validated origin"))
         .timeout(deadline);
@@ -178,10 +193,5 @@ async fn verify_bus(
     }
     let info: Value = serde_json::from_slice(&bytes)
         .map_err(|_| ClientError::Protocol("invalid broker identity response".into()))?;
-    if info["bus_id"].as_str() != Some(expected) {
-        return Err(ClientError::Protocol(
-            "broker identity does not match selected profile".into(),
-        ));
-    }
-    Ok(())
+    Ok(info)
 }

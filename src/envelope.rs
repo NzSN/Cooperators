@@ -45,6 +45,12 @@ pub struct Envelope {
     pub reply_to: Option<String>,
     #[serde(default)]
     pub idempotency_key: Option<String>,
+    /// Durable remote proof; omitted to preserve historical local hashes.
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub operation: Option<crate::operations::OperationProof>,
+    /// Resource operation proof used by channel source records.
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub domain_operation: Option<crate::operations::DomainOperationProof>,
     pub body: Body,
     pub prev_hash: String,
 }
@@ -70,6 +76,8 @@ impl Envelope {
             kind: kind.into(),
             reply_to: None,
             idempotency_key: None,
+            operation: None,
+            domain_operation: None,
             body,
             prev_hash: GENESIS_HASH.to_string(),
         })

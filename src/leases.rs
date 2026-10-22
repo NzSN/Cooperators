@@ -21,7 +21,26 @@ impl DaemonState {
         lease_id: &str,
     ) -> Result<RenewLeaseReceipt, BrokerError> {
         let _send_guard = self.send_lock.lock().await;
+        self.renew_lease_under_admission(identity, lease_id, None)
+            .await
+    }
 
+    pub(crate) async fn renew_lease_operation(
+        &self,
+        identity: &AgentIdentity,
+        lease_id: &str,
+        ticket: &crate::operations::DomainTicket,
+    ) -> Result<RenewLeaseReceipt, BrokerError> {
+        self.renew_lease_under_admission(identity, lease_id, Some(ticket))
+            .await
+    }
+
+    async fn renew_lease_under_admission(
+        &self,
+        identity: &AgentIdentity,
+        lease_id: &str,
+        ticket: Option<&crate::operations::DomainTicket>,
+    ) -> Result<RenewLeaseReceipt, BrokerError> {
         let queue = {
             let states: tokio::sync::MutexGuard<
                 '_,
@@ -42,6 +61,11 @@ impl DaemonState {
             })
         };
         if let Some(queue) = queue {
+            if let Some(ticket) = ticket {
+                return self
+                    .renew_queue_lease_operation(identity, &queue, lease_id, ticket)
+                    .await;
+            }
             return self.renew_queue_lease(identity, &queue, lease_id).await;
         }
 
@@ -57,6 +81,11 @@ impl DaemonState {
             })
         };
         if let Some(doc) = doc {
+            if let Some(ticket) = ticket {
+                return self
+                    .renew_doc_lease_operation(identity, &doc, lease_id, ticket)
+                    .await;
+            }
             return self.renew_doc_lease(identity, &doc, lease_id).await;
         }
 

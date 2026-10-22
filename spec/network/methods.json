@@ -1,6 +1,6 @@
 {
   "v": 1,
-  "status": "N0 contract; exposure remains gated until implementation acceptance",
+  "status": "N3b implemented; local source qualification pending; actual network/provider release remains gated",
   "source_commit": "27d6e901a683b2c651f8bbf9a3be017f3a5b22a2",
   "methods": [
     {
@@ -36,11 +36,11 @@
       "permission": "claim_doc",
       "resource": "document:name",
       "retry": "durable-operation",
-      "authoritative_storage": "owning document/queue source log",
-      "commit": "covering fsync; result reconstructed from authoritative operation evidence",
-      "negative_result": "no automatic retry with a new identity; claim empty outcome must be durably terminal",
-      "retention": "read none; durable keys use validity epoch plus replay tombstones",
-      "initial_remote_exposure": "disabled-until-method-gate"
+      "authoritative_storage": "document event domain_operation with verified blob if any; no-effect outcomes journal",
+      "commit": "authoritative source proof fsync; original receipt replay before current domain checks; fail-task dead projection must sync; arrival feed projection follows durable captured intent asynchronously",
+      "negative_result": "admitted terminal no-effect outcomes are synced under domain serialization; empty claim and CAS conflict remain original on retry; malformed and unauthorized requests are not admitted",
+      "retention": "shared 10000-operation epoch; input <=256 KiB; old validity epochs rejected; N3c rollover pending",
+      "initial_remote_exposure": "explicit enable_resource_operations policy; requires durable_resource_operations_v1 format guard"
     },
     {
       "method": "claim_task",
@@ -49,11 +49,11 @@
       "permission": "claim_task",
       "resource": "queue:queue",
       "retry": "durable-operation",
-      "authoritative_storage": "queue source log and derived dead letter if applicable",
-      "commit": "covering fsync; result reconstructed from authoritative operation evidence",
-      "negative_result": "no automatic retry with a new identity; claim empty outcome must be durably terminal",
-      "retention": "read none; durable keys use validity epoch plus replay tombstones",
-      "initial_remote_exposure": "disabled-until-method-gate"
+      "authoritative_storage": "queue event domain_operation; required deduplicated dead-letter projection; no-effect outcomes journal",
+      "commit": "authoritative source proof fsync; original receipt replay before current domain checks; fail-task dead projection must sync; arrival feed projection follows durable captured intent asynchronously",
+      "negative_result": "admitted terminal no-effect outcomes are synced under domain serialization; empty claim and CAS conflict remain original on retry; malformed and unauthorized requests are not admitted",
+      "retention": "shared 10000-operation epoch; input <=256 KiB; old validity epochs rejected; N3c rollover pending",
+      "initial_remote_exposure": "explicit enable_resource_operations policy; requires durable_resource_operations_v1 format guard"
     },
     {
       "method": "complete_task",
@@ -62,11 +62,11 @@
       "permission": "complete_task",
       "resource": "lease:owner-resolved",
       "retry": "durable-operation",
-      "authoritative_storage": "queue source log and derived dead letter if applicable",
-      "commit": "covering fsync; result reconstructed from authoritative operation evidence",
-      "negative_result": "no automatic retry with a new identity; claim empty outcome must be durably terminal",
-      "retention": "read none; durable keys use validity epoch plus replay tombstones",
-      "initial_remote_exposure": "disabled-until-method-gate"
+      "authoritative_storage": "queue event domain_operation; required deduplicated dead-letter projection; no-effect outcomes journal",
+      "commit": "authoritative source proof fsync; original receipt replay before current domain checks; fail-task dead projection must sync; arrival feed projection follows durable captured intent asynchronously",
+      "negative_result": "admitted terminal no-effect outcomes are synced under domain serialization; empty claim and CAS conflict remain original on retry; malformed and unauthorized requests are not admitted",
+      "retention": "shared 10000-operation epoch; input <=256 KiB; old validity epochs rejected; N3c rollover pending",
+      "initial_remote_exposure": "explicit enable_resource_operations policy; requires durable_resource_operations_v1 format guard"
     },
     {
       "method": "create_queue",
@@ -75,11 +75,11 @@
       "permission": "create_queue",
       "resource": "queue:queue",
       "retry": "durable-operation",
-      "authoritative_storage": "queue source log and derived dead letter if applicable",
-      "commit": "covering fsync; result reconstructed from authoritative operation evidence",
-      "negative_result": "no automatic retry with a new identity; claim empty outcome must be durably terminal",
-      "retention": "read none; durable keys use validity epoch plus replay tombstones",
-      "initial_remote_exposure": "disabled-until-method-gate"
+      "authoritative_storage": "queue event domain_operation; required deduplicated dead-letter projection; no-effect outcomes journal",
+      "commit": "authoritative source proof fsync; original receipt replay before current domain checks; fail-task dead projection must sync; arrival feed projection follows durable captured intent asynchronously",
+      "negative_result": "admitted terminal no-effect outcomes are synced under domain serialization; empty claim and CAS conflict remain original on retry; malformed and unauthorized requests are not admitted",
+      "retention": "shared 10000-operation epoch; input <=256 KiB; old validity epochs rejected; N3c rollover pending",
+      "initial_remote_exposure": "explicit enable_resource_operations policy; requires durable_resource_operations_v1 format guard"
     },
     {
       "method": "daemon.status",
@@ -114,11 +114,11 @@
       "permission": "enqueue",
       "resource": "queue:queue",
       "retry": "durable-operation",
-      "authoritative_storage": "queue source log and derived dead letter if applicable",
-      "commit": "covering fsync; result reconstructed from authoritative operation evidence",
-      "negative_result": "no automatic retry with a new identity; claim empty outcome must be durably terminal",
-      "retention": "read none; durable keys use validity epoch plus replay tombstones",
-      "initial_remote_exposure": "disabled-until-method-gate"
+      "authoritative_storage": "queue event domain_operation; required deduplicated dead-letter projection; no-effect outcomes journal",
+      "commit": "authoritative source proof fsync; original receipt replay before current domain checks; fail-task dead projection must sync; arrival feed projection follows durable captured intent asynchronously",
+      "negative_result": "admitted terminal no-effect outcomes are synced under domain serialization; empty claim and CAS conflict remain original on retry; malformed and unauthorized requests are not admitted",
+      "retention": "shared 10000-operation epoch; input <=256 KiB; old validity epochs rejected; N3c rollover pending",
+      "initial_remote_exposure": "explicit enable_resource_operations policy; requires durable_resource_operations_v1 format guard"
     },
     {
       "method": "enroll_agent",
@@ -140,11 +140,11 @@
       "permission": "fail_task",
       "resource": "lease:owner-resolved",
       "retry": "durable-operation",
-      "authoritative_storage": "queue source log and derived dead letter if applicable",
-      "commit": "covering fsync; result reconstructed from authoritative operation evidence",
-      "negative_result": "no automatic retry with a new identity; claim empty outcome must be durably terminal",
-      "retention": "read none; durable keys use validity epoch plus replay tombstones",
-      "initial_remote_exposure": "disabled-until-method-gate"
+      "authoritative_storage": "queue event domain_operation; required deduplicated dead-letter projection; no-effect outcomes journal",
+      "commit": "authoritative source proof fsync; original receipt replay before current domain checks; fail-task dead projection must sync; arrival feed projection follows durable captured intent asynchronously",
+      "negative_result": "admitted terminal no-effect outcomes are synced under domain serialization; empty claim and CAS conflict remain original on retry; malformed and unauthorized requests are not admitted",
+      "retention": "shared 10000-operation epoch; input <=256 KiB; old validity epochs rejected; N3c rollover pending",
+      "initial_remote_exposure": "explicit enable_resource_operations policy; requires durable_resource_operations_v1 format guard"
     },
     {
       "method": "heartbeat",
@@ -231,11 +231,11 @@
       "permission": "publish",
       "resource": "channel:channel",
       "retry": "durable-operation",
-      "authoritative_storage": "channel source log",
-      "commit": "covering fsync; result reconstructed from authoritative operation evidence",
-      "negative_result": "no automatic retry with a new identity; claim empty outcome must be durably terminal",
-      "retention": "read none; durable keys use validity epoch plus replay tombstones",
-      "initial_remote_exposure": "disabled-until-method-gate"
+      "authoritative_storage": "channel envelope domain_operation; no-effect outcomes journal",
+      "commit": "authoritative source proof fsync; original receipt replay before current domain checks; fail-task dead projection must sync; arrival feed projection follows durable captured intent asynchronously",
+      "negative_result": "admitted terminal no-effect outcomes are synced under domain serialization; empty claim and CAS conflict remain original on retry; malformed and unauthorized requests are not admitted",
+      "retention": "shared 10000-operation epoch; input <=256 KiB; old validity epochs rejected; N3c rollover pending",
+      "initial_remote_exposure": "explicit enable_resource_operations policy; requires durable_resource_operations_v1 format guard"
     },
     {
       "method": "publish_doc",
@@ -244,11 +244,11 @@
       "permission": "publish_doc",
       "resource": "document:name",
       "retry": "durable-operation",
-      "authoritative_storage": "owning document/queue source log",
-      "commit": "covering fsync; result reconstructed from authoritative operation evidence",
-      "negative_result": "no automatic retry with a new identity; claim empty outcome must be durably terminal",
-      "retention": "read none; durable keys use validity epoch plus replay tombstones",
-      "initial_remote_exposure": "disabled-until-method-gate"
+      "authoritative_storage": "document event domain_operation with verified blob if any; no-effect outcomes journal",
+      "commit": "authoritative source proof fsync; original receipt replay before current domain checks; fail-task dead projection must sync; arrival feed projection follows durable captured intent asynchronously",
+      "negative_result": "admitted terminal no-effect outcomes are synced under domain serialization; empty claim and CAS conflict remain original on retry; malformed and unauthorized requests are not admitted",
+      "retention": "shared 10000-operation epoch; input <=256 KiB; old validity epochs rejected; N3c rollover pending",
+      "initial_remote_exposure": "explicit enable_resource_operations policy; requires durable_resource_operations_v1 format guard"
     },
     {
       "method": "read_channel",
@@ -296,11 +296,11 @@
       "permission": "release_doc",
       "resource": "lease:owner-resolved",
       "retry": "durable-operation",
-      "authoritative_storage": "owning document/queue source log",
-      "commit": "covering fsync; result reconstructed from authoritative operation evidence",
-      "negative_result": "no automatic retry with a new identity; claim empty outcome must be durably terminal",
-      "retention": "read none; durable keys use validity epoch plus replay tombstones",
-      "initial_remote_exposure": "disabled-until-method-gate"
+      "authoritative_storage": "document event domain_operation with verified blob if any; no-effect outcomes journal",
+      "commit": "authoritative source proof fsync; original receipt replay before current domain checks; fail-task dead projection must sync; arrival feed projection follows durable captured intent asynchronously",
+      "negative_result": "admitted terminal no-effect outcomes are synced under domain serialization; empty claim and CAS conflict remain original on retry; malformed and unauthorized requests are not admitted",
+      "retention": "shared 10000-operation epoch; input <=256 KiB; old validity epochs rejected; N3c rollover pending",
+      "initial_remote_exposure": "explicit enable_resource_operations policy; requires durable_resource_operations_v1 format guard"
     },
     {
       "method": "renew_lease",
@@ -309,11 +309,11 @@
       "permission": "renew_lease",
       "resource": "lease:owner-resolved",
       "retry": "durable-operation",
-      "authoritative_storage": "owning document/queue source log",
-      "commit": "covering fsync; result reconstructed from authoritative operation evidence",
-      "negative_result": "no automatic retry with a new identity; claim empty outcome must be durably terminal",
-      "retention": "read none; durable keys use validity epoch plus replay tombstones",
-      "initial_remote_exposure": "disabled-until-method-gate"
+      "authoritative_storage": "owning queue/document event domain_operation with original fence and expiry; no-effect outcomes journal",
+      "commit": "authoritative source proof fsync; original receipt replay before current domain checks; fail-task dead projection must sync; arrival feed projection follows durable captured intent asynchronously",
+      "negative_result": "admitted terminal no-effect outcomes are synced under domain serialization; empty claim and CAS conflict remain original on retry; malformed and unauthorized requests are not admitted",
+      "retention": "shared 10000-operation epoch; input <=256 KiB; old validity epochs rejected; N3c rollover pending",
+      "initial_remote_exposure": "explicit enable_resource_operations policy; requires durable_resource_operations_v1 format guard"
     },
     {
       "method": "retire_agent",
@@ -335,11 +335,11 @@
       "permission": "send_message",
       "resource": "inbox:to",
       "retry": "durable-operation",
-      "authoritative_storage": "inbox log and optional TTL log",
-      "commit": "covering fsync; result reconstructed from authoritative operation evidence",
-      "negative_result": "no automatic retry with a new identity; claim empty outcome must be durably terminal",
-      "retention": "read none; durable keys use validity epoch plus replay tombstones",
-      "initial_remote_exposure": "disabled-until-method-gate"
+      "authoritative_storage": "recipient inbox envelope operation proof plus existing TTL companion",
+      "commit": "covering source sync before receipt publication",
+      "negative_result": "invalid/auth denied before admission; uncertain writes remain fenced until recovery",
+      "retention": "bounded active epoch; unseen expired deadlines never execute",
+      "initial_remote_exposure": "durable-operations-enabled; N3a gate"
     },
     {
       "method": "subscribe_arrivals",
@@ -374,11 +374,11 @@
       "permission": "update_doc",
       "resource": "document:name",
       "retry": "durable-operation",
-      "authoritative_storage": "owning document/queue source log",
-      "commit": "covering fsync; result reconstructed from authoritative operation evidence",
-      "negative_result": "no automatic retry with a new identity; claim empty outcome must be durably terminal",
-      "retention": "read none; durable keys use validity epoch plus replay tombstones",
-      "initial_remote_exposure": "disabled-until-method-gate"
+      "authoritative_storage": "document event domain_operation with verified blob if any; no-effect outcomes journal",
+      "commit": "authoritative source proof fsync; original receipt replay before current domain checks; fail-task dead projection must sync; arrival feed projection follows durable captured intent asynchronously",
+      "negative_result": "admitted terminal no-effect outcomes are synced under domain serialization; empty claim and CAS conflict remain original on retry; malformed and unauthorized requests are not admitted",
+      "retention": "shared 10000-operation epoch; input <=256 KiB; old validity epochs rejected; N3c rollover pending",
+      "initial_remote_exposure": "explicit enable_resource_operations policy; requires durable_resource_operations_v1 format guard"
     },
     {
       "method": "wait_arrivals",
@@ -405,6 +405,19 @@
       "negative_result": "no automatic retry with a new identity; claim empty outcome must be durably terminal",
       "retention": "read none; durable keys use validity epoch plus replay tombstones",
       "initial_remote_exposure": "read-only-gate"
+    },
+    {
+      "method": "operation_status",
+      "mcp_tool": "coop_operation_status",
+      "principal": "instance",
+      "permission": "operation_status and original method permission",
+      "resource": "agent:self and original operation resource",
+      "retry": "read",
+      "authoritative_storage": "replay-derived operation index; source proofs are authoritative",
+      "commit": "read snapshot after complete authoritative recovery",
+      "negative_result": "unseen is authoritative only after recovery; unknown remains fenced",
+      "retention": "active operation epoch only; expired epochs never reexecute",
+      "initial_remote_exposure": "durable-operations-enabled"
     }
   ],
   "future_endpoints": [

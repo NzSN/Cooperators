@@ -1,0 +1,19 @@
+{
+  "source_commit": "bfbf7534c3ab63a5756321070413415e917e5464",
+  "binary": "/tmp/cooperators-n3a-preoperation-bfbf753/target/debug/coop",
+  "sha256": "aa0cacfbe2a0ee3bff46724c6ec838cf2e3fc1fd258d974cb5d605901ac118d7",
+  "bytes": 183210720,
+  "cargo": "cargo 1.96.0 (30a34c682 2026-05-25)",
+  "rustc": "rustc 1.96.0 (ac68faa20 2026-05-25)",
+  "command": [
+    "cargo",
+    "build",
+    "--offline",
+    "--locked",
+    "--bin",
+    "coop",
+    "--target-dir",
+    "/tmp/cooperators-n3a-preoperation-bfbf753/target"
+  ],
+  "build_exit_code": 0
+}

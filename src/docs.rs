@@ -32,6 +32,7 @@ use crate::envelope::Body;
 use crate::error::{BrokerError, ErrorCode};
 use crate::id;
 use crate::messaging::DAEMON_SENDER;
+use crate::operations::{DomainOperationProof, DomainTicket, OperationOutcome, OperationStore};
 use crate::queues::{RenewLeaseReceipt, MAX_LEASE_TTL_S};
 use crate::registry::AgentIdentity;
 use crate::server::DaemonState;
@@ -81,6 +82,9 @@ pub struct DocEvent {
     /// Recipients captured under the source mutation order, before commit.
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub notification_intent: Option<NotificationIntent>,
+    /// Original durable operation receipt, committed with its source effect.
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub domain_operation: Option<DomainOperationProof>,
 }
 
 impl ChainRecord for DocEvent {
@@ -317,6 +321,7 @@ fn base_event(kind: &str, doc: &str, identity: &AgentIdentity) -> DocEvent {
         reason: None,
         truncated_bytes: None,
         notification_intent: None,
+        domain_operation: None,
     }
 }
 
@@ -415,6 +420,15 @@ fn open_doc(
     name: &str,
     rotation_bytes: u64,
 ) -> Result<(LogFile<DocEvent>, DocRuntime), BrokerError> {
+    open_doc_operation(root, name, rotation_bytes, None)
+}
+
+fn open_doc_operation(
+    root: &Path,
+    name: &str,
+    rotation_bytes: u64,
+    operation: Option<&DomainTicket>,
+) -> Result<(LogFile<DocEvent>, DocRuntime), BrokerError> {
     validate_doc_name(name)?;
     let path = doc_path(root, name);
     let (mut log, report) =
@@ -448,7 +462,11 @@ fn open_doc(
         recovery.reason = Some(format!(
             "truncated_bytes={truncated_bytes}, last_valid_offset={last_valid_offset}"
         ));
+        let maintenance = operation.map(DomainTicket::begin_maintenance);
         log.append(&mut recovery)?;
+        if let Some(maintenance) = maintenance {
+            maintenance.complete();
+        }
     }
     Ok((log, runtime))
 }
@@ -603,6 +621,185 @@ fn apply_event(
     Ok(())
 }
 
+fn attach_document_operation<T: Serialize>(
+    event: &mut DocEvent,
+    operation: Option<&DomainTicket>,
+    result: &T,
+) -> Result<(), BrokerError> {
+    if let Some(operation) = operation {
+        let result = serde_json::to_value(result)
+            .map_err(|error| BrokerError::internal(format!("document receipt: {error}")))?;
+        event.domain_operation = Some(operation.proof(OperationOutcome::Success(result))?);
+    }
+    Ok(())
+}
+
+/// Rebuilds receipts only from validated document source records. Replaying
+/// earlier state also binds an update's omitted title to its original value.
+pub(crate) fn recover_document_operations(
+    root: &Path,
+    logs: &HashMap<String, LogFile<DocEvent>>,
+    operations: &OperationStore,
+) -> Result<(), BrokerError> {
+    for name in logs.keys() {
+        let report = LogFile::<DocEvent>::read_segments(doc_path(root, name))?;
+        let mut runtime = DocRuntime::empty();
+        for event in &report.records {
+            if event.doc != *name {
+                return Err(BrokerError::internal("document source name mismatch"));
+            }
+            if let Some(proof) = &event.domain_operation {
+                verify_document_operation(root, event, &runtime, proof)?;
+                operations.recover_domain(proof, proof.outcome.clone())?;
+            }
+            apply_event(&mut runtime, event, "")?;
+        }
+    }
+    Ok(())
+}
+
+fn verify_document_operation(
+    root: &Path,
+    event: &DocEvent,
+    previous: &DocRuntime,
+    proof: &DomainOperationProof,
+) -> Result<(), BrokerError> {
+    let invalid = || BrokerError::internal("invalid authoritative document operation proof");
+    let method = match event.kind.as_str() {
+        "doc_published" => "publish_doc",
+        "doc_updated" => "update_doc",
+        "doc_claimed" => "claim_doc",
+        "doc_lease_renewed" => "renew_lease",
+        "doc_released" => "release_doc",
+        _ => return Err(invalid()),
+    };
+    proof.verify(method, &format!("document:{}", event.doc))?;
+    if proof.context.scope.agent_id != event.actor_id || proof.completion.is_some() {
+        return Err(invalid());
+    }
+    let input = &proof.context.input;
+    let (expected_input, expected_result) = match method {
+        "publish_doc" | "update_doc" => {
+            let mime = event.mime.as_ref().ok_or_else(invalid)?;
+            let body = match (&event.body, &event.blob) {
+                (Some(body), None) if body.mime == *mime => body.clone(),
+                (None, Some(blob)) => Body::new(mime.clone(), load_blob(root, blob)?),
+                _ => return Err(invalid()),
+            };
+            let title = event.title.as_ref().ok_or_else(invalid)?;
+            let version = event.version.ok_or_else(invalid)?;
+            let expected_input = if method == "publish_doc" {
+                if version != 1 || previous.head != 0 || event.previous_version.is_some() {
+                    return Err(invalid());
+                }
+                json!({"name":event.doc,"mime":mime,"body":body,"title":title})
+            } else {
+                if version != previous.head + 1 || event.previous_version != Some(previous.head) {
+                    return Err(invalid());
+                }
+                let title_input = if input.get("title").is_some_and(serde_json::Value::is_null) {
+                    if *title != previous.title {
+                        return Err(invalid());
+                    }
+                    serde_json::Value::Null
+                } else {
+                    json!(title)
+                };
+                json!({"name":event.doc,"base_version":previous.head,"body":body,
+                    "title":title_input,"lease_id":event.lease_id,"fence":event.fence})
+            };
+            let result = DocWriteReceipt {
+                name: event.doc.clone(),
+                version,
+                head_version: version,
+                title: title.clone(),
+                mime: mime.clone(),
+                storage: if event.blob.is_some() {
+                    "blob"
+                } else {
+                    "inline"
+                }
+                .into(),
+                blob: event.blob.clone(),
+                seq: event.seq,
+                ts: event.ts.clone(),
+            };
+            (
+                expected_input,
+                serde_json::to_value(result).map_err(|_| invalid())?,
+            )
+        }
+        "claim_doc" => {
+            let ttl = event.lease_ttl_s.ok_or_else(invalid)?;
+            if event.version != Some(previous.head)
+                || previous.claim.is_some()
+                || ttl == 0
+                || ttl > MAX_LEASE_TTL_S
+            {
+                return Err(invalid());
+            }
+            let result = ClaimDocReceipt {
+                name: event.doc.clone(),
+                lease_id: event.lease_id.clone().ok_or_else(invalid)?,
+                fence: event.seq,
+                head_version: previous.head,
+                expires_at: id::format_rfc3339_millis(event.expires_at_ms.ok_or_else(invalid)?),
+                lease_ttl_s: ttl,
+            };
+            (
+                json!({"name":event.doc,"lease_ttl_s":ttl}),
+                serde_json::to_value(result).map_err(|_| invalid())?,
+            )
+        }
+        "renew_lease" | "release_doc" => {
+            let claim = previous.claim.as_ref().ok_or_else(invalid)?;
+            if event.lease_id.as_deref() != Some(&claim.lease_id)
+                || event.fence != Some(claim.fence)
+                || event.actor_id != claim.agent_id
+                || event.version != Some(previous.head)
+            {
+                return Err(invalid());
+            }
+            if method == "renew_lease" {
+                if event.lease_ttl_s != Some(claim.ttl_s) {
+                    return Err(invalid());
+                }
+                let result = RenewLeaseReceipt {
+                    lease_id: claim.lease_id.clone(),
+                    kind: "doc".into(),
+                    fence: claim.fence,
+                    expires_at: id::format_rfc3339_millis(event.expires_at_ms.ok_or_else(invalid)?),
+                    lease_ttl_s: claim.ttl_s,
+                };
+                (
+                    json!({"lease_id":claim.lease_id}),
+                    serde_json::to_value(result).map_err(|_| invalid())?,
+                )
+            } else {
+                let result = ReleaseDocReceipt {
+                    name: event.doc.clone(),
+                    lease_id: claim.lease_id.clone(),
+                    fence: claim.fence,
+                    new_fence: event.seq,
+                    released: true,
+                    seq: event.seq,
+                };
+                (
+                    json!({"lease_id":claim.lease_id,"fence":claim.fence}),
+                    serde_json::to_value(result).map_err(|_| invalid())?,
+                )
+            }
+        }
+        _ => unreachable!(),
+    };
+    if input != &expected_input
+        || !matches!(&proof.outcome, OperationOutcome::Success(result) if result == &expected_result)
+    {
+        return Err(invalid());
+    }
+    Ok(())
+}
+
 fn claim_view(claim: &DocClaim) -> DocClaimView {
     DocClaimView {
         holder: DocHolder {
@@ -711,6 +908,7 @@ impl DaemonState {
         log: &mut LogFile<DocEvent>,
         runtime: &mut DocRuntime,
         now_ms: u64,
+        operation: Option<&DomainTicket>,
     ) -> Result<bool, BrokerError> {
         let Some(claim) = runtime.claim.clone() else {
             return Ok(false);
@@ -734,9 +932,13 @@ impl DaemonState {
         event.lease_ttl_s = Some(claim.ttl_s);
         event.reason = Some("lease_expired".to_string());
         event.version = Some(runtime.head);
+        let maintenance = operation.map(DomainTicket::begin_maintenance);
         let receipt = log.append(&mut event)?;
         self.announce_document_commit(&name, receipt.seq, &receipt.hash);
         apply_event(runtime, &event, &receipt.hash)?;
+        if let Some(maintenance) = maintenance {
+            maintenance.complete();
+        }
         Ok(true)
     }
 
@@ -750,11 +952,42 @@ impl DaemonState {
         body: Body,
         title: Option<String>,
     ) -> Result<DocWriteReceipt, BrokerError> {
+        self.publish_doc_impl(identity, name, mime, body, title, None)
+            .await
+    }
+
+    /// Caller holds `send_lock` for the independent operation task.
+    pub(crate) async fn publish_doc_operation(
+        &self,
+        identity: &AgentIdentity,
+        name: &str,
+        mime: &str,
+        body: Body,
+        title: Option<String>,
+        operation: &DomainTicket,
+    ) -> Result<DocWriteReceipt, BrokerError> {
+        self.publish_doc_impl(identity, name, mime, body, title, Some(operation))
+            .await
+    }
+
+    async fn publish_doc_impl(
+        &self,
+        identity: &AgentIdentity,
+        name: &str,
+        mime: &str,
+        body: Body,
+        title: Option<String>,
+        operation: Option<&DomainTicket>,
+    ) -> Result<DocWriteReceipt, BrokerError> {
         validate_doc_name(name)?;
         if mime.is_empty() {
             return Err(BrokerError::invalid("mime must not be empty"));
         }
-        let _send_guard = self.send_lock.lock().await;
+        let _send_guard = if operation.is_none() {
+            Some(self.send_lock.lock().await)
+        } else {
+            None
+        };
         if self
             .doc_states
             .lock()
@@ -767,7 +1000,8 @@ impl DaemonState {
                 format!("document {name:?} already exists"),
             ));
         }
-        let (mut log, mut runtime) = open_doc(&self.root, name, self.config.log_rotation_bytes)?;
+        let (mut log, mut runtime) =
+            open_doc_operation(&self.root, name, self.config.log_rotation_bytes, operation)?;
         if runtime.head > 0 {
             return Err(BrokerError::application(
                 ErrorCode::Exists,
@@ -789,6 +1023,21 @@ impl DaemonState {
         event.mime = Some(mime.to_string());
         event.body = inline;
         event.blob = blob.clone();
+        let result = DocWriteReceipt {
+            name: name.to_string(),
+            version: 1,
+            head_version: 1,
+            title: event.title.clone().unwrap_or_default(),
+            mime: mime.to_string(),
+            storage: storage.to_string(),
+            blob,
+            seq: log.seq_head() + 1,
+            ts: event.ts.clone(),
+        };
+        attach_document_operation(&mut event, operation, &result)?;
+        if let Some(operation) = operation {
+            operation.mark_effect_attempt();
+        }
         let receipt = log.append(&mut event)?;
         self.announce_document_commit(&name, receipt.seq, &receipt.hash);
         apply_event(&mut runtime, &event, &receipt.hash)?;
@@ -797,17 +1046,7 @@ impl DaemonState {
             .lock()
             .await
             .insert(name.to_string(), runtime);
-        Ok(DocWriteReceipt {
-            name: name.to_string(),
-            version: 1,
-            head_version: 1,
-            title: event.title.unwrap_or_default(),
-            mime: mime.to_string(),
-            storage: storage.to_string(),
-            blob,
-            seq: receipt.seq,
-            ts: event.ts,
-        })
+        Ok(result)
     }
 
     /// Compare-and-swap update. When a claim is active the caller must also
@@ -821,11 +1060,52 @@ impl DaemonState {
         title: Option<String>,
         lease: Option<(&str, u64)>,
     ) -> Result<DocWriteReceipt, BrokerError> {
+        self.update_doc_impl(identity, name, base_version, body, title, lease, None)
+            .await
+    }
+
+    /// Caller holds `send_lock` for the independent operation task.
+    pub(crate) async fn update_doc_operation(
+        &self,
+        identity: &AgentIdentity,
+        name: &str,
+        base_version: u64,
+        body: Body,
+        title: Option<String>,
+        lease: Option<(&str, u64)>,
+        operation: &DomainTicket,
+    ) -> Result<DocWriteReceipt, BrokerError> {
+        self.update_doc_impl(
+            identity,
+            name,
+            base_version,
+            body,
+            title,
+            lease,
+            Some(operation),
+        )
+        .await
+    }
+
+    async fn update_doc_impl(
+        &self,
+        identity: &AgentIdentity,
+        name: &str,
+        base_version: u64,
+        body: Body,
+        title: Option<String>,
+        lease: Option<(&str, u64)>,
+        operation: Option<&DomainTicket>,
+    ) -> Result<DocWriteReceipt, BrokerError> {
         validate_doc_name(name)?;
         if body.mime.is_empty() {
             return Err(BrokerError::invalid("body.mime must not be empty"));
         }
-        let _send_guard = self.send_lock.lock().await;
+        let _send_guard = if operation.is_none() {
+            Some(self.send_lock.lock().await)
+        } else {
+            None
+        };
         if !self.ensure_doc_loaded(name).await? {
             return Err(BrokerError::application(
                 ErrorCode::NotFound,
@@ -841,7 +1121,7 @@ impl DaemonState {
         let runtime = states
             .get_mut(name)
             .ok_or_else(|| BrokerError::internal("doc state vanished"))?;
-        let expired = self.expire_doc_claim(name, log, runtime, now_ms)?;
+        let expired = self.expire_doc_claim(name, log, runtime, now_ms, operation)?;
 
         match lease {
             Some((lease_id, fence)) => {
@@ -904,20 +1184,25 @@ impl DaemonState {
             event.lease_id = Some(claim.lease_id.clone());
             event.fence = Some(claim.fence);
         }
-        let receipt = log.append(&mut event)?;
-        self.announce_document_commit(&name, receipt.seq, &receipt.hash);
-        apply_event(runtime, &event, &receipt.hash)?;
-        Ok(DocWriteReceipt {
+        let result = DocWriteReceipt {
             name: name.to_string(),
             version: head + 1,
             head_version: head + 1,
-            title: event.title.unwrap_or_default(),
+            title: event.title.clone().unwrap_or_default(),
             mime: body.mime,
             storage: storage.to_string(),
             blob,
-            seq: receipt.seq,
-            ts: event.ts,
-        })
+            seq: log.seq_head() + 1,
+            ts: event.ts.clone(),
+        };
+        attach_document_operation(&mut event, operation, &result)?;
+        if let Some(operation) = operation {
+            operation.mark_effect_attempt();
+        }
+        let receipt = log.append(&mut event)?;
+        self.announce_document_commit(&name, receipt.seq, &receipt.hash);
+        apply_event(runtime, &event, &receipt.hash)?;
+        Ok(result)
     }
 
     /// Acquires the exclusive edit lease. A live claim owned by anyone else
@@ -928,13 +1213,39 @@ impl DaemonState {
         name: &str,
         lease_ttl_s: u64,
     ) -> Result<ClaimDocReceipt, BrokerError> {
+        self.claim_doc_impl(identity, name, lease_ttl_s, None).await
+    }
+
+    /// Caller holds `send_lock` for the independent operation task.
+    pub(crate) async fn claim_doc_operation(
+        &self,
+        identity: &AgentIdentity,
+        name: &str,
+        lease_ttl_s: u64,
+        operation: &DomainTicket,
+    ) -> Result<ClaimDocReceipt, BrokerError> {
+        self.claim_doc_impl(identity, name, lease_ttl_s, Some(operation))
+            .await
+    }
+
+    async fn claim_doc_impl(
+        &self,
+        identity: &AgentIdentity,
+        name: &str,
+        lease_ttl_s: u64,
+        operation: Option<&DomainTicket>,
+    ) -> Result<ClaimDocReceipt, BrokerError> {
         if lease_ttl_s == 0 || lease_ttl_s > MAX_LEASE_TTL_S {
             return Err(BrokerError::invalid(format!(
                 "lease_ttl_s must be 1..={MAX_LEASE_TTL_S}"
             )));
         }
         validate_doc_name(name)?;
-        let _send_guard = self.send_lock.lock().await;
+        let _send_guard = if operation.is_none() {
+            Some(self.send_lock.lock().await)
+        } else {
+            None
+        };
         if !self.ensure_doc_loaded(name).await? {
             return Err(BrokerError::application(
                 ErrorCode::NotFound,
@@ -950,7 +1261,7 @@ impl DaemonState {
         let runtime = states
             .get_mut(name)
             .ok_or_else(|| BrokerError::internal("doc state vanished"))?;
-        self.expire_doc_claim(name, log, runtime, now_ms)?;
+        self.expire_doc_claim(name, log, runtime, now_ms, operation)?;
         if let Some(claim) = &runtime.claim {
             return Err(conflict_claimed(claim, runtime.head));
         }
@@ -963,17 +1274,22 @@ impl DaemonState {
         event.lease_id = Some(lease_id.clone());
         event.expires_at_ms = Some(expires_at_ms);
         event.lease_ttl_s = Some(lease_ttl_s);
-        let receipt = log.append(&mut event)?;
-        self.announce_document_commit(&name, receipt.seq, &receipt.hash);
-        apply_event(runtime, &event, &receipt.hash)?;
-        Ok(ClaimDocReceipt {
+        let result = ClaimDocReceipt {
             name: name.to_string(),
             lease_id,
-            fence: receipt.seq,
+            fence: log.seq_head() + 1,
             head_version,
             expires_at: id::format_rfc3339_millis(expires_at_ms),
             lease_ttl_s,
-        })
+        };
+        attach_document_operation(&mut event, operation, &result)?;
+        if let Some(operation) = operation {
+            operation.mark_effect_attempt();
+        }
+        let receipt = log.append(&mut event)?;
+        self.announce_document_commit(&name, receipt.seq, &receipt.hash);
+        apply_event(runtime, &event, &receipt.hash)?;
+        Ok(result)
     }
 
     /// Renews a document lease held by `identity`.
@@ -982,6 +1298,29 @@ impl DaemonState {
         identity: &AgentIdentity,
         name: &str,
         lease_id: &str,
+    ) -> Result<RenewLeaseReceipt, BrokerError> {
+        self.renew_doc_lease_impl(identity, name, lease_id, None)
+            .await
+    }
+
+    /// Caller holds `send_lock`, as for the local renewal dispatcher.
+    pub(crate) async fn renew_doc_lease_operation(
+        &self,
+        identity: &AgentIdentity,
+        name: &str,
+        lease_id: &str,
+        operation: &DomainTicket,
+    ) -> Result<RenewLeaseReceipt, BrokerError> {
+        self.renew_doc_lease_impl(identity, name, lease_id, Some(operation))
+            .await
+    }
+
+    async fn renew_doc_lease_impl(
+        &self,
+        identity: &AgentIdentity,
+        name: &str,
+        lease_id: &str,
+        operation: Option<&DomainTicket>,
     ) -> Result<RenewLeaseReceipt, BrokerError> {
         let now_ms = id::unix_millis();
         let mut logs = self.docs.lock().await;
@@ -992,7 +1331,7 @@ impl DaemonState {
         let runtime = states
             .get_mut(name)
             .ok_or_else(|| BrokerError::application(ErrorCode::LeaseLost, "lease lost"))?;
-        self.expire_doc_claim(name, log, runtime, now_ms)?;
+        self.expire_doc_claim(name, log, runtime, now_ms, operation)?;
         let claim = runtime
             .claim
             .clone()
@@ -1008,20 +1347,21 @@ impl DaemonState {
         event.lease_id = Some(claim.lease_id.clone());
         event.expires_at_ms = Some(expires_at_ms);
         event.lease_ttl_s = Some(claim.ttl_s);
+        let result = RenewLeaseReceipt {
+            lease_id: claim.lease_id,
+            kind: "doc".to_string(),
+            fence: claim.fence,
+            expires_at: id::format_rfc3339_millis(expires_at_ms),
+            lease_ttl_s: claim.ttl_s,
+        };
+        attach_document_operation(&mut event, operation, &result)?;
+        if let Some(operation) = operation {
+            operation.mark_effect_attempt();
+        }
         let receipt = log.append(&mut event)?;
         self.announce_document_commit(&name, receipt.seq, &receipt.hash);
         apply_event(runtime, &event, &receipt.hash)?;
-        let new_claim = runtime
-            .claim
-            .clone()
-            .ok_or_else(|| BrokerError::internal("renewal did not install a claim"))?;
-        Ok(RenewLeaseReceipt {
-            lease_id: new_claim.lease_id,
-            kind: "doc".to_string(),
-            fence: new_claim.fence,
-            expires_at: id::format_rfc3339_millis(expires_at_ms),
-            lease_ttl_s: new_claim.ttl_s,
-        })
+        Ok(result)
     }
 
     /// Releases a claim. The release event advances the fence.
@@ -1031,7 +1371,33 @@ impl DaemonState {
         lease_id: &str,
         fence: u64,
     ) -> Result<ReleaseDocReceipt, BrokerError> {
-        let _send_guard = self.send_lock.lock().await;
+        self.release_doc_impl(identity, lease_id, fence, None).await
+    }
+
+    /// Caller holds `send_lock` for the independent operation task.
+    pub(crate) async fn release_doc_operation(
+        &self,
+        identity: &AgentIdentity,
+        lease_id: &str,
+        fence: u64,
+        operation: &DomainTicket,
+    ) -> Result<ReleaseDocReceipt, BrokerError> {
+        self.release_doc_impl(identity, lease_id, fence, Some(operation))
+            .await
+    }
+
+    async fn release_doc_impl(
+        &self,
+        identity: &AgentIdentity,
+        lease_id: &str,
+        fence: u64,
+        operation: Option<&DomainTicket>,
+    ) -> Result<ReleaseDocReceipt, BrokerError> {
+        let _send_guard = if operation.is_none() {
+            Some(self.send_lock.lock().await)
+        } else {
+            None
+        };
         let name = self
             .doc_for_lease(lease_id)
             .await
@@ -1045,7 +1411,7 @@ impl DaemonState {
         let runtime = states
             .get_mut(&name)
             .ok_or_else(|| BrokerError::internal("doc state vanished"))?;
-        self.expire_doc_claim(&name, log, runtime, now_ms)?;
+        self.expire_doc_claim(&name, log, runtime, now_ms, operation)?;
         let claim = runtime.claim.clone().ok_or_else(|| {
             BrokerError::application(ErrorCode::LeaseLost, "lease lost or expired")
         })?;
@@ -1068,17 +1434,22 @@ impl DaemonState {
         event.version = Some(runtime.head);
         event.lease_id = Some(claim.lease_id.clone());
         event.fence = Some(claim.fence);
+        let result = ReleaseDocReceipt {
+            name: name.clone(),
+            lease_id: claim.lease_id,
+            fence,
+            new_fence: log.seq_head() + 1,
+            released: true,
+            seq: log.seq_head() + 1,
+        };
+        attach_document_operation(&mut event, operation, &result)?;
+        if let Some(operation) = operation {
+            operation.mark_effect_attempt();
+        }
         let receipt = log.append(&mut event)?;
         self.announce_document_commit(&name, receipt.seq, &receipt.hash);
         apply_event(runtime, &event, &receipt.hash)?;
-        Ok(ReleaseDocReceipt {
-            name,
-            lease_id: claim.lease_id,
-            fence,
-            new_fence: receipt.seq,
-            released: true,
-            seq: receipt.seq,
-        })
+        Ok(result)
     }
 
     /// Reads the head or a pinned version. Claims are visible but reads never
@@ -1115,7 +1486,7 @@ impl DaemonState {
             let runtime = states
                 .get_mut(name)
                 .ok_or_else(|| BrokerError::internal("doc state vanished"))?;
-            self.expire_doc_claim(name, log, runtime, now_ms)?;
+            self.expire_doc_claim(name, log, runtime, now_ms, None)?;
             let version_number = version.unwrap_or(runtime.head);
             let version = runtime.versions.get(&version_number).ok_or_else(|| {
                 BrokerError::application(
@@ -1224,7 +1595,7 @@ impl DaemonState {
             let Some(runtime) = states.get_mut(&name) else {
                 continue;
             };
-            self.expire_doc_claim(&name, log, runtime, now_ms)?;
+            self.expire_doc_claim(&name, log, runtime, now_ms, None)?;
             let Some(head) = runtime.head_version() else {
                 continue;
             };
@@ -1284,7 +1655,7 @@ impl DaemonState {
             let Some(runtime) = states.get_mut(&name) else {
                 continue;
             };
-            self.expire_doc_claim(&name, log, runtime, now_ms)?;
+            self.expire_doc_claim(&name, log, runtime, now_ms, None)?;
             let Some(head) = runtime.head_version() else {
                 continue;
             };
@@ -1360,7 +1731,7 @@ impl DaemonState {
             let Some(runtime) = states.get_mut(&name) else {
                 continue;
             };
-            if self.expire_doc_claim(&name, log, runtime, now_ms)? {
+            if self.expire_doc_claim(&name, log, runtime, now_ms, None)? {
                 total += 1;
             }
         }
@@ -1382,6 +1753,6 @@ impl DaemonState {
         let Some(runtime) = states.get_mut(name) else {
             return Ok(false);
         };
-        self.expire_doc_claim(name, log, runtime, u64::MAX)
+        self.expire_doc_claim(name, log, runtime, u64::MAX, None)
     }
 }

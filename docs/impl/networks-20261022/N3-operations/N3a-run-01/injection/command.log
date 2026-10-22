@@ -1,0 +1,595 @@
+   Compiling cooperators v0.1.0 (/home/nzsn/Repos/Cooperators)
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 22.93s
+     Running unittests src/lib.rs (target/debug/deps/cooperators-bcd6c19b7ac6ff6d)
+
+running 18 tests
+test id::tests::rfc3339_format_is_stable ... ok
+test id::tests::ulid_time_encoding_matches_spec_vector ... ok
+test id::tests::generated_ulids_are_valid ... ok
+test registry::tests::token_hash_is_sha256_and_tokens_are_128_bits ... ok
+test operations::tests::canonical_inputs_sort_objects_but_keep_array_order_numbers_and_methods ... ok
+test operations::tests::status_distinguishes_shared_pending_unknown_and_committed_without_scope_leaks ... ok
+test server::tests::notifications_produce_no_response ... ok
+test server::tests::ndjson_request_response_framing_over_an_in_process_stream ... ok
+test server::tests::status_reports_identity_and_an_empty_head_map ... ok
+test server::tests::dispatch_handles_ping_echo_and_unknown_methods ... ok
+test registry::tests::registry_roundtrip_keeps_only_token_hashes ... ok
+test network::runtime::tests::enrollment_rechecks_authority_after_waiting_for_registry ... ok
+test registry::tests::uncertain_network_activation_fences_registry_until_disk_reopen ... ok
+test network::runtime::tests::enrollment_cannot_return_a_retired_or_rotated_credential ... ok
+test registry::tests::uncertain_enrollment_recovers_the_persisted_launch_without_duplicate_identity ... ok
+test registry::tests::uncertain_policy_commit_fences_and_reopen_observes_actual_revocation ... ok
+test network::runtime::tests::enrollment_rechecks_expiry_after_waiting_for_registry ... ok
+test operations::tests::finite_quota_rejects_new_admission_but_preserves_existing_completion ... ok
+
+test result: ok. 18 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.35s
+
+     Running unittests src/main.rs (target/debug/deps/coop-b713a7554f8bba49)
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running tests/arrival_crash.rs (target/debug/deps/arrival_crash-03970104063842ed)
+
+running 6 tests
+test arrival_crash_child ... ok
+test preupgrade_binary_refuses_v2_before_repairing_source_files ... ok
+test process_kill_before_feed_sync_recovers_complete_row_without_duplicate ... ok
+test process_kill_after_ack_success_preserves_default_and_historical_cursors ... ok
+test process_kill_after_source_commit_before_feed_write_recovers_exact_arrival ... ok
+test process_kill_before_ack_sync_preserves_prior_acknowledged_prefix ... ok
+
+test result: ok. 6 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 4.52s
+
+     Running tests/arrival_faults.rs (target/debug/deps/arrival_faults-7ddc0a80fa16a0c3)
+
+running 4 tests
+test subscription_sync_failure_fences_mutation_until_reopen_and_recovers_client_key ... ok
+test recovery_sync_failure_never_publishes_uncertain_feed_indexes ... ok
+test uncertain_feed_sync_replays_complete_notice_before_retry_and_isolates_recipient ... ok
+test uncertain_ack_is_quarantined_and_recovered_before_success ... ok
+
+test result: ok. 4 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.25s
+
+     Running tests/arrival_migration.rs (target/debug/deps/arrival_migration-0290db9c366e11e7)
+
+running 10 tests
+test stable_id_tuples_are_versioned_unambiguous_and_scope_every_coordinate ... ok
+test historical_source_hashes_omit_absent_notification_intent ... ok
+test wire_defaults_and_kind_names_match_the_arrival_contract ... ok
+test unknown_required_features_and_invalid_format_combinations_fail_early ... ok
+test disabled_root_keeps_v1_without_notification_artifacts ... ok
+test v2_missing_or_incompatible_metadata_fails_without_replacing_it ... ok
+test metadata_before_v2_is_reused_without_changing_bus_identity ... ok
+test directory_failure_also_requires_reopen_and_does_not_promote ... ok
+test promotion_failure_fences_retry_and_mutations_until_real_reopen ... ok
+test promotion_preserves_identities_and_all_following_saves_preserve_v2 ... ok
+
+test result: ok. 10 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.06s
+
+     Running tests/arrival_model.rs (target/debug/deps/arrival_model-6f871252a3238859)
+
+running 2 tests
+MODEL_TRACE {"case":0,"group":"bridge","pair":["arrival","arrival"],"seed":262145}
+MODEL_TRACE {"case":0,"group":"broker","pair":["toggle_a","toggle_a"],"seed":262145}
+MODEL_TRACE {"case":1,"group":"broker","pair":["toggle_a","toggle_b"],"seed":262145}
+MODEL_TRACE {"case":1,"group":"bridge","pair":["arrival","restart"],"seed":262145}
+MODEL_TRACE {"case":2,"group":"bridge","pair":["arrival","rebind"],"seed":262145}
+MODEL_TRACE {"case":2,"group":"broker","pair":["toggle_a","mutate"],"seed":262145}
+MODEL_TRACE {"case":3,"group":"bridge","pair":["arrival","schedule"],"seed":262145}
+MODEL_TRACE {"case":3,"group":"broker","pair":["toggle_a","restart"],"seed":262145}
+MODEL_TRACE {"case":4,"group":"bridge","pair":["arrival","begin_claim"],"seed":262145}
+MODEL_TRACE {"case":4,"group":"broker","pair":["toggle_a","drain_ack_a"],"seed":262145}
+MODEL_TRACE {"case":5,"group":"bridge","pair":["arrival","finish_empty"],"seed":262145}
+MODEL_TRACE {"case":5,"group":"broker","pair":["toggle_a","drain_ack_b"],"seed":262145}
+MODEL_TRACE {"case":6,"group":"bridge","pair":["arrival","finish_adopted"],"seed":262145}
+MODEL_TRACE {"case":6,"group":"broker","pair":["toggle_a","reject_future_ack"],"seed":262145}
+MODEL_TRACE {"case":7,"group":"bridge","pair":["arrival","resolve"],"seed":262145}
+MODEL_TRACE {"case":7,"group":"broker","pair":["toggle_a","reject_cross_identity"],"seed":262145}
+MODEL_TRACE {"case":8,"group":"bridge","pair":["restart","arrival"],"seed":262145}
+MODEL_TRACE {"case":8,"group":"broker","pair":["toggle_b","toggle_a"],"seed":262145}
+MODEL_TRACE {"case":9,"group":"bridge","pair":["restart","restart"],"seed":262145}
+MODEL_TRACE {"case":9,"group":"broker","pair":["toggle_b","toggle_b"],"seed":262145}
+MODEL_TRACE {"case":10,"group":"bridge","pair":["restart","rebind"],"seed":262145}
+MODEL_TRACE {"case":10,"group":"broker","pair":["toggle_b","mutate"],"seed":262145}
+MODEL_TRACE {"case":11,"group":"bridge","pair":["restart","schedule"],"seed":262145}
+MODEL_TRACE {"case":11,"group":"broker","pair":["toggle_b","restart"],"seed":262145}
+MODEL_TRACE {"case":12,"group":"bridge","pair":["restart","begin_claim"],"seed":262145}
+MODEL_TRACE {"case":12,"group":"broker","pair":["toggle_b","drain_ack_a"],"seed":262145}
+MODEL_TRACE {"case":13,"group":"bridge","pair":["restart","finish_empty"],"seed":262145}
+MODEL_TRACE {"case":13,"group":"broker","pair":["toggle_b","drain_ack_b"],"seed":262145}
+MODEL_TRACE {"case":14,"group":"bridge","pair":["restart","finish_adopted"],"seed":262145}
+MODEL_TRACE {"case":15,"group":"bridge","pair":["restart","resolve"],"seed":262145}
+MODEL_TRACE {"case":14,"group":"broker","pair":["toggle_b","reject_future_ack"],"seed":262145}
+MODEL_TRACE {"case":16,"group":"bridge","pair":["rebind","arrival"],"seed":262145}
+MODEL_TRACE {"case":15,"group":"broker","pair":["toggle_b","reject_cross_identity"],"seed":262145}
+MODEL_TRACE {"case":17,"group":"bridge","pair":["rebind","restart"],"seed":262145}
+MODEL_TRACE {"case":16,"group":"broker","pair":["mutate","toggle_a"],"seed":262145}
+MODEL_TRACE {"case":18,"group":"bridge","pair":["rebind","rebind"],"seed":262145}
+MODEL_TRACE {"case":17,"group":"broker","pair":["mutate","toggle_b"],"seed":262145}
+MODEL_TRACE {"case":19,"group":"bridge","pair":["rebind","schedule"],"seed":262145}
+MODEL_TRACE {"case":18,"group":"broker","pair":["mutate","mutate"],"seed":262145}
+MODEL_TRACE {"case":20,"group":"bridge","pair":["rebind","begin_claim"],"seed":262145}
+MODEL_TRACE {"case":19,"group":"broker","pair":["mutate","restart"],"seed":262145}
+MODEL_TRACE {"case":21,"group":"bridge","pair":["rebind","finish_empty"],"seed":262145}
+MODEL_TRACE {"case":20,"group":"broker","pair":["mutate","drain_ack_a"],"seed":262145}
+MODEL_TRACE {"case":22,"group":"bridge","pair":["rebind","finish_adopted"],"seed":262145}
+MODEL_TRACE {"case":23,"group":"bridge","pair":["rebind","resolve"],"seed":262145}
+MODEL_TRACE {"case":21,"group":"broker","pair":["mutate","drain_ack_b"],"seed":262145}
+MODEL_TRACE {"case":24,"group":"bridge","pair":["schedule","arrival"],"seed":262145}
+MODEL_TRACE {"case":22,"group":"broker","pair":["mutate","reject_future_ack"],"seed":262145}
+MODEL_TRACE {"case":25,"group":"bridge","pair":["schedule","restart"],"seed":262145}
+MODEL_TRACE {"case":23,"group":"broker","pair":["mutate","reject_cross_identity"],"seed":262145}
+MODEL_TRACE {"case":26,"group":"bridge","pair":["schedule","rebind"],"seed":262145}
+MODEL_TRACE {"case":24,"group":"broker","pair":["restart","toggle_a"],"seed":262145}
+MODEL_TRACE {"case":27,"group":"bridge","pair":["schedule","schedule"],"seed":262145}
+MODEL_TRACE {"case":25,"group":"broker","pair":["restart","toggle_b"],"seed":262145}
+MODEL_TRACE {"case":28,"group":"bridge","pair":["schedule","begin_claim"],"seed":262145}
+MODEL_TRACE {"case":26,"group":"broker","pair":["restart","mutate"],"seed":262145}
+MODEL_TRACE {"case":29,"group":"bridge","pair":["schedule","finish_empty"],"seed":262145}
+MODEL_TRACE {"case":27,"group":"broker","pair":["restart","restart"],"seed":262145}
+MODEL_TRACE {"case":30,"group":"bridge","pair":["schedule","finish_adopted"],"seed":262145}
+MODEL_TRACE {"case":28,"group":"broker","pair":["restart","drain_ack_a"],"seed":262145}
+MODEL_TRACE {"case":31,"group":"bridge","pair":["schedule","resolve"],"seed":262145}
+MODEL_TRACE {"case":32,"group":"bridge","pair":["begin_claim","arrival"],"seed":262145}
+MODEL_TRACE {"case":29,"group":"broker","pair":["restart","drain_ack_b"],"seed":262145}
+MODEL_TRACE {"case":33,"group":"bridge","pair":["begin_claim","restart"],"seed":262145}
+MODEL_TRACE {"case":30,"group":"broker","pair":["restart","reject_future_ack"],"seed":262145}
+MODEL_TRACE {"case":34,"group":"bridge","pair":["begin_claim","rebind"],"seed":262145}
+MODEL_TRACE {"case":31,"group":"broker","pair":["restart","reject_cross_identity"],"seed":262145}
+MODEL_TRACE {"case":35,"group":"bridge","pair":["begin_claim","schedule"],"seed":262145}
+MODEL_TRACE {"case":32,"group":"broker","pair":["drain_ack_a","toggle_a"],"seed":262145}
+MODEL_TRACE {"case":36,"group":"bridge","pair":["begin_claim","begin_claim"],"seed":262145}
+MODEL_TRACE {"case":33,"group":"broker","pair":["drain_ack_a","toggle_b"],"seed":262145}
+MODEL_TRACE {"case":37,"group":"bridge","pair":["begin_claim","finish_empty"],"seed":262145}
+MODEL_TRACE {"case":34,"group":"broker","pair":["drain_ack_a","mutate"],"seed":262145}
+MODEL_TRACE {"case":38,"group":"bridge","pair":["begin_claim","finish_adopted"],"seed":262145}
+MODEL_TRACE {"case":35,"group":"broker","pair":["drain_ack_a","restart"],"seed":262145}
+MODEL_TRACE {"case":39,"group":"bridge","pair":["begin_claim","resolve"],"seed":262145}
+MODEL_TRACE {"case":36,"group":"broker","pair":["drain_ack_a","drain_ack_a"],"seed":262145}
+MODEL_TRACE {"case":40,"group":"bridge","pair":["finish_empty","arrival"],"seed":262145}
+MODEL_TRACE {"case":37,"group":"broker","pair":["drain_ack_a","drain_ack_b"],"seed":262145}
+MODEL_TRACE {"case":41,"group":"bridge","pair":["finish_empty","restart"],"seed":262145}
+MODEL_TRACE {"case":38,"group":"broker","pair":["drain_ack_a","reject_future_ack"],"seed":262145}
+MODEL_TRACE {"case":42,"group":"bridge","pair":["finish_empty","rebind"],"seed":262145}
+MODEL_TRACE {"case":39,"group":"broker","pair":["drain_ack_a","reject_cross_identity"],"seed":262145}
+MODEL_TRACE {"case":43,"group":"bridge","pair":["finish_empty","schedule"],"seed":262145}
+MODEL_TRACE {"case":44,"group":"bridge","pair":["finish_empty","begin_claim"],"seed":262145}
+MODEL_TRACE {"case":40,"group":"broker","pair":["drain_ack_b","toggle_a"],"seed":262145}
+MODEL_TRACE {"case":45,"group":"bridge","pair":["finish_empty","finish_empty"],"seed":262145}
+MODEL_TRACE {"case":41,"group":"broker","pair":["drain_ack_b","toggle_b"],"seed":262145}
+MODEL_TRACE {"case":46,"group":"bridge","pair":["finish_empty","finish_adopted"],"seed":262145}
+MODEL_TRACE {"case":42,"group":"broker","pair":["drain_ack_b","mutate"],"seed":262145}
+MODEL_TRACE {"case":47,"group":"bridge","pair":["finish_empty","resolve"],"seed":262145}
+MODEL_TRACE {"case":43,"group":"broker","pair":["drain_ack_b","restart"],"seed":262145}
+MODEL_TRACE {"case":48,"group":"bridge","pair":["finish_adopted","arrival"],"seed":262145}
+MODEL_TRACE {"case":44,"group":"broker","pair":["drain_ack_b","drain_ack_a"],"seed":262145}
+MODEL_TRACE {"case":49,"group":"bridge","pair":["finish_adopted","restart"],"seed":262145}
+MODEL_TRACE {"case":45,"group":"broker","pair":["drain_ack_b","drain_ack_b"],"seed":262145}
+MODEL_TRACE {"case":50,"group":"bridge","pair":["finish_adopted","rebind"],"seed":262145}
+MODEL_TRACE {"case":46,"group":"broker","pair":["drain_ack_b","reject_future_ack"],"seed":262145}
+MODEL_TRACE {"case":51,"group":"bridge","pair":["finish_adopted","schedule"],"seed":262145}
+MODEL_TRACE {"case":52,"group":"bridge","pair":["finish_adopted","begin_claim"],"seed":262145}
+MODEL_TRACE {"case":47,"group":"broker","pair":["drain_ack_b","reject_cross_identity"],"seed":262145}
+MODEL_TRACE {"case":53,"group":"bridge","pair":["finish_adopted","finish_empty"],"seed":262145}
+MODEL_TRACE {"case":48,"group":"broker","pair":["reject_future_ack","toggle_a"],"seed":262145}
+MODEL_TRACE {"case":54,"group":"bridge","pair":["finish_adopted","finish_adopted"],"seed":262145}
+MODEL_TRACE {"case":49,"group":"broker","pair":["reject_future_ack","toggle_b"],"seed":262145}
+MODEL_TRACE {"case":55,"group":"bridge","pair":["finish_adopted","resolve"],"seed":262145}
+MODEL_TRACE {"case":50,"group":"broker","pair":["reject_future_ack","mutate"],"seed":262145}
+MODEL_TRACE {"case":56,"group":"bridge","pair":["resolve","arrival"],"seed":262145}
+MODEL_TRACE {"case":57,"group":"bridge","pair":["resolve","restart"],"seed":262145}
+MODEL_TRACE {"case":51,"group":"broker","pair":["reject_future_ack","restart"],"seed":262145}
+MODEL_TRACE {"case":58,"group":"bridge","pair":["resolve","rebind"],"seed":262145}
+MODEL_TRACE {"case":52,"group":"broker","pair":["reject_future_ack","drain_ack_a"],"seed":262145}
+MODEL_TRACE {"case":59,"group":"bridge","pair":["resolve","schedule"],"seed":262145}
+MODEL_TRACE {"case":53,"group":"broker","pair":["reject_future_ack","drain_ack_b"],"seed":262145}
+MODEL_TRACE {"case":60,"group":"bridge","pair":["resolve","begin_claim"],"seed":262145}
+MODEL_TRACE {"case":54,"group":"broker","pair":["reject_future_ack","reject_future_ack"],"seed":262145}
+MODEL_TRACE {"case":61,"group":"bridge","pair":["resolve","finish_empty"],"seed":262145}
+MODEL_TRACE {"case":55,"group":"broker","pair":["reject_future_ack","reject_cross_identity"],"seed":262145}
+MODEL_TRACE {"case":62,"group":"bridge","pair":["resolve","finish_adopted"],"seed":262145}
+MODEL_TRACE {"case":63,"group":"bridge","pair":["resolve","resolve"],"seed":262145}
+MODEL_TRACE {"case":56,"group":"broker","pair":["reject_cross_identity","toggle_a"],"seed":262145}
+MODEL_COVERAGE group=bridge executed=64 alphabet=8 ordered_pairs=64 explicit_fair_recovery=true
+test generated_bridge_pairs_preserve_generations_claims_and_new_arrivals ... ok
+MODEL_TRACE {"case":57,"group":"broker","pair":["reject_cross_identity","toggle_b"],"seed":262145}
+MODEL_TRACE {"case":58,"group":"broker","pair":["reject_cross_identity","mutate"],"seed":262145}
+MODEL_TRACE {"case":59,"group":"broker","pair":["reject_cross_identity","restart"],"seed":262145}
+MODEL_TRACE {"case":60,"group":"broker","pair":["reject_cross_identity","drain_ack_a"],"seed":262145}
+MODEL_TRACE {"case":61,"group":"broker","pair":["reject_cross_identity","drain_ack_b"],"seed":262145}
+MODEL_TRACE {"case":62,"group":"broker","pair":["reject_cross_identity","reject_future_ack"],"seed":262145}
+MODEL_TRACE {"case":63,"group":"broker","pair":["reject_cross_identity","reject_cross_identity"],"seed":262145}
+MODEL_COVERAGE group=broker executed=64 alphabet=8 ordered_pairs=64 explicit_fair_recovery=true
+test generated_broker_pairs_preserve_intent_feeds_and_ack_boundaries ... ok
+
+test result: ok. 2 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 12.66s
+
+     Running tests/arrival_service.rs (target/debug/deps/arrival_service-18b2f6e12d5efa0d)
+
+running 9 tests
+test limits_reject_excess_subscriptions_and_matching_recipients_before_commit ... ok
+test client_keys_are_identity_scoped_durable_and_never_recreate_catchup ... ok
+test route_capture_survives_unsubscribe_and_retirement_is_terminal ... ok
+test catchup_watermark_never_suppresses_earlier_live_source_obligations ... ok
+test cursors_are_independent_bound_to_bus_and_identity_and_cannot_skip_head ... ok
+test full_feed_does_not_block_healthy_recipient_or_reorder_source ... ok
+test source_scan_stops_at_validated_committed_head_and_handles_rotation ... ok
+test replay_recovers_source_to_feed_gap_and_dedupes_after_ack ... ok
+test sparse_feed_pages_recover_rotated_history_and_resume_from_old_anchor ... ok
+
+test result: ok. 9 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 2.22s
+
+     Running tests/arrival_sources.rs (target/debug/deps/arrival_sources-a05c20240ab55a0d)
+
+running 7 tests
+test historical_document_and_queue_hashes_omit_absent_intent ... ok
+test disabled_source_writes_keep_the_historical_shape ... ok
+test queue_intent_covers_enqueue_failure_and_forced_expiry_without_granting_ownership ... ok
+test uncertain_subscription_commit_fences_document_and_queue_arrivals_until_reopen ... ok
+test queue_catch_up_is_one_current_hint_and_empty_queues_have_none ... ok
+test document_intent_is_immutable_and_catch_up_pins_content_across_replay ... ok
+test on_demand_and_sweeper_expiry_capture_queue_arrival_routes ... ok
+
+test result: ok. 7 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 1.35s
+
+     Running tests/batch_crash.rs (target/debug/deps/batch_crash-1128998043e42bc4)
+
+running 4 tests
+test batch_crash_child ... ok
+test process_kill_before_batch_covering_sync_preserves_acknowledged_prefix ... ok
+test process_kill_after_batch_receipts_recovers_every_receipt_and_dedupe ... ok
+test process_kill_after_partial_batch_failure_repairs_tail_and_preserves_prefix ... ok
+
+test result: ok. 4 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.31s
+
+     Running tests/enrollment_retry.rs (target/debug/deps/enrollment_retry-2b04784e3fe060bd)
+
+running 1 test
+test lost_enrollment_reply_retries_same_key_and_keeps_one_durable_identity ... ok
+
+test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.05s
+
+     Running tests/envelope.rs (target/debug/deps/envelope-55c8891f6836fcc8)
+
+running 5 tests
+test new_envelope_has_ulid_timestamp_and_genesis_link ... ok
+test envelope_serde_roundtrip_preserves_every_design_field ... ok
+test absent_operation_preserves_pre_operation_golden_hash ... ok
+test validation_rejects_draft_and_malformed_records ... ok
+test optional_fields_accept_absence_and_serialize_as_null ... ok
+
+test result: ok. 5 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running tests/error.rs (target/debug/deps/error-724440f55e84b8dd)
+
+running 1 test
+test taxonomy_maps_to_distinct_server_reserved_jsonrpc_codes ... ok
+
+test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running tests/host_adapters.rs (target/debug/deps/host_adapters-236edcd5a7265b1e)
+
+running 17 tests
+test codex_initializes_exact_thread_and_fences_binding_and_generation ... ok
+test codex_busy_state_never_starts_or_steers_a_turn ... ok
+test claude_new_session_uses_bound_uuid_without_resume_or_fork ... ok
+test claude_permission_before_echo_remains_reconcilable_without_resubmission ... ok
+test codex_bootstrap_creates_exact_thread_without_a_model_turn_and_reaps_child ... ok
+test codex_reconciliation_does_not_treat_unrelated_turn_as_wake_acceptance ... ok
+test claude_uses_persistent_host_mode_exact_session_and_explicit_approval ... ok
+test claude_wrong_session_and_stale_generation_never_get_a_second_wake ... ok
+test codex_approval_is_retained_until_operator_answers_that_request ... ok
+test buffered_frames_cannot_revive_a_closed_host ... ok
+test codex_bootstrap_materializes_empty_thread_before_resuming ... ok
+test codex_wrong_thread_workspace_and_malformed_stream_fail_closed ... ok
+test codex_bootstrap_and_resume_failure_reap_children ... ok
+test oversized_or_invalid_runtime_frames_stop_further_submissions ... ok
+test claude_never_claims_unknown_write_or_restart_as_acceptance ... ok
+test codex_lost_response_reconciles_exact_wake_from_history_after_restart ... ok
+test codex_approval_survives_timeout_and_bounded_diagnostic_overflow ... ok
+
+test result: ok. 17 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 1.14s
+
+     Running tests/host_bridge.rs (target/debug/deps/host_bridge-b49da90347d43d23)
+
+running 17 tests
+test full_receive_and_oversized_wake_preserve_all_due_notices ... ok
+test bounded_wakes_are_immutable_and_conflicting_resolutions_are_rejected ... ok
+test known_busy_time_pauses_observation_and_nonce_expiry ... ok
+test binding_generation_fences_resolution_and_prevents_pending_redirection ... ok
+test queue_empty_proof_cannot_cover_a_new_received_generation_or_another_wake ... ok
+test receipt_survives_restart_and_torn_tail_without_resetting_cursor ... ok
+test activation_challenges_enforce_purpose_expiry_and_reconnection ... ok
+test adopted_work_requires_continuation_and_keeps_the_hint_for_a_later_wake ... ok
+test busy_permission_and_offline_do_not_discard_receipts_or_storm_wakes ... ok
+test confirmation_after_resolution_rejects_before_appending_an_invalid_journal_event ... ok
+test adoption_and_uncertain_claim_invalidate_earlier_empty_proofs ... ok
+test unknown_host_acceptance_reconciles_same_wake_and_replays_after_restart ... ok
+test canonical_lock_survives_release_and_rejects_duplicate_and_broker_paths ... ok
+test successful_transport_without_observation_exhausts_five_attempts ... ok
+test restart_keeps_unknown_in_flight_claims_fenced_until_exact_result_reconciles ... ok
+test uncertain_receive_sync_withholds_a_receipt_until_actual_recovery ... ok
+test keyed_claim_admission_and_result_retries_are_durable_and_bounded ... ok
+
+test result: ok. 17 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.49s
+
+     Running tests/host_cli.rs (target/debug/deps/host_cli-5656a53471e386c1)
+
+running 2 tests
+test managed_cli_redacts_bootstrap_error_secrets ... ok
+test managed_cli_runs_and_resumes_exact_binding_without_model_turns ... ok
+
+test result: ok. 2 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.22s
+
+     Running tests/host_control.rs (target/debug/deps/host_control-3a80b9e44a10ec2f)
+
+running 14 tests
+test host_control_child ... ok
+test public_parent_and_empty_launch_secret_are_rejected ... ok
+test stale_socket_is_recovered_and_active_or_non_socket_paths_are_preserved ... ok
+test wrong_secret_bus_and_agent_are_rejected_before_dispatch ... ok
+test independent_process_frontend_reaches_the_existing_bridge_owner ... ok
+test cancelled_unsubmitted_begin_reports_its_retained_context ... ok
+test local_rpc_resolves_confirms_and_fences_generation ... ok
+test restarted_control_server_cannot_adopt_an_unknown_inflight_frontend ... ok
+test restarted_frontend_preserves_unreconciled_claims_and_requests_attention ... ok
+test independent_status_monitors_preserve_inflight_frontend_and_readiness ... ok
+test immutable_claim_contexts_prevent_forged_and_stale_drain_evidence ... ok
+test exhausted_begin_retries_surface_attention_and_retain_one_context ... ok
+test lost_begin_and_finish_replies_retry_the_same_durable_claim_once ... ok
+test oversized_frames_are_bounded_and_partial_frames_time_out ... ok
+
+test result: ok. 14 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 5.17s
+
+     Running tests/host_runtime.rs (target/debug/deps/host_runtime-3e338828026bfc56)
+
+running 7 tests
+test runner_surfaces_individual_approval_requests_and_retains_pending_notices ... ok
+test restarted_receipt_loop_acks_replayed_cursor_before_waiting ... ok
+test runner_reconciles_uncertain_acceptance_without_an_extra_submission ... ok
+test trusted_proxy_claim_context_authenticates_and_cannot_be_forged ... ok
+test inconsistent_empty_page_and_full_journal_withhold_ack_and_require_attention ... ok
+test runner_coalesces_busy_receipts_and_preserves_next_batch_and_exact_session ... ok
+test receipt_loop_syncs_local_journal_before_ack_and_retries_lost_ack ... ok
+
+test result: ok. 7 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 1.04s
+
+     Running tests/instance_identity.rs (target/debug/deps/instance_identity-23252140ebed15e7)
+
+running 10 tests
+test invalid_launch_secrets_do_not_create_registry_records ... ok
+test existing_v1_registry_deserializes_without_new_fields ... ok
+test enrollment_retry_with_changed_metadata_is_rejected_without_mutation ... ok
+baseline: two clients using one configured token authenticate as 01M5J12AC8B55R6GG3VKFGPGZP; registry records=1
+test legacy_shared_credential_observes_one_identity ... ok
+test enrollment_cannot_reuse_current_or_revoked_legacy_credentials ... ok
+test same_kind_launches_are_distinct_and_retry_survives_registry_reload ... ok
+test rotated_launch_key_never_revives_and_canonical_metadata_survives ... ok
+test concurrent_retry_uses_one_actual_id_and_independent_launch_uses_another ... ok
+test retirement_reserves_identity_and_alias_and_revokes_credentials_durably ... ok
+test enrolled_instances_keep_message_ack_presence_and_lease_ownership_isolated ... ok
+
+test result: ok. 10 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.09s
+
+     Running tests/instance_launch.rs (target/debug/deps/instance_launch-bfe0f59d4d46b040)
+
+running 2 tests
+test embedded_mcp_competitor_cannot_mutate_the_active_instance_root ... ok
+independent MCP PIDs Some(199002)/Some(199053), actual IDs "01M5J12AGHHKDBVZSZVMX7FE94"/"01M5J12AH67FX7SES25J000Y55", current credential hashes "sha256:ab42779565796a5e82442b4575d4bf0759f5b41dbdb963c5661750c1319a49d0"/"sha256:b94cd623103ba80c69e18a2b21e9a769715395d94a071aa5ab672fdf383ed774"
+test two_mcp_processes_sharing_configuration_keep_independent_principals ... ok
+
+test result: ok. 2 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.26s
+
+     Running tests/log_rotation.rs (target/debug/deps/log_rotation-f6886de1bc763b61)
+
+running 6 tests
+test status_of_sealed_only_log_is_read_only_and_uses_logical_path ... ok
+test new_system_event_channel_uses_the_configured_rotation_threshold ... ok
+test document_versions_and_fences_survive_dotted_log_rotation_and_restart ... ok
+test queue_lease_fences_survive_dotted_log_rotation_and_restart ... ok
+test sealed_only_queue_and_document_are_discovered_on_restart ... ok
+test channel_cursor_and_dedupe_survive_rotation_and_restart ... ok
+
+test result: ok. 6 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.21s
+
+     Running tests/m1.rs (target/debug/deps/m1-4d5a51ea55166093)
+
+running 8 tests
+rpc heartbeat {} failed: RpcError { code: -32001, message: "missing agent token; pass params.token or set COOP_TOKEN", data: Some(Object {"code": String("UNAUTHENTICATED")}) }
+rpc heartbeat {} failed: RpcError { code: -32001, message: "invalid agent token", data: Some(Object {"code": String("UNAUTHENTICATED")}) }
+rpc send_message {"kind":"event","text":"must not append","to":"alice"} failed: RpcError { code: -32001, message: "invalid agent token", data: Some(Object {"code": String("UNAUTHENTICATED")}) }
+rpc register_agent {"kind":"codex","name":"alice"} failed: RpcError { code: -32004, message: "agent name \"alice\" is already registered; supply the existing token to rotate", data: Some(Object {"code": String("CONFLICT")}) }
+rpc heartbeat {} failed: RpcError { code: -32001, message: "invalid agent token", data: Some(Object {"code": String("UNAUTHENTICATED")}) }
+test register_auth_roundtrip_and_wrong_token_rejection ... ok
+test dedupe_returns_original_seq_without_second_append ... ok
+test ndjson_session_auth_and_messaging_over_in_process_streams ... ok
+test restart_rebuilds_messages_dedupe_and_auth_without_shutdown_hooks ... ok
+rpc send_message {"kind":"event","text":"x","to":"nobody"} failed: RpcError { code: -32002, message: "unknown recipient \"nobody\"", data: Some(Object {"code": String("NOT_FOUND")}) }
+rpc wait_message {"cursor":"not-a-cursor","timeout_s":0} failed: RpcError { code: -32602, message: "invalid cursor \"not-a-cursor\"", data: None }
+test send_wait_ack_ordering_and_peek_semantics ... ok
+test ttl_messages_expire_for_waiters_but_survive_in_the_log ... ok
+test presence_stale_transition_and_heartbeat_revival ... ok
+test presence_gone_transition_with_short_ttl ... ok
+
+test result: ok. 8 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.52s
+
+     Running tests/m1_daemon.rs (target/debug/deps/m1_daemon-3c124e3f39927bd4)
+
+running 1 test
+test kill_9_restart_preserves_messages_dedupe_and_cli_roundtrip ... ok
+
+test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.13s
+
+     Running tests/m2.rs (target/debug/deps/m2-a61e23e538bb7629)
+
+running 6 tests
+rpc create_queue {"queue":"jobs"} failed: RpcError { code: -32005, message: "queue \"jobs\" already exists", data: Some(Object {"code": String("EXISTS")}) }
+rpc complete_task {"fence":2,"lease_id":"01M5J12BKZRMWZYYTNRP6BMCJR","outcome":{"ok":true}} failed: RpcError { code: -32008, message: "stale fence 2; current fence is 3", data: Some(Object {"code": String("LEASE_LOST")}) }
+rpc publish_doc {"name":"plan","text":"again"} failed: RpcError { code: -32005, message: "document \"plan\" already exists", data: Some(Object {"code": String("EXISTS")}) }
+rpc update_doc {"base_version":2,"name":"plan","text":"# two"} failed: RpcError { code: -32006, message: "base_version 2 does not match head 1", data: Some(Object {"code": String("VERSION_CONFLICT"), "head_version": Number(1)}) }
+rpc claim_doc {"lease_ttl_s":30,"name":"plan"} failed: RpcError { code: -32007, message: "document is claimed by alice until 2026-10-22T14:43:31.064Z", data: Some(Object {"code": String("CONFLICT_CLAIMED"), "expires_at": String("2026-10-22T14:43:31.064Z"), "expires_at_ms": Number(1792680211064), "fence": Number(3), "head_version": Number(2), "holder": Object {"agent_id": String("01M5J12BJV93EJRN4RSJDXHVFN"), "name": String("alice")}, "holder_agent_id": String("01M5J12BJV93EJRN4RSJDXHVFN"), "holder_name": String("alice")}) }
+rpc update_doc {"base_version":2,"name":"plan","text":"sneak"} failed: RpcError { code: -32007, message: "document is claimed by alice until 2026-10-22T14:43:31.064Z", data: Some(Object {"code": String("CONFLICT_CLAIMED"), "expires_at": String("2026-10-22T14:43:31.064Z"), "expires_at_ms": Number(1792680211064), "fence": Number(3), "head_version": Number(2), "holder": Object {"agent_id": String("01M5J12BJV93EJRN4RSJDXHVFN"), "name": String("alice")}, "holder_agent_id": String("01M5J12BJV93EJRN4RSJDXHVFN"), "holder_name": String("alice")}) }
+test queue_renew_and_fail_retry_then_dead_letter ... ok
+rpc claim_task {"lease_ttl_s":5,"queue":"restart"} failed: RpcError { code: -32002, message: "queue \"restart\" has no claimable task", data: Some(Object {"code": String("NOT_FOUND")}) }
+test restart_replays_queue_leases_doc_claims_and_channels ... ok
+rpc read_channel {"channel":"never","cursor":"0"} failed: RpcError { code: -32002, message: "unknown channel \"never\"", data: Some(Object {"code": String("NOT_FOUND")}) }
+test channel_publish_dedupe_read_and_cursor_replay ... ok
+rpc complete_task {"fence":3,"lease_id":"01M5J12BKZRMWZYYTNRP6BMCJR","outcome":{"ok":true}} failed: RpcError { code: -32008, message: "unknown lease", data: Some(Object {"code": String("LEASE_LOST")}) }
+rpc update_doc {"base_version":2,"fence":3,"lease_id":"01M5J12BMG2QYA9P667MQGZAAB","name":"plan","text":"late"} failed: RpcError { code: -32008, message: "document claim expired; fence advanced", data: Some(Object {"code": String("LEASE_LOST")}) }
+rpc complete_task {"fence":3,"lease_id":"01M5J12BKZFARMCA81JH71GW26","outcome":true} failed: RpcError { code: -32008, message: "lease lost or expired", data: Some(Object {"code": String("LEASE_LOST")}) }
+test restart_after_expiry_requeues_task_and_frees_doc_claim ... ok
+test doc_cas_claim_exclusion_expired_write_and_blob_roundtrip ... ok
+rpc claim_task {"lease_ttl_s":1,"queue":"jobs"} failed: RpcError { code: -32002, message: "queue \"jobs\" has no claimable task", data: Some(Object {"code": String("NOT_FOUND")}) }
+test queue_claim_expiry_requeue_dead_letter_and_stale_fence ... ok
+
+test result: ok. 6 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 2.20s
+
+     Running tests/m3.rs (target/debug/deps/m3-d0dceeb3487c8c91)
+
+running 10 tests
+test daemon_status_is_namespaced_as_coop_get_status ... ok
+test tools_list_exposes_every_method_with_matching_schemas ... ok
+test unreachable_daemon_is_a_tool_error_not_a_protocol_error ... ok
+test http_requires_bearer_and_rejects_bad_tokens ... ok
+test unknown_tool_is_a_tool_error_with_method_not_found ... ok
+test http_tools_list_matches_the_stdio_catalog ... ok
+test http_messaging_presence_and_status_roundtrip ... ok
+test mcp_stdio_subprocess_roundtrip_over_pipes ... ok
+test golden_transcripts_match_uds_and_mcp_tool_layer ... ok
+test http_endpoint_parity_in_process ... ok
+
+test result: ok. 10 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.58s
+
+     Running tests/m4.rs (target/debug/deps/m4-042e3fe6d0f52985)
+
+running 8 tests
+test line_capped_reader_accepts_lines_at_the_limit ... ok
+test line_capped_reader_rejects_a_runaway_line ... ok
+test healthz_is_public_and_metrics_requires_a_bearer_token ... ok
+test stdio_message_cap_returns_resource_exhausted ... ok
+test dedupe_still_answers_when_the_inbox_is_full ... ok
+test inbox_byte_cap_rejects_large_messages_without_blocking_small_ones ... ok
+test inbox_message_cap_rejects_senders_until_ack_frees_capacity ... ok
+test metrics_report_inbox_backlog_queues_leases_and_message_heads ... ok
+
+test result: ok. 8 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.08s
+
+     Running tests/messaging_batch.rs (target/debug/deps/messaging_batch-7fa96709c2a60111)
+
+running 16 tests
+test faults::paused_writer_bounds_queued_requests_separately_from_its_active_batch ... ok
+test oversized_write_queue_request_is_rejected_without_using_inbox_capacity ... ok
+test concurrent_key_retries_across_inboxes_commit_one_message ... ok
+test faults::failed_active_write_retains_its_key_but_releases_a_known_queued_key ... ok
+test concurrent_admissions_respect_exact_serialized_inbox_byte_capacity ... ok
+test concurrent_admissions_respect_inbox_message_capacity ... ok
+test faults::canceling_a_sender_keeps_its_admitted_write_and_dedupe_result ... ok
+test faults::canceled_writer_holds_root_ownership_through_its_last_sync ... ok
+test concurrent_inbox_sends_have_unique_receipts_and_a_replayable_ordered_chain ... ok
+test faults::status_publishes_expiry_head_only_after_its_sync_and_inbox_head_after_both ... ok
+test retry_of_committed_key_succeeds_when_inbox_is_full ... ok
+test faults::batched_ttl_records_recover_with_expired_cursor_progress ... ok
+test faults::failed_sync_preserves_the_prior_ack_without_publishing_provisional_backlog ... ok
+test faults::uncertain_key_cannot_move_to_another_inbox_until_actual_replay ... ok
+test faults::paused_sync_hides_message_and_allows_another_inbox_to_commit ... ok
+test faults::expiry_sync_failure_hides_messages_and_retains_uncertain_keys_until_replay ... ok
+
+test result: ok. 16 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.49s
+
+     Running tests/network_bounds.rs (target/debug/deps/network_bounds-5a5d754a20fdef58)
+
+running 7 tests
+test malformed_optional_values_and_http_statuses_are_explicit ... ok
+test duplicate_authorization_headers_never_select_one_credential ... ok
+test agents_and_subscriptions_filter_before_counting_the_page_limit ... ok
+test inbox_cursors_and_document_blob_budgets_are_checked_before_returning_data ... ok
+test documents_are_authorized_before_paging_and_cursors_bind_scope_and_filters ... ok
+test document_metadata_pages_stop_at_bytes_and_resume_at_the_last_returned_name ... ok
+test channel_pages_count_escaped_bytes_and_never_skip_an_unreturned_record ... ok
+
+test result: ok. 7 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 1.87s
+
+     Running tests/network_facades.rs (target/debug/deps/network_facades-54bf79a643df9ab6)
+
+running 5 tests
+test mcp_rejects_ambiguous_authorization_and_oversized_response_ids ... ok
+test mcp_admission_is_before_body_and_releases_capacity_after_oversized_body ... ok
+test unknown_or_retired_scoped_bearer_cannot_use_unauthenticated_local_routes ... ok
+test scoped_session_never_switches_to_local_body_credential_or_falls_back_after_retirement ... ok
+test mcp_keeps_full_structured_result_when_duplicate_text_exceeds_budget ... ok
+
+test result: ok. 5 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.61s
+
+     Running tests/network_migration.rs (target/debug/deps/network_migration-2aa983a9e30a3720)
+
+running 11 tests
+test injection::network_migration_child ... ok
+test incomplete_v3_guard_or_principal_history_is_rejected_without_changes ... ok
+test invalid_policy_cannot_activate_arrivals_or_network ... ok
+test activated_v3_root_requires_policy_before_any_log_repair ... ok
+test orphan_arrival_identity_is_adopted_without_enabling_arrivals ... ok
+test v1_activation_preserves_instances_and_persistent_network_identity ... ok
+test conflicting_or_corrupt_arrival_identity_refuses_before_guard_or_log_changes ... ok
+test injection::pre_network_binary_refuses_v3_before_log_repair ... ok
+test both_upgrade_orders_share_one_bus_and_preserve_arrival_feature ... ok
+test injection::failed_activation_reopens_actual_disk_guard_without_repairing_logs_early ... ok
+test injection::process_kill_at_registry_boundaries_preserves_recoverable_identity ... ok
+
+test result: ok. 11 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.54s
+
+     Running tests/network_security.rs (target/debug/deps/network_security-55dc2299859f6aa3)
+
+running 11 tests
+test policy_requires_exact_host_origin_and_unambiguous_patterns ... ok
+test revoking_permission_cancels_an_already_admitted_wait ... ok
+test launch_retry_cannot_transfer_principal_or_change_metadata ... ok
+test poll_capacity_preserves_request_and_global_capacity_across_policy_replacement ... ok
+test enrollment_budget_is_atomic_and_retry_does_not_extend_or_duplicate ... ok
+test scoped_authority_denies_local_credentials_resources_and_mutations ... ok
+test failed_policy_persistence_fences_runtime_until_reopen ... ok
+test generation_changes_and_readdition_fence_existing_contexts ... ok
+test principal_removal_and_generation_floor_survive_daemon_reopen ... ok
+test retirement_generation_and_principal_expiry_cancel_admitted_waits ... ok
+test credential_expiry_cancels_wait_and_retry_never_renews_it ... ok
+
+test result: ok. 11 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 1.06s
+
+     Running tests/operation_crash.rs (target/debug/deps/operation_crash-31fa969ccd76c9cd)
+
+running 13 tests
+test operation_crash_child ... ok
+test preoperation_envelope_hash_and_absent_optional_fields_remain_identical ... ok
+coop daemon: MCP streamable HTTP on http://127.0.0.1:43865/mcp
+coop daemon: MCP streamable HTTP on http://127.0.0.1:42827/mcp
+coop daemon: MCP streamable HTTP on http://127.0.0.1:38841/mcp
+coop daemon: MCP streamable HTTP on http://127.0.0.1:41215/mcp
+coop daemon: MCP streamable HTTP on http://127.0.0.1:41655/mcp
+
+thread 'uncertain_registry_activation_must_sync_recovered_guard_before_source_repair' (199733) panicked at tests/operation_crash.rs:1373:5:
+assertion `left == right` failed
+  left: Armed
+ right: InjectedFailure
+note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
+test uncertain_registry_activation_must_sync_recovered_guard_before_source_repair ... FAILED
+coop daemon: MCP streamable HTTP on http://127.0.0.1:35711/mcp
+test http_mcp_explicit_operation_replays_and_binds_header_credentials ... ok
+test remote_status_tracks_pending_commit_and_revokes_historical_receipt_access ... ok
+test lost_https_reply_after_commit_recovers_exact_original_receipt ... ok
+test remote_stdio_lost_reply_resumes_using_only_id_reported_in_error ... ok
+test remote_stdio_journals_fresh_intents_and_resumes_only_matching_saved_intent ... ok
+test cli_fresh_sends_are_distinct_and_explicit_resume_preserves_receipt ... ok
+test sigkill_before_inbox_sync_recovers_complete_operation_proof_once ... ok
+test sigkill_after_inbox_sync_before_receipt_recovers_original_outcome ... ok
+test sigkill_after_partial_write_repairs_then_replays_original_intent_once ... ok
+test preoperation_binary_refuses_upgraded_root_before_repairing_any_source ... ok
+
+failures:
+
+failures:
+    uncertain_registry_activation_must_sync_recovered_guard_before_source_repair
+
+test result: FAILED. 12 passed; 1 failed; 0 ignored; 0 measured; 0 filtered out; finished in 4.97s
+
+error: test failed, to rerun pass `--test operation_crash`

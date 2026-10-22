@@ -7,6 +7,7 @@ import http.server
 import json
 from pathlib import Path
 import ssl
+import threading
 import time
 
 parser = argparse.ArgumentParser()
@@ -16,6 +17,8 @@ parser.add_argument("--events", type=Path, required=True)
 parser.add_argument("--mode", default="proxy")
 args = parser.parse_args()
 fixtures = Path(__file__).parent / "tls"
+drop_lock = threading.Lock()
+dropped_send = False
 
 
 class Handler(http.server.BaseHTTPRequestHandler):
@@ -23,6 +26,7 @@ class Handler(http.server.BaseHTTPRequestHandler):
         pass
 
     def do_POST(self):
+        global dropped_send
         length = int(self.headers.get("Content-Length", "0"))
         if length > 4 * 1024 * 1024:
             self.send_error(413)
@@ -64,6 +68,24 @@ class Handler(http.server.BaseHTTPRequestHandler):
         response = connection.getresponse()
         payload = response.read()
         connection.close()
+        drop_method = "send_message" if mode == "drop-send-once" else (
+            mode[len("drop-method-"):] if mode.startswith("drop-method-") else None)
+        if drop_method and request.get("method") == drop_method:
+            with drop_lock:
+                drop = not dropped_send
+                dropped_send = True
+            if drop:
+                # Retain only the credential-free committed result. Reading the
+                # entire upstream response proves loss happened after commit.
+                reply = json.loads(payload)
+                with args.events.open("a") as stream:
+                    stream.write(json.dumps({"event": "dropped_send_reply" if drop_method == "send_message" else "dropped_mutation_reply",
+                                             "method": drop_method,
+                                             "upstream_status": response.status,
+                                             "result": reply.get("result"),
+                                             "error": reply.get("error")}) + "\n")
+                self.close_connection = True
+                return
         if mode == "drop":
             self.close_connection = True
             return

@@ -33,6 +33,9 @@ pub const ARRIVALS_REGISTRY_VERSION: u16 = 2;
 pub const ARRIVALS_REQUIRED_FEATURE: &str = "arrival_notifications_v1";
 pub const NETWORK_REGISTRY_VERSION: u16 = 3;
 pub const NETWORK_REQUIRED_FEATURE: &str = "network_authority_v1";
+pub const OPERATIONS_REQUIRED_FEATURE: &str = "durable_operations_v1";
+pub const RESOURCE_OPERATIONS_REQUIRED_FEATURE: &str = "durable_resource_operations_v1";
+pub const OPERATION_EPOCH_DURATION_MS: u64 = 7 * 24 * 60 * 60 * 1000;
 
 #[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize)]
 #[serde(deny_unknown_fields)]
@@ -47,6 +50,8 @@ pub struct NetworkGrant {
 pub struct NetworkMeta {
     pub bus_id: String,
     pub operation_epoch: String,
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub operation_epoch_expires_at_ms: Option<u64>,
 }
 
 #[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize)]
@@ -201,7 +206,11 @@ impl Registry {
                     )));
                 }
                 for feature in &file.required_features {
-                    if feature != ARRIVALS_REQUIRED_FEATURE && feature != NETWORK_REQUIRED_FEATURE {
+                    if feature != ARRIVALS_REQUIRED_FEATURE
+                        && feature != NETWORK_REQUIRED_FEATURE
+                        && feature != OPERATIONS_REQUIRED_FEATURE
+                        && feature != RESOURCE_OPERATIONS_REQUIRED_FEATURE
+                    {
                         return Err(BrokerError::internal(format!(
                             "unsupported required registry feature {feature:?} in {}",
                             path.display()
@@ -216,6 +225,10 @@ impl Registry {
                     .required_features
                     .iter()
                     .any(|f| f == NETWORK_REQUIRED_FEATURE);
+                let operations_required = file
+                    .required_features
+                    .iter()
+                    .any(|f| f == OPERATIONS_REQUIRED_FEATURE);
                 if (file.v == REGISTRY_VERSION && !file.required_features.is_empty())
                     || (file.v == ARRIVALS_REGISTRY_VERSION
                         && (!arrivals_required || network_required))
@@ -227,6 +240,17 @@ impl Registry {
                         && (file.network.is_some()
                             || file.network_principals.is_some()
                             || file.agents.values().any(|a| a.network_grant.is_some())))
+                    || (operations_required && !network_required)
+                    || (file
+                        .required_features
+                        .iter()
+                        .any(|f| f == RESOURCE_OPERATIONS_REQUIRED_FEATURE)
+                        && !operations_required)
+                    || (operations_required
+                        != file
+                            .network
+                            .as_ref()
+                            .is_some_and(|meta| meta.operation_epoch_expires_at_ms.is_some()))
                 {
                     return Err(BrokerError::internal(format!(
                         "registry version {} has incompatible required_features in {}",
@@ -235,7 +259,9 @@ impl Registry {
                     )));
                 }
                 if file.network.as_ref().is_some_and(|meta| {
-                    !id::is_ulid(&meta.bus_id) || !id::is_ulid(&meta.operation_epoch)
+                    !id::is_ulid(&meta.bus_id)
+                        || !id::is_ulid(&meta.operation_epoch)
+                        || meta.operation_epoch_expires_at_ms == Some(0)
                 }) {
                     return Err(BrokerError::internal("invalid network root identity"));
                 }
@@ -279,6 +305,12 @@ impl Registry {
         };
 
         if path.exists() {
+            // Prove an atomic replacement recovered after rename is durable
+            // before any source log can be repaired or receive new fields.
+            #[cfg(feature = "mbt-injection")]
+            crate::faults::reach(&path, crate::faults::FaultPoint::BeforeRecoverySync)?;
+            File::open(&path)?.sync_all()?;
+            File::open(root)?.sync_all()?;
             let metadata = fs::metadata(&path)?;
             if metadata.permissions().mode() & 0o777 != 0o600 {
                 fs::set_permissions(&path, fs::Permissions::from_mode(0o600))?;
@@ -418,6 +450,7 @@ impl Registry {
                 None => id::new_ulid()?,
             },
             operation_epoch: id::new_ulid()?,
+            operation_epoch_expires_at_ms: None,
         };
         self.network = Some(meta.clone());
         self.network_principals = Some(BTreeMap::new());
@@ -426,6 +459,55 @@ impl Registry {
         self.write_snapshot()?;
         self.activation_fenced = false;
         Ok(meta)
+    }
+
+    /// Fence old binaries before any operation-bearing source is recovered or
+    /// appended. Activation is explicit and never extends an existing epoch.
+    pub(crate) fn prepare_operations(&mut self) -> Result<NetworkMeta, BrokerError> {
+        self.check_activation_ready()?;
+        let meta = self
+            .network
+            .as_ref()
+            .ok_or_else(|| BrokerError::invalid("network authority activation required"))?;
+        if self
+            .required_features
+            .iter()
+            .any(|f| f == OPERATIONS_REQUIRED_FEATURE)
+        {
+            return Ok(meta.clone());
+        }
+        self.activation_fenced = true;
+        self.network.as_mut().unwrap().operation_epoch_expires_at_ms =
+            Some(id::unix_millis().saturating_add(OPERATION_EPOCH_DURATION_MS));
+        self.required_features
+            .push(OPERATIONS_REQUIRED_FEATURE.into());
+        self.write_snapshot()?;
+        self.activation_fenced = false;
+        Ok(self.network.as_ref().unwrap().clone())
+    }
+
+    /// Fence the send-only executable before resource proofs can be recovered.
+    pub(crate) fn prepare_resource_operations(&mut self) -> Result<(), BrokerError> {
+        self.prepare_operations()?;
+        if self
+            .required_features
+            .iter()
+            .any(|f| f == RESOURCE_OPERATIONS_REQUIRED_FEATURE)
+        {
+            return Ok(());
+        }
+        self.activation_fenced = true;
+        self.required_features
+            .push(RESOURCE_OPERATIONS_REQUIRED_FEATURE.into());
+        self.write_snapshot()?;
+        self.activation_fenced = false;
+        Ok(())
+    }
+
+    pub(crate) fn resource_operations_active(&self) -> bool {
+        self.required_features
+            .iter()
+            .any(|f| f == RESOURCE_OPERATIONS_REQUIRED_FEATURE)
     }
 
     /// Persist revocation and generation fencing before publishing a policy.

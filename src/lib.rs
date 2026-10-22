@@ -42,6 +42,7 @@ pub mod mcp;
 pub mod messaging;
 pub mod metrics;
 pub mod network;
+pub mod operations;
 pub mod paths;
 pub mod presence;
 pub mod queues;

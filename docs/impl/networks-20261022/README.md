@@ -10,7 +10,7 @@ provider result is not cross-machine or Internet qualification.
 Execution resumed on 2026-10-22 from checkpoint commit `44900f3`. The local N2
 authorization, migration and bounded-read gate now passes on the source pinned
 in [its execution record](N2-security/README.md). See
-[CHECKPOINT.md](../../../CHECKPOINT.md) for the N3a handoff. Historical N0/N1
+[CHECKPOINT.md](../../../CHECKPOINT.md) for the current handoff. Historical N0/N1
 results remain tied to their own source; the full network release is pending.
 
 | Wave | State | Evidence / remaining gate |
@@ -18,8 +18,8 @@ results remain tied to their own source; the full network release is pending.
 | N0 | Passed for the local baseline | Source/tool manifest, 181 normal / 230 injection tests, 63 generated MBT traces and real rotation crash controls; required sockets, one pre-existing ignored performance test per suite and zero skips. Offline HTTPS dependency audit and baseline gap controls passed. |
 | N1 | Passed for the transport gate | Shared UDS/HTTPS client, CLI/stdio transport selection, private native read adapter; 189 normal tests, zero failures/skips, one pre-existing ignored test. Includes real TLS ingress, certificate/hostname/redirect, timeout and uncertain-response controls. Pinned profile identity needs the N2 info endpoint. |
 | N2 | Passed local security/migration/read gate | 232 normal / 288 injection tests, 63 generated traces, required sockets and zero skips; source unchanged across all final gates. Approved enrollment, durable generation fencing, bounded authorized pages, real TLS facades and old-binary/crash controls. Credential renewal remains N3c. [Evidence](N2-security/README.md). |
-| N3a | Pending | Atomic receipt core and send crash pilot. |
-| N3b | Pending | Queue/document/channel mutation and empty-claim replay. |
+| N3a | Passed local send gate | 257 normal / 330 injection tests, 63 generated traces; required sockets, zero skips, matching source manifests. [Evidence](N3-operations/README.md). |
+| N3b | Paused, unqualified | Partial queue/document/channel mutation coverage; review repairs and final gate unfinished at user STOP. See [checkpoint](../../../CHECKPOINT.md). |
 | N3c | Pending | Lifecycle, ACK/recovery and retention guarantees. |
 | N4 | Pending | Remote hosts, exact binding and controller fencing. |
 | N5 | Pending | Full regression, actual network and provider qualification. |

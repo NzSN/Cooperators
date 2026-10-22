@@ -20,6 +20,8 @@ fn permission(method: &str, resource: &str) -> Permission {
 fn policy(token: &str) -> NetworkPolicy {
     NetworkPolicy {
         v: 1,
+        enable_operations: false,
+        enable_resource_operations: false,
         allowed_hosts: vec!["bus.example:443".into()],
         allowed_origins: vec!["https://ui.example".into()],
         devices: vec![DevicePrincipal {

@@ -1,12 +1,14 @@
 //! Client transport boundary. HTTPS requests never retry a mutation implicitly.
 
 mod https;
+pub mod journal;
 pub mod profile;
 mod uds;
 
 use std::path::{Path, PathBuf};
 use std::time::Duration;
 
+use serde::{Deserialize, Serialize};
 use serde_json::Value;
 
 use crate::client::ClientError;
@@ -14,8 +16,41 @@ use crate::rpc::{RpcError, RpcResponse};
 
 pub use https::HttpsOptions;
 
+/// Authenticated discovery advertised by `/v1/info`.
+#[derive(Clone, Debug, Serialize, Deserialize)]
+pub struct BrokerInfo {
+    pub v: u16,
+    pub bus_id: String,
+    pub operation_epoch: String,
+    pub supported_methods: Vec<String>,
+    #[serde(default)]
+    pub operation_max_age_ms: Option<u64>,
+    #[serde(default)]
+    pub operation_epoch_expires_at_ms: Option<u64>,
+}
+
 /// Shared limit for one request or response, including JSON framing.
 pub const MAX_RPC_BYTES: usize = 4 * 1024 * 1024;
+
+/// Domain mutations supported by the private client intent journal. Exposure
+/// still requires the selected broker to advertise the particular method.
+pub fn is_journaled_mutation(method: &str) -> bool {
+    matches!(
+        method,
+        "send_message"
+            | "publish"
+            | "create_queue"
+            | "enqueue"
+            | "claim_task"
+            | "renew_lease"
+            | "complete_task"
+            | "fail_task"
+            | "publish_doc"
+            | "update_doc"
+            | "claim_doc"
+            | "release_doc"
+    )
+}
 
 /// A broker's location. HTTPS URLs identify an origin, never credentials.
 #[derive(Clone, Debug, PartialEq, Eq)]
@@ -80,6 +115,45 @@ impl BrokerClient {
 
     pub fn endpoint(&self) -> &Endpoint {
         &self.endpoint
+    }
+
+    /// Read discovery without enabling implicit retries or logging credentials.
+    pub async fn discover_info(
+        &self,
+        token: Option<&str>,
+        deadline: Duration,
+    ) -> Result<BrokerInfo, ClientError> {
+        let Endpoint::Https(origin) = &self.endpoint else {
+            return Err(ClientError::Protocol(
+                "broker discovery requires an HTTPS endpoint".into(),
+            ));
+        };
+        let value = tokio::time::timeout(
+            deadline,
+            https::discover(
+                self.http.as_ref().expect("HTTPS client initialized"),
+                origin,
+                token,
+                deadline,
+            ),
+        )
+        .await
+        .map_err(|_| ClientError::RemoteTransport("broker identity query timed out".into()))??;
+        let info: BrokerInfo = serde_json::from_value(value)
+            .map_err(|_| ClientError::Protocol("invalid broker discovery response".into()))?;
+        if info.v != 1
+            || !crate::id::is_ulid(&info.bus_id)
+            || !crate::id::is_ulid(&info.operation_epoch)
+            || self
+                .expected_bus_id
+                .as_ref()
+                .is_some_and(|expected| expected != &info.bus_id)
+        {
+            return Err(ClientError::Protocol(
+                "broker discovery identity does not match selected profile".into(),
+            ));
+        }
+        Ok(info)
     }
 
     pub fn with_expected_bus_id(mut self, bus_id: String) -> Result<Self, ClientError> {

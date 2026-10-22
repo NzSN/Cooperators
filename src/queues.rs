@@ -17,7 +17,7 @@ use std::path::{Path, PathBuf};
 use std::sync::Arc;
 
 use serde::{Deserialize, Serialize};
-use serde_json::Value;
+use serde_json::{json, Value};
 
 use crate::arrivals::{
     ArrivalKind, ArrivalReference, ArrivalResource, ArrivalService, CatchUpSnapshot,
@@ -25,6 +25,9 @@ use crate::arrivals::{
 };
 use crate::error::{BrokerError, ErrorCode};
 use crate::id;
+use crate::operations::{
+    CompletionRequirement, DomainOperationProof, DomainTicket, OperationOutcome, OperationStore,
+};
 use crate::registry::AgentIdentity;
 use crate::server::DaemonState;
 use crate::storage::{hash_record, AppendReceipt, ChainRecord, LogFile};
@@ -80,6 +83,15 @@ pub struct QueueEvent {
     /// Recipients captured before enqueue/requeue commits.
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub notification_intent: Option<NotificationIntent>,
+    /// Durable remote intent and its exact result, committed with the effect.
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub domain_operation: Option<DomainOperationProof>,
+    /// The original claim fence, retained after renewal or terminal mutation.
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub original_fence: Option<u64>,
+    /// Original enqueue timestamp included in the immutable claim receipt.
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub enqueued_at: Option<String>,
 }
 
 impl ChainRecord for QueueEvent {
@@ -101,7 +113,7 @@ impl ChainRecord for QueueEvent {
 }
 
 /// One claim attempt, retained in the task history and in dead letters.
-#[derive(Debug, Clone, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize)]
 pub struct AttemptRecord {
     pub attempt: u64,
     pub lease_id: String,
@@ -359,6 +371,9 @@ fn base_event(kind: &str, queue: &str) -> QueueEvent {
         history: None,
         truncated_bytes: None,
         notification_intent: None,
+        domain_operation: None,
+        original_fence: None,
+        enqueued_at: None,
     }
 }
 
@@ -624,6 +639,7 @@ fn expire_queue_leases(
     rotation_bytes: u64,
     arrivals: Option<&Arc<ArrivalService>>,
     notification_intent: Option<NotificationIntent>,
+    operation: Option<&DomainTicket>,
 ) -> Result<u64, BrokerError> {
     let expired: Vec<String> = runtime
         .tasks
@@ -638,6 +654,7 @@ fn expire_queue_leases(
         .map(|task| task.task_id.clone())
         .collect();
     let mut count = 0;
+    let mut maintenance = None;
     for task_id in expired {
         let Some(task) = runtime.tasks.get(&task_id).cloned() else {
             continue;
@@ -673,6 +690,9 @@ fn expire_queue_leases(
         event.agent_name = Some(lease.agent_name.clone());
         event.expires_at_ms = Some(lease.expires_at_ms);
         event.lease_ttl_s = Some(lease.ttl_s);
+        if maintenance.is_none() {
+            maintenance = operation.map(DomainTicket::begin_maintenance);
+        }
         let receipt = log.append(&mut event)?;
         announce_queue_commit(arrivals, queue, receipt.seq, &receipt.hash);
         apply_event(runtime, &event, &receipt.hash)?;
@@ -692,6 +712,9 @@ fn expire_queue_leases(
             append_dead_letter(root, queue, record, rotation_bytes)?;
         }
         count += 1;
+    }
+    if let Some(maintenance) = maintenance {
+        maintenance.complete();
     }
     Ok(count)
 }
@@ -730,6 +753,17 @@ fn append_dead_letter(
         .iter()
         .find(|existing| existing.task_id == record.task_id)
     {
+        if existing.queue != record.queue
+            || existing.payload != record.payload
+            || existing.max_attempts != record.max_attempts
+            || existing.attempts != record.attempts
+            || existing.reason != record.reason
+            || existing.history != record.history
+        {
+            return Err(BrokerError::internal(
+                "dead-letter projection conflicts with authoritative task",
+            ));
+        }
         return Ok(AppendReceipt {
             seq: existing.seq,
             hash: hash_record(existing).map_err(BrokerError::from)?,
@@ -792,6 +826,313 @@ fn project_missing_dead_letters(
     Ok(())
 }
 
+fn attach_operation<T: Serialize>(
+    event: &mut QueueEvent,
+    operation: Option<&DomainTicket>,
+    result: &T,
+    completion: Option<CompletionRequirement>,
+) -> Result<(), BrokerError> {
+    if let Some(operation) = operation {
+        let outcome = OperationOutcome::Success(
+            serde_json::to_value(result)
+                .map_err(|error| BrokerError::internal(error.to_string()))?,
+        );
+        event.domain_operation = Some(match completion {
+            Some(completion) => operation.proof_with_completion(outcome, completion)?,
+            None => operation.proof(outcome)?,
+        });
+        // Failure after this point may have left a durable source record.
+        operation.mark_effect_attempt();
+    }
+    Ok(())
+}
+
+fn invalid_queue_proof() -> BrokerError {
+    BrokerError::internal("invalid authoritative queue operation proof")
+}
+
+fn required<T>(value: &Option<T>) -> Result<&T, BrokerError> {
+    value.as_ref().ok_or_else(invalid_queue_proof)
+}
+
+/// Checks source-specific input and result bindings before rebuilding the
+/// cross-domain operation index. `runtime` is the state before this event.
+fn verify_queue_operation(event: &QueueEvent, runtime: &QueueRuntime) -> Result<(), BrokerError> {
+    let Some(proof) = &event.domain_operation else {
+        return Ok(());
+    };
+    let queue = &event.queue;
+    let mut completion = None;
+    let (method, input, result) = match event.kind.as_str() {
+        "queue_created" => {
+            if runtime.created_seq != 0 {
+                return Err(invalid_queue_proof());
+            }
+            (
+                "create_queue",
+                json!({"queue":queue}),
+                json!(CreateQueueReceipt {
+                    queue: queue.clone(),
+                    created_seq: event.seq,
+                    created_at: event.ts.clone(),
+                }),
+            )
+        }
+        "task_enqueued" => {
+            let task_id = required(&event.task_id)?;
+            let max_attempts = *required(&event.max_attempts)?;
+            if runtime.created_seq == 0
+                || runtime.tasks.contains_key(task_id)
+                || !(1..=1000).contains(&max_attempts)
+                || event.attempts != Some(0)
+            {
+                return Err(invalid_queue_proof());
+            }
+            (
+                "enqueue",
+                json!({"queue":queue,"payload":required(&event.payload)?,"max_attempts":max_attempts}),
+                json!(EnqueueReceipt {
+                    queue: queue.clone(),
+                    task_id: task_id.clone(),
+                    seq: event.seq,
+                    max_attempts,
+                    attempts: 0,
+                    enqueued_at: event.ts.clone()
+                }),
+            )
+        }
+        "task_claimed" => {
+            let task = runtime
+                .tasks
+                .get(required(&event.task_id)?)
+                .ok_or_else(invalid_queue_proof)?;
+            let attempt = task.attempts.saturating_add(1);
+            let lease_ttl_s = *required(&event.lease_ttl_s)?;
+            if task.phase != TaskPhase::Pending
+                || event.payload.as_ref() != Some(&task.payload)
+                || event.max_attempts != Some(task.max_attempts)
+                || event.attempt != Some(attempt)
+                || event.attempts != Some(attempt)
+                || event.enqueued_at.as_ref() != Some(&task.enqueued_at)
+                || !(1..=MAX_LEASE_TTL_S).contains(&lease_ttl_s)
+            {
+                return Err(invalid_queue_proof());
+            }
+            let lease = TaskLease {
+                lease_id: required(&event.lease_id)?.clone(),
+                fence: event.seq,
+                agent_id: required(&event.agent_id)?.clone(),
+                agent_name: required(&event.agent_name)?.clone(),
+                expires_at_ms: *required(&event.expires_at_ms)?,
+                ttl_s: lease_ttl_s,
+                attempt,
+            };
+            (
+                "claim_task",
+                json!({"queue":queue,"lease_ttl_s":lease_ttl_s}),
+                json!(ClaimTaskReceipt {
+                    queue: queue.clone(),
+                    task: TaskView {
+                        task_id: task.task_id.clone(),
+                        payload: task.payload.clone(),
+                        max_attempts: task.max_attempts,
+                        attempts: attempt,
+                        attempt,
+                        enqueued_at: task.enqueued_at.clone(),
+                        state: TaskPhase::Leased,
+                        lease: Some(lease_view(&lease)),
+                    },
+                    lease_id: lease.lease_id.clone(),
+                    fence: event.seq,
+                    expires_at: id::format_rfc3339_millis(lease.expires_at_ms),
+                    lease_ttl_s,
+                }),
+            )
+        }
+        "lease_renewed" | "task_completed" | "task_requeued" | "task_dead" => {
+            let task = runtime
+                .tasks
+                .get(required(&event.task_id)?)
+                .ok_or_else(invalid_queue_proof)?;
+            let lease = task.lease.as_ref().ok_or_else(invalid_queue_proof)?;
+            if task.phase != TaskPhase::Leased
+                || event.lease_id.as_ref() != Some(&lease.lease_id)
+                || event.original_fence != Some(lease.fence)
+                || event.agent_id.as_ref() != Some(&lease.agent_id)
+                || event.agent_name.as_ref() != Some(&lease.agent_name)
+                || event.attempts != Some(task.attempts)
+            {
+                return Err(invalid_queue_proof());
+            }
+            match event.kind.as_str() {
+                "lease_renewed" => {
+                    if event.attempt != Some(lease.attempt)
+                        || event.lease_ttl_s != Some(lease.ttl_s)
+                    {
+                        return Err(invalid_queue_proof());
+                    }
+                    (
+                        "renew_lease",
+                        json!({"lease_id":lease.lease_id}),
+                        json!(RenewLeaseReceipt {
+                            lease_id: lease.lease_id.clone(),
+                            kind: "task".into(),
+                            fence: lease.fence,
+                            expires_at: id::format_rfc3339_millis(*required(&event.expires_at_ms)?),
+                            lease_ttl_s: lease.ttl_s,
+                        }),
+                    )
+                }
+                "task_completed" => {
+                    if event.attempt != Some(lease.attempt) {
+                        return Err(invalid_queue_proof());
+                    }
+                    let outcome = required(&event.outcome)?;
+                    (
+                        "complete_task",
+                        json!({"lease_id":lease.lease_id,"fence":lease.fence,"outcome":outcome,"receipt":event.receipt}),
+                        json!(CompleteTaskReceipt {
+                            queue: queue.clone(),
+                            task_id: task.task_id.clone(),
+                            lease_id: lease.lease_id.clone(),
+                            fence: lease.fence,
+                            status: "completed".into(),
+                            seq: event.seq,
+                            outcome: outcome.clone()
+                        }),
+                    )
+                }
+                _ => {
+                    let reason = required(&event.reason)?
+                        .strip_prefix("failed: ")
+                        .ok_or_else(invalid_queue_proof)?;
+                    let dead = event.kind == "task_dead";
+                    let next_attempt = task.attempts.saturating_add(1);
+                    if reason.trim().is_empty()
+                        || dead != (task.attempts >= task.max_attempts)
+                        || event.payload.as_ref() != Some(&task.payload)
+                        || event.max_attempts != Some(task.max_attempts)
+                        || event.expires_at_ms != Some(lease.expires_at_ms)
+                        || event.lease_ttl_s != Some(lease.ttl_s)
+                        || (!dead && event.attempt != Some(next_attempt))
+                    {
+                        return Err(invalid_queue_proof());
+                    }
+                    if dead {
+                        let history = required(&event.history)?;
+                        if history.len() != task.history.len()
+                            || history.last().is_none_or(|last| {
+                                last.fence != lease.fence
+                                    || last.lease_id != lease.lease_id
+                                    || last.ended_at.is_none()
+                                    || last.result.as_deref() != event.reason.as_deref()
+                            })
+                        {
+                            return Err(invalid_queue_proof());
+                        }
+                        let mut expected_history = task.history.clone();
+                        let last = expected_history
+                            .last_mut()
+                            .ok_or_else(invalid_queue_proof)?;
+                        last.ended_at = history.last().and_then(|last| last.ended_at.clone());
+                        last.result = event.reason.clone();
+                        if *history != expected_history {
+                            return Err(invalid_queue_proof());
+                        }
+                        completion = Some(CompletionRequirement::DeadLetter {
+                            queue: queue.clone(),
+                            task_id: task.task_id.clone(),
+                        });
+                    }
+                    (
+                        "fail_task",
+                        json!({"lease_id":lease.lease_id,"fence":lease.fence,"reason":reason}),
+                        json!(FailTaskReceipt {
+                            queue: queue.clone(),
+                            task_id: task.task_id.clone(),
+                            lease_id: lease.lease_id.clone(),
+                            fence: lease.fence,
+                            status: if dead { "dead" } else { "requeued" }.into(),
+                            attempts: task.attempts,
+                            max_attempts: task.max_attempts,
+                            next_attempt: (!dead).then_some(next_attempt),
+                            dead_letter_seq: None,
+                            seq: event.seq,
+                            reason: reason.into()
+                        }),
+                    )
+                }
+            }
+        }
+        _ => return Err(invalid_queue_proof()),
+    };
+    proof.verify(method, &format!("queue:{queue}"))?;
+    if proof.context.input != input
+        || proof.outcome != OperationOutcome::Success(result)
+        || proof.completion != completion
+        || (event.agent_id.is_some()
+            && event.agent_id.as_ref() != Some(&proof.context.scope.agent_id))
+    {
+        return Err(invalid_queue_proof());
+    }
+    Ok(())
+}
+
+/// Synchronizes source/projection records and reconstructs immutable receipts
+/// before remote admission. Duplicate identities across any source are rejected
+/// by `OperationStore::recover_domain`.
+pub(crate) fn recover_queue_operations(
+    root: &Path,
+    rotation_bytes: u64,
+    operations: &OperationStore,
+) -> Result<(), BrokerError> {
+    // Opening every source performs the recovery sync before any proof is
+    // exposed. The first daemon load normally already repaired these tails.
+    let (logs, states) = load_all_queues(root, rotation_bytes)?;
+    for (queue, runtime) in &states {
+        project_missing_dead_letters(root, queue, runtime, rotation_bytes)?;
+    }
+    for (queue, log) in logs {
+        let report = LogFile::<QueueEvent>::read_segments(log.path())?;
+        let mut runtime = QueueRuntime::empty();
+        for event in report.records {
+            if event.queue != queue {
+                return Err(invalid_queue_proof());
+            }
+            verify_queue_operation(&event, &runtime)?;
+            if let Some(proof) = &event.domain_operation {
+                let mut outcome = proof.outcome.clone();
+                if let Some(CompletionRequirement::DeadLetter { .. }) = &proof.completion {
+                    let receipt = append_dead_letter(
+                        root,
+                        &queue,
+                        DeadLetterRecord {
+                            seq: 0,
+                            prev_hash: String::new(),
+                            ts: event.ts.clone(),
+                            queue: queue.clone(),
+                            task_id: required(&event.task_id)?.clone(),
+                            payload: required(&event.payload)?.clone(),
+                            max_attempts: *required(&event.max_attempts)?,
+                            attempts: *required(&event.attempts)?,
+                            reason: required(&event.reason)?.clone(),
+                            history: required(&event.history)?.clone(),
+                        },
+                        rotation_bytes,
+                    )?;
+                    let OperationOutcome::Success(result) = &mut outcome else {
+                        return Err(invalid_queue_proof());
+                    };
+                    result["dead_letter_seq"] = receipt.seq.into();
+                }
+                operations.recover_domain(proof, outcome)?;
+            }
+            apply_event(&mut runtime, &event, &hash_record(&event)?)?;
+        }
+    }
+    Ok(())
+}
+
 impl DaemonState {
     /// Captures at most one current-state hint while the caller holds
     /// `send_lock`; an advisory count never reserves or selects a task.
@@ -799,7 +1140,7 @@ impl DaemonState {
         &self,
         queue: &str,
     ) -> Result<Option<CatchUpSnapshot>, BrokerError> {
-        if !self.ensure_queue_loaded(queue).await? {
+        if !self.ensure_queue_loaded(queue, None).await? {
             return Ok(None);
         }
         let states = self.queue_states.lock().await;
@@ -839,42 +1180,81 @@ impl DaemonState {
     }
 
     /// Ensures a queue's log and replay state are loaded. Returns false when
-    /// the queue does not exist.
-    async fn ensure_queue_loaded(&self, queue: &str) -> Result<bool, BrokerError> {
+    /// no `queue_created` record has committed, including an interrupted first
+    /// append whose stream contains only recovery records.
+    async fn ensure_queue_loaded(
+        &self,
+        queue: &str,
+        operation: Option<&DomainTicket>,
+    ) -> Result<bool, BrokerError> {
         validate_queue_name(queue)?;
         {
             let states = self.queue_states.lock().await;
-            if states.contains_key(queue) {
-                return Ok(true);
+            if let Some(runtime) = states.get(queue) {
+                return Ok(runtime.created_seq > 0);
             }
         }
         if crate::storage::segment_paths(queue_path(&self.root, queue))?.is_empty() {
             return Ok(false);
         }
+        let maintenance = operation.map(DomainTicket::begin_maintenance);
         let (log, runtime) = open_queue(&self.root, queue, self.config.log_rotation_bytes)?;
+        let created = runtime.created_seq > 0;
         self.queues.lock().await.insert(queue.to_string(), log);
         self.queue_states
             .lock()
             .await
             .insert(queue.to_string(), runtime);
-        Ok(true)
+        if let Some(maintenance) = maintenance {
+            maintenance.complete();
+        }
+        Ok(created)
     }
 
     /// Creates a queue and records `queue_created`. Existing names are never
     /// recycled and return `EXISTS`.
     pub async fn create_queue(&self, queue: &str) -> Result<CreateQueueReceipt, BrokerError> {
+        self.create_queue_inner(queue, None).await
+    }
+
+    /// The operation owner already holds `send_lock`.
+    pub(crate) async fn create_queue_operation(
+        &self,
+        queue: &str,
+        operation: &DomainTicket,
+    ) -> Result<CreateQueueReceipt, BrokerError> {
+        self.create_queue_inner(queue, Some(operation)).await
+    }
+
+    async fn create_queue_inner(
+        &self,
+        queue: &str,
+        operation: Option<&DomainTicket>,
+    ) -> Result<CreateQueueReceipt, BrokerError> {
         validate_queue_name(queue)?;
-        let _send_guard = self.send_lock.lock().await;
-        if self.queue_states.lock().await.contains_key(queue)
-            || queue_path(&self.root, queue).exists()
-        {
+        let _send_guard = if operation.is_none() {
+            Some(self.send_lock.lock().await)
+        } else {
+            None
+        };
+        if self.ensure_queue_loaded(queue, operation).await? {
             return Err(BrokerError::application(
                 ErrorCode::Exists,
                 format!("queue {queue:?} already exists"),
             ));
         }
+        let maintenance = operation.map(DomainTicket::begin_maintenance);
         let (mut log, mut runtime) = open_queue(&self.root, queue, self.config.log_rotation_bytes)?;
+        if let Some(maintenance) = maintenance {
+            maintenance.complete();
+        }
         let mut event = base_event("queue_created", queue);
+        let result = CreateQueueReceipt {
+            queue: queue.to_string(),
+            created_seq: log.seq_head() + 1,
+            created_at: event.ts.clone(),
+        };
+        attach_operation(&mut event, operation, &result, None)?;
         let receipt = log.append(&mut event)?;
         announce_queue_commit(self.arrivals.as_ref(), &queue, receipt.seq, &receipt.hash);
         apply_event(&mut runtime, &event, &receipt.hash)?;
@@ -883,11 +1263,7 @@ impl DaemonState {
             .lock()
             .await
             .insert(queue.to_string(), runtime);
-        Ok(CreateQueueReceipt {
-            queue: queue.to_string(),
-            created_seq: receipt.seq,
-            created_at: event.ts,
-        })
+        Ok(result)
     }
 
     /// Appends one task to a queue.
@@ -897,12 +1273,37 @@ impl DaemonState {
         payload: Value,
         max_attempts: Option<u64>,
     ) -> Result<EnqueueReceipt, BrokerError> {
+        self.enqueue_inner(queue, payload, max_attempts, None).await
+    }
+
+    pub(crate) async fn enqueue_operation(
+        &self,
+        queue: &str,
+        payload: Value,
+        max_attempts: Option<u64>,
+        operation: &DomainTicket,
+    ) -> Result<EnqueueReceipt, BrokerError> {
+        self.enqueue_inner(queue, payload, max_attempts, Some(operation))
+            .await
+    }
+
+    async fn enqueue_inner(
+        &self,
+        queue: &str,
+        payload: Value,
+        max_attempts: Option<u64>,
+        operation: Option<&DomainTicket>,
+    ) -> Result<EnqueueReceipt, BrokerError> {
         let max_attempts = max_attempts.unwrap_or(DEFAULT_MAX_ATTEMPTS);
         if max_attempts == 0 || max_attempts > 1_000 {
             return Err(BrokerError::invalid("max_attempts must be 1..=1000"));
         }
-        let _send_guard = self.send_lock.lock().await;
-        if !self.ensure_queue_loaded(queue).await? {
+        let _send_guard = if operation.is_none() {
+            Some(self.send_lock.lock().await)
+        } else {
+            None
+        };
+        if !self.ensure_queue_loaded(queue, operation).await? {
             return Err(BrokerError::application(
                 ErrorCode::NotFound,
                 format!("unknown queue {queue:?}"),
@@ -920,6 +1321,15 @@ impl DaemonState {
         event.payload = Some(payload);
         event.max_attempts = Some(max_attempts);
         event.attempts = Some(0);
+        let result = EnqueueReceipt {
+            queue: queue.to_string(),
+            task_id,
+            seq: log.seq_head() + 1,
+            max_attempts,
+            attempts: 0,
+            enqueued_at: event.ts.clone(),
+        };
+        attach_operation(&mut event, operation, &result, None)?;
         let receipt = log.append(&mut event)?;
         announce_queue_commit(self.arrivals.as_ref(), &queue, receipt.seq, &receipt.hash);
         let mut states = self.queue_states.lock().await;
@@ -927,14 +1337,7 @@ impl DaemonState {
             .get_mut(queue)
             .ok_or_else(|| BrokerError::internal("queue state vanished"))?;
         apply_event(runtime, &event, log.last_hash())?;
-        Ok(EnqueueReceipt {
-            queue: queue.to_string(),
-            task_id,
-            seq: receipt.seq,
-            max_attempts,
-            attempts: 0,
-            enqueued_at: event.ts,
-        })
+        Ok(result)
     }
 
     /// Claims the oldest ready task in a queue. The claim log sequence is the
@@ -945,13 +1348,39 @@ impl DaemonState {
         queue: &str,
         lease_ttl_s: u64,
     ) -> Result<ClaimTaskReceipt, BrokerError> {
+        self.claim_task_inner(identity, queue, lease_ttl_s, None)
+            .await
+    }
+
+    pub(crate) async fn claim_task_operation(
+        &self,
+        identity: &AgentIdentity,
+        queue: &str,
+        lease_ttl_s: u64,
+        operation: &DomainTicket,
+    ) -> Result<ClaimTaskReceipt, BrokerError> {
+        self.claim_task_inner(identity, queue, lease_ttl_s, Some(operation))
+            .await
+    }
+
+    async fn claim_task_inner(
+        &self,
+        identity: &AgentIdentity,
+        queue: &str,
+        lease_ttl_s: u64,
+        operation: Option<&DomainTicket>,
+    ) -> Result<ClaimTaskReceipt, BrokerError> {
         if lease_ttl_s == 0 || lease_ttl_s > MAX_LEASE_TTL_S {
             return Err(BrokerError::invalid(format!(
                 "lease_ttl_s must be 1..={MAX_LEASE_TTL_S}"
             )));
         }
-        let _send_guard = self.send_lock.lock().await;
-        if !self.ensure_queue_loaded(queue).await? {
+        let _send_guard = if operation.is_none() {
+            Some(self.send_lock.lock().await)
+        } else {
+            None
+        };
+        if !self.ensure_queue_loaded(queue, operation).await? {
             return Err(BrokerError::application(
                 ErrorCode::NotFound,
                 format!("unknown queue {queue:?}"),
@@ -975,6 +1404,7 @@ impl DaemonState {
             self.config.log_rotation_bytes,
             self.arrivals.as_ref(),
             self.capture_queue_arrival_routes(queue)?,
+            operation,
         )?;
 
         let task = runtime.pending_task().cloned().ok_or_else(|| {
@@ -998,16 +1428,20 @@ impl DaemonState {
         event.agent_name = Some(identity.name.clone());
         event.expires_at_ms = Some(expires_at_ms);
         event.lease_ttl_s = Some(lease_ttl_s);
-        let receipt = log.append(&mut event)?;
-        announce_queue_commit(self.arrivals.as_ref(), &queue, receipt.seq, &receipt.hash);
-        apply_event(runtime, &event, log.last_hash())?;
-        let fence = receipt.seq;
-        let lease = runtime
-            .tasks
-            .get(&task.task_id)
-            .and_then(|task| task.lease.clone())
-            .ok_or_else(|| BrokerError::internal("claim did not install a lease"))?;
-        Ok(ClaimTaskReceipt {
+        if operation.is_some() {
+            event.enqueued_at = Some(task.enqueued_at.clone());
+        }
+        let fence = log.seq_head() + 1;
+        let lease = TaskLease {
+            lease_id: lease_id.clone(),
+            fence,
+            agent_id: identity.agent_id.clone(),
+            agent_name: identity.name.clone(),
+            expires_at_ms,
+            ttl_s: lease_ttl_s,
+            attempt,
+        };
+        let result = ClaimTaskReceipt {
             queue: queue.to_string(),
             task: TaskView {
                 task_id: task.task_id,
@@ -1023,7 +1457,12 @@ impl DaemonState {
             fence,
             expires_at: id::format_rfc3339_millis(expires_at_ms),
             lease_ttl_s,
-        })
+        };
+        attach_operation(&mut event, operation, &result, None)?;
+        let receipt = log.append(&mut event)?;
+        announce_queue_commit(self.arrivals.as_ref(), &queue, receipt.seq, &receipt.hash);
+        apply_event(runtime, &event, log.last_hash())?;
+        Ok(result)
     }
 
     /// Renews a queue lease held by `identity`.
@@ -1032,6 +1471,28 @@ impl DaemonState {
         identity: &AgentIdentity,
         queue: &str,
         lease_id: &str,
+    ) -> Result<RenewLeaseReceipt, BrokerError> {
+        self.renew_queue_lease_inner(identity, queue, lease_id, None)
+            .await
+    }
+
+    pub(crate) async fn renew_queue_lease_operation(
+        &self,
+        identity: &AgentIdentity,
+        queue: &str,
+        lease_id: &str,
+        operation: &DomainTicket,
+    ) -> Result<RenewLeaseReceipt, BrokerError> {
+        self.renew_queue_lease_inner(identity, queue, lease_id, Some(operation))
+            .await
+    }
+
+    async fn renew_queue_lease_inner(
+        &self,
+        identity: &AgentIdentity,
+        queue: &str,
+        lease_id: &str,
+        operation: Option<&DomainTicket>,
     ) -> Result<RenewLeaseReceipt, BrokerError> {
         let now_ms = id::unix_millis();
         let mut logs = self.queues.lock().await;
@@ -1051,6 +1512,7 @@ impl DaemonState {
             self.config.log_rotation_bytes,
             self.arrivals.as_ref(),
             self.capture_queue_arrival_routes(queue)?,
+            operation,
         )?;
         let task = runtime
             .tasks
@@ -1084,16 +1546,21 @@ impl DaemonState {
         event.agent_name = Some(lease.agent_name.clone());
         event.expires_at_ms = Some(expires_at_ms);
         event.lease_ttl_s = Some(lease.ttl_s);
-        let receipt = log.append(&mut event)?;
-        announce_queue_commit(self.arrivals.as_ref(), &queue, receipt.seq, &receipt.hash);
-        apply_event(runtime, &event, &receipt.hash)?;
-        Ok(RenewLeaseReceipt {
+        if operation.is_some() {
+            event.original_fence = Some(lease.fence);
+        }
+        let result = RenewLeaseReceipt {
             lease_id: lease.lease_id,
             kind: "task".to_string(),
             fence: lease.fence,
             expires_at: id::format_rfc3339_millis(expires_at_ms),
             lease_ttl_s: lease.ttl_s,
-        })
+        };
+        attach_operation(&mut event, operation, &result, None)?;
+        let receipt = log.append(&mut event)?;
+        announce_queue_commit(self.arrivals.as_ref(), &queue, receipt.seq, &receipt.hash);
+        apply_event(runtime, &event, &receipt.hash)?;
+        Ok(result)
     }
 
     /// Completes a task only when `lease_id` and the current fence match.
@@ -1105,7 +1572,37 @@ impl DaemonState {
         outcome: Value,
         receipt: Option<Value>,
     ) -> Result<CompleteTaskReceipt, BrokerError> {
-        let _send_guard = self.send_lock.lock().await;
+        self.complete_task_inner(identity, lease_id, fence, outcome, receipt, None)
+            .await
+    }
+
+    pub(crate) async fn complete_task_operation(
+        &self,
+        identity: &AgentIdentity,
+        lease_id: &str,
+        fence: u64,
+        outcome: Value,
+        receipt: Option<Value>,
+        operation: &DomainTicket,
+    ) -> Result<CompleteTaskReceipt, BrokerError> {
+        self.complete_task_inner(identity, lease_id, fence, outcome, receipt, Some(operation))
+            .await
+    }
+
+    async fn complete_task_inner(
+        &self,
+        identity: &AgentIdentity,
+        lease_id: &str,
+        fence: u64,
+        outcome: Value,
+        receipt: Option<Value>,
+        operation: Option<&DomainTicket>,
+    ) -> Result<CompleteTaskReceipt, BrokerError> {
+        let _send_guard = if operation.is_none() {
+            Some(self.send_lock.lock().await)
+        } else {
+            None
+        };
         let queue = self
             .queue_for_lease(lease_id)
             .await
@@ -1128,6 +1625,7 @@ impl DaemonState {
             self.config.log_rotation_bytes,
             self.arrivals.as_ref(),
             self.capture_queue_arrival_routes(&queue)?,
+            operation,
         )?;
         let task = runtime
             .tasks
@@ -1168,6 +1666,19 @@ impl DaemonState {
         event.agent_name = Some(lease.agent_name.clone());
         event.outcome = Some(outcome.clone());
         event.receipt = receipt;
+        if operation.is_some() {
+            event.original_fence = Some(fence);
+        }
+        let result = CompleteTaskReceipt {
+            queue: queue.clone(),
+            task_id: task.task_id,
+            lease_id: lease.lease_id,
+            fence,
+            status: "completed".to_string(),
+            seq: log.seq_head() + 1,
+            outcome,
+        };
+        attach_operation(&mut event, operation, &result, None)?;
         let append_receipt = log.append(&mut event)?;
         announce_queue_commit(
             self.arrivals.as_ref(),
@@ -1176,15 +1687,7 @@ impl DaemonState {
             &append_receipt.hash,
         );
         apply_event(runtime, &event, log.last_hash())?;
-        Ok(CompleteTaskReceipt {
-            queue,
-            task_id: task.task_id,
-            lease_id: lease.lease_id,
-            fence,
-            status: "completed".to_string(),
-            seq: append_receipt.seq,
-            outcome,
-        })
+        Ok(result)
     }
 
     /// Reports a failed attempt. The task is requeued while attempts remain,
@@ -1196,10 +1699,38 @@ impl DaemonState {
         fence: u64,
         reason: &str,
     ) -> Result<FailTaskReceipt, BrokerError> {
+        self.fail_task_inner(identity, lease_id, fence, reason, None)
+            .await
+    }
+
+    pub(crate) async fn fail_task_operation(
+        &self,
+        identity: &AgentIdentity,
+        lease_id: &str,
+        fence: u64,
+        reason: &str,
+        operation: &DomainTicket,
+    ) -> Result<FailTaskReceipt, BrokerError> {
+        self.fail_task_inner(identity, lease_id, fence, reason, Some(operation))
+            .await
+    }
+
+    async fn fail_task_inner(
+        &self,
+        identity: &AgentIdentity,
+        lease_id: &str,
+        fence: u64,
+        reason: &str,
+        operation: Option<&DomainTicket>,
+    ) -> Result<FailTaskReceipt, BrokerError> {
         if reason.trim().is_empty() {
             return Err(BrokerError::invalid("reason must not be empty"));
         }
-        let _send_guard = self.send_lock.lock().await;
+        let _send_guard = if operation.is_none() {
+            Some(self.send_lock.lock().await)
+        } else {
+            None
+        };
         let queue = self
             .queue_for_lease(lease_id)
             .await
@@ -1222,6 +1753,7 @@ impl DaemonState {
             self.config.log_rotation_bytes,
             self.arrivals.as_ref(),
             self.capture_queue_arrival_routes(&queue)?,
+            operation,
         )?;
         let task = runtime
             .tasks
@@ -1281,6 +1813,27 @@ impl DaemonState {
         event.agent_name = Some(lease.agent_name.clone());
         event.expires_at_ms = Some(lease.expires_at_ms);
         event.lease_ttl_s = Some(lease.ttl_s);
+        if operation.is_some() {
+            event.original_fence = Some(fence);
+        }
+        let mut result = FailTaskReceipt {
+            queue: queue.clone(),
+            task_id: task.task_id.clone(),
+            lease_id: lease.lease_id,
+            fence,
+            status: if dead { "dead" } else { "requeued" }.to_string(),
+            attempts: task.attempts,
+            max_attempts: task.max_attempts,
+            next_attempt: (!dead).then_some(next_attempt),
+            dead_letter_seq: None,
+            seq: log.seq_head() + 1,
+            reason: reason.to_string(),
+        };
+        let completion = dead.then(|| CompletionRequirement::DeadLetter {
+            queue: queue.clone(),
+            task_id: task.task_id.clone(),
+        });
+        attach_operation(&mut event, operation, &result, completion)?;
         let append_receipt = log.append(&mut event)?;
         announce_queue_commit(
             self.arrivals.as_ref(),
@@ -1289,7 +1842,7 @@ impl DaemonState {
             &append_receipt.hash,
         );
         apply_event(runtime, &event, log.last_hash())?;
-        let dead_letter_seq = if dead {
+        result.dead_letter_seq = if dead {
             Some(
                 append_dead_letter(
                     &self.root,
@@ -1313,19 +1866,7 @@ impl DaemonState {
         } else {
             None
         };
-        Ok(FailTaskReceipt {
-            queue,
-            task_id: task.task_id,
-            lease_id: lease.lease_id,
-            fence,
-            status: if dead { "dead" } else { "requeued" }.to_string(),
-            attempts: task.attempts,
-            max_attempts: task.max_attempts,
-            next_attempt: (!dead).then_some(next_attempt),
-            dead_letter_seq,
-            seq: append_receipt.seq,
-            reason: reason.to_string(),
-        })
+        Ok(result)
     }
 
     pub(crate) async fn queue_for_lease(&self, lease_id: &str) -> Option<String> {
@@ -1370,6 +1911,7 @@ impl DaemonState {
                 self.config.log_rotation_bytes,
                 self.arrivals.as_ref(),
                 self.capture_queue_arrival_routes(&queue)?,
+                None,
             )?;
             project_missing_dead_letters(
                 &self.root,
@@ -1406,6 +1948,7 @@ impl DaemonState {
             self.config.log_rotation_bytes,
             self.arrivals.as_ref(),
             self.capture_queue_arrival_routes(queue)?,
+            None,
         )
     }
 }

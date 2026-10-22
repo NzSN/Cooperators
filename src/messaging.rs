@@ -42,6 +42,10 @@ use crate::storage::{AppendReceipt, ChainRecord, LogFile};
 /// Sender name used by daemon-generated records (recovery, presence).
 pub const DAEMON_SENDER: &str = "daemon:cooperators";
 
+/// Leaves room for the wait response and its transport wrapper. Durable remote
+/// sends must fit this same read budget after proof and sequence assignment.
+pub const REMOTE_INBOX_PAGE_BYTES: usize = crate::transport::MAX_RPC_BYTES - 8192;
+
 /// Companion-log record that persists a message TTL.
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct ExpiryRecord {
@@ -82,7 +86,7 @@ pub struct SendRequest {
 }
 
 /// Durable send acknowledgement.
-#[derive(Debug, Clone, Serialize)]
+#[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize)]
 pub struct SendReceipt {
     pub message_id: String,
     pub seq: u64,
@@ -91,6 +95,9 @@ pub struct SendReceipt {
     pub to: String,
     pub to_agent_id: String,
     pub idempotency_key: Option<String>,
+    /// Original source timestamp for durable operations; absent on local APIs.
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub ts: Option<String>,
 }
 
 /// Batch returned by a wait (peek).
@@ -359,6 +366,82 @@ pub fn parse_cursor(cursor: &str) -> Result<u64, BrokerError> {
 }
 
 impl DaemonState {
+    /// Durable remote direct send. Authentication/authorization belongs to the
+    /// edge; the stable scope is checked again here before global admission.
+    pub async fn send_operation(
+        &self,
+        sender: &AgentIdentity,
+        scope: crate::operations::OperationScope,
+        reference: crate::operations::OperationRef,
+        request: SendRequest,
+    ) -> Result<SendReceipt, BrokerError> {
+        if self
+            .network
+            .as_ref()
+            .is_none_or(|network| !network.policy().enable_operations)
+        {
+            return Err(BrokerError::application(
+                ErrorCode::Forbidden,
+                "durable operations are disabled by network policy",
+            ));
+        }
+        if scope.agent_id != sender.agent_id {
+            return Err(BrokerError::application(
+                ErrorCode::Forbidden,
+                "operation instance differs from authenticated sender",
+            ));
+        }
+        if request.idempotency_key.is_some() {
+            return Err(BrokerError::invalid(
+                "durable remote send rejects legacy idempotency_key",
+            ));
+        }
+        if request.kind.is_empty()
+            || request.body.mime.is_empty()
+            || request.reply_to.as_deref().is_some_and(str::is_empty)
+        {
+            return Err(BrokerError::invalid("invalid durable send fields"));
+        }
+        let known = self
+            .operations
+            .known(&scope, &reference, inbox_now(&self.root))?;
+        // Saved receipt identity survives recipient retirement and name changes.
+        // Name/id aliases normalize to the same original destination.
+        let saved_recipient = known
+            .as_ref()
+            .filter(|proof| request.to == proof.result.to || request.to == proof.result.to_agent_id)
+            .map(|proof| AgentIdentity {
+                agent_id: proof.result.to_agent_id.clone(),
+                name: proof.result.to.clone(),
+                kind: String::new(),
+                capabilities: Vec::new(),
+            });
+        let recipient = match saved_recipient {
+            Some(recipient) => recipient,
+            None => self
+                .registry
+                .read()
+                .await
+                .resolve(&request.to)
+                .ok_or_else(|| {
+                    if known.is_some() {
+                        BrokerError::application(
+                            ErrorCode::IdempotencyConflict,
+                            "operation destination differs from original input",
+                        )
+                    } else {
+                        BrokerError::application(
+                            ErrorCode::NotFound,
+                            format!("unknown recipient {:?}", request.to),
+                        )
+                    }
+                })?,
+        };
+        self.inboxes
+            .send_operation(sender, &recipient, request, scope, reference)
+            .await
+    }
+
     /// Read-only access to the actual committed backlog counters for MBT ports.
     #[cfg(feature = "mbt-injection")]
     #[doc(hidden)]

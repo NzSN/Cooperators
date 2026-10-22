@@ -1,0 +1,39 @@
+    Blocking waiting for file lock on build directory
+   Compiling cooperators v0.1.0 (/home/nzsn/Repos/Cooperators)
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 20.61s
+     Running tests/operation_crash.rs (target/debug/deps/operation_crash-31fa969ccd76c9cd)
+
+running 20 tests
+test domain_crash_child ... ok
+test operation_crash_child ... ok
+test preoperation_envelope_hash_and_absent_optional_fields_remain_identical ... ok
+coop daemon: MCP streamable HTTP on http://127.0.0.1:36235/mcp
+coop daemon: MCP streamable HTTP on http://127.0.0.1:41469/mcp
+coop daemon: MCP streamable HTTP on http://127.0.0.1:40709/mcp
+coop daemon: MCP streamable HTTP on http://127.0.0.1:42551/mcp
+coop daemon: MCP streamable HTTP on http://127.0.0.1:46751/mcp
+coop daemon: MCP streamable HTTP on http://127.0.0.1:44331/mcp
+coop daemon: MCP streamable HTTP on http://127.0.0.1:38337/mcp
+test send_only_binary_refuses_resource_format_before_repair ... ok
+coop daemon: MCP streamable HTTP on http://127.0.0.1:40239/mcp
+test uncertain_registry_activation_must_sync_recovered_guard_before_source_repair ... ok
+test http_mcp_explicit_operation_replays_and_binds_header_credentials ... ok
+test remote_status_tracks_pending_commit_and_revokes_historical_receipt_access ... ok
+test lost_https_reply_after_commit_recovers_exact_original_receipt ... ok
+test empty_claim_terminal_error_is_journaled_after_lost_reply_and_later_enqueue ... ok
+test remote_stdio_lost_reply_resumes_using_only_id_reported_in_error ... ok
+coop daemon: MCP streamable HTTP on http://127.0.0.1:42525/mcp
+test remote_stdio_journals_fresh_intents_and_resumes_only_matching_saved_intent ... ok
+test cli_fresh_sends_are_distinct_and_explicit_resume_preserves_receipt ... ok
+coop daemon: MCP streamable HTTP on http://127.0.0.1:34769/mcp
+test resource_families_recover_dropped_https_receipts_from_source_after_restart ... ok
+test sigkill_after_partial_write_repairs_then_replays_original_intent_once ... ok
+test sigkill_after_inbox_sync_before_receipt_recovers_original_outcome ... ok
+test sigkill_before_inbox_sync_recovers_complete_operation_proof_once ... ok
+test preoperation_binary_refuses_upgraded_root_before_repairing_any_source ... ok
+test enqueue_sigkill_before_sync_partial_write_and_after_sync_recovers_once ... ok
+test update_doc_sigkill_before_sync_partial_write_and_after_sync_recovers_once ... ok
+test publish_sigkill_before_sync_partial_write_and_after_sync_recovers_once ... ok
+
+test result: ok. 20 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 14.67s
+
