@@ -1,0 +1,116 @@
+{
+  "document": "0005-across-networks.html",
+  "title": "0005 \u2014 Cooperators across LANs and the Internet",
+  "date": "2026-10-22",
+  "type": "canonical design 0005; proposed, not approved or implemented",
+  "source_commit": "2023d3c9f136b5fd1e1d93cabb373c96c5677206",
+  "scope": "Shared authority over HTTPS, optional autonomous-site federation, and separate replication/availability scope.",
+  "assumptions": [
+    "One organizational trust domain per bus initially.",
+    "Shared broker recommended unless offline site writes are required; user has not confirmed this preference."
+  ],
+  "source_sha256": {
+    "src/client.rs": "f3a2306f1c9eb1c6bc88705abccc7377f0f9d5dac50142675b23b195a1b79cd9",
+    "src/main.rs": "04e91f0f0edb607416f608fa3b87704fdd7616559740a8fb254536963b162a59",
+    "src/server.rs": "c913acb36a4c0396fb1e6b0e8c7489a741d6c683f06d711ba9aa48b3b04c0334",
+    "src/mcp.rs": "1acac9624353b2deeacfdc80fe3ac790f1dac5285b2374ea286cb07ca1877ead",
+    "src/registry.rs": "5c572fa414c984a699ab5607e99aef106d00ff5cabcdc0f95c684d96d9dde550",
+    "src/messaging.rs": "0272256f93cfff8eda0386128a5b30801f2b8968c15ddc88295437d4acee8038",
+    "src/inbox_writer.rs": "b928d0a369a484d17c0965565536c705751af02c00d2842be5fdb3bd32d11676",
+    "src/queues.rs": "f4865b1152259bd4ea43e5ebad01c8f15ffa63341a89eef9ba0dd8ba5a87c110",
+    "src/docs.rs": "dcac0993c707addfdb9116c78ed062a9686fdcd0cc66df22976e5146155676b3",
+    "src/channels.rs": "3946e0fbc5e985a8680aa3ff493ec18919daa8304de5adde521b6c0bfaeed540",
+    "src/host/mod.rs": "01182412ca7fc6ee4f333fe4972749ea62ce5529351d4de86948b24c1ad4dd79",
+    "src/host/runtime.rs": "12d4fac455327415368120162cd1c666023b67349ad8c3582ccf7222ed7dfff8",
+    "src/host_cli.rs": "c738ad32bd14f24d23013aacdf2a34286630ddec83f045095d6a2d79029c0d19",
+    "src/host_control.rs": "7e6f2295ab010bcc6986fe21a388e495c1744d78783c13ff312480ad61e18322",
+    "src/arrivals/migration.rs": "6f33abeaa25cc84ab9bebaf9dfb528ff22c9407f42aa7daa9c001beb7db79055",
+    "Cargo.toml": "fb9676f2cd646e30414c4194ab8780b5340ff2abb533d5a1fad8010cd3492bd6",
+    "Cargo.lock": "401880c50b7dabe78dc04e650a1bfa442225593461eed18ecc0af40564a7eb3f",
+    "CONTEXT.md": "f78495dba6058962f7dda8ca62d60a4675abeb5cb0b400f0dfcb9bf3cda59378",
+    "README.md": "0c89af9afec9b61a182f1c9a7877a27aced688b9c1f43fce3c85f1196a30bb13",
+    "docs/design/0001-cooperatorsd-broker.md": "023c2dccc5441dde57d1a6984043e2e47c2eda6e5f8df69f1f0961848cddd218",
+    "docs/design/0003-durable-inbox-group-commit.md": "144328b807981d1b83e4b6297640d187bcc942687399ebeb3e2733bb97f00a0d",
+    "docs/design/0004-arrival-notifications-and-agent-activation.md": "d04d8a6b40720174871516b6442643d8caceab7186954cfdd9bc355854c8dde5",
+    "docs/impl/arrivals-20261021/HANDOFF.md": "8242b149d199e32db6f51343863418c7157d6a33fa0bfd30b4271193b3bc8f9e"
+  },
+  "dependency_source": {
+    "crate": "rmcp",
+    "version": "3.2.0",
+    "path_in_crate": "src/transport/streamable_http_server/tower.rs",
+    "sha256": "5762025186afe98c163ac37a52a5adf5576eb4c3de925915ea0f76754aa5d84f"
+  },
+  "external_sources": [
+    {
+      "url": "https://modelcontextprotocol.io/specification/2026-07-28/basic/transports/streamable-http",
+      "checked": "2026-10-22"
+    },
+    {
+      "url": "https://modelcontextprotocol.io/specification/2026-07-28/basic/authorization",
+      "checked": "2026-10-22"
+    },
+    {
+      "url": "https://www.rfc-editor.org/rfc/rfc8446.html",
+      "checked": "2026-10-22"
+    },
+    {
+      "url": "https://www.rfc-editor.org/rfc/rfc9110.html#section-9.2.2",
+      "checked": "2026-10-22"
+    }
+  ],
+  "implementation_changed": false,
+  "network_tests_run": false,
+  "provider_tests_run": false,
+  "performance_tests_run": false,
+  "prior_turn_check": {
+    "command": "cargo check --offline --locked",
+    "result": "passed",
+    "scope": "local build only; not network qualification"
+  },
+  "notes": [
+    "No secrets, private source or qualification artifacts were uploaded.",
+    "No dependency installation was performed.",
+    "Promoted to docs/design at user request. Design status remains proposed; existing designs 0001-0004 remain unchanged."
+  ],
+  "document_sha256": "702d4729ce1d4c35d6b791a5e3746e1c53ca2af2a5a9e5872f39cbf3ead1b500",
+  "canonical_path": "docs/design/0005-across-networks.html",
+  "relocated_from": {
+    "document": ".agents/chatdocs/2026-10-22-across-networks-proposal.html",
+    "provenance": ".agents/chatdocs/2026-10-22-across-networks-proposal-provenance.json",
+    "document_sha256": "ae433dfa2ba7e363c8a69e9c9182a738d2add1cb7abb8d2ada171d201c92f3a5",
+    "date": "2026-10-22"
+  },
+  "prior_archive_validation": {
+    "html_links": "passed",
+    "fragment_ids": "passed",
+    "inline_svg_xml": "passed",
+    "visual_inspection": false,
+    "browser_launch": {
+      "command": "wslview .agents/chatdocs/2026-10-22-across-networks-proposal.html",
+      "sandbox_attempt": "failed: WSL interop unavailable",
+      "escalated_attempt": "exit 0; launch successful",
+      "visual_inspection": false
+    },
+    "validation_counts": {
+      "passed": true,
+      "local_links": 53,
+      "html_fragments": 10,
+      "svg_diagrams": 2,
+      "source_hashes_checked": 23,
+      "installed": false,
+      "errors": []
+    },
+    "interactive_controls": "3 native HTML details/summary elements; not exercised in a browser",
+    "installed_archive_validation": "passed: 53 local links, 10 fragments, 2 SVGs, 23 source hashes",
+    "git_diff_check": "passed"
+  },
+  "proposal_validation": {
+    "html_links": "passed",
+    "fragment_ids": "passed; original fragment IDs preserved",
+    "inline_svg_xml": "passed; both diagrams byte-identical to archive original",
+    "visual_inspection": false,
+    "browser_launch": "not repeated for relocated document; prior archive launch retained above",
+    "local_links_checked": 56,
+    "fragment_links_checked": 10
+  }
+}

@@ -1,0 +1,106 @@
+{
+  "document": "2026-10-22-across-networks-implementation-plan.html",
+  "title": "Implementing network support in Cooperators",
+  "date": "2026-10-22",
+  "type": "proposed implementation plan; no implementation execution authorized by this artifact",
+  "canonical_design": "docs/design/0005-across-networks.html",
+  "canonical_design_sha256": "702d4729ce1d4c35d6b791a5e3746e1c53ca2af2a5a9e5872f39cbf3ead1b500",
+  "source_commit": "2023d3c9f136b5fd1e1d93cabb373c96c5677206",
+  "source_sha256": {
+    "docs/design/0005-across-networks.html": "702d4729ce1d4c35d6b791a5e3746e1c53ca2af2a5a9e5872f39cbf3ead1b500",
+    "docs/design/0003-durable-inbox-group-commit.md": "144328b807981d1b83e4b6297640d187bcc942687399ebeb3e2733bb97f00a0d",
+    "docs/design/0004-arrival-notifications-and-agent-activation.md": "d04d8a6b40720174871516b6442643d8caceab7186954cfdd9bc355854c8dde5",
+    "docs/design/0002-generated-adapter-fault-mbt-plan.md": "2b09e847f094d77323679a810e2199884d392297e9922e69862fe502b88239f7",
+    "src/client.rs": "f3a2306f1c9eb1c6bc88705abccc7377f0f9d5dac50142675b23b195a1b79cd9",
+    "src/server.rs": "c913acb36a4c0396fb1e6b0e8c7489a741d6c683f06d711ba9aa48b3b04c0334",
+    "src/mcp.rs": "1acac9624353b2deeacfdc80fe3ac790f1dac5285b2374ea286cb07ca1877ead",
+    "src/registry.rs": "5c572fa414c984a699ab5607e99aef106d00ff5cabcdc0f95c684d96d9dde550",
+    "src/envelope.rs": "7f6427cb5d6bc1fc1fcb5801eac2a7ad5336d2daa25998bc8f62b2ddf9393510",
+    "src/storage.rs": "e507be55bb4a2934c248163772910218e5aaa4265e51f9a96b42dd68d745b60f",
+    "src/inbox_writer.rs": "b928d0a369a484d17c0965565536c705751af02c00d2842be5fdb3bd32d11676",
+    "src/messaging.rs": "0272256f93cfff8eda0386128a5b30801f2b8968c15ddc88295437d4acee8038",
+    "src/queues.rs": "f4865b1152259bd4ea43e5ebad01c8f15ffa63341a89eef9ba0dd8ba5a87c110",
+    "src/docs.rs": "dcac0993c707addfdb9116c78ed062a9686fdcd0cc66df22976e5146155676b3",
+    "src/arrival_api.rs": "9e4c0fb977f22eb1c052db6b060c53f461d7af60c055e519a5d26891bb271f91",
+    "src/arrivals/migration.rs": "6f33abeaa25cc84ab9bebaf9dfb528ff22c9407f42aa7daa9c001beb7db79055",
+    "src/host/mod.rs": "01182412ca7fc6ee4f333fe4972749ea62ce5529351d4de86948b24c1ad4dd79",
+    "src/host/runtime.rs": "12d4fac455327415368120162cd1c666023b67349ad8c3582ccf7222ed7dfff8",
+    "src/host_cli.rs": "c738ad32bd14f24d23013aacdf2a34286630ddec83f045095d6a2d79029c0d19",
+    "src/host_control.rs": "7e6f2295ab010bcc6986fe21a388e495c1744d78783c13ff312480ad61e18322",
+    "Cargo.toml": "fb9676f2cd646e30414c4194ab8780b5340ff2abb533d5a1fad8010cd3492bd6",
+    "Cargo.lock": "401880c50b7dabe78dc04e650a1bfa442225593461eed18ecc0af40564a7eb3f",
+    "TASKS.md": "425645027a281949b9021e0979e33eade15ae742642c0285481103ff61f11a7c",
+    "CONTEXT.md": "f78495dba6058962f7dda8ca62d60a4675abeb5cb0b400f0dfcb9bf3cda59378",
+    "spec/mbt/README.md": "2ea9a734d8ba0ffa9ab2b7ba83be20eaacd7d1726b2fc1547d9cdb56a3b6f1b8",
+    "spec/mbt/generate_fault_interfaces.py": "275693c84229947a7aece7c11c598e985e1364cfd020a5aaebc71717d1a85d5e",
+    "scripts/qualify_arrivals.py": "d59665275b16c968daa8a53cb7aac228bf04bf8d4950229c3ec3b2e18ffcbc58",
+    "docs/impl/arrivals-20261021/HANDOFF.md": "8242b149d199e32db6f51343863418c7157d6a33fa0bfd30b4271193b3bc8f9e"
+  },
+  "scope": {
+    "first_release": "A-controlled",
+    "separate_interoperability_gate": "A-MCP",
+    "follow_on": "B / N6 when autonomous LAN operation is required",
+    "replication": "C requires a separate plan"
+  },
+  "wave_status": {
+    "N0": "planned, not executed",
+    "N1": "planned, not executed",
+    "N2": "planned, not executed",
+    "N3a": "planned, not executed",
+    "N3b": "planned, not executed",
+    "N3c": "planned, not executed",
+    "N4": "planned, not executed",
+    "N5": "planned, not executed",
+    "N6": "planned, not executed"
+  },
+  "read_only_cache_observation": [
+    "reqwest 0.12.28",
+    "rustls 0.23.43",
+    "rustls 0.23.45",
+    "hyper-rustls 0.27.10",
+    "webpki-roots 1.0.9"
+  ],
+  "cache_observation_limit": "Archive presence only; full dependency closure and selected feature graph not checked.",
+  "implementation_tests_run": false,
+  "network_tests_run": false,
+  "model_checks_run": false,
+  "provider_tests_run": false,
+  "document_validation": {
+    "html_links": "passed",
+    "fragment_ids": "passed",
+    "inline_svg_xml": "passed",
+    "visual_inspection": false,
+    "browser_launch": {
+      "command": "wslview /home/lsz/Codebase/Cooperators/.agents/chatdocs/2026-10-22-across-networks-implementation-plan.html",
+      "exit_code": 0,
+      "stderr": "",
+      "visual_inspection": false
+    },
+    "validation_counts": {
+      "passed": true,
+      "local_links": 53,
+      "html_fragments": 8,
+      "svg_diagrams": 1,
+      "source_hashes_checked": 28,
+      "installed": false,
+      "errors": []
+    },
+    "interactive_controls": "Navigation anchors only; no scripts or disclosure controls",
+    "installed_validation": {
+      "passed": true,
+      "local_links": 53,
+      "html_fragments": 8,
+      "svg_diagrams": 1,
+      "source_hashes_checked": 28,
+      "installed": true,
+      "errors": []
+    }
+  },
+  "document_sha256": "806c7522810f40248dc115868576bdc7806088b2315cf91dfff0046a2e729d01",
+  "index_before_sha256": "b036f034439853bd4b54fd1b9c87f533f92ae3f8bd0c661cbeccfb4b487aa4da",
+  "notes": [
+    "Existing canonical design and production source remain unchanged.",
+    "Earlier uncommitted design and archive work is preserved.",
+    "External protocol references are inherited from design 0005; this plan adds implementation gates, not new protocol qualification."
+  ]
+}
