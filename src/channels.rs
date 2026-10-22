@@ -285,6 +285,18 @@ impl DaemonState {
         limit: usize,
         wait: Duration,
     ) -> Result<ChannelReadBatch, BrokerError> {
+        self.read_channel_limited(channel, cursor, limit, wait, None)
+            .await
+    }
+
+    pub(crate) async fn read_channel_limited(
+        &self,
+        channel: &str,
+        cursor: Option<ChannelCursor>,
+        limit: usize,
+        wait: Duration,
+        byte_limit: Option<usize>,
+    ) -> Result<ChannelReadBatch, BrokerError> {
         validate_channel_name(channel)?;
         if limit == 0 || limit > MAX_READ_LIMIT {
             return Err(BrokerError::invalid(format!(
@@ -318,13 +330,25 @@ impl DaemonState {
                 let log = logs
                     .get_mut(channel)
                     .expect("channel log is present after insertion");
-                let messages = log
+                if byte_limit.is_some() && start.seq > log.log.seq_head() {
+                    return Err(BrokerError::invalid(
+                        "channel cursor exceeds committed head",
+                    ));
+                }
+                let mut budget =
+                    byte_limit.map(|bytes| crate::network::page::PageBudget::new(limit, bytes));
+                let first = log
                     .records
-                    .iter()
-                    .filter(|record| record.seq > start.seq)
-                    .take(limit)
-                    .cloned()
-                    .collect::<Vec<_>>();
+                    .partition_point(|record| record.seq <= start.seq);
+                let mut messages = Vec::new();
+                for record in log.records[first..].iter().take(limit) {
+                    if let Some(budget) = &mut budget {
+                        if !budget.admit(record)? {
+                            break;
+                        }
+                    }
+                    messages.push(record.clone());
+                }
                 let head = ChannelCursor::new(channel, log.log.seq_head());
                 let notified = Arc::clone(&log.notify).notified_owned();
                 (messages, head, notified)

@@ -1140,6 +1140,16 @@ impl DaemonState {
                     ));
                 }
             }
+            let body_budget = byte_limit.map(|maximum| {
+                maximum.saturating_sub(
+                    // Blob responses carry MIME at both the document and body levels.
+                    crate::rpc::bounded_json_size(
+                        &(&version.title, &version.mime, &version.mime),
+                        maximum,
+                    )
+                    .unwrap_or(maximum),
+                )
+            });
             let version = version.clone();
             let claim = runtime.claim.as_ref().map(claim_view);
             (
@@ -1149,16 +1159,26 @@ impl DaemonState {
                 runtime.fence,
                 runtime.versions.len(),
                 runtime.updated_at.clone(),
+                body_budget,
             )
         };
-        let (version, head, claim, fence, versions, updated_at) = snapshot;
+        let (version, head, claim, fence, versions, updated_at, body_budget) = snapshot;
         let body = if let Some(body) = version.body {
             body
         } else if let Some(blob) = &version.blob {
             Body::new(
                 version.mime.clone(),
-                match byte_limit {
-                    Some(maximum) => load_blob_limited(&self.root, blob, maximum)?,
+                match body_budget {
+                    Some(maximum) => {
+                        let text = load_blob_limited(&self.root, blob, maximum)?;
+                        if crate::rpc::bounded_json_size(&text, maximum).is_none() {
+                            return Err(BrokerError::application(
+                                ErrorCode::ResourceExhausted,
+                                "encoded document body exceeds remote budget",
+                            ));
+                        }
+                        text
+                    }
                     None => load_blob(&self.root, blob)?,
                 },
             )
@@ -1224,6 +1244,93 @@ impl DaemonState {
             prefix: prefix.map(str::to_string),
             docs,
         })
+    }
+
+    /// Select only authorized keys before copying metadata. The candidate set
+    /// stays at limit + 1 even when the root contains many inaccessible docs.
+    pub(crate) async fn list_docs_page(
+        &self,
+        prefix: Option<&str>,
+        after: Option<&str>,
+        limit: usize,
+        bytes: usize,
+        allows: impl Fn(&str) -> bool,
+    ) -> Result<(ListDocsResponse, Option<String>), BrokerError> {
+        let _send_guard = self.send_lock.lock().await;
+        let mut names = std::collections::BTreeSet::new();
+        for (name, runtime) in self.doc_states.lock().await.iter() {
+            if prefix.is_some_and(|prefix| !name.starts_with(prefix))
+                || after.is_some_and(|after| name.as_str() <= after)
+                || runtime.head_version().is_none()
+                || !allows(name)
+            {
+                continue;
+            }
+            names.insert(name.clone());
+            if names.len() > limit + 1 {
+                names.pop_last();
+            }
+        }
+        let mut budget = crate::network::page::PageBudget::new(limit, bytes);
+        let now_ms = id::unix_millis();
+        let mut docs: Vec<DocSummary> = Vec::new();
+        let mut next = None;
+        for name in names {
+            let mut logs = self.docs.lock().await;
+            let Some(log) = logs.get_mut(&name) else {
+                continue;
+            };
+            let mut states = self.doc_states.lock().await;
+            let Some(runtime) = states.get_mut(&name) else {
+                continue;
+            };
+            self.expire_doc_claim(&name, log, runtime, now_ms)?;
+            let Some(head) = runtime.head_version() else {
+                continue;
+            };
+            #[derive(Serialize)]
+            struct Summary<'a> {
+                name: &'a str,
+                head_version: u64,
+                title: &'a str,
+                mime: &'a str,
+                versions: usize,
+                updated_at: &'a str,
+                fence: u64,
+                claim: Option<DocClaimView>,
+            }
+            let view = Summary {
+                name: &name,
+                head_version: runtime.head,
+                title: &runtime.title,
+                mime: &head.mime,
+                versions: runtime.versions.len(),
+                updated_at: &runtime.updated_at,
+                fence: runtime.fence,
+                claim: runtime.claim.as_ref().map(claim_view),
+            };
+            if !budget.admit(&view)? {
+                next = docs.last().map(|doc| doc.name.clone());
+                break;
+            }
+            docs.push(DocSummary {
+                name: name.clone(),
+                head_version: view.head_version,
+                title: view.title.into(),
+                mime: view.mime.into(),
+                versions: view.versions,
+                updated_at: view.updated_at.into(),
+                fence: view.fence,
+                claim: view.claim,
+            });
+        }
+        Ok((
+            ListDocsResponse {
+                prefix: prefix.map(str::to_owned),
+                docs,
+            },
+            next,
+        ))
     }
 
     pub(crate) async fn doc_for_lease(&self, lease_id: &str) -> Option<String> {

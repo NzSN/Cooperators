@@ -67,6 +67,19 @@ impl DaemonState {
         blocking(move || service.list(&agent_id)).await
     }
 
+    pub(crate) async fn list_arrival_subscriptions_page(
+        &self,
+        identity: &AgentIdentity,
+        after: Option<String>,
+        limit: usize,
+        bytes: usize,
+        allows: impl Fn(&ArrivalResource) -> bool + Send + 'static,
+    ) -> Result<(SubscriptionList, Option<String>), BrokerError> {
+        let service = self.arrival_service()?;
+        let agent_id = identity.agent_id.clone();
+        blocking(move || service.list_page(&agent_id, after.as_deref(), limit, bytes, allows)).await
+    }
+
     pub async fn wait_arrivals(
         &self,
         identity: &AgentIdentity,
@@ -76,6 +89,19 @@ impl DaemonState {
     ) -> Result<WaitArrivals, BrokerError> {
         self.arrival_service()?
             .wait(&identity.agent_id, cursor, timeout, limit)
+            .await
+    }
+
+    pub(crate) async fn wait_arrivals_limited(
+        &self,
+        identity: &AgentIdentity,
+        cursor: Option<&str>,
+        timeout: Duration,
+        limit: usize,
+        bytes: usize,
+    ) -> Result<WaitArrivals, BrokerError> {
+        self.arrival_service()?
+            .wait_limited(&identity.agent_id, cursor, timeout, limit, Some(bytes))
             .await
     }
 

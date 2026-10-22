@@ -35,7 +35,7 @@ with (args.output / "command.log").open("w") as log:
     result = subprocess.run(command, cwd=root, stdout=log, stderr=subprocess.STDOUT)
 after = manifest()
 text = (args.output / "command.log").read_text(errors="replace")
-counts = [tuple(map(int, row)) for row in re.findall(r"test result: ok\. (\d+) passed; (\d+) failed; (\d+) ignored;", text)]
+counts = [tuple(map(int, row)) for row in re.findall(r"test result: (?:ok|FAILED)\. (\d+) passed; (\d+) failed; (\d+) ignored;", text)]
 skips = len(re.findall(r"(?m)^SKIP", text))
 required = bool(os.getenv("COOP_REQUIRE_UDS") or os.getenv("COOP_REQUIRE_REMOTE"))
 receipt = {

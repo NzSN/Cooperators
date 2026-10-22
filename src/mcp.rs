@@ -32,7 +32,7 @@ use http::header;
 use http::{HeaderMap, Method, Request, Response, StatusCode};
 use http_body::Body;
 use http_body_util::combinators::BoxBody;
-use http_body_util::{BodyExt, Full};
+use http_body_util::{BodyExt, Full, Limited};
 use rmcp::handler::server::ServerHandler;
 use rmcp::model::{
     CallToolRequestParams, CallToolResponse, CallToolResult, Implementation, JsonObject,
@@ -429,7 +429,9 @@ fn client_error_to_rpc(error: ClientError) -> RpcError {
             RpcError::application(ErrorCode::DaemonUnreachable, detail)
         }
         ClientError::HttpStatus(status) => RpcError::application_with_data(
-            ErrorCode::DaemonUnreachable,
+            ClientError::HttpStatus(status)
+                .error_code()
+                .unwrap_or(ErrorCode::DaemonUnreachable),
             "broker HTTP request rejected",
             json!({"http_status":status}),
         ),
@@ -614,6 +616,9 @@ impl CoopMcpHandler {
 
     fn visible_catalog(&self) -> Vec<Tool> {
         let mut tools = cached_tool_catalog().to_vec();
+        let remote = matches!(&self.backend, Backend::Remote(_))
+            || self.auth == AuthMode::HttpHeader
+                && matches!(&self.backend, Backend::Embedded(state) if state.network().is_some());
         if matches!(&self.backend, Backend::Remote(_)) {
             tools.retain(|tool| {
                 spec_for_tool(tool.name.as_ref()).is_some_and(|spec| {
@@ -644,6 +649,41 @@ impl CoopMcpHandler {
                 "Confirm this binding's activation nonce without resolving its pending work.",
                 schema_object(schema_confirm_activation()),
             ));
+        }
+        if remote {
+            for tool in &mut tools {
+                let schema = Arc::make_mut(&mut tool.input_schema);
+                if let Some(properties) =
+                    schema.get_mut("properties").and_then(Value::as_object_mut)
+                {
+                    match tool.name.as_ref() {
+                        "coop_list_docs"
+                        | "coop_list_agents"
+                        | "coop_list_arrival_subscriptions" => {
+                            properties.insert("cursor".into(), json!({"type":"object"}));
+                            properties.insert(
+                                "limit".into(),
+                                json!({"type":"integer","minimum":1,"maximum":64}),
+                            );
+                        }
+                        "coop_read_channel" | "coop_wait_arrivals" => {
+                            properties.insert(
+                                "limit".into(),
+                                json!({"type":"integer","minimum":1,"maximum":64}),
+                            );
+                        }
+                        _ => {}
+                    }
+                    for key in ["timeout_s", "wait_s"] {
+                        if let Some(parameter) = properties.get_mut(key) {
+                            parameter["maximum"] = json!(25);
+                            if key == "timeout_s" {
+                                parameter["default"] = json!(25);
+                            }
+                        }
+                    }
+                }
+            }
         }
         tools
     }
@@ -741,24 +781,47 @@ impl CoopMcpHandler {
             };
         }
         let spec = spec.expect("known broker tool");
+        if self.auth == AuthMode::HttpHeader && token.is_none() {
+            return tool_error(
+                ErrorCode::Unauthenticated.rpc_code(),
+                "HTTP bearer credential required",
+                "UNAUTHENTICATED",
+            )
+            .into();
+        }
         if let Some(token) = token {
             if let Value::Object(map) = &mut params {
-                if self.auth == AuthMode::HttpHeader
-                    && map
-                        .get("token")
-                        .is_some_and(|body| body.as_str() != Some(&token))
-                {
+                let replacement = map
+                    .get("token")
+                    .is_some_and(|body| body.as_str() != Some(&token));
+                let bind = if !replacement || managed || self.auth == AuthMode::HttpHeader {
+                    true
+                } else {
+                    match &self.backend {
+                        Backend::Remote(_) => true,
+                        Backend::Embedded(state) => {
+                            let registry = state.registry.read().await;
+                            registry.authenticate(&token).is_none_or(|identity| {
+                                registry.network_grant(&identity.agent_id).is_some()
+                            })
+                        }
+                        Backend::Uds { .. } => self
+                            .backend
+                            .call("instance_metadata", json!({"token":token}))
+                            .await
+                            .map_or(true, |metadata| metadata["network_scoped"] == true),
+                    }
+                };
+                if replacement && bind {
                     return tool_error(
                         ErrorCode::Forbidden.rpc_code(),
-                        "body credential cannot replace HTTP identity",
+                        "body credential cannot replace captured transport identity",
                         "FORBIDDEN",
                     )
                     .into();
                 }
-                if managed || self.auth == AuthMode::HttpHeader {
+                if bind {
                     map.insert("token".into(), Value::String(token));
-                } else {
-                    map.entry("token").or_insert(Value::String(token));
                 }
             }
         }
@@ -827,7 +890,17 @@ impl CoopMcpHandler {
                 if spec.method == "retire_agent" && self.auth == AuthMode::Captured {
                     *self.token.write().await = None;
                 }
-                CallToolResult::structured(result).into()
+                let result = CallToolResult::structured(result);
+                if rpc::bounded_json_size(&result, crate::transport::MAX_RPC_BYTES - 1024).is_none()
+                {
+                    return tool_error(
+                        ErrorCode::ResourceExhausted.rpc_code(),
+                        "MCP response exceeds limit; request a smaller page",
+                        "RESOURCE_EXHAUSTED",
+                    )
+                    .into();
+                }
+                result.into()
             }
             Err(error) => CallToolResult::structured_error(canonical_error(&error)).into(),
         }
@@ -1034,6 +1107,9 @@ pub async fn serve_http(listener: TcpListener, state: Arc<DaemonState>) -> io::R
                     .header_read_timeout(Duration::from_secs(10))
                     .max_headers(32)
                     .max_buf_size(64 * 1024)
+                    // Remote requests have finite lifetimes; idle keep-alive
+                    // sockets must not consume all enrollment/renewal slots.
+                    .keep_alive(state.network().is_none())
                     .serve_connection(
                         io,
                         hyper::service::service_fn(move |request| {
@@ -1065,9 +1141,6 @@ where
     let response = match path.as_str() {
         "/v1/rpc" | "/v1/enroll" | "/v1/info" if state.network().is_some() => {
             crate::network::handle_network_http(state, request).await
-        }
-        "/v1/rpc" if state.config().remote_read_only => {
-            crate::network::handle_native_read(state, request).await
         }
         "/healthz" => {
             if request.method() != Method::GET {
@@ -1125,6 +1198,73 @@ where
                 };
                 if !authenticated {
                     unauthorized("invalid bearer token")
+                } else if let Some(network) = state.network() {
+                    if request.method() != Method::POST {
+                        return method_not_allowed();
+                    }
+                    let context = match network.authenticate(state, &token).await {
+                        Ok(context) => context,
+                        Err(_) => return unauthorized("invalid bearer token"),
+                    };
+                    let permit = match network.request_permit(&context.principal_id, false) {
+                        Ok(permit) => permit,
+                        Err(_) => {
+                            return http_json(
+                                StatusCode::TOO_MANY_REQUESTS,
+                                json!({"error":"principal request capacity exhausted"}),
+                            )
+                        }
+                    };
+                    let (parts, body) = request.into_parts();
+                    let body = body.map_err(|_| io::Error::other("request body interrupted"));
+                    let bytes = match tokio::time::timeout(
+                        Duration::from_secs(10),
+                        Limited::new(body, crate::transport::MAX_RPC_BYTES).collect(),
+                    )
+                    .await
+                    {
+                        Ok(Ok(body)) => body.to_bytes(),
+                        Ok(Err(_)) => {
+                            return http_json(
+                                StatusCode::PAYLOAD_TOO_LARGE,
+                                json!({"error":"request body exceeds limit or is incomplete"}),
+                            )
+                        }
+                        Err(_) => {
+                            return http_json(
+                                StatusCode::REQUEST_TIMEOUT,
+                                json!({"error":"request body deadline exceeded"}),
+                            )
+                        }
+                    };
+                    drop(permit);
+                    if serde_json::from_slice::<Value>(&bytes)
+                        .ok()
+                        .and_then(|v| v.get("id").cloned())
+                        .is_some_and(|id| rpc::bounded_json_size(&id, 512).is_none())
+                    {
+                        return http_json(
+                            StatusCode::BAD_REQUEST,
+                            json!({"error":"request ID exceeds limit"}),
+                        );
+                    }
+                    if network.authenticate(state, &token).await.is_err() {
+                        return unauthorized("credential revoked while receiving request");
+                    }
+                    // The live policy above owns Host/Origin checks. Recreate
+                    // the stateless service so policy replacement cannot leave
+                    // a stale second allowlist in the rmcp service.
+                    let mut service = http_service(Arc::clone(state));
+                    let request = Request::from_parts(parts, Full::new(bytes));
+                    match tokio::time::timeout(Duration::from_secs(30), service.call(request)).await
+                    {
+                        Ok(Ok(response)) => response,
+                        Ok(Err(never)) => match never {},
+                        Err(_) => http_json(
+                            StatusCode::REQUEST_TIMEOUT,
+                            json!({"error":"request deadline exceeded"}),
+                        ),
+                    }
                 } else {
                     let mut service = service.clone();
                     match service.call(request).await {
@@ -1194,13 +1334,16 @@ fn method_not_allowed() -> Response<BoxBody<Bytes, Infallible>> {
 }
 
 fn bearer_token(headers: &HeaderMap) -> Option<String> {
+    if headers.get_all(header::AUTHORIZATION).iter().count() != 1 {
+        return None;
+    }
     let value = headers.get(header::AUTHORIZATION)?.to_str().ok()?;
     let (scheme, token) = value.split_once(' ')?;
     if !scheme.eq_ignore_ascii_case("bearer") {
         return None;
     }
     let token = token.trim();
-    (!token.is_empty()).then(|| token.to_string())
+    (!token.is_empty() && token.len() <= 4096).then(|| token.to_string())
 }
 
 // ---------------------------------------------------------------------------

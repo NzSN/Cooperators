@@ -1,0 +1,26 @@
+{
+  "tools": {
+    "/home/nzsn/Repos/Mirrors/.lake/build/bin/mirror": "cb790cfc85b5152769d4d9efd7638a09a40b8dafd93276e5dd223a8b37ca348f",
+    "/home/nzsn/Repos/Mirrors/.lake/build/bin/model_interface_gen": "143fbe36a1143771d8ee15b76eb0ae6e661f70a7d4c04e58eba1af67ade05c35"
+  },
+  "mirror_rust_commit": "5049e99886a3d1f775e60190478c26e39c9aefc9",
+  "mirror_rust_status": " M tests/protocol.rs\n",
+  "mirror_rust_sources": {
+    "Cargo.toml": "dc7529ce6edbdc1096ff935b90be2ce4ff667dd5aac4edd90f3db3a82d25a01a",
+    "Cargo.lock": "9b00e2e1be5928f6f45b7b6a877deee23aca627724c017415182489ca2396c8f",
+    "src/lib.rs": "971cc43eee0eff44e0f2ad01a0e1de88c583d022e811a15f608c96757c531b62",
+    "src/transport.rs": "feccfdf438d977ec324016a4c7a955bb8b01ff4099442505bbf0f9ba08f70528",
+    "src/protocol.rs": "44c37530eed7350567bfa575d06eaa989c38e3d96c39db8a97f36e7f189358ca",
+    "src/json.rs": "ef20283713e020529d022fc67f8b92eef8027912f58fa78e04a897c16d739c19",
+    "src/model_interface.rs": "3d6ada4b8526fa6aa7d0ce5f2d824498160285d110b6cf53dbe77d9cd1174c6d",
+    "src/schedule.rs": "53805b9de7521c928a3ade593efc7609a7f165f68f41a1ede12be899f6cb336b",
+    "src/spec.rs": "6a13de7cfa6fbdb7c3a572b7479b94efd1902b9514cccb192687b058cc72cd4f",
+    "src/schedule_binding.rs": "75bfe6e2b097af2007c14d1efb5881d08e990229b80a121d24f24e294c1e0ccf",
+    "src/registry.rs": "97458ada08ffd4e00392d6c630ea353bce83969048ec58da4a678e646ef0b0cf",
+    "src/schedule_exploration.rs": "82ad16ea0e05cfe29dc14929ffdc1a7100ee41cae2bbf924c5bcf75ed0c7b079",
+    "src/client.rs": "c038f8eeae439e501e72f8966c31c97e76cfe5edf494d4cb536dc1948e542f87"
+  },
+  "rustc": "rustc 1.96.0 (ac68faa20 2026-05-25)",
+  "cargo": "cargo 1.96.0 (30a34c682 2026-05-25)",
+  "scope": "Local required-socket fixture and retained-trace regression only; no external deployment/provider qualification."
+}

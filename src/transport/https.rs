@@ -87,32 +87,47 @@ pub(super) async fn call(
         }
     })?;
     let status = response.status();
-    if !status.is_success() {
-        return Err(if status.is_server_error() {
-            uncertain(
-                method,
-                "HTTPS upstream failed; the request may have committed",
-            )
-        } else {
-            ClientError::HttpStatus(status.as_u16())
-        });
+    if status.is_server_error() {
+        return Err(uncertain(
+            method,
+            "HTTPS upstream failed; the request may have committed",
+        ));
+    }
+    if !status.is_success() && !status.is_client_error() {
+        return Err(ClientError::HttpStatus(status.as_u16()));
     }
     if response
         .content_length()
         .is_some_and(|length| length > MAX_RPC_BYTES as u64)
     {
+        if status.is_client_error() {
+            return Err(ClientError::HttpStatus(status.as_u16()));
+        }
         return Err(uncertain(method, "broker response exceeds 4 MiB"));
     }
     let mut bytes = Vec::new();
-    while let Some(chunk) = response
-        .chunk()
-        .await
-        .map_err(|_| uncertain(method, "HTTPS response was interrupted"))?
-    {
+    while let Some(chunk) = response.chunk().await.map_err(|_| {
+        if status.is_client_error() {
+            ClientError::HttpStatus(status.as_u16())
+        } else {
+            uncertain(method, "HTTPS response was interrupted")
+        }
+    })? {
         if bytes.len().saturating_add(chunk.len()) > MAX_RPC_BYTES {
+            if status.is_client_error() {
+                return Err(ClientError::HttpStatus(status.as_u16()));
+            }
             return Err(uncertain(method, "broker response exceeds 4 MiB"));
         }
         bytes.extend_from_slice(&chunk);
+    }
+    if status.is_client_error() {
+        // Preserve the broker's typed denial without treating an HTTP error
+        // page or a mismatched JSON-RPC response as a trusted outcome.
+        return match decode(&bytes) {
+            Err(ClientError::Rpc(error)) => Err(ClientError::Rpc(error)),
+            _ => Err(ClientError::HttpStatus(status.as_u16())),
+        };
     }
     match decode(&bytes) {
         Err(ClientError::Protocol(_)) => Err(uncertain(method, "invalid broker JSON-RPC response")),

@@ -86,9 +86,9 @@ impl NetworkPolicy {
             ));
         }
         for host in &self.allowed_hosts {
-            if host.len() > 256
-                || host.parse::<http::uri::Authority>().is_err()
-                || host.contains(['*', '@', '/'])
+            if !host
+                .parse::<http::uri::Authority>()
+                .is_ok_and(|a| explicit_authority(&a))
             {
                 return Err(BrokerError::invalid(
                     "network hosts must be explicit authorities",
@@ -136,7 +136,7 @@ impl NetworkPolicy {
                     || permission.resources.iter().any(|r| {
                         r.is_empty()
                             || r.len() > 256
-                            || r.trim_end_matches('*').contains('*')
+                            || r.strip_suffix('*').unwrap_or(r).contains('*')
                             || r.chars().any(char::is_control)
                     })
                 {
@@ -185,17 +185,22 @@ impl NetworkPolicy {
     }
 
     pub fn headers_allowed(&self, headers: &http::HeaderMap) -> bool {
+        if headers.get_all(http::header::HOST).iter().count() != 1
+            || headers.get_all(http::header::ORIGIN).iter().count() > 1
+        {
+            return false;
+        }
         let host = headers
             .get(http::header::HOST)
             .and_then(|h| h.to_str().ok())
-            .and_then(|s| s.parse::<http::uri::Authority>().ok());
+            .and_then(|s| s.parse::<http::uri::Authority>().ok())
+            .filter(explicit_authority);
         let Some(host) = host else { return false };
         if !self.allowed_hosts.iter().any(|allowed| {
             let a = allowed
                 .parse::<http::uri::Authority>()
                 .expect("validated authority");
-            a.host().eq_ignore_ascii_case(host.host())
-                && a.port_u16().is_none_or(|p| Some(p) == host.port_u16())
+            a.host().eq_ignore_ascii_case(host.host()) && a.port() == host.port()
         }) {
             return false;
         }
@@ -207,6 +212,14 @@ impl NetworkPolicy {
                 .is_some_and(|origin| self.allowed_origins.iter().any(|allowed| allowed == origin)),
         }
     }
+}
+
+fn explicit_authority(authority: &http::uri::Authority) -> bool {
+    let raw = authority.as_str();
+    raw.len() <= 256
+        && !authority.host().is_empty()
+        && !raw.contains(['*', '@', '/'])
+        && (raw == authority.host() || authority.port_u16().is_some())
 }
 
 fn resource_matches(pattern: &str, resource: &str) -> bool {

@@ -298,6 +298,69 @@ impl DaemonState {
         Ok(views)
     }
 
+    pub(crate) async fn list_agents_page(
+        &self,
+        include_stale: bool,
+        after: Option<&str>,
+        limit: usize,
+        bytes: usize,
+        allows: impl Fn(&str) -> bool,
+    ) -> Result<(Vec<AgentView>, Option<String>), BrokerError> {
+        self.sweep_presence().await?;
+        let registry = self.registry.read().await;
+        let presence = self.presence.lock().await;
+        let mut budget = crate::network::page::PageBudget::new(limit, bytes);
+        let mut views: Vec<AgentView> = Vec::new();
+        let mut next = None;
+        for (name, record) in registry.records_with_names() {
+            if after.is_some_and(|after| name <= after) || !allows(&record.agent_id) {
+                continue;
+            }
+            let entry = presence.entries.get(&record.agent_id);
+            let state = entry.map_or(AgentState::Active, |entry| entry.state);
+            if !include_stale && state != AgentState::Active {
+                continue;
+            }
+            let last_seen = entry.map_or_else(
+                || record.registered_at.clone(),
+                |entry| id::format_rfc3339_millis(entry.last_seen_ms),
+            );
+            #[derive(Serialize)]
+            struct View<'a> {
+                agent_id: &'a str,
+                name: &'a str,
+                kind: &'a str,
+                capabilities: &'a [String],
+                state: AgentState,
+                last_seen: &'a str,
+                registered_at: &'a str,
+            }
+            let view = View {
+                agent_id: &record.agent_id,
+                name,
+                kind: &record.kind,
+                capabilities: &record.capabilities,
+                state,
+                last_seen: &last_seen,
+                registered_at: &record.registered_at,
+            };
+            if !budget.admit(&view)? {
+                next = views.last().map(|view| view.name.clone());
+                break;
+            }
+            views.push(AgentView {
+                agent_id: record.agent_id.clone(),
+                name: name.into(),
+                kind: record.kind.clone(),
+                capabilities: record.capabilities.clone(),
+                state,
+                last_seen,
+                registered_at: record.registered_at.clone(),
+            });
+        }
+        Ok((views, next))
+    }
+
     /// Returns the current presence snapshot for one authenticated agent.
     pub async fn heartbeat(
         &self,

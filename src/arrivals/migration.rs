@@ -50,7 +50,10 @@ pub fn prepare(
     let path = directory.join(ARRIVAL_META_FILE);
     if registry.arrivals_enabled() {
         return match read_meta(&path) {
-            Ok(meta) => Ok(Some(meta)),
+            Ok(meta) => {
+                validate_network_identity(registry, &meta)?;
+                Ok(Some(meta))
+            }
             Err(error) => {
                 registry.fence_activation();
                 Err(error)
@@ -81,6 +84,7 @@ pub fn prepare(
         }
         Err(error) => return Err(error),
     };
+    validate_network_identity(registry, &meta)?;
     // An orphan metadata file can predate a crash before directory sync. Sync
     // all three entries again when reusing it, before the registry guard moves.
     File::open(&path)?.sync_all()?;
@@ -88,6 +92,38 @@ pub fn prepare(
     File::open(root)?.sync_all()?;
     registry.promote_arrivals()?;
     Ok(Some(meta))
+}
+
+fn validate_network_identity(
+    registry: &mut Registry,
+    meta: &ArrivalMeta,
+) -> Result<(), BrokerError> {
+    if registry
+        .network_meta()
+        .is_some_and(|network| network.bus_id != meta.bus_id)
+    {
+        registry.fence_activation();
+        return Err(BrokerError::internal(
+            "network and arrival bus identities conflict",
+        ));
+    }
+    Ok(())
+}
+
+pub(crate) fn read_existing_meta(root: &Path) -> Result<Option<ArrivalMeta>, BrokerError> {
+    let path = root.join(NOTIFICATIONS_DIRECTORY).join(ARRIVAL_META_FILE);
+    match read_meta(&path) {
+        Ok(meta) => Ok(Some(meta)),
+        Err(BrokerError::Io(error)) if error.kind() == io::ErrorKind::NotFound => Ok(None),
+        Err(error) => Err(error),
+    }
+}
+
+pub(crate) fn sync_existing_meta(root: &Path) -> io::Result<()> {
+    let directory = root.join(NOTIFICATIONS_DIRECTORY);
+    File::open(directory.join(ARRIVAL_META_FILE))?.sync_all()?;
+    File::open(&directory)?.sync_all()?;
+    File::open(root)?.sync_all()
 }
 
 fn read_meta(path: &Path) -> Result<ArrivalMeta, BrokerError> {
@@ -148,7 +184,7 @@ fn persist_meta(directory: &Path, path: &Path, meta: &ArrivalMeta) -> Result<(),
 /// Sync each newly created directory and its parent before returning. This
 /// also handles a previously nonexistent bus root, rather than syncing only
 /// entries inside a root whose own parent entry is still uncertain.
-fn durable_create_directory(path: &Path) -> io::Result<()> {
+pub(crate) fn durable_create_directory(path: &Path) -> io::Result<()> {
     if path.as_os_str().is_empty() || path == Path::new(".") {
         return Ok(());
     }

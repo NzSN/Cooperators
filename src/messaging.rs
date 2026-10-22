@@ -451,6 +451,11 @@ impl DaemonState {
                     start = explicit_start.unwrap_or(inbox.acked_seq);
                     initialized = true;
                 }
+                if byte_limit.is_some()
+                    && start > inbox.records.last().map_or(0, |record| record.seq)
+                {
+                    return Err(BrokerError::invalid("inbox cursor exceeds committed head"));
+                }
 
                 let now_ms = inbox_now(&self.root);
                 let mut messages = Vec::new();
@@ -471,7 +476,7 @@ impl DaemonState {
                     if let Some(maximum) = byte_limit {
                         let size = crate::rpc::bounded_json_size(
                             record,
-                            maximum.saturating_sub(encoded_bytes),
+                            maximum.saturating_sub(encoded_bytes + 1),
                         );
                         let Some(size) = size else {
                             if messages.is_empty() {

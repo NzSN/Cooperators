@@ -1,150 +1,112 @@
 # Network implementation checkpoint
 
-Date: 2026-10-22. Execution stopped at the user's explicit request.
-Base commit: `27d6e901a683b2c651f8bbf9a3be017f3a5b22a2` on `main`.
+Date: 2026-10-22. Resumed from checkpoint commit
+`44900f39e6d891da97f486fe275e72a413cbb952` on `main`.
 
-This checkpoint preserves **N0 and the source-pinned N1 transport gate, plus
-unfinished N2 work**. It is not an accepted Internet deployment or a complete
-implementation of design 0005. No build or runtime test was started after the
-stop request; checkpoint preparation only preserved evidence and publication
-state.
+**N2's local authorization, migration and bounded-read gate passed.**
+Qualification ran on the working tree based on that commit; acceptance is bound
+to the exact source manifests, not to the base Git HEAD. N3a is the next wave.
+This is not an accepted Internet deployment or the complete design 0005 release.
 
 ## Design and execution records
 
 - [Canonical design 0005](docs/design/0005-across-networks.html).
 - [Ordered implementation plan](.agents/chatdocs/2026-10-22-across-networks-implementation-plan.html).
 - [Execution tracker](docs/impl/networks-20261022/README.md).
-- [Method contract inventory](spec/network/methods.json) and
-  [format/retry obligations](spec/network/README.md).
+- [N2 implementation and contracts](docs/impl/networks-20261022/N2-security/README.md).
+- [Final evidence summary](docs/impl/networks-20261022/N2-security/resume-20261022/summary.json).
+- [Method inventory](spec/network/methods.json) and
+  [retry/format obligations](spec/network/README.md).
 
 The first release remains one shared authority with controlled coop clients.
-Whether autonomous LAN operation is required has not been selected. Generic
-remote MCP/OAuth interoperability and N6 federation have separate gates.
+Autonomous LAN operation has not been selected. Generic remote MCP/OAuth
+interoperability and N6 federation retain separate gates.
 
 ## Results actually obtained
 
-| Source scope | Check | Result |
-|---|---|---|
-| Unchanged pre-network baseline | Required-socket normal suite | 181 passed, zero failed/skipped, one pre-existing ignored performance test |
-| Isolated export of the same baseline | Required-socket injection suite with rebuilt pre-arrival binary | 230 passed, zero failed/skipped, one pre-existing ignored test |
-| Isolated baseline | Generated MBT | 63 traces: 34 protocol, five writer and 24 fault; zero failures; two rotation crash controls passed |
-| Isolated dependency audit | Exact reqwest 0.12.28, rustls/webpki client feature graph | Offline resolution and compilation passed |
-| N1 source pinned in its receipt | Full normal suite with required UDS/TCP/TLS | 189 passed, zero failed/skipped, one pre-existing ignored test; source unchanged during the run |
-| Intermediate N2 states | Two `cargo check --offline --locked --all-targets` commands | Passed diagnostically; not source-pinned acceptance of the final checkpoint |
+| Gate | Result |
+|---|---|
+| N2 normal suite | **232 passed**, zero failed/skipped; one pre-existing ignored performance test |
+| N2 injection suite | **288 passed**, zero failed/skipped; one pre-existing ignored performance test |
+| Generated replay | **63 traces passed**: 34 protocol, five writer and 24 fault; rotation crash controls passed |
+| Source integrity | All three final receipts contain identical source manifests and report source unchanged during execution |
+| Additional checks | Formatting, whitespace and doctests passed; zero doctests exist; external model tools/sibling source unchanged |
 
-The final N2 edit rejects reopening an activated network root without its
-approved policy. That last guard has not been compiled or tested. The N1
-189-test receipt predates the N2 changes and must not be presented as validation
-of the current checkpoint tree.
+All final suites used offline locked dependencies and required sockets. Exact
+commands, source hashes, logs, environment and control binaries are retained in
+[the evidence directory](docs/impl/networks-20261022/N2-security/resume-20261022/).
+The generated replay validates its existing declared models; it is not a new
+network authorization model.
 
-Evidence is retained under
-[`docs/impl/networks-20261022/`](docs/impl/networks-20261022/).
-The N1 result and its exact source hashes are in
-[`N1-transport/full-normal-run-01/receipt.json`](docs/impl/networks-20261022/N1-transport/full-normal-run-01/receipt.json).
-Generated disposable credentials in three test logs were replaced with stable
-pseudonyms before publication. Original/published artifact hashes and counts
-are in
-[`credential-redactions.json`](docs/impl/networks-20261022/credential-redactions.json).
+The first normal run remains **failed**: two local MCP identity-switch
+compatibility cases exposed an overly broad credential-binding change. The
+corrected source preserves unscoped local behavior and fences scoped sessions.
+The HTTP conformance driver selects the same explicit principal in its header
+and body. Final normal/injection/replay runs all use that corrected source.
+Disposable fixture credentials in the earlier failed log were pseudonymized,
+with original/published hashes retained; test diagnostics now omit tokens.
 
-Baseline controls observed the existing gaps: repeated JSON-RPC correlation IDs
-do not dedupe enqueue; a fresh claim after a lost reply can select another task;
-ordinary ACK resets on restart; HTTP MCP could select a different valid body
-credential from the header credential; non-loopback Host values are rejected.
-Those controls used the preserved pre-network executable and disposable roots.
+Historical N0/N1 receipts retain their original source boundaries. No live
+provider, user bus, cross-machine deployment or installed binary was qualified
+by this resumed gate.
 
-## Implemented source changes
+## Completed N2 scope
 
-- `src/transport/`: reusable UDS/HTTPS client, whole-exchange deadlines, bounded
-  frames/responses, verified TLS, optional CA/client identity, explicit proxy,
-  disabled redirects and implicit retries, and named JSON profiles with private
-  credential references. Profile bus-ID verification uses `/v1/info`.
-- `src/client.rs`, `src/main.rs`, `src/mcp.rs`: compatibility wrappers, remote
-  endpoint/profile selection, HTTPS CLI/stdio forwarding, an approved-enrollment
-  entry point, and a read-only remote tool catalog while mutation gates remain
-  unavailable. Unknown mutation outcomes have an explicit error class.
-- `spec/network/`: all 31 current native routes and 28 MCP aliases classified
-  by identity, permission, resource, retry, persistence and exposure obligations.
-- `tests/remote_transport.rs` and `tests/fixtures/network_tls_proxy.py`: real TLS
-  ingress around a native broker fixture; certificate/hostname, redirect,
-  deadline, response-bound, uncertain-result and actual CLI checks. Certificates
-  and the retained server key are public test fixtures only; the fixture CA key
-  remains outside the repository.
-- `scripts/run_network_gate.py`: before/after source manifests, actual command
-  status, test counts, skip detection and retained logs.
-- `scripts/record_network_baseline.py`: disposable baseline gap observations
-  that retain no bearer values.
+- Approved enrollment over verified HTTPS with pinned bus identity; native,
+  HTTP MCP, stdio and UDS scoped calls share the authorization boundary.
+- Registry V3 activation adopts existing arrival identity in either upgrade
+  order, recovers orphan metadata, rejects conflicts before log repair and
+  requires policy on every reopen. Actual pre-network executables refuse
+  upgraded roots without changing durable bytes.
+- Durable principal generation/removal history prevents stale grant revival
+  across restart. Uncertain registry replacement fences further operations.
+  Registry failure controls and six activation SIGKILL cases passed.
+- Enrollment budgets, immutable retry metadata, expiry and final-token checks;
+  policy changes and retirement/rotation/expiry cancel outstanding waits.
+- Exact Host/Origin and single Authorization headers, bounded admission and
+  bodies, private metrics, typed read arguments, authorized bounded pages,
+  scope-bound cursors, and MCP response-wrapper limits.
+- The prototype `remote_read_only` path is removed. TLS fixtures now exercise
+  approved policy/enrollment; scoped stdio cannot replace its captured identity.
 
-## N2 work in progress — not accepted
-
-The following code is present but has not passed its security, migration or full
-regression gates:
-
-- Registry V3 and `network_authority_v1` feature guard; stable bus/operation-epoch
-  metadata; principal/generation/expiry grants on enrolled identities; adoption
-  of existing arrival bus identity and preservation of the arrival feature.
-- `src/network/policy.rs`: approved device principals, bounded permissions,
-  Host/Origin policy, instance budgets and request/poll capacity settings.
-- `src/network/runtime.rs`: scoped authentication/enrollment, resource
-  authorization, principal generation checks, capacity gates and policy
-  replacement semantics.
-- `src/network/gateway.rs`: `/v1/rpc`, `/v1/enroll`, `/v1/info`, credential
-  separation, shared scoped dispatch, post-wait reauthorization, filtered lists
-  and remote wait/page limits. Resource mutations remain gated off.
-- Shared policy routing for scoped identities through UDS and MCP/native HTTP;
-  HTTP body credentials can no longer replace a different header identity.
-- `daemon run --network-config`: explicit root activation, loopback-only HTTP
-  backend for a same-host TLS ingress, and failure instead of silent remote
-  listener fallback. Connection/header/request limits have been added.
-- Bounded JSON size accounting, bounded remote inbox selection and bounded
-  document/blob reads. These changes compiled before the final startup guard,
-  but their new behavioral tests have not been written or run.
-
-The original N1 `remote_read_only` fixture path remains in the tree. The existing
-TLS fixture still tests that prototype rather than the new approved-policy
-enrollment path. Migrate those fixtures and remove the prototype before N2
-acceptance. The canonical design and implementation-plan documents themselves
-were not changed during execution.
+Remote resource mutations, ACK, heartbeat, subscription mutation, retirement
+and credential renewal remain gated pending their durable lifecycle contracts.
+The private UDS catalog remains the local catalog; scoped dispatch still enforces
+network permissions and mutation gates.
 
 ## Resume here
 
-1. Inspect the checkpoint diff and run formatting/build checks on the complete
-   tree. Then add and run N2 tests before accepting any N2 behavior.
-2. Convert TLS fixtures to `NetworkPolicy` plus approved enrollment. Exercise
-   pinned bus-ID checks, anonymous/local-unscoped denial, different body/header
-   credentials, unauthorized resources, enrollment budgets, expiry, revocation
-   during waits, and principal-generation fencing through every facade.
-3. Test registry V1/V2 → V3 activation, arrival identity adoption in both upgrade
-   orders, crash/failure recovery and actual pre-network binary refusal before
-   log repair. Prove that a V3 root cannot reopen without its policy.
-4. Finish bounded response construction for channels and list operations.
-   Current list filtering happens after domain list construction; this needs
-   bounded authorized pagination. Validate input types and cursor semantics.
-   Review HTTP status-to-error mapping, policy replacement/capacity behavior and
-   request admission ordering as part of the security gate.
-5. Seal an unchanged-source N2 normal/injection regression and updated generated
-   replay. Only then proceed to N3a/N3b/N3c durable operations, negative/empty
-   result replay, lifecycle/retention and cursor recovery.
-6. N4 remote managed hosts/controller epochs and N5 actual network/provider
-   qualification remain pending. N6 federation is conditional. No remote
-   mutation retry or Internet-readiness claim is earned by this checkpoint.
+1. Start **N3a** from the implementation plan: define durable operation identity,
+   authoritative effect/receipt binding, replay-derived lookup, and a persisted
+   client journal. Implement the send pilot with real lost-response and crash
+   controls before exposing any remote mutation or automatic retry.
+2. Continue **N3b** only after N3a acceptance: queue/document/channel mutations,
+   including persisted negative and empty-claim results.
+3. Continue **N3c**: lifecycle operations and credential renewal, ACK/recovery,
+   retention/compaction, and restart behavior. N2 launch retries do not extend
+   instance expiry and are not a general mutation-receipt mechanism.
+4. **N4** remote managed hosts, exact provider binding and controller epochs;
+   **N5** actual network/provider and deployment qualification remain pending.
+   **N6** federation remains conditional on the autonomy requirement.
 
-## Environment and retained local prerequisites
+## Environment and local prerequisites
 
-Inside the sandbox, AF_UNIX and TCP bind probes returned EPERM. Required-socket
-gates ran through the environment's escalation mechanism and did not skip.
-Rust/Cargo versions and the baseline manifests are retained in `N0-baseline/`.
+Required UDS/TCP/TLS gates used escalation because sandbox socket binds can fail.
+Missing lockfile-pinned crates were restored before offline qualification. The
+MBT lockfile now includes HTTPS dependencies and the current sibling MirrorRust
+v1.0.0. Tool/source hashes are retained with the gate.
 
-Temporary prerequisites, useful only if they still exist:
+Rebuilt controls, if still present:
 
-- `/tmp/coop-network-baseline/coop`: pre-network release executable at base
-  `27d6e90`; its hash is retained in `N0-baseline/binary.json`.
-- `/tmp/coop-network-baseline/Cooperators`: isolated baseline source export.
-- `/tmp/coop-prearrival-network/target/release/coop`: rebuilt `edcbc923`
-  pre-arrival control; hash retained in `N0-baseline/prearrival-binary.json`.
-- `/home/lsz/Codebase/Mirrors/.lake/build/bin/mirror` and
-  `model_interface_gen`, plus sibling `MirrorRust`, were present for the baseline.
+- Pre-network `27d6e901a683b2c651f8bbf9a3be017f3a5b22a2`:
+  `/tmp/coop-network-prenetwork-20261022/target/debug/coop`.
+- Pre-arrival `edcbc92372c9efc45c1a83c31f7d23d8ea11be64`:
+  `/tmp/coop-network-prearrival-20261022/target/debug/coop`.
+- Set `COOP_PRENETWORK_BINARY`, `COOP_PREUPGRADE_BINARY`,
+  `COOP_REQUIRE_NETWORK_MIGRATION=1`, `COOP_REQUIRE_UDS=1`, and
+  `COOP_REQUIRE_REMOTE=1` for full migration/socket gates.
+- Generated replay uses `/home/nzsn/Repos/Mirrors/.lake/build/bin/mirror` and
+  `model_interface_gen`, with sibling `/home/nzsn/Repos/MirrorRust`.
 
-These paths are not portable acceptance evidence. Rebuild missing controls from
-their pinned revisions. No binary, provider credential, user bus, live provider
-session or cross-machine deployment is included in this checkpoint. The
-pre-existing `.projectile-cache.eld` editor cache is excluded from the commit.
+These paths are local prerequisites, not portable acceptance evidence. Rebuild
+missing controls from the retained exact revisions and source manifests.

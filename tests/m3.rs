@@ -431,16 +431,19 @@ impl HttpDriver {
     }
 
     async fn post(&self, body: Value) -> (u16, Vec<Value>) {
+        // Golden local transcripts can explicitly switch identities. HTTP
+        // carries that selected identity in the header as well as the body.
+        let token = body
+            .pointer("/params/arguments/token")
+            .and_then(Value::as_str)
+            .unwrap_or(&self.token);
         let request = http::Request::builder()
             .method(http::Method::POST)
             .uri("http://localhost/mcp")
             .header(http::header::HOST, "localhost")
             .header(http::header::CONTENT_TYPE, "application/json")
             .header(http::header::ACCEPT, "application/json, text/event-stream")
-            .header(
-                http::header::AUTHORIZATION,
-                format!("Bearer {}", self.token),
-            )
+            .header(http::header::AUTHORIZATION, format!("Bearer {token}"))
             .header("MCP-Protocol-Version", &self.protocol_version)
             .body(http_body_util::Full::new(Bytes::from(body.to_string())))
             .expect("HTTP request");

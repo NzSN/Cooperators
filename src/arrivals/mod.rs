@@ -415,12 +415,62 @@ impl ArrivalService {
         })
     }
 
+    pub(crate) fn list_page(
+        &self,
+        agent_id: &str,
+        after: Option<&str>,
+        limit: usize,
+        bytes: usize,
+        allows: impl Fn(&ArrivalResource) -> bool,
+    ) -> Result<(SubscriptionList, Option<String>), BrokerError> {
+        self.check_agent(agent_id)?;
+        let state = self.subscriptions.lock().unwrap();
+        let mut budget = crate::network::page::PageBudget::new(limit, bytes);
+        let mut subscriptions: Vec<SubscriptionReceipt> = Vec::new();
+        let mut next = None;
+        for receipt in state.receipts.values() {
+            if receipt.agent_id != agent_id
+                || after.is_some_and(|after| receipt.subscription_id.as_str() <= after)
+                || !allows(&receipt.resource)
+            {
+                continue;
+            }
+            if !budget.admit(receipt)? {
+                next = subscriptions
+                    .last()
+                    .map(|receipt| receipt.subscription_id.clone());
+                break;
+            }
+            subscriptions.push(receipt.clone());
+        }
+        Ok((
+            SubscriptionList {
+                bus_id: self.bus_id.clone(),
+                agent_id: agent_id.into(),
+                subscriptions,
+            },
+            next,
+        ))
+    }
+
     pub async fn wait(
         self: &Arc<Self>,
         agent_id: &str,
         cursor: Option<&str>,
         timeout: Duration,
         limit: usize,
+    ) -> Result<WaitArrivals, BrokerError> {
+        self.wait_limited(agent_id, cursor, timeout, limit, None)
+            .await
+    }
+
+    pub(crate) async fn wait_limited(
+        self: &Arc<Self>,
+        agent_id: &str,
+        cursor: Option<&str>,
+        timeout: Duration,
+        limit: usize,
+        byte_limit: Option<usize>,
     ) -> Result<WaitArrivals, BrokerError> {
         self.check_agent(agent_id)?;
         if limit == 0 {
@@ -443,7 +493,7 @@ impl ArrivalService {
             let agent = agent_id.to_owned();
             let feed_copy = Arc::clone(&feed);
             let page = tokio::task::spawn_blocking(move || {
-                service.page(&agent, &feed_copy, explicit, limit)
+                service.page(&agent, &feed_copy, explicit, limit, byte_limit)
             })
             .await
             .map_err(|error| BrokerError::internal(error.to_string()))??;
@@ -516,6 +566,7 @@ impl ArrivalService {
         feed: &Feed,
         explicit: Option<u64>,
         limit: usize,
+        byte_limit: Option<usize>,
     ) -> Result<WaitArrivals, BrokerError> {
         let state = feed.state.lock().unwrap();
         if state.log.requires_recovery() {
@@ -547,19 +598,49 @@ impl ArrivalService {
         let mut notices = Vec::new();
         let mut bytes = 0u64;
         let mut next = start;
-        while let Some(record) =
-            scanner.next(state.log.path(), &head, self.limits.notice_bytes as usize)?
+        let maximum = self
+            .limits
+            .page_bytes
+            .min(byte_limit.unwrap_or(usize::MAX) as u64);
+        while let Some(record) = scanner
+            .next(
+                state.log.path(),
+                &head,
+                self.limits
+                    .notice_bytes
+                    .min(byte_limit.unwrap_or(usize::MAX) as u64) as usize,
+            )
+            .map_err(|error| {
+                if byte_limit.is_some()
+                    && matches!(&error, BrokerError::Internal(message)
+                if message == "arrival source record exceeds scan bound")
+                {
+                    BrokerError::application(
+                        crate::error::ErrorCode::ResourceExhausted,
+                        "next arrival exceeds remote scan budget",
+                    )
+                } else {
+                    error
+                }
+            })?
         {
             if scanner.seq <= start {
                 continue;
             }
-            let size = serde_json::to_vec(&record.value)
-                .map_err(|error| BrokerError::internal(error.to_string()))?
-                .len() as u64
-                + 1;
-            if bytes + size > self.limits.page_bytes {
+            let size = crate::rpc::bounded_json_size(
+                &record.value,
+                maximum.saturating_sub(bytes + 1) as usize,
+            );
+            let Some(size) = size else {
+                if notices.is_empty() && byte_limit.is_some() {
+                    return Err(BrokerError::application(
+                        crate::error::ErrorCode::ResourceExhausted,
+                        "next arrival exceeds remote page budget",
+                    ));
+                }
                 break;
-            }
+            };
+            let size = size as u64 + 1;
             let notice: ArrivalNotice = serde_json::from_value(record.value)
                 .map_err(|error| BrokerError::internal(error.to_string()))?;
             bytes += size;

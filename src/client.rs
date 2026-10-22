@@ -43,6 +43,9 @@ impl ClientError {
             Self::Unreachable(_) | Self::Timeout => Some(ErrorCode::DaemonUnreachable),
             Self::Protocol(_) => None,
             Self::OutcomeUnknown(_) => Some(ErrorCode::OutcomeUnknown),
+            Self::HttpStatus(401) => Some(ErrorCode::Unauthenticated),
+            Self::HttpStatus(403) => Some(ErrorCode::Forbidden),
+            Self::HttpStatus(413 | 429) => Some(ErrorCode::ResourceExhausted),
             Self::RemoteTransport(_) | Self::HttpStatus(_) => Some(ErrorCode::DaemonUnreachable),
         }
     }

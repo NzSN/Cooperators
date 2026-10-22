@@ -1,0 +1,210 @@
+   Compiling cooperators v0.1.0 (/home/nzsn/Repos/Cooperators)
+   Compiling cooperators-mbt v0.1.0 (/home/nzsn/Repos/Cooperators/spec/mbt)
+warning: unused variable: `initial`
+   --> src/../fault_interfaces/identity/generated/MBFaultIdentityMirror.generated.rs:266:17
+    |
+266 | ...   let initial = Value::Record(params.iter().filter(|(k,_)| !k.starts_with('#') && *k != "action_taken" && *k != "parameters").m...
+    |           ^^^^^^^ help: if this is intentional, prefix it with an underscore: `_initial`
+    |
+    = note: `#[warn(unused_variables)]` (part of `#[warn(unused)]`) on by default
+
+warning: unused variable: `initial`
+   --> src/../fault_interfaces/rotation/generated/MBFaultRotationMirror.generated.rs:284:17
+    |
+284 | ...   let initial = Value::Record(params.iter().filter(|(k,_)| !k.starts_with('#') && *k != "action_taken" && *k != "parameters").m...
+    |           ^^^^^^^ help: if this is intentional, prefix it with an underscore: `_initial`
+
+warning: unused variable: `initial`
+   --> src/../fault_interfaces/deadletter/generated/MBFaultDeadLetterMirror.generated.rs:223:17
+    |
+223 | ...   let initial = Value::Record(params.iter().filter(|(k,_)| !k.starts_with('#') && *k != "action_taken" && *k != "parameters").m...
+    |           ^^^^^^^ help: if this is intentional, prefix it with an underscore: `_initial`
+
+warning: unused variable: `payload`
+   --> src/../fault_interfaces/deadletter/generated/MBFaultDeadLetterMirror.generated.rs:224:17
+    |
+224 |             let payload = Value::Record(params.clone());
+    |                 ^^^^^^^ help: if this is intentional, prefix it with an underscore: `_payload`
+
+warning: unused variable: `initial`
+   --> src/../fault_interfaces/document/generated/MBFaultDocumentMirror.generated.rs:223:17
+    |
+223 | ...   let initial = Value::Record(params.iter().filter(|(k,_)| !k.starts_with('#') && *k != "action_taken" && *k != "parameters").m...
+    |           ^^^^^^^ help: if this is intentional, prefix it with an underscore: `_initial`
+
+warning: unused variable: `payload`
+   --> src/../fault_interfaces/document/generated/MBFaultDocumentMirror.generated.rs:224:17
+    |
+224 |             let payload = Value::Record(params.clone());
+    |                 ^^^^^^^ help: if this is intentional, prefix it with an underscore: `_payload`
+
+warning: unused variable: `initial`
+   --> src/../fault_interfaces/inbox/generated/MBFaultInboxMirror.generated.rs:232:17
+    |
+232 | ...   let initial = Value::Record(params.iter().filter(|(k,_)| !k.starts_with('#') && *k != "action_taken" && *k != "parameters").m...
+    |           ^^^^^^^ help: if this is intentional, prefix it with an underscore: `_initial`
+
+warning: unused variable: `initial`
+   --> src/../fault_interfaces/status/generated/MBFaultStatusMirror.generated.rs:243:17
+    |
+243 | ...   let initial = Value::Record(params.iter().filter(|(k,_)| !k.starts_with('#') && *k != "action_taken" && *k != "parameters").m...
+    |           ^^^^^^^ help: if this is intentional, prefix it with an underscore: `_initial`
+
+warning: unused variable: `initial`
+   --> src/../fault_interfaces/storage/generated/MBFaultStorageMirror.generated.rs:274:17
+    |
+274 | ...   let initial = Value::Record(params.iter().filter(|(k,_)| !k.starts_with('#') && *k != "action_taken" && *k != "parameters").m...
+    |           ^^^^^^^ help: if this is intentional, prefix it with an underscore: `_initial`
+
+warning: unused variable: `initial`
+   --> src/../fault_interfaces/writer/generated/MBFaultWriterMirror.generated.rs:240:17
+    |
+240 | ...   let initial = Value::Record(params.iter().filter(|(k,_)| !k.starts_with('#') && *k != "action_taken" && *k != "parameters").m...
+    |           ^^^^^^^ help: if this is intentional, prefix it with an underscore: `_initial`
+
+warning: unused variable: `initial`
+   --> src/../writers/generated/MBWritersMirror.generated.rs:223:17
+    |
+223 | ...   let initial = Value::Record(params.iter().filter(|(k,_)| !k.starts_with('#') && *k != "action_taken" && *k != "parameters").m...
+    |           ^^^^^^^ help: if this is intentional, prefix it with an underscore: `_initial`
+
+warning: unused variable: `initial`
+   --> src/../generated/MBCooperatorsMirror.generated.rs:291:17
+    |
+291 | ...   let initial = Value::Record(params.iter().filter(|(k,_)| !k.starts_with('#') && *k != "action_taken" && *k != "parameters").m...
+    |           ^^^^^^^ help: if this is intentional, prefix it with an underscore: `_initial`
+
+warning: constant `ADAPTER_ID` is never used
+  --> src/main.rs:47:7
+   |
+47 | const ADAPTER_ID: &str = "cooperators.mbc/v1";
+   |       ^^^^^^^^^^
+   |
+   = note: `#[warn(dead_code)]` (part of `#[warn(unused)]`) on by default
+
+warning: constant `TARGET_PROFILE` is never used
+  --> src/main.rs:48:7
+   |
+48 | const TARGET_PROFILE: &str = "mirrorrust-v2";
+   |       ^^^^^^^^^^^^^^
+
+warning: `cooperators-mbt` (bin "cooperators-mbt") generated 14 warnings (run `cargo fix --bin "cooperators-mbt" -p cooperators-mbt` to apply 12 suggestions)
+    Finished `dev` profile [unoptimized + debuginfo] target(s) in 18.66s
+     Running `spec/mbt/target/debug/cooperators-mbt --skip-gen --suite all`
+PASS /home/nzsn/Repos/Cooperators/spec/mbt/traces/NoAck__violation.itf.json
+PASS /home/nzsn/Repos/Cooperators/spec/mbt/traces/NoAck__violation1.itf.json
+PASS /home/nzsn/Repos/Cooperators/spec/mbt/traces/NoAck__violation2.itf.json
+PASS /home/nzsn/Repos/Cooperators/spec/mbt/traces/NoComplete__violation.itf.json
+PASS /home/nzsn/Repos/Cooperators/spec/mbt/traces/NoComplete__violation1.itf.json
+PASS /home/nzsn/Repos/Cooperators/spec/mbt/traces/NoComplete__violation2.itf.json
+PASS /home/nzsn/Repos/Cooperators/spec/mbt/traces/NoCrash__violation.itf.json
+PASS /home/nzsn/Repos/Cooperators/spec/mbt/traces/NoCrash__violation1.itf.json
+PASS /home/nzsn/Repos/Cooperators/spec/mbt/traces/NoCrash__violation2.itf.json
+PASS /home/nzsn/Repos/Cooperators/spec/mbt/traces/NoDead__violation.itf.json
+PASS /home/nzsn/Repos/Cooperators/spec/mbt/traces/NoDead__violation1.itf.json
+PASS /home/nzsn/Repos/Cooperators/spec/mbt/traces/NoDead__violation2.itf.json
+PASS /home/nzsn/Repos/Cooperators/spec/mbt/traces/NoExpire__violation.itf.json
+PASS /home/nzsn/Repos/Cooperators/spec/mbt/traces/NoExpire__violation1.itf.json
+PASS /home/nzsn/Repos/Cooperators/spec/mbt/traces/NoExpire__violation2.itf.json
+PASS /home/nzsn/Repos/Cooperators/spec/mbt/traces/NoFail__violation.itf.json
+PASS /home/nzsn/Repos/Cooperators/spec/mbt/traces/NoFail__violation1.itf.json
+PASS /home/nzsn/Repos/Cooperators/spec/mbt/traces/NoFail__violation2.itf.json
+PASS /home/nzsn/Repos/Cooperators/spec/mbt/traces/NoRelease__violation.itf.json
+PASS /home/nzsn/Repos/Cooperators/spec/mbt/traces/NoRelease__violation1.itf.json
+PASS /home/nzsn/Repos/Cooperators/spec/mbt/traces/NoRelease__violation2.itf.json
+PASS /home/nzsn/Repos/Cooperators/spec/mbt/traces/TraceComplete__violation.itf.json
+PASS /home/nzsn/Repos/Cooperators/spec/mbt/traces/TraceComplete__violation1.itf.json
+PASS /home/nzsn/Repos/Cooperators/spec/mbt/traces/TraceComplete__violation10.itf.json
+PASS /home/nzsn/Repos/Cooperators/spec/mbt/traces/TraceComplete__violation11.itf.json
+PASS /home/nzsn/Repos/Cooperators/spec/mbt/traces/TraceComplete__violation12.itf.json
+PASS /home/nzsn/Repos/Cooperators/spec/mbt/traces/TraceComplete__violation2.itf.json
+PASS /home/nzsn/Repos/Cooperators/spec/mbt/traces/TraceComplete__violation3.itf.json
+PASS /home/nzsn/Repos/Cooperators/spec/mbt/traces/TraceComplete__violation4.itf.json
+PASS /home/nzsn/Repos/Cooperators/spec/mbt/traces/TraceComplete__violation5.itf.json
+PASS /home/nzsn/Repos/Cooperators/spec/mbt/traces/TraceComplete__violation6.itf.json
+PASS /home/nzsn/Repos/Cooperators/spec/mbt/traces/TraceComplete__violation7.itf.json
+PASS /home/nzsn/Repos/Cooperators/spec/mbt/traces/TraceComplete__violation8.itf.json
+PASS /home/nzsn/Repos/Cooperators/spec/mbt/traces/TraceComplete__violation9.itf.json
+PASS /home/nzsn/Repos/Cooperators/spec/mbt/writers/traces/NoCompeteW1.itf.json
+PASS /home/nzsn/Repos/Cooperators/spec/mbt/writers/traces/NoCompeteW2.itf.json
+PASS /home/nzsn/Repos/Cooperators/spec/mbt/writers/traces/NoHandoff.itf.json
+PASS /home/nzsn/Repos/Cooperators/spec/mbt/writers/traces/NoIndependentRoots.itf.json
+PASS /home/nzsn/Repos/Cooperators/spec/mbt/writers/traces/NoRejectedRecovery.itf.json
+mbt: 39 traces, 0 failed
+scaffolded reviewable proposal /tmp/coop-fault-interface-zvpsfwt8/MBFaultStorage.mirror-interface.scaffold.json 792436bf2f4ba6548c211c4225c3b49d9ac7ca7978531fc2132e762b3a47ce63
+model-interface check clean
+{"actions":[{"count":9,"id":"AppendBytes"},{"count":3,"id":"Initialize"},{"count":3,"id":"InspectStorage"},{"count":3,"id":"RecoverStorage"},{"count":1,"id":"SyncFail"},{"count":4,"id":"SyncOk"}],"schema":"mirrors.model-interface-coverage/v1","semanticDigest":"396ddbafc8cb224ae03c7b5cd4b82f26b8bb47151ec1975a93a661935a548ab7","states":23,"traces":3,"unseenActions":[]}
+scaffolded reviewable proposal /tmp/coop-fault-interface-p3jiodce/MBFaultWriter.mirror-interface.scaffold.json b594314ce5ade5869903071d3dd613e1c16ab21a952319366b5940b84f0aaf25
+model-interface check clean
+{"actions":[{"count":4,"id":"Initialize"},{"count":7,"id":"Start"},{"count":1,"id":"Stop"},{"count":1,"id":"TearTail"},{"count":3,"id":"WriterAppend"}],"schema":"mirrors.model-interface-coverage/v1","semanticDigest":"85e0bc7092f8b11bda66d2638fef9d40bfed7f429a971b4cc410e39949e1357b","states":16,"traces":4,"unseenActions":[]}
+scaffolded proposal /tmp/coop-fault-interface-cdkkecw8/MBFaultInbox.mirror-interface.scaffold.json
+model-interface check clean
+{"actions":[{"count":1,"id":"ExpireInbox"},{"count":1,"id":"InboxAck"},{"count":4,"id":"InboxSend"},{"count":1,"id":"InboxWait"},{"count":1,"id":"Initialize"}],"schema":"mirrors.model-interface-coverage/v1","semanticDigest":"9213850235d76e2c14aab792cb3729480de10c8ad76b1ca442ac58f10933b93c","states":8,"traces":1,"unseenActions":[]}
+scaffolded reviewable proposal /tmp/coop-fault-interface-6wq8l0tp/MBFaultDeadLetter.mirror-interface.scaffold.json f9a98f817b3ad0f54d85b310deecb673bc9d2ee19707fe6c440fd084239eb617
+model-interface check clean
+{"actions":[{"count":2,"id":"CrashDead"},{"count":1,"id":"FailProjection"},{"count":1,"id":"FinishProjection"},{"count":2,"id":"Initialize"},{"count":2,"id":"MarkDead"},{"count":3,"id":"ProjectDead"},{"count":2,"id":"RecoverDead"}],"schema":"mirrors.model-interface-coverage/v1","semanticDigest":"805fe73dbb8e170151ba01719ab3a80fc745f59907e874827e4153284aadfef8","states":13,"traces":2,"unseenActions":[]}
+scaffolded reviewable proposal /tmp/coop-fault-interface-mnth7m4k/MBFaultDocument.mirror-interface.scaffold.json 30d22dc36e5fd786e61c524bc3abf33fa67ce3a5515d42edd68f5be290100403
+model-interface check clean
+{"actions":[{"count":1,"id":"AbortPublish"},{"count":4,"id":"BeginPublish"},{"count":2,"id":"CommitPublish"},{"count":1,"id":"CrashDoc"},{"count":2,"id":"Initialize"},{"count":2,"id":"ReadDoc"},{"count":1,"id":"RecoverDoc"}],"schema":"mirrors.model-interface-coverage/v1","semanticDigest":"50ae2604007125547988460eceb95dc4e1fb7cece7bfedcaa77d534724f3c041","states":13,"traces":2,"unseenActions":[]}
+scaffolded proposal /tmp/coop-fault-interface-npnijibi/MBFaultStatus.mirror-interface.scaffold.json
+model-interface check clean
+{"actions":[{"count":1,"id":"AppendStatus"},{"count":1,"id":"Initialize"},{"count":1,"id":"SampleStatus"}],"schema":"mirrors.model-interface-coverage/v1","semanticDigest":"3dec8d1704584d3e3b87ea4f2b39f018ea00a3c45b0faa7824386c1c6cd3093f","states":3,"traces":1,"unseenActions":[]}
+scaffolded reviewable proposal /tmp/coop-fault-interface-2hcyaq_s/MBFaultRotation.mirror-interface.scaffold.json 71034be79609f9d83a8c1053127719ac3f55965ea79a163876112529a51be5f7
+model-interface check clean
+{"actions":[{"count":8,"id":"BeginRotatingAppend"},{"count":7,"id":"CommitRotatingAppend"},{"count":1,"id":"CrashRotation"},{"count":3,"id":"Initialize"},{"count":8,"id":"PrepareSegment"},{"count":3,"id":"ReadCursor"},{"count":1,"id":"RecoverRotation"},{"count":1,"id":"SaveCursor"}],"schema":"mirrors.model-interface-coverage/v1","semanticDigest":"2df1903fa928586921a109f61504990f4d25c17ad8fc57916ca2d822eec9c9ee","states":32,"traces":3,"unseenActions":[]}
+scaffolded reviewable proposal /tmp/coop-fault-interface-jwr1zkga/MBFaultIdentity.mirror-interface.scaffold.json 1e5836a3cf63f2de4446c43b9bf1e6091dc52ebe14ff17b7d65b7bcb4734df1a
+model-interface check clean
+{"actions":[{"count":2,"id":"Authenticate"},{"count":1,"id":"Disconnect"},{"count":18,"id":"Enroll"},{"count":8,"id":"Initialize"},{"count":1,"id":"Reconnect"},{"count":3,"id":"Retire"},{"count":2,"id":"RotateToken"}],"schema":"mirrors.model-interface-coverage/v1","semanticDigest":"6239df76e649d0c746e16f2bef86ad3662d1b6dd29fb369ee20bc24479571755","states":35,"traces":8,"unseenActions":[]}
+Generated fault interface bridge and selected compiler checks clean
+writer fault fixture: /tmp/coop-network-n2-mbt-final-20261022/writer-Iv0uOH
+retained writer fault fixture: /tmp/coop-network-n2-mbt-final-20261022/writer-Iv0uOH
+PASS fault-writer /home/nzsn/Repos/Cooperators/spec/mbt/fault_interfaces/writer/traces/NoRejectedRepair.itf.json
+writer fault fixture: /tmp/coop-network-n2-mbt-final-20261022/writer-OND5F4
+retained writer fault fixture: /tmp/coop-network-n2-mbt-final-20261022/writer-OND5F4
+PASS fault-writer /home/nzsn/Repos/Cooperators/spec/mbt/fault_interfaces/writer/traces/NoUnownedWrite.itf.json
+writer fault fixture: /tmp/coop-network-n2-mbt-final-20261022/writer-8dFKuZ
+retained writer fault fixture: /tmp/coop-network-n2-mbt-final-20261022/writer-8dFKuZ
+PASS fault-writer /home/nzsn/Repos/Cooperators/spec/mbt/fault_interfaces/writer/traces/NoWriterHandoff.itf.json
+writer fault fixture: /tmp/coop-network-n2-mbt-final-20261022/writer-85Q0ld
+retained writer fault fixture: /tmp/coop-network-n2-mbt-final-20261022/writer-85Q0ld
+PASS fault-writer /home/nzsn/Repos/Cooperators/spec/mbt/fault_interfaces/writer/traces/NoWriterRejection.itf.json
+storage fixture: /tmp/coop-network-n2-mbt-final-20261022/storage-sT8JdO
+PASS fault-storage /home/nzsn/Repos/Cooperators/spec/mbt/fault_interfaces/storage/traces/NoAcknowledgedRecovery.itf.json
+storage fixture: /tmp/coop-network-n2-mbt-final-20261022/storage-3rKn2q
+PASS fault-storage /home/nzsn/Repos/Cooperators/spec/mbt/fault_interfaces/storage/traces/NoPartialRecovery.itf.json
+storage fixture: /tmp/coop-network-n2-mbt-final-20261022/storage-ycKzl7
+PASS fault-storage /home/nzsn/Repos/Cooperators/spec/mbt/fault_interfaces/storage/traces/NoStorageRecovery.itf.json
+PASS fault-inbox /home/nzsn/Repos/Cooperators/spec/mbt/fault_interfaces/inbox/traces/NoInboxCapacityRecovery.itf.json
+PASS fault-deadletter /home/nzsn/Repos/Cooperators/spec/mbt/fault_interfaces/deadletter/traces/NoProjectionCrashRetry.itf.json
+PASS fault-deadletter /home/nzsn/Repos/Cooperators/spec/mbt/fault_interfaces/deadletter/traces/NoProjectionRecovery.itf.json
+PASS fault-document /home/nzsn/Repos/Cooperators/spec/mbt/fault_interfaces/document/traces/NoDocumentCrashRetry.itf.json
+PASS fault-document /home/nzsn/Repos/Cooperators/spec/mbt/fault_interfaces/document/traces/NoDocumentRetry.itf.json
+PASS fault-status /home/nzsn/Repos/Cooperators/spec/mbt/fault_interfaces/status/traces/NoLargeStatus.itf.json
+rotation fixture: /tmp/coop-network-n2-mbt-final-20261022/rotation/NoOversizedRotation.itf
+PASS fault-rotation /home/nzsn/Repos/Cooperators/spec/mbt/fault_interfaces/rotation/traces/NoOversizedRotation.itf.json
+rotation fixture: /tmp/coop-network-n2-mbt-final-20261022/rotation/NoRotatedCursor.itf
+PASS fault-rotation /home/nzsn/Repos/Cooperators/spec/mbt/fault_interfaces/rotation/traces/NoRotatedCursor.itf.json
+rotation fixture: /tmp/coop-network-n2-mbt-final-20261022/rotation/NoRotationCrashRecovery.itf
+PASS fault-rotation /home/nzsn/Repos/Cooperators/spec/mbt/fault_interfaces/rotation/traces/NoRotationCrashRecovery.itf.json
+rotation fixture: /tmp/coop-network-n2-mbt-final-20261022/rotation/boundary-after-seal
+PASS actual process crash boundary after-seal
+rotation fixture: /tmp/coop-network-n2-mbt-final-20261022/rotation/boundary-after-create
+PASS actual process crash boundary after-create
+PASS rotation crash boundaries
+identity evidence: /tmp/coop-network-n2-mbt-final-20261022/identity/NoEnrollmentRetry.itf-01M5HXR33CYWS5E95C8K8ZDPY9
+PASS fault-identity /home/nzsn/Repos/Cooperators/spec/mbt/fault_interfaces/identity/traces/NoEnrollmentRetry.itf.json
+identity evidence: /tmp/coop-network-n2-mbt-final-20261022/identity/NoRetiredAuthentication.itf-01M5HXR3682WRKA2K158MJV7WK
+PASS fault-identity /home/nzsn/Repos/Cooperators/spec/mbt/fault_interfaces/identity/traces/NoRetiredAuthentication.itf.json
+identity evidence: /tmp/coop-network-n2-mbt-final-20261022/identity/NoRetiredEnrollmentRetry.itf-01M5HXR399Q5WXHRCCY39QJFNZ
+PASS fault-identity /home/nzsn/Repos/Cooperators/spec/mbt/fault_interfaces/identity/traces/NoRetiredEnrollmentRetry.itf.json
+identity evidence: /tmp/coop-network-n2-mbt-final-20261022/identity/NoRetiredThenFresh.itf-01M5HXR3C0HRYE3C89HJDAFHTS
+PASS fault-identity /home/nzsn/Repos/Cooperators/spec/mbt/fault_interfaces/identity/traces/NoRetiredThenFresh.itf.json
+identity evidence: /tmp/coop-network-n2-mbt-final-20261022/identity/NoRevokedAuthentication.itf-01M5HXR3EZEXEPPATB4MPJEX7E
+PASS fault-identity /home/nzsn/Repos/Cooperators/spec/mbt/fault_interfaces/identity/traces/NoRevokedAuthentication.itf.json
+identity evidence: /tmp/coop-network-n2-mbt-final-20261022/identity/NoSameKindEnrollment.itf-01M5HXR3J4BH2Z4Q1XRF6RTE7N
+PASS fault-identity /home/nzsn/Repos/Cooperators/spec/mbt/fault_interfaces/identity/traces/NoSameKindEnrollment.itf.json
+identity evidence: /tmp/coop-network-n2-mbt-final-20261022/identity/NoStableReconnect.itf-01M5HXR3MTM62NHC2SV6E0BB0G
+PASS fault-identity /home/nzsn/Repos/Cooperators/spec/mbt/fault_interfaces/identity/traces/NoStableReconnect.itf.json
+identity evidence: /tmp/coop-network-n2-mbt-final-20261022/identity/NoStaleEnrollmentRetry.itf-01M5HXR3QST5505NRJ9RMQMXY2
+PASS fault-identity /home/nzsn/Repos/Cooperators/spec/mbt/fault_interfaces/identity/traces/NoStaleEnrollmentRetry.itf.json
+fault MBT: 24 traces, 0 failures

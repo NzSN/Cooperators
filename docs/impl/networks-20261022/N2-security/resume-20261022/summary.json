@@ -1,0 +1,61 @@
+{
+  "scope": "N2 local authorization, migration and bounded-read gate; resource mutations, remote renewal, managed hosts and deployment acceptance remain later gates.",
+  "passed": true,
+  "source_commit": "44900f39e6d891da97f486fe275e72a413cbb952",
+  "source_is_uncommitted_working_tree": true,
+  "source_manifest_sha256": "cfa8285fb5a2e5116e315aa306becdda1afb44b7aff1f01d955857a3c430c2f0",
+  "receipts": {
+    "normal-run-02": {
+      "passed": true,
+      "passed_tests": 232,
+      "failed_tests": 0,
+      "ignored_tests": 1,
+      "reported_skips": 0,
+      "source_unchanged": true,
+      "log_sha256": "f2bbbf291d82ef3a8e14324e2b545ca46b2690c2268da8005c4ebf6235c33886"
+    },
+    "injection-run-01": {
+      "passed": true,
+      "passed_tests": 288,
+      "failed_tests": 0,
+      "ignored_tests": 1,
+      "reported_skips": 0,
+      "source_unchanged": true,
+      "log_sha256": "aed9a610fa7cde5e12598ba4ae29115e2c42e8428ca9c746423a25b918d4c5b6"
+    },
+    "generated-replay-run-02": {
+      "passed": true,
+      "passed_tests": 0,
+      "failed_tests": 0,
+      "ignored_tests": 0,
+      "reported_skips": 0,
+      "source_unchanged": true,
+      "log_sha256": "a3945cf4be6a5b90db1374b427bafb45d763f5991d52efd1f4a7f388277a8c83"
+    }
+  },
+  "generated_replay": {
+    "protocol_traces": 34,
+    "writer_traces": 5,
+    "fault_traces": 24,
+    "failures": 0,
+    "rotation_crash_controls_passed": true,
+    "new_network_authorization_model": false
+  },
+  "required_environment": {
+    "COOP_REQUIRE_UDS": "1",
+    "COOP_REQUIRE_REMOTE": "1",
+    "COOP_REQUIRE_NETWORK_MIGRATION": "1",
+    "COOP_PRENETWORK_BINARY": "/tmp/coop-network-prenetwork-20261022/target/debug/coop",
+    "COOP_PREUPGRADE_BINARY": "/tmp/coop-network-prearrival-20261022/target/debug/coop"
+  },
+  "additional_checks": {
+    "rustfmt": "passed",
+    "git_diff_check": "passed",
+    "doctests": "passed (zero doctests)",
+    "external_sources_and_tools": "unchanged"
+  },
+  "earlier_attempts": {
+    "normal-run-01": "failed; two local MCP identity-switch compatibility failures, corrected in final source",
+    "generated-replay-run-01": "passed for earlier source; superseded by run-02"
+  }
+}

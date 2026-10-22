@@ -31,36 +31,44 @@ class Handler(http.server.BaseHTTPRequestHandler):
         request = json.loads(body)
         with args.events.open("a") as stream:
             stream.write(json.dumps({"method": request.get("method"),
-                                     "body_token": "token" in request.get("params", {}),
+                                     "path": self.path,
+                                     "body_token": "token" in request.get("params", {}) or
+                                                   "token" in request.get("params", {}).get("arguments", {}),
                                      "bearer_present": self.headers.get("Authorization", "").startswith("Bearer ")}) + "\n")
-        if args.mode == "redirect":
+        mode = args.mode if self.path == "/v1/rpc" else "proxy"
+        if mode == "redirect":
             self.send_response(307)
             self.send_header("Location", "https://localhost:1/stolen")
             self.end_headers()
             return
-        if args.mode == "slow":
+        if mode == "slow":
             time.sleep(0.5)
-        if args.mode in ("malformed", "oversize"):
+        if mode in ("malformed", "oversize"):
             self.send_response(200)
             self.send_header("Content-Type", "application/json")
-            self.send_header("Content-Length", str(4 * 1024 * 1024 + 1) if args.mode == "oversize" else "1")
+            self.send_header("Content-Length", str(4 * 1024 * 1024 + 1) if mode == "oversize" else "1")
             self.end_headers()
-            if args.mode == "malformed":
+            if mode == "malformed":
                 self.wfile.write(b"{")
             return
         connection = http.client.HTTPConnection("127.0.0.1", args.upstream_port, timeout=10)
         headers = {"Content-Type": "application/json", "Host": "localhost"}
         if self.headers.get("Authorization"):
             headers["Authorization"] = self.headers["Authorization"]
+        for name in ("Accept", "Origin", "Mcp-Protocol-Version", "Mcp-Session-Id"):
+            if self.headers.get(name):
+                headers[name] = self.headers[name]
+        if self.headers.get("X-Test-Upstream-Host"):
+            headers["Host"] = self.headers["X-Test-Upstream-Host"]
         connection.request("POST", self.path, body, headers)
         response = connection.getresponse()
         payload = response.read()
         connection.close()
-        if args.mode == "drop":
+        if mode == "drop":
             self.close_connection = True
             return
         self.send_response(response.status)
-        self.send_header("Content-Type", "application/json")
+        self.send_header("Content-Type", response.getheader("Content-Type", "application/json"))
         self.send_header("Content-Length", str(len(payload)))
         self.end_headers()
         try:
@@ -78,7 +86,7 @@ class Handler(http.server.BaseHTTPRequestHandler):
         payload = response.read()
         connection.close()
         self.send_response(response.status)
-        self.send_header("Content-Type", "application/json")
+        self.send_header("Content-Type", response.getheader("Content-Type", "application/json"))
         self.send_header("Content-Length", str(len(payload)))
         self.end_headers()
         self.wfile.write(payload)

@@ -133,9 +133,6 @@ pub struct DaemonConfig {
     pub enable_arrivals: bool,
     /// Separate arrival subscription/feed bounds.
     pub arrival_limits: ArrivalLimits,
-    /// Experimental native remote read adapter. Off until explicitly selected
-    /// by an isolated fixture or the later network policy activation path.
-    pub remote_read_only: bool,
     /// Explicit approved-principal policy; activates the incompatible network
     /// root format before source-log recovery. A client connection never does.
     pub network_policy: Option<crate::network::NetworkPolicy>,
@@ -162,7 +159,6 @@ impl DaemonConfig {
             write_queue_bytes: 8 * 1024 * 1024,
             enable_arrivals: false,
             arrival_limits: ArrivalLimits::default(),
-            remote_read_only: false,
             network_policy: None,
         }
     }
@@ -226,28 +222,29 @@ impl DaemonState {
     /// Creates state with explicit tunables, replaying registry, inboxes, and
     /// the `#presence` channel before returning.
     pub fn with_config(config: DaemonConfig) -> Result<Self, BrokerError> {
+        if let Some(policy) = &config.network_policy {
+            policy.validate()?;
+        }
         paths::ensure_layout(&config.root)?;
         let mut registry = Registry::load(&config.root)?;
         if registry.network_meta().is_some() && config.network_policy.is_none() {
-            return Err(BrokerError::invalid("an activated network root requires its approved policy on every reopen"));
+            return Err(BrokerError::invalid(
+                "an activated network root requires its approved policy on every reopen",
+            ));
         }
         // Validate/activate the format guard before any log recovery can repair
         // source files containing fields that an older binary cannot hash.
         let arrival_meta =
             arrivals::migration::prepare(&config.root, &mut registry, config.enable_arrivals)?;
         let network = if let Some(policy) = &config.network_policy {
-            policy.validate()?;
-            let bus_id = match (&arrival_meta, registry.network_meta()) {
-                (Some(arrival), Some(network)) if arrival.bus_id != network.bus_id => {
-                    return Err(BrokerError::internal(
-                        "network and arrival bus identities conflict",
-                    ))
-                }
-                (Some(arrival), _) => arrival.bus_id.clone(),
-                (_, Some(network)) => network.bus_id.clone(),
-                _ => id::new_ulid()?,
-            };
-            let meta = registry.promote_network(bus_id)?;
+            let meta = registry.prepare_network()?;
+            registry.apply_network_policy_generations(
+                &policy
+                    .devices
+                    .iter()
+                    .map(|d| (d.principal_id.clone(), d.generation))
+                    .collect::<Vec<_>>(),
+            )?;
             Some(Arc::new(crate::network::NetworkRuntime::new(
                 policy.clone(),
                 meta,
@@ -579,18 +576,45 @@ pub async fn dispatch(
     request: RpcRequest,
 ) -> Option<RpcResponse> {
     if state.network().is_some() {
-        if let Ok(token) = request_token(&request.params, session) {
-            let scoped = {
+        if request
+            .params
+            .get("token")
+            .is_some_and(|v| !v.is_null() && v.as_str().is_none_or(str::is_empty))
+        {
+            return (!request.is_notification).then(|| {
+                RpcResponse::failure(
+                    request.id.clone().unwrap_or(Value::Null),
+                    RpcError::invalid_params("token must be a nonempty string"),
+                )
+            });
+        }
+        let bound_token = if let Some(token) = &session.token {
+            let registry = state.registry.read().await;
+            let local = registry
+                .authenticate(token)
+                .is_some_and(|id| registry.network_grant(&id.agent_id).is_none());
+            (!local).then(|| token.clone())
+        } else {
+            None
+        };
+        if let Ok(token) = bound_token
+            .map(Ok)
+            .unwrap_or_else(|| request_token(&request.params, session))
+        {
+            let local = {
                 let registry = state.registry.read().await;
                 registry
                     .authenticate(&token)
-                    .is_some_and(|id| registry.network_grant(&id.agent_id).is_some())
+                    .is_some_and(|id| registry.network_grant(&id.agent_id).is_none())
             };
-            if scoped {
+            if !local {
                 let id = request.id.clone().unwrap_or(Value::Null);
                 let result =
                     crate::network::call_remote(state, &token, &request.method, request.params)
                         .await;
+                if result.is_ok() {
+                    session.token = Some(token);
+                }
                 if request.is_notification {
                     return None;
                 }
@@ -681,7 +705,17 @@ async fn route(
             if request.method == "retire_agent" {
                 session.token = None;
             }
-            to_value(metadata)
+            let mut reply = to_value(metadata)?;
+            if state
+                .registry
+                .read()
+                .await
+                .network_grant(&identity.agent_id)
+                .is_some()
+            {
+                reply["network_scoped"] = Value::Bool(true);
+            }
+            Ok(reply)
         }
         method if AUTHENTICATED_METHODS.contains(&method) => {
             let identity = authenticate_request(state, session, &request.params).await?;
