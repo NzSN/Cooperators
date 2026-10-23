@@ -1,0 +1,4 @@
+interface:
+  display_name: "Cooperators"
+  short_description: "Coordinate agents with messages, tasks and documents"
+  default_prompt: "Use $cooperators to coordinate this task through the configured broker."
