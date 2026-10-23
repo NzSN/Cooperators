@@ -133,9 +133,6 @@ pub struct DaemonConfig {
     pub enable_arrivals: bool,
     /// Separate arrival subscription/feed bounds.
     pub arrival_limits: ArrivalLimits,
-    /// Experimental native remote read adapter. Off until explicitly selected
-    /// by an isolated fixture or the later network policy activation path.
-    pub remote_read_only: bool,
     /// Explicit approved-principal policy; activates the incompatible network
     /// root format before source-log recovery. A client connection never does.
     pub network_policy: Option<crate::network::NetworkPolicy>,
@@ -162,7 +159,6 @@ impl DaemonConfig {
             write_queue_bytes: 8 * 1024 * 1024,
             enable_arrivals: false,
             arrival_limits: ArrivalLimits::default(),
-            remote_read_only: false,
             network_policy: None,
         }
     }
@@ -229,15 +225,23 @@ impl DaemonState {
         paths::ensure_layout(&config.root)?;
         let mut registry = Registry::load(&config.root)?;
         if registry.network_meta().is_some() && config.network_policy.is_none() {
-            return Err(BrokerError::invalid("an activated network root requires its approved policy on every reopen"));
+            return Err(BrokerError::invalid(
+                "an activated network root requires its approved policy on every reopen",
+            ));
+        }
+        if let Some(policy) = &config.network_policy {
+            policy.validate()?;
+            if registry.network_meta().is_some() {
+                registry.validate_network_policy(policy)?;
+            }
         }
         // Validate/activate the format guard before any log recovery can repair
         // source files containing fields that an older binary cannot hash.
         let arrival_meta =
             arrivals::migration::prepare(&config.root, &mut registry, config.enable_arrivals)?;
         let network = if let Some(policy) = &config.network_policy {
-            policy.validate()?;
-            let bus_id = match (&arrival_meta, registry.network_meta()) {
+            let arrival_identity = arrivals::migration::existing_meta(&config.root)?;
+            let bus_id = match (&arrival_identity, registry.network_meta()) {
                 (Some(arrival), Some(network)) if arrival.bus_id != network.bus_id => {
                     return Err(BrokerError::internal(
                         "network and arrival bus identities conflict",
@@ -248,6 +252,7 @@ impl DaemonState {
                 _ => id::new_ulid()?,
             };
             let meta = registry.promote_network(bus_id)?;
+            registry.approve_network_policy(policy)?;
             Some(Arc::new(crate::network::NetworkRuntime::new(
                 policy.clone(),
                 meta,
@@ -582,15 +587,23 @@ pub async fn dispatch(
         if let Ok(token) = request_token(&request.params, session) {
             let scoped = {
                 let registry = state.registry.read().await;
-                registry
-                    .authenticate(&token)
-                    .is_some_and(|id| registry.network_grant(&id.agent_id).is_some())
+                registry.is_network_credential(&token)
+                    || state
+                        .network()
+                        .unwrap()
+                        .policy()
+                        .devices
+                        .iter()
+                        .any(|d| d.token_hash == crate::registry::token_hash(&token))
             };
             if scoped {
                 let id = request.id.clone().unwrap_or(Value::Null);
                 let result =
                     crate::network::call_remote(state, &token, &request.method, request.params)
                         .await;
+                if result.is_ok() {
+                    session.token = Some(token);
+                }
                 if request.is_notification {
                     return None;
                 }

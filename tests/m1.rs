@@ -29,7 +29,7 @@ async fn call(
         .expect("dispatch returns a response for a request with id")
         .into_result()
         .map_err(|error| {
-            eprintln!("rpc {method} {params} failed: {error:?}");
+            eprintln!("rpc {method} failed: {error:?}");
             error
         })
 }

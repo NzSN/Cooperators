@@ -73,8 +73,21 @@ impl NetworkRuntime {
 
     /// Admissions authorized before this replacement may complete; read results
     /// are checked again before return. Capacity changes require restart.
-    pub fn replace_policy(&self, policy: NetworkPolicy) -> Result<(), BrokerError> {
+    pub async fn replace_policy(
+        &self,
+        state: &DaemonState,
+        policy: NetworkPolicy,
+    ) -> Result<(), BrokerError> {
         policy.validate()?;
+        if !state
+            .network()
+            .is_some_and(|runtime| std::ptr::eq(runtime.as_ref(), self))
+        {
+            return Err(BrokerError::invalid(
+                "policy replacement requires its owning daemon state",
+            ));
+        }
+        let mut registry = state.registry.write().await;
         let mut current = self.policy.write().unwrap();
         if current.max_connections != policy.max_connections
             || current.requests_per_principal != policy.requests_per_principal
@@ -84,23 +97,14 @@ impl NetworkRuntime {
                 "network capacity changes require restart",
             ));
         }
-        for old in &current.devices {
-            if policy
-                .devices
-                .iter()
-                .any(|d| d.principal_id == old.principal_id && d.generation < old.generation)
-            {
-                return Err(BrokerError::invalid(
-                    "principal generation must not decrease",
-                ));
-            }
-        }
+        registry.approve_network_policy(&policy)?;
         for (map, capacity) in [
             (&self.requests, policy.requests_per_principal),
             (&self.polls, policy.polls_per_principal),
         ] {
             let mut gates = map.lock().unwrap();
-            gates.retain(|id, _| policy.devices.iter().any(|d| d.principal_id == *id));
+            // Retain gates across removal so outstanding requests still count
+            // if a principal is restored with a newer generation.
             for device in &policy.devices {
                 gates
                     .entry(device.principal_id.clone())
@@ -117,6 +121,7 @@ impl NetworkRuntime {
         token: &str,
     ) -> Result<AuthContext, BrokerError> {
         let registry = state.registry.read().await;
+        registry.check_activation_ready()?;
         let identity = registry.authenticate(token).ok_or_else(unauthenticated)?;
         let grant = registry
             .network_grant(&identity.agent_id)
@@ -196,21 +201,37 @@ impl NetworkRuntime {
         }
         let request: Enrollment = serde_json::from_value(params)
             .map_err(|_| BrokerError::invalid("invalid approved enrollment request"))?;
-        let policy = self.policy();
-        let device = policy.authenticate_device(token)?;
-        if !device.allow_enroll {
-            return Err(forbidden());
-        }
-        let _permit = self.request_permit(&device.principal_id, false)?;
-        let grant = NetworkGrant {
-            principal_id: device.principal_id.clone(),
-            principal_generation: device.generation,
-            expires_at_ms: crate::id::unix_millis()
-                .saturating_add(device.instance_ttl_s * 1000)
-                .min(device.expires_at_ms),
-        };
+        let principal = self
+            .policy()
+            .authenticate_device(token)?
+            .principal_id
+            .clone();
+        let _permit = self.request_permit(&principal, false)?;
         let enrollment = {
             let mut registry = state.registry.write().await;
+            // Policy replacement and the registry commit share this admission
+            // boundary. Never hold a policy guard across an await.
+            let policy = self.policy.read().unwrap();
+            let device = policy.authenticate_device(token)?;
+            if !device.allow_enroll || device.principal_id != principal {
+                return Err(forbidden());
+            }
+            if policy
+                .devices
+                .iter()
+                .any(|d| d.token_hash == crate::registry::token_hash(&request.launch_key))
+            {
+                return Err(BrokerError::invalid(
+                    "instance launch proof must differ from every device credential",
+                ));
+            }
+            let grant = NetworkGrant {
+                principal_id: device.principal_id.clone(),
+                principal_generation: device.generation,
+                expires_at_ms: crate::id::unix_millis()
+                    .saturating_add(device.instance_ttl_s * 1000)
+                    .min(device.expires_at_ms),
+            };
             let retry = registry.authenticate(&request.launch_key).is_some();
             if !retry && registry.network_issued(&device.principal_id) >= device.max_instances {
                 return Err(BrokerError::application(
@@ -261,6 +282,13 @@ impl NetworkRuntime {
         {
             return Err(forbidden());
         }
+        if !self
+            .policy()
+            .device(&context.principal_id)
+            .is_some_and(|d| d.generation == context.principal_generation)
+        {
+            return Err(unauthenticated());
+        }
         let resource = match method {
             "send_message" => {
                 let recipient = state
@@ -306,9 +334,11 @@ impl NetworkRuntime {
             }
             _ => format!("agent:{}", context.identity.agent_id),
         };
-        if !self
-            .policy()
-            .allows(&context.principal_id, method, &resource)
+        let policy = self.policy();
+        if !policy
+            .device(&context.principal_id)
+            .is_some_and(|d| d.generation == context.principal_generation)
+            || !policy.allows(&context.principal_id, method, &resource)
         {
             return Err(forbidden());
         }

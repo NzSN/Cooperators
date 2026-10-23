@@ -1,0 +1,82 @@
+warning: use of deprecated method `std::sync::atomic::Atomic::<u64>::fetch_update`: renamed to `try_update` for consistency
+   --> src/faults.rs:137:14
+    |
+137 |             .fetch_update(Ordering::Relaxed, Ordering::Relaxed, |old| {
+    |              ^^^^^^^^^^^^
+    |
+    = note: `#[warn(deprecated)]` on by default
+help: replace the use of the deprecated method
+    |
+137 -             .fetch_update(Ordering::Relaxed, Ordering::Relaxed, |old| {
+137 +             .try_update(Ordering::Relaxed, Ordering::Relaxed, |old| {
+    |
+
+warning: `cooperators` (lib) generated 1 warning (run `cargo fix --lib -p cooperators` to apply 1 suggestion)
+   Compiling cooperators v0.1.0 (/home/lsz/Codebase/Cooperators)
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 1.13s
+     Running tests/network_migration.rs (target/debug/deps/network_migration-71e2148b9f10bdae)
+
+running 7 tests
+test network_activation_crash_child ... ok
+test orphan_metadata_is_adopted_and_conflicts_do_not_promote_arrivals ... ok
+test activated_root_refuses_missing_policy_before_repair_and_invalid_policy_before_activation ... ok
+test enrollment_expiry_and_budget_survive_reopen_without_revival ... ok
+test upgrades_in_both_orders_preserve_bus_identity_and_historical_registry_fields ... ok
+test real_process_kill_at_registry_replacement_recovers_one_stable_authority ... ok
+test actual_pre_network_binary_refuses_v3_before_any_source_repair ... ok
+
+test result: ok. 7 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.22s
+
+     Running tests/remote_authorization.rs (target/debug/deps/remote_authorization-074b00279059226d)
+
+running 12 tests
+test policy_validation_and_header_controls_reject_ambiguous_authority ... ok
+test policy_removal_does_not_reset_capacity_or_restore_old_generations ... ok
+test unready_mutations_cannot_bypass_policy_through_any_dispatch ... ok
+test enrollment_retries_keep_identity_expiry_and_persistent_budget ... ok
+test generation_expiry_retirement_and_policy_replacement_fence_instances ... ok
+test pagination_is_authorized_query_scoped_and_rejects_bad_types ... ok
+test native_ingress_requires_approved_scoped_credentials_and_exact_authority ... ok
+test body_credentials_and_resource_denials_apply_through_native_uds_and_mcp ... ok
+test arrival_pages_and_subscription_lists_check_current_resource_policy ... ok
+test revocation_during_a_wait_suppresses_the_result_and_releases_capacity ... ok
+test bounded_inbox_and_document_reads_do_not_skip_oversized_contents ... ok
+test bounded_channel_pages_preserve_cursors_and_refuse_a_single_oversized_record ... ok
+
+test result: ok. 12 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.70s
+
+     Running tests/remote_transport.rs (target/debug/deps/remote_transport-d39febe885317853)
+
+running 10 tests
+test contracts_cover_every_mcp_alias_and_native_route ... ok
+test endpoint_rejects_plaintext_credentials_and_ambiguous_paths ... ok
+test profile_credentials_are_private_referenced_and_not_debugged ... ok
+coop daemon: MCP streamable HTTP on http://127.0.0.1:46143/mcp
+coop daemon: MCP streamable HTTP on http://127.0.0.1:38049/mcp
+coop daemon: MCP streamable HTTP on http://127.0.0.1:37557/mcp
+coop daemon: MCP streamable HTTP on http://127.0.0.1:41907/mcp
+coop daemon: MCP streamable HTTP on http://127.0.0.1:40199/mcp
+coop daemon: MCP streamable HTTP on http://127.0.0.1:40629/mcp
+coop daemon: MCP streamable HTTP on http://127.0.0.1:40077/mcp
+test scoped_credentials_keep_authorization_over_a_real_uds_connection ... ok
+test tls_rejects_untrusted_certificate_and_wrong_hostname ... ok
+test redirects_do_not_forward_credentials_or_retry ... ok
+test lost_mutation_response_is_unknown_and_is_never_automatically_retried ... ok
+
+thread 'verified_tls_forwards_native_identity_and_wait_without_body_credentials' (323473) panicked at tests/remote_transport.rs:251:5:
+assertion failed: matches!(result, Err(ClientError::HttpStatus(403)))
+note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
+test tls_enrollment_and_pinned_bus_identity_use_the_approved_gateway ... ok
+test verified_tls_forwards_native_identity_and_wait_without_body_credentials ... FAILED
+coop daemon: MCP streamable HTTP on http://127.0.0.1:33581/mcp
+coop daemon: MCP streamable HTTP on http://127.0.0.1:43899/mcp
+test deadlines_and_response_limits_cover_the_tls_exchange ... ok
+
+failures:
+
+failures:
+    verified_tls_forwards_native_identity_and_wait_without_body_credentials
+
+test result: FAILED. 9 passed; 1 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.29s
+
+error: test failed, to rerun pass `--test remote_transport`

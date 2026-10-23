@@ -271,15 +271,65 @@ impl DaemonState {
     /// Lists registered agents. When `include_stale` is false only `active`
     /// agents are returned; otherwise every state is included.
     pub async fn list_agents(&self, include_stale: bool) -> Result<Vec<AgentView>, BrokerError> {
-        self.sweep_presence().await?;
+        self.list_agents_page(include_stale, None, usize::MAX, |_, _| true)
+            .await
+    }
+
+    pub(crate) async fn list_agents_page(
+        &self,
+        include_stale: bool,
+        after: Option<&str>,
+        limit: usize,
+        allowed: impl Fn(&str, &str) -> bool,
+    ) -> Result<Vec<AgentView>, BrokerError> {
+        if limit == usize::MAX {
+            self.sweep_presence().await?;
+        }
+        // Remote listing computes a view without constructing a full sweep's
+        // transition batch. The background sweeper owns transition emission.
+        let now_ms = id::unix_millis();
         let registry = self.registry.read().await;
         let presence = self.presence.lock().await;
         let mut views = Vec::new();
+        let mut encoded_bytes = 0usize;
         for (name, record) in registry.records_with_names() {
+            if after.is_some_and(|after| name <= after) || !allowed(name, &record.agent_id) {
+                continue;
+            }
+            if views.len() == limit {
+                break;
+            }
             let entry = presence.entries.get(&record.agent_id);
-            let state = entry.map_or(AgentState::Active, |entry| entry.state);
+            let state = entry.map_or(AgentState::Active, |entry| {
+                let silence = now_ms.saturating_sub(entry.last_seen_ms);
+                if silence >= u64::try_from(self.config.gone_after.as_millis()).unwrap_or(u64::MAX)
+                {
+                    AgentState::Gone
+                } else if silence
+                    >= u64::try_from(self.config.stale_after.as_millis()).unwrap_or(u64::MAX)
+                {
+                    AgentState::Stale
+                } else {
+                    AgentState::Active
+                }
+            });
             if !include_stale && state != AgentState::Active {
                 continue;
+            }
+            if limit != usize::MAX {
+                let Some(size) = crate::rpc::bounded_json_size(
+                    record,
+                    (crate::transport::MAX_RPC_BYTES - 16384).saturating_sub(encoded_bytes),
+                ) else {
+                    if views.is_empty() {
+                        return Err(BrokerError::application(
+                            crate::error::ErrorCode::ResourceExhausted,
+                            "agent metadata exceeds remote page budget",
+                        ));
+                    }
+                    break;
+                };
+                encoded_bytes += size + 1024;
             }
             let last_seen = entry.map_or_else(
                 || record.registered_at.clone(),

@@ -1188,10 +1188,37 @@ impl DaemonState {
 
     /// Lists document metadata, optionally filtered by name prefix.
     pub async fn list_docs(&self, prefix: Option<&str>) -> Result<ListDocsResponse, BrokerError> {
+        self.list_docs_page(prefix, None, usize::MAX, |_| true)
+            .await
+    }
+
+    pub(crate) async fn list_docs_page(
+        &self,
+        prefix: Option<&str>,
+        after: Option<&str>,
+        limit: usize,
+        allowed: impl Fn(&str) -> bool,
+    ) -> Result<ListDocsResponse, BrokerError> {
         let _send_guard = self.send_lock.lock().await;
-        let names: Vec<String> = self.doc_states.lock().await.keys().cloned().collect();
+        // Keep only the next authorized names; never construct a full remote list.
+        let mut names = std::collections::BTreeSet::new();
+        for name in self.doc_states.lock().await.keys() {
+            if prefix.is_some_and(|prefix| !name.starts_with(prefix))
+                || after.is_some_and(|after| name.as_str() <= after)
+                || !allowed(name)
+            {
+                continue;
+            }
+            if names.len() < limit || names.last().is_some_and(|last| name < last) {
+                names.insert(name.clone());
+                if names.len() > limit {
+                    names.pop_last();
+                }
+            }
+        }
         let now_ms = id::unix_millis();
         let mut docs = Vec::new();
+        let mut encoded_bytes = 0usize;
         for name in names {
             if prefix.is_some_and(|prefix| !name.starts_with(prefix)) {
                 continue;
@@ -1208,6 +1235,25 @@ impl DaemonState {
             let Some(head) = runtime.head_version() else {
                 continue;
             };
+            if limit != usize::MAX {
+                let Some(size) = crate::rpc::bounded_json_size(
+                    &(
+                        &runtime.title,
+                        &head.mime,
+                        runtime.claim.as_ref().map(claim_view),
+                    ),
+                    (crate::transport::MAX_RPC_BYTES - 16384).saturating_sub(encoded_bytes),
+                ) else {
+                    if docs.is_empty() {
+                        return Err(BrokerError::application(
+                            ErrorCode::ResourceExhausted,
+                            "document metadata exceeds remote page budget",
+                        ));
+                    }
+                    break;
+                };
+                encoded_bytes += size + 1024;
+            }
             docs.push(DocSummary {
                 name: name.clone(),
                 head_version: runtime.head,

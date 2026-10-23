@@ -131,7 +131,7 @@
       "commit": "covering fsync; result reconstructed from authoritative operation evidence",
       "negative_result": "no automatic retry with a new identity; claim empty outcome must be durably terminal",
       "retention": "read none; durable keys use validity epoch plus replay tombstones",
-      "initial_remote_exposure": "deny"
+      "initial_remote_exposure": "approved-device-enrollment-only"
     },
     {
       "method": "fail_task",

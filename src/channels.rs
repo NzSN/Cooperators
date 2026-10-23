@@ -285,7 +285,25 @@ impl DaemonState {
         limit: usize,
         wait: Duration,
     ) -> Result<ChannelReadBatch, BrokerError> {
+        self.read_channel_limited(channel, cursor, limit, wait, None)
+            .await
+    }
+
+    pub(crate) async fn read_channel_limited(
+        &self,
+        channel: &str,
+        cursor: Option<ChannelCursor>,
+        limit: usize,
+        wait: Duration,
+        byte_limit: Option<usize>,
+    ) -> Result<ChannelReadBatch, BrokerError> {
         validate_channel_name(channel)?;
+        if cursor
+            .as_ref()
+            .is_some_and(|c| c.file != ChannelCursor::new(channel, 0).file)
+        {
+            return Err(BrokerError::invalid("cursor belongs to another channel"));
+        }
         if limit == 0 || limit > MAX_READ_LIMIT {
             return Err(BrokerError::invalid(format!(
                 "limit must be 1..={MAX_READ_LIMIT}"
@@ -318,13 +336,29 @@ impl DaemonState {
                 let log = logs
                     .get_mut(channel)
                     .expect("channel log is present after insertion");
-                let messages = log
+                let mut messages = Vec::new();
+                let mut encoded_bytes = 0usize;
+                let first = log
                     .records
-                    .iter()
-                    .filter(|record| record.seq > start.seq)
-                    .take(limit)
-                    .cloned()
-                    .collect::<Vec<_>>();
+                    .partition_point(|record| record.seq <= start.seq);
+                for record in log.records[first..].iter().take(limit) {
+                    if let Some(maximum) = byte_limit {
+                        let Some(size) = crate::rpc::bounded_json_size(
+                            record,
+                            maximum.saturating_sub(encoded_bytes),
+                        ) else {
+                            if messages.is_empty() {
+                                return Err(BrokerError::application(
+                                    ErrorCode::ResourceExhausted,
+                                    "next channel record exceeds remote page budget",
+                                ));
+                            }
+                            break;
+                        };
+                        encoded_bytes = encoded_bytes.saturating_add(size + 1);
+                    }
+                    messages.push(record.clone());
+                }
                 let head = ChannelCursor::new(channel, log.log.seq_head());
                 let notified = Arc::clone(&log.notify).notified_owned();
                 (messages, head, notified)

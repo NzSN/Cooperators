@@ -95,6 +95,7 @@ struct Fixture {
     origin: String,
     token: String,
     agent_id: String,
+    device_token: String,
 }
 
 impl Drop for Fixture {
@@ -123,9 +124,18 @@ impl Fixture {
         };
         let port = listener.local_addr().unwrap().port();
         let mut config = DaemonConfig::new(temp.path().join("root"));
-        config.remote_read_only = true;
+        let device_token = cooperators::registry::new_token().unwrap();
+        config.network_policy = Some(serde_json::from_value(json!({
+            "v":1, "allowed_hosts":["localhost"], "devices":[{
+                "principal_id":"tls-test", "token_hash":cooperators::registry::token_hash(&device_token),
+                "expires_at_ms":cooperators::id::unix_millis()+3_600_000,
+                "allow_enroll":true, "max_instances":10, "instance_ttl_s":3600,
+                "permissions":method_contracts().iter().map(|m|json!({"method":m.method,"resources":["*"]})).collect::<Vec<_>>()
+            }]
+        })).unwrap());
         let state = Arc::new(DaemonState::owned(config).unwrap());
-        let registration = local(&state, "register_agent", json!({"name":"network-alice"})).await;
+        let registration = state.network().unwrap().enroll(&state, &device_token,
+            json!({"launch_key":cooperators::registry::new_token().unwrap(),"kind":"agent","display_name":"network-alice"})).await.unwrap();
         let http_state = state.clone();
         let task = tokio::spawn(async move { mcp::serve_http(listener, http_state).await });
         let ready = temp.path().join("ready.json");
@@ -151,6 +161,7 @@ impl Fixture {
             origin: String::new(),
             token: registration["token"].as_str().unwrap().into(),
             agent_id: registration["agent_id"].as_str().unwrap().into(),
+            device_token,
         };
         for _ in 0..300 {
             if ready.exists() {
@@ -233,7 +244,7 @@ async fn verified_tls_forwards_native_identity_and_wait_without_body_credentials
     let result = client
         .call(
             "send_message",
-            json!({"token":fixture.token,"to":"network-alice","text":"blocked"}),
+            json!({"token":fixture.token,"to":fixture.agent_id,"text":"blocked"}),
             Duration::from_secs(5),
         )
         .await;
@@ -353,4 +364,145 @@ async fn deadlines_and_response_limits_cover_the_tls_exchange() {
             .await
             .is_err());
     }
+}
+
+#[tokio::test]
+async fn tls_enrollment_and_pinned_bus_identity_use_the_approved_gateway() {
+    let Some(fixture) = Fixture::start("proxy").await else {
+        return;
+    };
+    let bus = fixture.state.network().unwrap().meta.bus_id.clone();
+    let client = fixture.client().with_expected_bus_id(bus.clone()).unwrap();
+    let enrollment=client.call("enroll_agent",json!({"token":fixture.device_token,
+        "launch_key":cooperators::registry::new_token().unwrap(),"kind":"agent","display_name":"tls-enrolled"}),Duration::from_secs(5)).await.unwrap();
+    assert_eq!(enrollment["bus_id"], bus);
+    let identity = client
+        .call(
+            "instance_metadata",
+            json!({"token":enrollment["token"]}),
+            Duration::from_secs(5),
+        )
+        .await
+        .unwrap();
+    assert_eq!(identity["agent_id"], enrollment["agent_id"]);
+    let wrong = fixture
+        .client()
+        .with_expected_bus_id(cooperators::id::new_ulid().unwrap())
+        .unwrap();
+    let before = fixture.events().len();
+    assert!(matches!(
+        wrong
+            .call(
+                "ping",
+                json!({"token":fixture.token}),
+                Duration::from_secs(5)
+            )
+            .await,
+        Err(ClientError::Protocol(_))
+    ));
+    assert_eq!(
+        fixture.events().len(),
+        before,
+        "bus mismatch must fail before RPC submission"
+    );
+}
+
+#[tokio::test]
+async fn scoped_credentials_keep_authorization_over_a_real_uds_connection() {
+    let Some(fixture) = Fixture::start("proxy").await else {
+        return;
+    };
+    let socket = fixture.temp.path().join("scoped.sock");
+    let listener = tokio::net::UnixListener::bind(&socket).unwrap();
+    let state = fixture.state.clone();
+    let task = tokio::spawn(async move { server::serve(listener, state).await });
+    let client = BrokerClient::uds(&socket);
+    let identity = client
+        .call(
+            "instance_metadata",
+            json!({"token":fixture.token}),
+            Duration::from_secs(5),
+        )
+        .await
+        .unwrap();
+    assert_eq!(identity["agent_id"], fixture.agent_id);
+    let error = client
+        .call(
+            "create_queue",
+            json!({"token":fixture.token,"queue":"bypass"}),
+            Duration::from_secs(5),
+        )
+        .await
+        .unwrap_err();
+    assert!(
+        matches!(error,ClientError::Rpc(error) if error.code == cooperators::error::ErrorCode::Forbidden.rpc_code())
+    );
+    assert!(!fixture
+        .temp
+        .path()
+        .join("root/queues/bypass.jsonl")
+        .exists());
+    task.abort();
+}
+
+#[tokio::test]
+async fn real_tls_mcp_preserves_header_identity_and_hides_unready_mutations() {
+    let Some(fixture) = Fixture::start("proxy").await else {
+        return;
+    };
+    let client = reqwest::Client::builder()
+        .no_proxy()
+        .add_root_certificate(
+            reqwest::Certificate::from_pem(include_bytes!("fixtures/tls/ca.pem")).unwrap(),
+        )
+        .timeout(Duration::from_secs(5))
+        .build()
+        .unwrap();
+    let response = client
+        .post(format!("{}/mcp", fixture.origin))
+        .bearer_auth(&fixture.token)
+        .header("Accept", "application/json, text/event-stream")
+        .json(
+            &json!({"jsonrpc":"2.0","id":1,"method":"tools/call","params":{
+            "name":"coop_instance_metadata","arguments":{}}}),
+        )
+        .send()
+        .await
+        .unwrap();
+    assert_eq!(response.status(), 200);
+    let reply: Value = response.json().await.unwrap();
+    assert_eq!(
+        reply["result"]["structuredContent"]["agent_id"],
+        fixture.agent_id
+    );
+    let response = client
+        .post(format!("{}/mcp", fixture.origin))
+        .bearer_auth(&fixture.token)
+        .header("Accept", "application/json, text/event-stream")
+        .json(
+            &json!({"jsonrpc":"2.0","id":2,"method":"tools/call","params":{
+            "name":"coop_instance_metadata","arguments":{"token":fixture.device_token}}}),
+        )
+        .send()
+        .await
+        .unwrap();
+    let reply: Value = response.json().await.unwrap();
+    assert!(reply.to_string().contains("FORBIDDEN"));
+    let response = client
+        .post(format!("{}/mcp", fixture.origin))
+        .bearer_auth(&fixture.token)
+        .header("Accept", "application/json, text/event-stream")
+        .json(&json!({"jsonrpc":"2.0","id":3,"method":"tools/list"}))
+        .send()
+        .await
+        .unwrap();
+    let reply: Value = response.json().await.unwrap();
+    assert!(reply["result"]["tools"]
+        .as_array()
+        .unwrap()
+        .iter()
+        .all(|tool| !matches!(
+            tool["name"].as_str(),
+            Some("coop_create_queue" | "coop_send_message" | "coop_register_agent")
+        )));
 }

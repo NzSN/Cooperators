@@ -1,0 +1,87 @@
+{
+  "date": "2026-10-23",
+  "resumed_from": "44900f39e6d891da97f486fe275e72a413cbb952",
+  "source_state": "qualified working tree based on 44900f3; final source manifests identify qualified files independently of the publication commit",
+  "accepted_scope": "N2 local approved enrollment and scoped read/policy/migration gate",
+  "gate_passed": true,
+  "network_release_accepted": false,
+  "remote_domain_mutations_enabled": false,
+  "source_manifest_sha256": "e38d5724a77f5d2aa8e241a5453d5ee14ab6e6c81d993f5db1f508b5dccadd77",
+  "final_receipts": {
+    "full-normal-run-03": {
+      "receipt": "full-normal-run-03/receipt.json",
+      "passed_tests": 213,
+      "failed_tests": 0,
+      "ignored_tests": 1,
+      "reported_skips": 0,
+      "source_unchanged": true,
+      "log_sha256": "e1c20436fb0080c820c37fbe828dafe0ca64227ddd1038cc151f83f9e97eacd1"
+    },
+    "full-injection-run-02": {
+      "receipt": "full-injection-run-02/receipt.json",
+      "passed_tests": 265,
+      "failed_tests": 0,
+      "ignored_tests": 1,
+      "reported_skips": 0,
+      "source_unchanged": true,
+      "log_sha256": "c536eccec23e3a0f87bf43a158db660f212fc1071109014e3b89b944b6af862e"
+    },
+    "generated-replay-03": {
+      "receipt": "generated-replay-03/receipt.json",
+      "passed_tests": 0,
+      "failed_tests": 0,
+      "ignored_tests": 0,
+      "reported_skips": 0,
+      "source_unchanged": true,
+      "log_sha256": "be6efd24569babfe8155e6d6cc1feacdc091e56a6508e86a6aebc9a8d1cc9360"
+    },
+    "final-build-check-01": {
+      "receipt": "final-build-check-01/receipt.json",
+      "passed_tests": 0,
+      "failed_tests": 0,
+      "ignored_tests": 0,
+      "reported_skips": 0,
+      "source_unchanged": true,
+      "log_sha256": "f73a41b7ee70b783bbe14495dae05ff00d4420b101ac22881a97c20654bc0c77"
+    }
+  },
+  "generated_replay": {
+    "protocol_traces": 34,
+    "writer_traces": 5,
+    "fault_traces": 24,
+    "total_traces": 63,
+    "failures": 0,
+    "real_rotation_crash_controls": 2,
+    "scope": "existing generated model regression; no new network-operation model claimed"
+  },
+  "focused_security_controls": [
+    "real TLS native CLI and HTTP MCP; bus identity pinning; scoped real UDS",
+    "body/header identity separation, exact Host and Origin policy, request admission and bounds",
+    "resource-filtered bounded pagination and byte-bounded inbox/channel/document reads",
+    "expiry/retirement/budgets, policy revisions, generation fencing and revocation during wait",
+    "V1/V2 to V3 and both arrival/network activation orders, orphan adoption and metadata conflict denial",
+    "actual pinned pre-network executable refusal before log repair",
+    "actual process kills before and after registry replacement and uncertain-policy-I/O fencing"
+  ],
+  "ignored_scope": "one pre-existing performance test per full Rust suite",
+  "remaining_gates": [
+    "N3a atomic operation receipt core and direct-send crash pilot",
+    "N3b mutation families and terminal negative/empty replay",
+    "N3c lifecycle renewal, client recovery/cursors and retention",
+    "N4 remote managed hosts and controller fencing",
+    "N5 network models plus actual topology/provider qualification",
+    "N6 autonomous-site federation, only if selected"
+  ],
+  "next_gate": "N3a",
+  "evidence_notes": [
+    "Failed and intermediate attempts are retained; see README.md for scope and failure corrections.",
+    "Historical log redactions map original receipt hashes to published hashes in credential-redactions.json.",
+    "Final receipt logs require no credential redaction.",
+    "No provider session, user bus, remote deployment or private source transfer was used."
+  ],
+  "publication": {
+    "branch": "checkpoint/n2-local-authority-20261023",
+    "remote_main_at_fetch": "804781c103228ff5fe1eac94948b021d973470ff",
+    "scope": "separate qualified N2 checkpoint; preserves independently advanced main; no merge qualification"
+  }
+}

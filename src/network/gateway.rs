@@ -40,6 +40,13 @@ pub async fn call_remote(
     if !params.is_object() {
         return Err(RpcError::invalid_params("object params required"));
     }
+    validate_read_params(method, &params)?;
+    if crate::rpc::bounded_json_size(&params, MAX_RPC_BYTES - 1024).is_none() {
+        return Err(RpcError::application(
+            ErrorCode::ResourceExhausted,
+            "request exceeds limit",
+        ));
+    }
     let context = network
         .authenticate(state, token)
         .await
@@ -55,16 +62,16 @@ pub async fn call_remote(
     let _permit = network
         .request_permit(&context.principal_id, poll)
         .map_err(|e| e.into_rpc_error())?;
-    network
-        .authorize(state, &context, method, &params)
-        .await
-        .map_err(|e| e.into_rpc_error())?;
     if !remote_method_ready(method) {
         return Err(RpcError::application(
             ErrorCode::Forbidden,
             "method has not passed its remote mutation gate",
         ));
     }
+    network
+        .authorize(state, &context, method, &params)
+        .await
+        .map_err(|e| e.into_rpc_error())?;
     // Bound caller-selected read windows and page sizes before domain dispatch.
     if params
         .get("timeout_s")
@@ -84,7 +91,15 @@ pub async fn call_remote(
     if matches!(method, "wait_message" | "wait_arrivals") && params.get("timeout_s").is_none() {
         params["timeout_s"] = json!(25);
     }
-    if matches!(method, "read_channel" | "wait_arrivals") && params.get("limit").is_none() {
+    if matches!(
+        method,
+        "read_channel"
+            | "wait_arrivals"
+            | "list_docs"
+            | "list_agents"
+            | "list_arrival_subscriptions"
+    ) && params.get("limit").is_none()
+    {
         params["limit"] = json!(64);
     }
     let original = params.clone();
@@ -123,6 +138,32 @@ pub async fn call_remote(
                 .map_err(|e| e.into_rpc_error())?,
         )
         .expect("document result serializes")
+    } else if method == "read_channel" {
+        let channel = params["channel"].as_str().expect("authorized channel");
+        let cursor = params
+            .get("cursor")
+            .filter(|v| !v.is_null())
+            .map(|v| crate::channels::parse_channel_cursor(v, channel))
+            .transpose()
+            .map_err(|e| e.into_rpc_error())?;
+        serde_json::to_value(
+            state
+                .read_channel_limited(
+                    channel,
+                    cursor,
+                    params["limit"].as_u64().unwrap_or(64) as usize,
+                    Duration::from_secs(params["wait_s"].as_u64().unwrap_or(0)),
+                    Some(MAX_RPC_BYTES - 16384),
+                )
+                .await
+                .map_err(|e| e.into_rpc_error())?,
+        )
+        .unwrap()
+    } else if matches!(
+        method,
+        "list_docs" | "list_agents" | "list_arrival_subscriptions"
+    ) {
+        super::pages::list_page(state, &context, method, &params).await?
     } else {
         server::dispatch_trusted(
             state,
@@ -155,6 +196,30 @@ pub async fn call_remote(
     filter_reply(state, &current, method, result)
 }
 
+fn validate_read_params(method: &str, params: &Value) -> Result<(), RpcError> {
+    for key in ["timeout_s", "wait_s", "limit", "version"] {
+        if let Some(value) = params.get(key) {
+            let n = value.as_u64().ok_or_else(|| {
+                RpcError::invalid_params(format!("{key} must be an unsigned integer"))
+            })?;
+            if matches!(key, "limit" | "version") && n == 0 {
+                return Err(RpcError::invalid_params(format!("{key} must be positive")));
+            }
+        }
+    }
+    if params.get("include_stale").is_some_and(|v| !v.is_boolean())
+        || params
+            .get("prefix")
+            .is_some_and(|v| v.as_str().is_none_or(|s| s.len() > 256))
+    {
+        return Err(RpcError::invalid_params("invalid list filter type"));
+    }
+    if method == "wait_message" && params.get("cursor").is_some_and(|v| !v.is_string()) {
+        return Err(RpcError::invalid_params("inbox cursor must be a string"));
+    }
+    Ok(())
+}
+
 pub(super) fn remote_method_ready(method: &str) -> bool {
     super::is_read(method) && !matches!(method, "echo" | "daemon.status")
 }
@@ -166,6 +231,15 @@ fn filter_reply(
     mut reply: Value,
 ) -> Result<Value, RpcError> {
     let policy = state.network().expect("network enabled").policy();
+    if !policy
+        .device(&context.principal_id)
+        .is_some_and(|d| d.generation == context.principal_generation)
+    {
+        return Err(RpcError::application(
+            ErrorCode::Unauthenticated,
+            "principal generation changed",
+        ));
+    }
     match method {
         "list_docs" => {
             if let Some(docs) = reply["docs"].as_array_mut() {
@@ -206,6 +280,25 @@ fn filter_reply(
             }
         }
         _ => {}
+    }
+    if matches!(
+        method,
+        "list_docs" | "list_agents" | "list_arrival_subscriptions"
+    ) && !reply["next_cursor"].is_null()
+    {
+        let (rows, key) = match method {
+            "list_docs" => ("docs", "name"),
+            "list_agents" => ("agents", "name"),
+            _ => ("subscriptions", "subscription_id"),
+        };
+        let after = reply[rows]
+            .as_array()
+            .and_then(|rows| rows.last())
+            .map(|row| row[key].clone());
+        match after {
+            Some(after) => reply["next_cursor"]["after"] = after,
+            None => reply["next_cursor"] = Value::Null,
+        }
     }
     if crate::rpc::bounded_json_size(&reply, MAX_RPC_BYTES - 1024).is_none() {
         return Err(RpcError::application(
@@ -277,25 +370,25 @@ where
             RpcError::invalid_request("POST required"),
         );
     }
-    if path == "/v1/enroll" {
-        if network.policy().authenticate_device(&token).is_err() {
-            return failure(
-                StatusCode::UNAUTHORIZED,
-                RpcError::application(
-                    ErrorCode::Unauthenticated,
-                    "approved enrollment principal required",
-                ),
-            );
-        }
-    } else if network.authenticate(state, &token).await.is_err() {
-        return failure(
-            StatusCode::UNAUTHORIZED,
-            RpcError::application(
-                ErrorCode::Unauthenticated,
-                "scoped instance credential required",
-            ),
-        );
-    }
+    let principal = if path == "/v1/enroll" {
+        network
+            .policy()
+            .authenticate_device(&token)
+            .map(|d| d.principal_id.clone())
+    } else {
+        network
+            .authenticate(state, &token)
+            .await
+            .map(|c| c.principal_id)
+    };
+    let principal = match principal {
+        Ok(principal) => principal,
+        Err(error) => return failure(StatusCode::UNAUTHORIZED, error.into_rpc_error()),
+    };
+    let body_permit = match network.request_permit(&principal, false) {
+        Ok(permit) => permit,
+        Err(error) => return failure(StatusCode::TOO_MANY_REQUESTS, error.into_rpc_error()),
+    };
     if request
         .headers()
         .get(http::header::CONTENT_TYPE)
@@ -343,6 +436,12 @@ where
         }
     };
     let id = request.id.clone().expect("not notification");
+    if crate::rpc::bounded_json_size(&id, 512).is_none() {
+        return failure(
+            StatusCode::BAD_REQUEST,
+            RpcError::invalid_request("request ID exceeds limit"),
+        );
+    }
     if request.params.get("token").is_some() {
         return json_response(
             StatusCode::BAD_REQUEST,
@@ -353,6 +452,7 @@ where
             .unwrap(),
         );
     }
+    drop(body_permit);
     let result = if path == "/v1/enroll" && request.method == "enroll_agent" {
         network
             .enroll(state, &token, request.params)

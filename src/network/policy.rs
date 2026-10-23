@@ -6,7 +6,7 @@ use serde::{Deserialize, Serialize};
 use crate::error::{BrokerError, ErrorCode};
 use crate::registry::token_hash;
 
-#[derive(Clone, Debug, Serialize, Deserialize)]
+#[derive(Clone, Debug, PartialEq, Eq, Serialize, Deserialize)]
 #[serde(deny_unknown_fields)]
 pub struct Permission {
     pub method: String,
@@ -14,7 +14,7 @@ pub struct Permission {
     pub resources: Vec<String>,
 }
 
-#[derive(Clone, Debug, Serialize, Deserialize)]
+#[derive(Clone, Debug, PartialEq, Eq, Serialize, Deserialize)]
 #[serde(deny_unknown_fields)]
 pub struct DevicePrincipal {
     pub principal_id: String,
@@ -30,10 +30,14 @@ pub struct DevicePrincipal {
     pub permissions: Vec<Permission>,
 }
 
-#[derive(Clone, Debug, Serialize, Deserialize)]
+#[derive(Clone, Debug, PartialEq, Eq, Serialize, Deserialize)]
 #[serde(deny_unknown_fields)]
 pub struct NetworkPolicy {
     pub v: u16,
+    /// Administrator revision. Every policy change advances it; stale files
+    /// must never silently restore an earlier authority after restart.
+    #[serde(default = "initial_generation")]
+    pub revision: u64,
     pub allowed_hosts: Vec<String>,
     #[serde(default)]
     pub allowed_origins: Vec<String>,
@@ -72,6 +76,7 @@ impl NetworkPolicy {
 
     pub fn validate(&self) -> Result<(), BrokerError> {
         if self.v != 1
+            || self.revision == 0
             || self.devices.len() > 1024
             || self.allowed_hosts.is_empty()
             || self.allowed_hosts.len() > 32
@@ -88,6 +93,9 @@ impl NetworkPolicy {
         for host in &self.allowed_hosts {
             if host.len() > 256
                 || host.parse::<http::uri::Authority>().is_err()
+                || host
+                    .parse::<http::uri::Authority>()
+                    .is_ok_and(|a| a.as_str() != a.host() && a.port_u16().is_none())
                 || host.contains(['*', '@', '/'])
             {
                 return Err(BrokerError::invalid(
@@ -136,7 +144,7 @@ impl NetworkPolicy {
                     || permission.resources.iter().any(|r| {
                         r.is_empty()
                             || r.len() > 256
-                            || r.trim_end_matches('*').contains('*')
+                            || r.strip_suffix('*').unwrap_or(r).contains('*')
                             || r.chars().any(char::is_control)
                     })
                 {
@@ -185,6 +193,12 @@ impl NetworkPolicy {
     }
 
     pub fn headers_allowed(&self, headers: &http::HeaderMap) -> bool {
+        if headers.get_all(http::header::HOST).iter().count() != 1
+            || headers.get_all(http::header::ORIGIN).iter().count() > 1
+            || headers.get_all(http::header::AUTHORIZATION).iter().count() > 1
+        {
+            return false;
+        }
         let host = headers
             .get(http::header::HOST)
             .and_then(|h| h.to_str().ok())
@@ -194,8 +208,7 @@ impl NetworkPolicy {
             let a = allowed
                 .parse::<http::uri::Authority>()
                 .expect("validated authority");
-            a.host().eq_ignore_ascii_case(host.host())
-                && a.port_u16().is_none_or(|p| Some(p) == host.port_u16())
+            a.as_str().eq_ignore_ascii_case(host.as_str())
         }) {
             return false;
         }

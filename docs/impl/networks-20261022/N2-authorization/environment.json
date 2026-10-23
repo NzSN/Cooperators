@@ -1,0 +1,25 @@
+{
+  "os": "Linux-6.18.54.1-microsoft-standard-WSL2-x86_64-with-glibc2.43",
+  "python": "3.14.4",
+  "rustc": "rustc 1.99.1 (58cf8f9c3 2026-10-13)",
+  "cargo": "cargo 1.99.1 (5f94df478 2026-08-27)",
+  "scope": "Local disposable roots, real loopback TLS and UDS through sandbox escalation; no cross-machine or provider qualification",
+  "controls": [
+    {
+      "path": "/tmp/coop-network-baseline/coop",
+      "sha256": "ad96a75923c421c62dd891fd765ab750ef43cd63b426f7ceb073e3d8f8488b9f"
+    },
+    {
+      "path": "/tmp/coop-prearrival-network/target/release/coop",
+      "sha256": "61a9e4a48af9c2ff75961a8b38d5325e434312f65255965d63a0a17963f6d073"
+    },
+    {
+      "path": "/home/lsz/Codebase/Mirrors/.lake/build/bin/mirror",
+      "sha256": "7d4423df432149a2ce493a636a98795fc482591bcd376ab590b480f3a8fe7ac1"
+    },
+    {
+      "path": "/home/lsz/Codebase/Mirrors/.lake/build/bin/model_interface_gen",
+      "sha256": "143fbe36a1143771d8ee15b76eb0ae6e661f70a7d4c04e58eba1af67ade05c35"
+    }
+  ]
+}

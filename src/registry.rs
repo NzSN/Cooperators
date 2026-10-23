@@ -33,6 +33,14 @@ pub const ARRIVALS_REGISTRY_VERSION: u16 = 2;
 pub const ARRIVALS_REQUIRED_FEATURE: &str = "arrival_notifications_v1";
 pub const NETWORK_REGISTRY_VERSION: u16 = 3;
 pub const NETWORK_REQUIRED_FEATURE: &str = "network_authority_v1";
+pub const NETWORK_POLICY_REQUIRED_FEATURE: &str = "network_policy_revisions_v1";
+
+#[derive(Debug, Clone, Serialize, Deserialize)]
+#[serde(deny_unknown_fields)]
+struct NetworkAuthority {
+    policy: crate::network::NetworkPolicy,
+    generations: BTreeMap<String, u64>,
+}
 
 #[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize)]
 #[serde(deny_unknown_fields)]
@@ -141,6 +149,8 @@ struct RegistryFile {
     revoked_token_hashes: BTreeSet<String>,
     #[serde(default, skip_serializing_if = "Option::is_none")]
     network: Option<NetworkMeta>,
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    network_authority: Option<NetworkAuthority>,
 }
 
 /// In-memory registry backed by `registry.json`.
@@ -150,6 +160,7 @@ pub struct Registry {
     format_version: u16,
     required_features: Vec<String>,
     network: Option<NetworkMeta>,
+    network_authority: Option<NetworkAuthority>,
     /// Any uncertain activation I/O requires reopening, even when replacement
     /// of the registry may already have succeeded.
     activation_fenced: bool,
@@ -168,77 +179,109 @@ impl Registry {
     /// when the file does not exist.
     pub fn load(root: &Path) -> Result<Self, BrokerError> {
         let path = root.join(REGISTRY_FILE);
-        let (format_version, required_features, agents, revoked_token_hashes, network) =
-            match fs::read(&path) {
-                Ok(bytes) => {
-                    let file: RegistryFile = serde_json::from_slice(&bytes).map_err(|error| {
-                        BrokerError::internal(format!("invalid {}: {error}", path.display()))
-                    })?;
-                    if file.v != REGISTRY_VERSION
-                        && file.v != ARRIVALS_REGISTRY_VERSION
-                        && file.v != NETWORK_REGISTRY_VERSION
-                    {
-                        return Err(BrokerError::internal(format!(
-                            "unsupported registry version {} in {}",
-                            file.v,
-                            path.display()
-                        )));
-                    }
-                    for feature in &file.required_features {
-                        if feature != ARRIVALS_REQUIRED_FEATURE
-                            && feature != NETWORK_REQUIRED_FEATURE
-                        {
-                            return Err(BrokerError::internal(format!(
-                                "unsupported required registry feature {feature:?} in {}",
-                                path.display()
-                            )));
-                        }
-                    }
-                    let arrivals_required = file
-                        .required_features
-                        .iter()
-                        .any(|feature| feature == ARRIVALS_REQUIRED_FEATURE);
-                    let network_required = file
-                        .required_features
-                        .iter()
-                        .any(|f| f == NETWORK_REQUIRED_FEATURE);
-                    if (file.v == REGISTRY_VERSION && !file.required_features.is_empty())
-                        || (file.v == ARRIVALS_REGISTRY_VERSION
-                            && (!arrivals_required || network_required))
-                        || (file.v == NETWORK_REGISTRY_VERSION
-                            && (!network_required || file.network.is_none()))
-                        || (file.v != NETWORK_REGISTRY_VERSION
-                            && (file.network.is_some()
-                                || file.agents.values().any(|a| a.network_grant.is_some())))
-                    {
-                        return Err(BrokerError::internal(format!(
-                            "registry version {} has incompatible required_features in {}",
-                            file.v,
-                            path.display()
-                        )));
-                    }
-                    if file.network.as_ref().is_some_and(|meta| {
-                        !id::is_ulid(&meta.bus_id) || !id::is_ulid(&meta.operation_epoch)
-                    }) {
-                        return Err(BrokerError::internal("invalid network root identity"));
-                    }
-                    (
+        let (
+            format_version,
+            required_features,
+            agents,
+            revoked_token_hashes,
+            network,
+            network_authority,
+        ) = match fs::read(&path) {
+            Ok(bytes) => {
+                let file: RegistryFile = serde_json::from_slice(&bytes).map_err(|error| {
+                    BrokerError::internal(format!("invalid {}: {error}", path.display()))
+                })?;
+                if file.v != REGISTRY_VERSION
+                    && file.v != ARRIVALS_REGISTRY_VERSION
+                    && file.v != NETWORK_REGISTRY_VERSION
+                {
+                    return Err(BrokerError::internal(format!(
+                        "unsupported registry version {} in {}",
                         file.v,
-                        file.required_features,
-                        file.agents,
-                        file.revoked_token_hashes,
-                        file.network,
-                    )
+                        path.display()
+                    )));
                 }
-                Err(error) if error.kind() == io::ErrorKind::NotFound => (
-                    REGISTRY_VERSION,
-                    Vec::new(),
-                    BTreeMap::new(),
-                    BTreeSet::new(),
-                    None,
-                ),
-                Err(error) => return Err(error.into()),
-            };
+                for feature in &file.required_features {
+                    if feature != ARRIVALS_REQUIRED_FEATURE
+                        && feature != NETWORK_REQUIRED_FEATURE
+                        && feature != NETWORK_POLICY_REQUIRED_FEATURE
+                    {
+                        return Err(BrokerError::internal(format!(
+                            "unsupported required registry feature {feature:?} in {}",
+                            path.display()
+                        )));
+                    }
+                }
+                let arrivals_required = file
+                    .required_features
+                    .iter()
+                    .any(|feature| feature == ARRIVALS_REQUIRED_FEATURE);
+                let network_required = file
+                    .required_features
+                    .iter()
+                    .any(|f| f == NETWORK_REQUIRED_FEATURE);
+                if (file.v == REGISTRY_VERSION && !file.required_features.is_empty())
+                    || (file.v == ARRIVALS_REGISTRY_VERSION
+                        && (!arrivals_required || network_required))
+                    || (file.v == NETWORK_REGISTRY_VERSION
+                        && (!network_required || file.network.is_none()))
+                    || (file.v != NETWORK_REGISTRY_VERSION
+                        && (file.network.is_some()
+                            || file.agents.values().any(|a| a.network_grant.is_some())))
+                {
+                    return Err(BrokerError::internal(format!(
+                        "registry version {} has incompatible required_features in {}",
+                        file.v,
+                        path.display()
+                    )));
+                }
+                let policy_required = file
+                    .required_features
+                    .iter()
+                    .any(|f| f == NETWORK_POLICY_REQUIRED_FEATURE);
+                if policy_required != file.network_authority.is_some()
+                    || (policy_required && file.v != NETWORK_REGISTRY_VERSION)
+                {
+                    return Err(BrokerError::internal(
+                        "registry policy revision guard is inconsistent",
+                    ));
+                }
+                if let Some(authority) = &file.network_authority {
+                    authority.policy.validate()?;
+                    if authority.generations.len() > 4096
+                        || authority.policy.devices.iter().any(|d| {
+                            authority.generations.get(&d.principal_id) != Some(&d.generation)
+                        })
+                    {
+                        return Err(BrokerError::internal(
+                            "registry policy generation history is inconsistent",
+                        ));
+                    }
+                }
+                if file.network.as_ref().is_some_and(|meta| {
+                    !id::is_ulid(&meta.bus_id) || !id::is_ulid(&meta.operation_epoch)
+                }) {
+                    return Err(BrokerError::internal("invalid network root identity"));
+                }
+                (
+                    file.v,
+                    file.required_features,
+                    file.agents,
+                    file.revoked_token_hashes,
+                    file.network,
+                    file.network_authority,
+                )
+            }
+            Err(error) if error.kind() == io::ErrorKind::NotFound => (
+                REGISTRY_VERSION,
+                Vec::new(),
+                BTreeMap::new(),
+                BTreeSet::new(),
+                None,
+                None,
+            ),
+            Err(error) => return Err(error.into()),
+        };
 
         if path.exists() {
             let metadata = fs::metadata(&path)?;
@@ -252,6 +295,7 @@ impl Registry {
             format_version,
             required_features,
             network,
+            network_authority,
             activation_fenced: false,
             agents,
             tokens: HashMap::new(),
@@ -362,11 +406,124 @@ impl Registry {
         Ok(meta)
     }
 
+    pub(crate) fn validate_network_policy(
+        &self,
+        policy: &crate::network::NetworkPolicy,
+    ) -> Result<(), BrokerError> {
+        self.proposed_network_authority(policy).map(|_| ())
+    }
+
+    fn proposed_network_authority(
+        &self,
+        policy: &crate::network::NetworkPolicy,
+    ) -> Result<Option<NetworkAuthority>, BrokerError> {
+        self.check_activation_ready()?;
+        policy.validate()?;
+        if self.network.is_none() {
+            return Err(BrokerError::internal("network root activation required"));
+        }
+        let mut generations = BTreeMap::new();
+        for record in self.agents.values() {
+            if let Some(grant) = &record.network_grant {
+                generations
+                    .entry(grant.principal_id.clone())
+                    .and_modify(|g: &mut u64| *g = (*g).max(grant.principal_generation))
+                    .or_insert(grant.principal_generation);
+            }
+        }
+        if let Some(previous) = &self.network_authority {
+            if policy == &previous.policy {
+                return Ok(None);
+            }
+            if policy.revision <= previous.policy.revision {
+                return Err(BrokerError::invalid(
+                    "changed network policy requires a higher approved revision",
+                ));
+            }
+            generations = previous.generations.clone();
+            for device in &policy.devices {
+                if let Some(floor) = generations.get(&device.principal_id) {
+                    let prior = previous
+                        .policy
+                        .devices
+                        .iter()
+                        .find(|d| d.principal_id == device.principal_id);
+                    if device.generation < *floor
+                        || (device.generation == *floor && prior.is_none())
+                        || prior.is_some_and(|old| {
+                            old.generation == device.generation
+                                && old.expires_at_ms <= id::unix_millis()
+                                && device.expires_at_ms > old.expires_at_ms
+                        })
+                    {
+                        return Err(BrokerError::invalid("restored or expired principals require a newer generation; generations cannot decrease"));
+                    }
+                }
+            }
+        }
+        for device in &policy.devices {
+            if generations
+                .get(&device.principal_id)
+                .is_some_and(|floor| device.generation < *floor)
+            {
+                return Err(BrokerError::invalid(
+                    "policy generation is older than an issued identity",
+                ));
+            }
+            generations.insert(device.principal_id.clone(), device.generation);
+        }
+        if generations.len() > 4096 {
+            return Err(BrokerError::invalid(
+                "durable principal history capacity reached",
+            ));
+        }
+        Ok(Some(NetworkAuthority {
+            policy: policy.clone(),
+            generations,
+        }))
+    }
+
+    /// Persist approval and revocation fences before any new-policy request
+    /// can authenticate. An uncertain replacement fences all admissions.
+    pub(crate) fn approve_network_policy(
+        &mut self,
+        policy: &crate::network::NetworkPolicy,
+    ) -> Result<(), BrokerError> {
+        let Some(authority) = self.proposed_network_authority(policy)? else {
+            return Ok(());
+        };
+        self.activation_fenced = true;
+        self.network_authority = Some(authority);
+        if !self
+            .required_features
+            .iter()
+            .any(|f| f == NETWORK_POLICY_REQUIRED_FEATURE)
+        {
+            self.required_features
+                .push(NETWORK_POLICY_REQUIRED_FEATURE.into());
+        }
+        self.write_snapshot()?;
+        self.activation_fenced = false;
+        Ok(())
+    }
+
     pub fn network_grant(&self, agent_id: &str) -> Option<&NetworkGrant> {
         self.ids
             .get(agent_id)
             .and_then(|name| self.agents.get(name))
             .and_then(|a| a.network_grant.as_ref())
+    }
+
+    /// Classification is independent of validity, so expired/retired scoped
+    /// credentials cannot fall back into the local registration routes.
+    pub(crate) fn is_network_credential(&self, token: &str) -> bool {
+        let digest = token_hash(token);
+        self.revoked_token_hashes.contains(&digest)
+            || self.agents.values().any(|record| {
+                record.network_grant.is_some()
+                    && (record.token_hash == digest
+                        || record.launch_key_hash.as_ref() == Some(&digest))
+            })
     }
 
     pub(crate) fn network_issued(&self, principal_id: &str) -> usize {
@@ -769,6 +926,7 @@ impl Registry {
             agents: self.agents.clone(),
             revoked_token_hashes: self.revoked_token_hashes.clone(),
             network: self.network.clone(),
+            network_authority: self.network_authority.clone(),
         };
         let bytes = serde_json::to_vec_pretty(&file)
             .map_err(|error| BrokerError::internal(format!("serialize registry: {error}")))?;
@@ -783,7 +941,11 @@ impl Registry {
             handle.sync_all()?;
             drop(handle);
             fs::set_permissions(&temporary, fs::Permissions::from_mode(0o600))?;
+            #[cfg(feature = "mbt-injection")]
+            crate::faults::reach(&self.path, crate::faults::FaultPoint::BeforeRegistryRename)?;
             fs::rename(&temporary, &self.path)?;
+            #[cfg(feature = "mbt-injection")]
+            crate::faults::reach(&self.path, crate::faults::FaultPoint::AfterRegistryRename)?;
             File::open(parent)?.sync_all()?;
             Ok(())
         })();

@@ -81,6 +81,14 @@ pub fn prepare(
         }
         Err(error) => return Err(error),
     };
+    if registry
+        .network_meta()
+        .is_some_and(|network| network.bus_id != meta.bus_id)
+    {
+        return Err(BrokerError::internal(
+            "network and arrival bus identities conflict",
+        ));
+    }
     // An orphan metadata file can predate a crash before directory sync. Sync
     // all three entries again when reusing it, before the registry guard moves.
     File::open(&path)?.sync_all()?;
@@ -115,6 +123,15 @@ fn read_meta(path: &Path) -> Result<ArrivalMeta, BrokerError> {
         )));
     }
     Ok(meta)
+}
+
+/// Reconcile identity metadata left before a crashed registry promotion.
+pub(crate) fn existing_meta(root: &Path) -> Result<Option<ArrivalMeta>, BrokerError> {
+    match read_meta(&root.join(NOTIFICATIONS_DIRECTORY).join(ARRIVAL_META_FILE)) {
+        Ok(meta) => Ok(Some(meta)),
+        Err(BrokerError::Io(error)) if error.kind() == io::ErrorKind::NotFound => Ok(None),
+        Err(error) => Err(error),
+    }
 }
 
 fn persist_meta(directory: &Path, path: &Path, meta: &ArrivalMeta) -> Result<(), BrokerError> {

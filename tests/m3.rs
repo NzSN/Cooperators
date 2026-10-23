@@ -503,6 +503,11 @@ impl HttpDriver {
     }
 
     async fn call_tool(&mut self, tool: &str, arguments: Value) -> Value {
+        // The transcript selects identities at the client. HTTP transports
+        // that selection in the header, never by overriding a different bearer.
+        if let Some(token) = arguments.get("token").and_then(Value::as_str) {
+            self.token = token.to_owned();
+        }
         self.next_id += 1;
         let id = self.next_id;
         let (status, messages) = self
@@ -848,7 +853,11 @@ async fn tools_list_exposes_every_method_with_matching_schemas() {
         ("coop_wait_message", &[], &["cursor", "timeout_s"]),
         ("coop_ack", &["cursor"], &["cursor"]),
         ("coop_heartbeat", &[], &[]),
-        ("coop_list_agents", &[], &["include_stale"]),
+        (
+            "coop_list_agents",
+            &[],
+            &["include_stale", "limit", "cursor"],
+        ),
         (
             "coop_publish",
             &["channel"],
@@ -902,7 +911,7 @@ async fn tools_list_exposes_every_method_with_matching_schemas() {
             &["lease_id", "fence"],
         ),
         ("coop_read_doc", &["name"], &["name", "version"]),
-        ("coop_list_docs", &[], &["prefix"]),
+        ("coop_list_docs", &[], &["prefix", "limit", "cursor"]),
         ("coop_get_status", &[], &[]),
         (
             "coop_subscribe_arrivals",
@@ -914,7 +923,7 @@ async fn tools_list_exposes_every_method_with_matching_schemas() {
             &["subscription_id"],
             &["subscription_id"],
         ),
-        ("coop_list_arrival_subscriptions", &[], &[]),
+        ("coop_list_arrival_subscriptions", &[], &["limit", "cursor"]),
         ("coop_wait_arrivals", &[], &["cursor", "timeout_s", "limit"]),
         ("coop_ack_arrivals", &["cursor"], &["cursor"]),
     ];

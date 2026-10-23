@@ -415,6 +415,54 @@ impl ArrivalService {
         })
     }
 
+    pub(crate) fn list_page(
+        &self,
+        agent_id: &str,
+        after: Option<&str>,
+        limit: usize,
+        allowed: impl Fn(&ArrivalResource) -> bool,
+    ) -> Result<SubscriptionList, BrokerError> {
+        self.check_agent(agent_id)?;
+        let subscriptions = self.subscriptions.lock().unwrap();
+        let mut ids = BTreeSet::new();
+        for (id, receipt) in &subscriptions.receipts {
+            if receipt.agent_id != agent_id
+                || after.is_some_and(|after| id.as_str() <= after)
+                || !allowed(&receipt.resource)
+            {
+                continue;
+            }
+            ids.insert(id);
+            if ids.len() > limit {
+                ids.pop_last();
+            }
+        }
+        let mut page = Vec::new();
+        let mut bytes = 0usize;
+        for id in ids {
+            let receipt = &subscriptions.receipts[id];
+            let Some(size) = crate::rpc::bounded_json_size(
+                receipt,
+                (crate::transport::MAX_RPC_BYTES - 16384).saturating_sub(bytes),
+            ) else {
+                if page.is_empty() {
+                    return Err(BrokerError::application(
+                        ErrorCode::ResourceExhausted,
+                        "subscription metadata exceeds remote page budget",
+                    ));
+                }
+                break;
+            };
+            bytes += size + 1;
+            page.push(receipt.clone());
+        }
+        Ok(SubscriptionList {
+            bus_id: self.bus_id.clone(),
+            agent_id: agent_id.into(),
+            subscriptions: page,
+        })
+    }
+
     pub async fn wait(
         self: &Arc<Self>,
         agent_id: &str,

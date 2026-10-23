@@ -25,7 +25,7 @@ async fn call(
         .expect("dispatch returns a response")
         .into_result()
         .map_err(|error| {
-            eprintln!("rpc {method} {params} failed: {error:?}");
+            eprintln!("rpc {method} failed: {error:?}");
             error
         })
 }

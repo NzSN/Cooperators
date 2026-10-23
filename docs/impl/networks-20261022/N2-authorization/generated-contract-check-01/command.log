@@ -1,0 +1,25 @@
+scaffolded reviewable proposal /tmp/coop-fault-interface-32qh4him/MBFaultStorage.mirror-interface.scaffold.json 792436bf2f4ba6548c211c4225c3b49d9ac7ca7978531fc2132e762b3a47ce63
+model-interface check clean
+{"actions":[{"count":9,"id":"AppendBytes"},{"count":3,"id":"Initialize"},{"count":3,"id":"InspectStorage"},{"count":3,"id":"RecoverStorage"},{"count":1,"id":"SyncFail"},{"count":4,"id":"SyncOk"}],"schema":"mirrors.model-interface-coverage/v1","semanticDigest":"396ddbafc8cb224ae03c7b5cd4b82f26b8bb47151ec1975a93a661935a548ab7","states":23,"traces":3,"unseenActions":[]}
+scaffolded reviewable proposal /tmp/coop-fault-interface-fmx6ijca/MBFaultWriter.mirror-interface.scaffold.json b594314ce5ade5869903071d3dd613e1c16ab21a952319366b5940b84f0aaf25
+model-interface check clean
+{"actions":[{"count":4,"id":"Initialize"},{"count":7,"id":"Start"},{"count":1,"id":"Stop"},{"count":1,"id":"TearTail"},{"count":3,"id":"WriterAppend"}],"schema":"mirrors.model-interface-coverage/v1","semanticDigest":"85e0bc7092f8b11bda66d2638fef9d40bfed7f429a971b4cc410e39949e1357b","states":16,"traces":4,"unseenActions":[]}
+scaffolded proposal /tmp/coop-fault-interface-gg9sxh5t/MBFaultInbox.mirror-interface.scaffold.json
+model-interface check clean
+{"actions":[{"count":1,"id":"ExpireInbox"},{"count":1,"id":"InboxAck"},{"count":4,"id":"InboxSend"},{"count":1,"id":"InboxWait"},{"count":1,"id":"Initialize"}],"schema":"mirrors.model-interface-coverage/v1","semanticDigest":"9213850235d76e2c14aab792cb3729480de10c8ad76b1ca442ac58f10933b93c","states":8,"traces":1,"unseenActions":[]}
+scaffolded reviewable proposal /tmp/coop-fault-interface-bk3o2_t1/MBFaultDeadLetter.mirror-interface.scaffold.json f9a98f817b3ad0f54d85b310deecb673bc9d2ee19707fe6c440fd084239eb617
+model-interface check clean
+{"actions":[{"count":2,"id":"CrashDead"},{"count":1,"id":"FailProjection"},{"count":1,"id":"FinishProjection"},{"count":2,"id":"Initialize"},{"count":2,"id":"MarkDead"},{"count":3,"id":"ProjectDead"},{"count":2,"id":"RecoverDead"}],"schema":"mirrors.model-interface-coverage/v1","semanticDigest":"805fe73dbb8e170151ba01719ab3a80fc745f59907e874827e4153284aadfef8","states":13,"traces":2,"unseenActions":[]}
+scaffolded reviewable proposal /tmp/coop-fault-interface-xu0gdw7l/MBFaultDocument.mirror-interface.scaffold.json 30d22dc36e5fd786e61c524bc3abf33fa67ce3a5515d42edd68f5be290100403
+model-interface check clean
+{"actions":[{"count":1,"id":"AbortPublish"},{"count":4,"id":"BeginPublish"},{"count":2,"id":"CommitPublish"},{"count":1,"id":"CrashDoc"},{"count":2,"id":"Initialize"},{"count":2,"id":"ReadDoc"},{"count":1,"id":"RecoverDoc"}],"schema":"mirrors.model-interface-coverage/v1","semanticDigest":"50ae2604007125547988460eceb95dc4e1fb7cece7bfedcaa77d534724f3c041","states":13,"traces":2,"unseenActions":[]}
+scaffolded proposal /tmp/coop-fault-interface-ca94147k/MBFaultStatus.mirror-interface.scaffold.json
+model-interface check clean
+{"actions":[{"count":1,"id":"AppendStatus"},{"count":1,"id":"Initialize"},{"count":1,"id":"SampleStatus"}],"schema":"mirrors.model-interface-coverage/v1","semanticDigest":"3dec8d1704584d3e3b87ea4f2b39f018ea00a3c45b0faa7824386c1c6cd3093f","states":3,"traces":1,"unseenActions":[]}
+scaffolded reviewable proposal /tmp/coop-fault-interface-sqaygn48/MBFaultRotation.mirror-interface.scaffold.json 71034be79609f9d83a8c1053127719ac3f55965ea79a163876112529a51be5f7
+model-interface check clean
+{"actions":[{"count":8,"id":"BeginRotatingAppend"},{"count":7,"id":"CommitRotatingAppend"},{"count":1,"id":"CrashRotation"},{"count":3,"id":"Initialize"},{"count":8,"id":"PrepareSegment"},{"count":3,"id":"ReadCursor"},{"count":1,"id":"RecoverRotation"},{"count":1,"id":"SaveCursor"}],"schema":"mirrors.model-interface-coverage/v1","semanticDigest":"2df1903fa928586921a109f61504990f4d25c17ad8fc57916ca2d822eec9c9ee","states":32,"traces":3,"unseenActions":[]}
+scaffolded reviewable proposal /tmp/coop-fault-interface-rwshzsul/MBFaultIdentity.mirror-interface.scaffold.json 1e5836a3cf63f2de4446c43b9bf1e6091dc52ebe14ff17b7d65b7bcb4734df1a
+model-interface check clean
+{"actions":[{"count":2,"id":"Authenticate"},{"count":1,"id":"Disconnect"},{"count":18,"id":"Enroll"},{"count":8,"id":"Initialize"},{"count":1,"id":"Reconnect"},{"count":3,"id":"Retire"},{"count":2,"id":"RotateToken"}],"schema":"mirrors.model-interface-coverage/v1","semanticDigest":"6239df76e649d0c746e16f2bef86ad3662d1b6dd29fb369ee20bc24479571755","states":35,"traces":8,"unseenActions":[]}
+Generated fault interface bridge and selected compiler checks clean

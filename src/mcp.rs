@@ -241,7 +241,7 @@ pub const TOOL_SPECS: &[ToolSpec] = &[
         tool: "coop_list_arrival_subscriptions",
         method: "list_arrival_subscriptions",
         description: "List this identity's arrival subscriptions and stable bus identity.",
-        schema: schema_heartbeat,
+        schema: schema_list_page,
     },
     ToolSpec {
         tool: "coop_wait_arrivals",
@@ -817,6 +817,24 @@ impl CoopMcpHandler {
         }
         match result {
             Ok(result) => {
+                let network_mode = matches!(&self.backend, Backend::Remote(_))
+                    || matches!(&self.backend, Backend::Embedded(state) if state.network().is_some());
+                // MCP includes both structured JSON and a JSON-encoded text
+                // copy. Reserve space for both copies and escaping/framing.
+                if network_mode
+                    && crate::rpc::bounded_json_size(
+                        &result,
+                        (crate::transport::MAX_RPC_BYTES - 16384) / 3,
+                    )
+                    .is_none()
+                {
+                    return tool_error(
+                        ErrorCode::ResourceExhausted.rpc_code(),
+                        "MCP result exceeds remote response budget",
+                        "RESOURCE_EXHAUSTED",
+                    )
+                    .into();
+                }
                 if spec.method == "register_agent" {
                     if let Some(new_token) = result.get("token").and_then(Value::as_str) {
                         if self.auth == AuthMode::Captured {
@@ -990,7 +1008,8 @@ pub fn http_service(state: Arc<DaemonState>) -> CoopHttpService {
     let mut config = StreamableHttpServerConfig::default()
         .with_legacy_session_mode(false)
         .with_json_response(true)
-        .with_sse_keep_alive(None);
+        .with_sse_keep_alive(None)
+        .with_max_request_body_bytes(crate::transport::MAX_RPC_BYTES);
     if let Some(network) = state.network() {
         let policy = network.policy();
         config = config
@@ -1066,9 +1085,6 @@ where
         "/v1/rpc" | "/v1/enroll" | "/v1/info" if state.network().is_some() => {
             crate::network::handle_network_http(state, request).await
         }
-        "/v1/rpc" if state.config().remote_read_only => {
-            crate::network::handle_native_read(state, request).await
-        }
         "/healthz" => {
             if request.method() != Method::GET {
                 method_not_allowed()
@@ -1127,6 +1143,74 @@ where
                     unauthorized("invalid bearer token")
                 } else {
                     let mut service = service.clone();
+                    if let Some(network) = state.network() {
+                        let context = match network.authenticate(state, &token).await {
+                            Ok(context) => context,
+                            Err(_) => return unauthorized("invalid bearer token"),
+                        };
+                        let permit = match network.request_permit(&context.principal_id, false) {
+                            Ok(permit) => permit,
+                            Err(error) => {
+                                return http_json(
+                                    StatusCode::TOO_MANY_REQUESTS,
+                                    serde_json::to_value(RpcResponse::failure(
+                                        Value::Null,
+                                        error.into_rpc_error(),
+                                    ))
+                                    .unwrap(),
+                                )
+                            }
+                        };
+                        let (parts, body) = request.into_parts();
+                        let body =
+                            body.map_err(|_| std::io::Error::other("request body interrupted"));
+                        let bytes = match tokio::time::timeout(
+                            Duration::from_secs(10),
+                            http_body_util::Limited::new(body, crate::transport::MAX_RPC_BYTES)
+                                .collect(),
+                        )
+                        .await
+                        {
+                            Ok(Ok(body)) => body.to_bytes(),
+                            Ok(Err(_)) => {
+                                return http_json(
+                                    StatusCode::PAYLOAD_TOO_LARGE,
+                                    json!({"error":"request body exceeds limit or is incomplete"}),
+                                )
+                            }
+                            Err(_) => {
+                                return http_json(
+                                    StatusCode::REQUEST_TIMEOUT,
+                                    json!({"error":"request body deadline exceeded"}),
+                                )
+                            }
+                        };
+                        if let Ok(body) = serde_json::from_slice::<Value>(&bytes) {
+                            if body
+                                .get("id")
+                                .is_some_and(|id| crate::rpc::bounded_json_size(id, 512).is_none())
+                            {
+                                return http_json(
+                                    StatusCode::BAD_REQUEST,
+                                    json!({"error":"request ID exceeds limit"}),
+                                );
+                            }
+                        }
+                        drop(permit);
+                        return match tokio::time::timeout(
+                            Duration::from_secs(40),
+                            service.call(Request::from_parts(parts, Full::new(bytes))),
+                        )
+                        .await
+                        {
+                            Ok(Ok(response)) => response,
+                            Ok(Err(never)) => match never {},
+                            Err(_) => http_json(
+                                StatusCode::GATEWAY_TIMEOUT,
+                                json!({"error":"MCP request deadline exceeded"}),
+                            ),
+                        };
+                    }
                     match service.call(request).await {
                         Ok(response) => response,
                         Err(never) => match never {},
@@ -1348,9 +1432,17 @@ fn schema_heartbeat() -> Value {
 fn schema_list_agents() -> Value {
     json!({
         "type": "object",
-        "properties": {"include_stale": {"type": "boolean"}},
+        "properties": {"include_stale": {"type": "boolean"},
+            "limit": {"type":"integer","minimum":1,"maximum":64},
+            "cursor": {"type":"object"}},
         "additionalProperties": false
     })
+}
+
+fn schema_list_page() -> Value {
+    json!({"type":"object", "properties":{
+        "limit":{"type":"integer","minimum":1,"maximum":64},
+        "cursor":{"type":"object"}}, "additionalProperties":false})
 }
 
 fn schema_publish() -> Value {
@@ -1541,7 +1633,9 @@ fn schema_read_doc() -> Value {
 fn schema_list_docs() -> Value {
     json!({
         "type": "object",
-        "properties": {"prefix": {"type": "string"}},
+        "properties": {"prefix": {"type": "string"},
+            "limit": {"type":"integer","minimum":1,"maximum":64},
+            "cursor": {"type":"object"}},
         "additionalProperties": false
     })
 }

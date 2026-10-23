@@ -40,6 +40,8 @@ pub enum FaultPoint {
     AfterDeadProjectionAppend,
     AfterDocCreate,
     AfterSegmentCreate,
+    BeforeRegistryRename,
+    AfterRegistryRename,
 }
 
 #[derive(Debug, Clone, Copy, PartialEq, Eq)]

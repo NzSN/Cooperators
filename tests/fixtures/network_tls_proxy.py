@@ -52,6 +52,9 @@ class Handler(http.server.BaseHTTPRequestHandler):
         headers = {"Content-Type": "application/json", "Host": "localhost"}
         if self.headers.get("Authorization"):
             headers["Authorization"] = self.headers["Authorization"]
+        for name in ("Accept", "MCP-Protocol-Version", "Origin"):
+            if self.headers.get(name):
+                headers[name] = self.headers[name]
         connection.request("POST", self.path, body, headers)
         response = connection.getresponse()
         payload = response.read()
