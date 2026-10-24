@@ -1,4 +1,6 @@
 mod common;
+#[path = "common/policy.rs"]
+mod policy_approval;
 
 use std::sync::Arc;
 
@@ -261,10 +263,7 @@ async fn agents_and_subscriptions_filter_before_counting_the_page_limit() {
         .find(|p| p.method == "list_agents")
         .unwrap()
         .resources = vec![format!("agent:{}", allowed["agent_id"].as_str().unwrap())];
-    f.state
-        .network()
-        .unwrap()
-        .replace_policy(&f.state, policy)
+    policy_approval::replace_network_policy(&f.state, policy)
         .await
         .unwrap();
     let agents = f.remote("list_agents", json!({"limit":1})).await.unwrap();

@@ -10,7 +10,9 @@ use std::time::{Duration, Instant};
 
 use cooperators::arrivals::migration::{prepare, ArrivalMeta};
 use cooperators::network::NetworkPolicy;
-use cooperators::registry::{Registry, ARRIVALS_REQUIRED_FEATURE, NETWORK_REQUIRED_FEATURE};
+use cooperators::registry::{
+    Registry, ARRIVALS_REQUIRED_FEATURE, NETWORK_POLICY_REQUIRED_FEATURE, NETWORK_REQUIRED_FEATURE,
+};
 use cooperators::server::{DaemonConfig, DaemonState};
 use serde_json::{json, Value};
 
@@ -96,7 +98,7 @@ async fn v1_activation_preserves_instances_and_persistent_network_identity() {
     );
     assert_eq!(
         after["required_features"],
-        json!([NETWORK_REQUIRED_FEATURE])
+        json!([NETWORK_REQUIRED_FEATURE, NETWORK_POLICY_REQUIRED_FEATURE])
     );
     assert!(!root.path().join("notifications").exists());
     drop(state);

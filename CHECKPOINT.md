@@ -1,5 +1,13 @@
 # Network implementation checkpoint
 
+Merge integration: 2026-10-24. The user requested merging
+`checkpoint/n2-local-authority-20261023` (`0e50c3b`) into `main` (`804781c`).
+Both histories and their source-pinned evidence are retained. The merge adds the
+N2 policy revision checks and skill export while preserving main's N3 operation
+implementation. [Merge validation](docs/impl/networks-20261022/merge-20261024/README.md)
+records checks of the combined tree; historical N2/N3 receipts do not qualify it.
+The N3b implementation pause and unfinished work below remain in effect.
+
 Date: 2026-10-22. Implementation base: `bfbf7534c3ab63a5756321070413415e917e5464`
 on `main`.
 

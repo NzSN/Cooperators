@@ -1,4 +1,6 @@
 mod common;
+#[path = "common/policy.rs"]
+mod policy_approval;
 
 use std::collections::BTreeSet;
 use std::path::PathBuf;
@@ -882,8 +884,7 @@ async fn principal_generation_and_expiry_fence_native_mcp_and_stdio() {
     let network = fixture.state.network().unwrap();
     let mut policy = network.policy();
     policy.devices[0].generation += 1;
-    network
-        .replace_policy(&fixture.state, policy.clone())
+    policy_approval::replace_network_policy(&fixture.state, policy.clone())
         .await
         .unwrap();
     assert!(matches!(
@@ -919,8 +920,7 @@ async fn principal_generation_and_expiry_fence_native_mcp_and_stdio() {
         current["agent_id"]
     );
     policy.devices[0].expires_at_ms = cooperators::id::unix_millis().saturating_sub(1);
-    network
-        .replace_policy(&fixture.state, policy)
+    policy_approval::replace_network_policy(&fixture.state, policy)
         .await
         .unwrap();
     assert!(matches!(
@@ -989,8 +989,7 @@ async fn permission_revocation_interrupts_native_mcp_and_stdio_long_polls() {
         policy.devices[0]
             .permissions
             .retain(|permission| permission.method != "wait_message");
-        network
-            .replace_policy(&fixture.state, policy)
+        policy_approval::replace_network_policy(&fixture.state, policy)
             .await
             .unwrap();
     };
@@ -1057,4 +1056,104 @@ async fn uds_backed_stdio_cannot_replace_scoped_identity_or_register_unscoped_id
     .unwrap();
     assert!(registry["agents"].get("escape").is_none());
     process.stop().await;
+}
+
+#[tokio::test]
+async fn scoped_credentials_keep_authorization_over_a_real_uds_connection() {
+    let Some(fixture) = Fixture::start("proxy").await else {
+        return;
+    };
+    let socket = fixture.temp.path().join("scoped.sock");
+    let listener = tokio::net::UnixListener::bind(&socket).unwrap();
+    let state = fixture.state.clone();
+    let task = tokio::spawn(async move { server::serve(listener, state).await });
+    let client = BrokerClient::uds(&socket);
+    let identity = client
+        .call(
+            "instance_metadata",
+            json!({"token":fixture.token}),
+            Duration::from_secs(5),
+        )
+        .await
+        .unwrap();
+    assert_eq!(identity["agent_id"], fixture.agent_id);
+    let error = client
+        .call(
+            "create_queue",
+            json!({"token":fixture.token,"queue":"bypass"}),
+            Duration::from_secs(5),
+        )
+        .await
+        .unwrap_err();
+    assert!(
+        matches!(error,ClientError::Rpc(error) if error.code == cooperators::error::ErrorCode::Forbidden.rpc_code())
+    );
+    assert!(!fixture
+        .temp
+        .path()
+        .join("root/queues/bypass.jsonl")
+        .exists());
+    task.abort();
+}
+
+#[tokio::test]
+async fn real_tls_mcp_preserves_header_identity_and_hides_unready_mutations() {
+    let Some(fixture) = Fixture::start("proxy").await else {
+        return;
+    };
+    let client = reqwest::Client::builder()
+        .no_proxy()
+        .add_root_certificate(
+            reqwest::Certificate::from_pem(include_bytes!("fixtures/tls/ca.pem")).unwrap(),
+        )
+        .timeout(Duration::from_secs(5))
+        .build()
+        .unwrap();
+    let response = client
+        .post(format!("{}/mcp", fixture.origin))
+        .bearer_auth(&fixture.token)
+        .header("Accept", "application/json, text/event-stream")
+        .json(
+            &json!({"jsonrpc":"2.0","id":1,"method":"tools/call","params":{
+            "name":"coop_instance_metadata","arguments":{}}}),
+        )
+        .send()
+        .await
+        .unwrap();
+    assert_eq!(response.status(), 200);
+    let reply: Value = response.json().await.unwrap();
+    assert_eq!(
+        reply["result"]["structuredContent"]["agent_id"],
+        fixture.agent_id
+    );
+    let response = client
+        .post(format!("{}/mcp", fixture.origin))
+        .bearer_auth(&fixture.token)
+        .header("Accept", "application/json, text/event-stream")
+        .json(
+            &json!({"jsonrpc":"2.0","id":2,"method":"tools/call","params":{
+            "name":"coop_instance_metadata","arguments":{"token":fixture.device_token}}}),
+        )
+        .send()
+        .await
+        .unwrap();
+    let reply: Value = response.json().await.unwrap();
+    assert!(reply.to_string().contains("FORBIDDEN"));
+    let response = client
+        .post(format!("{}/mcp", fixture.origin))
+        .bearer_auth(&fixture.token)
+        .header("Accept", "application/json, text/event-stream")
+        .json(&json!({"jsonrpc":"2.0","id":3,"method":"tools/list"}))
+        .send()
+        .await
+        .unwrap();
+    let reply: Value = response.json().await.unwrap();
+    assert!(reply["result"]["tools"]
+        .as_array()
+        .unwrap()
+        .iter()
+        .all(|tool| !matches!(
+            tool["name"].as_str(),
+            Some("coop_create_queue" | "coop_send_message" | "coop_register_agent")
+        )));
 }

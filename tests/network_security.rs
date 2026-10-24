@@ -1,4 +1,6 @@
 mod common;
+#[path = "common/policy.rs"]
+mod policy_approval;
 
 use std::sync::Arc;
 use std::time::Duration;
@@ -20,6 +22,7 @@ fn permission(method: &str, resource: &str) -> Permission {
 fn policy(token: &str) -> NetworkPolicy {
     NetworkPolicy {
         v: 1,
+        revision: 1,
         enable_operations: false,
         enable_resource_operations: false,
         allowed_hosts: vec!["bus.example:443".into()],
@@ -288,8 +291,7 @@ async fn generation_changes_and_readdition_fence_existing_contexts() {
     let context = network.authenticate(&state, &key).await.unwrap();
     let mut bumped = initial.clone();
     bumped.devices[0].generation = 2;
-    network
-        .replace_policy(&state, bumped.clone())
+    policy_approval::replace_network_policy(&state, bumped.clone())
         .await
         .unwrap();
     assert_eq!(
@@ -317,18 +319,22 @@ async fn generation_changes_and_readdition_fence_existing_contexts() {
         Some(ErrorCode::Unauthenticated)
     );
     assert!(matches!(
-        network.replace_policy(&state, initial).await,
+        policy_approval::replace_network_policy(&state, initial).await,
         Err(BrokerError::Invalid(_))
     ));
     let mut removed = bumped.clone();
     removed.devices.clear();
-    network.replace_policy(&state, removed).await.unwrap();
+    policy_approval::replace_network_policy(&state, removed)
+        .await
+        .unwrap();
     assert!(matches!(
-        network.replace_policy(&state, bumped.clone()).await,
+        policy_approval::replace_network_policy(&state, bumped.clone()).await,
         Err(BrokerError::Invalid(_))
     ));
     bumped.devices[0].generation = 3;
-    network.replace_policy(&state, bumped).await.unwrap();
+    policy_approval::replace_network_policy(&state, bumped)
+        .await
+        .unwrap();
     assert_eq!(
         code(network.authenticate(&state, &key).await.unwrap_err()),
         Some(ErrorCode::Unauthenticated)
@@ -348,10 +354,7 @@ async fn principal_removal_and_generation_floor_survive_daemon_reopen() {
         enroll(&state, &device, &key).await;
         let mut removed = initial.clone();
         removed.devices.clear();
-        state
-            .network()
-            .unwrap()
-            .replace_policy(&state, removed)
+        policy_approval::replace_network_policy(&state, removed)
             .await
             .unwrap();
     }
@@ -371,6 +374,7 @@ async fn principal_removal_and_generation_floor_survive_daemon_reopen() {
         );
     }
     initial.devices[0].generation = 8;
+    initial.revision = 3;
     let reopened = state(&root, initial);
     let network = reopened.network().unwrap();
     assert_eq!(
@@ -398,7 +402,7 @@ async fn failed_policy_persistence_fences_runtime_until_reopen() {
         let mut replacement = initial.clone();
         replacement.devices[0].generation += 1;
         assert!(matches!(
-            network.replace_policy(&state, replacement).await,
+            policy_approval::replace_network_policy(&state, replacement).await,
             Err(BrokerError::Io(_))
         ));
         assert!(changes.has_changed().unwrap());
@@ -497,14 +501,15 @@ async fn poll_capacity_preserves_request_and_global_capacity_across_policy_repla
     let reserved = network.request_permit("device-b", false).unwrap();
     let mut removed = initial.clone();
     removed.devices.remove(0);
-    network.replace_policy(&state, removed).await.unwrap();
+    policy_approval::replace_network_policy(&state, removed)
+        .await
+        .unwrap();
     assert_eq!(
         code(network.request_permit("device-a", false).err().unwrap()),
         Some(ErrorCode::Unauthenticated)
     );
     initial.devices[0].generation += 1;
-    network
-        .replace_policy(&state, initial.clone())
+    policy_approval::replace_network_policy(&state, initial.clone())
         .await
         .unwrap();
     assert_eq!(
@@ -520,7 +525,7 @@ async fn poll_capacity_preserves_request_and_global_capacity_across_policy_repla
     assert!(network.request_permit("device-a", true).is_ok());
     initial.requests_per_principal += 1;
     assert!(matches!(
-        network.replace_policy(&state, initial).await,
+        policy_approval::replace_network_policy(&state, initial).await,
         Err(BrokerError::Invalid(_))
     ));
 }
@@ -543,10 +548,7 @@ async fn revoking_permission_cancels_an_already_admitted_wait() {
     revoked.devices[0]
         .permissions
         .retain(|p| p.method != "wait_message");
-    state
-        .network()
-        .unwrap()
-        .replace_policy(&state, revoked)
+    policy_approval::replace_network_policy(&state, revoked)
         .await
         .unwrap();
     let result = tokio::time::timeout(Duration::from_secs(2), waiter)
@@ -619,10 +621,7 @@ async fn retirement_generation_and_principal_expiry_cancel_admitted_waits() {
             } else {
                 replacement.devices[0].expires_at_ms = cooperators::id::unix_millis();
             }
-            state
-                .network()
-                .unwrap()
-                .replace_policy(&state, replacement)
+            policy_approval::replace_network_policy(&state, replacement)
                 .await
                 .unwrap();
         }

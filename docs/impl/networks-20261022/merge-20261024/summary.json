@@ -1,0 +1,58 @@
+{
+  "date": "2026-10-24",
+  "parents": {
+    "main": "804781c103228ff5fe1eac94948b021d973470ff",
+    "checkpoint": "0e50c3b"
+  },
+  "scope": "merge integration only; N3b remains paused and unqualified",
+  "release_accepted": false,
+  "final_manifests_match": true,
+  "validation": {
+    "normal-03": {
+      "passed": false,
+      "exit_code": 101,
+      "source_unchanged": true,
+      "passed_tests": 308,
+      "failed_tests": 1,
+      "ignored_tests": 1,
+      "reported_skips": 0
+    },
+    "selected-injection-03": {
+      "passed": true,
+      "exit_code": 0,
+      "source_unchanged": true,
+      "passed_tests": 160,
+      "failed_tests": 0,
+      "ignored_tests": 0,
+      "reported_skips": 0
+    }
+  },
+  "known_baseline_failure": {
+    "test": "domain_document_operations::incidental_claim_expiry_never_becomes_a_terminal_no_effect_receipt",
+    "actual": "LEASE_LOST",
+    "stale_expectation": "OUTCOME_UNKNOWN",
+    "preexisting_record": "CHECKPOINT.md, Known stale test"
+  },
+  "injection_exclusions": [
+    {
+      "test": "preoperation_binary_refuses_upgraded_root_before_repairing_any_source",
+      "reason": "historical COOP_PREOPERATION_BINARY executable unavailable"
+    },
+    {
+      "test": "send_only_binary_refuses_resource_format_before_repair",
+      "reason": "historical COOP_PRERESOURCE_BINARY executable unavailable"
+    }
+  ],
+  "concurrent_diagnostic": {
+    "run": "injection-02",
+    "passed_tests": 159,
+    "failed_tests": 1,
+    "test": "sigkill_after_partial_write_repairs_then_replays_original_intent_once",
+    "result": "child exited before boundary; passed isolated rerun and sequential injection-03; cause not established"
+  },
+  "not_run": [
+    "complete injection suite",
+    "generated model replay",
+    "network topology and provider qualification"
+  ]
+}

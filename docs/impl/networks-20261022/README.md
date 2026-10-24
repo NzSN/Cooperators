@@ -13,6 +13,12 @@ in [its execution record](N2-security/README.md). See
 [CHECKPOINT.md](../../../CHECKPOINT.md) for the current handoff. Historical N0/N1
 results remain tied to their own source; the full network release is pending.
 
+The 2026-10-24 merge also retains the independent
+[N2 authority branch evidence](N2-authorization/README.md) (213 normal / 265
+injection tests for that branch's exact source). Its policy revision checks are
+integrated with main's operation support. Historical receipts retain their
+original source scope. See [merge validation](merge-20261024/README.md).
+
 | Wave | State | Evidence / remaining gate |
 |---|---|---|
 | N0 | Passed for the local baseline | Source/tool manifest, 181 normal / 230 injection tests, 63 generated MBT traces and real rotation crash controls; required sockets, one pre-existing ignored performance test per suite and zero skips. Offline HTTPS dependency audit and baseline gap controls passed. |

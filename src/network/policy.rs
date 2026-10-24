@@ -6,7 +6,7 @@ use serde::{Deserialize, Serialize};
 use crate::error::{BrokerError, ErrorCode};
 use crate::registry::token_hash;
 
-#[derive(Clone, Debug, Serialize, Deserialize)]
+#[derive(Clone, Debug, PartialEq, Eq, Serialize, Deserialize)]
 #[serde(deny_unknown_fields)]
 pub struct Permission {
     pub method: String,
@@ -14,7 +14,7 @@ pub struct Permission {
     pub resources: Vec<String>,
 }
 
-#[derive(Clone, Debug, Serialize, Deserialize)]
+#[derive(Clone, Debug, PartialEq, Eq, Serialize, Deserialize)]
 #[serde(deny_unknown_fields)]
 pub struct DevicePrincipal {
     pub principal_id: String,
@@ -30,10 +30,13 @@ pub struct DevicePrincipal {
     pub permissions: Vec<Permission>,
 }
 
-#[derive(Clone, Debug, Serialize, Deserialize)]
+#[derive(Clone, Debug, PartialEq, Eq, Serialize, Deserialize)]
 #[serde(deny_unknown_fields)]
 pub struct NetworkPolicy {
     pub v: u16,
+    /// Every changed approval must advance the persisted policy revision.
+    #[serde(default = "initial_generation")]
+    pub revision: u64,
     /// Explicit activation of the incompatible durable-operation source format.
     #[serde(default)]
     pub enable_operations: bool,
@@ -78,6 +81,7 @@ impl NetworkPolicy {
 
     pub fn validate(&self) -> Result<(), BrokerError> {
         if self.v != 1
+            || self.revision == 0
             || (self.enable_resource_operations && !self.enable_operations)
             || self.devices.len() > 1024
             || self.allowed_hosts.is_empty()
@@ -93,9 +97,10 @@ impl NetworkPolicy {
             ));
         }
         for host in &self.allowed_hosts {
-            if !host
-                .parse::<http::uri::Authority>()
-                .is_ok_and(|a| explicit_authority(&a))
+            if host.len() > 256
+                || !host
+                    .parse::<http::uri::Authority>()
+                    .is_ok_and(|a| explicit_authority(&a))
             {
                 return Err(BrokerError::invalid(
                     "network hosts must be explicit authorities",

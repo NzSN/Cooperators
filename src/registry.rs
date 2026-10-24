@@ -33,6 +33,15 @@ pub const ARRIVALS_REGISTRY_VERSION: u16 = 2;
 pub const ARRIVALS_REQUIRED_FEATURE: &str = "arrival_notifications_v1";
 pub const NETWORK_REGISTRY_VERSION: u16 = 3;
 pub const NETWORK_REQUIRED_FEATURE: &str = "network_authority_v1";
+pub const NETWORK_POLICY_REQUIRED_FEATURE: &str = "network_policy_revisions_v1";
+
+#[derive(Debug, Clone, Serialize, Deserialize)]
+#[serde(deny_unknown_fields)]
+struct NetworkAuthority {
+    policy: crate::network::NetworkPolicy,
+    generations: BTreeMap<String, u64>,
+}
+
 pub const OPERATIONS_REQUIRED_FEATURE: &str = "durable_operations_v1";
 pub const RESOURCE_OPERATIONS_REQUIRED_FEATURE: &str = "durable_resource_operations_v1";
 pub const OPERATION_EPOCH_DURATION_MS: u64 = 7 * 24 * 60 * 60 * 1000;
@@ -155,6 +164,8 @@ struct RegistryFile {
     network: Option<NetworkMeta>,
     #[serde(default, skip_serializing_if = "Option::is_none")]
     network_principals: Option<BTreeMap<String, PrincipalGeneration>>,
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    network_authority: Option<NetworkAuthority>,
 }
 
 /// In-memory registry backed by `registry.json`.
@@ -165,6 +176,7 @@ pub struct Registry {
     required_features: Vec<String>,
     network: Option<NetworkMeta>,
     network_principals: Option<BTreeMap<String, PrincipalGeneration>>,
+    network_authority: Option<NetworkAuthority>,
     /// Any uncertain activation I/O requires reopening, even when replacement
     /// of the registry may already have succeeded.
     activation_fenced: bool,
@@ -190,9 +202,10 @@ impl Registry {
             revoked_token_hashes,
             network,
             network_principals,
+            network_authority,
         ) = match fs::read(&path) {
             Ok(bytes) => {
-                let file: RegistryFile = serde_json::from_slice(&bytes).map_err(|error| {
+                let mut file: RegistryFile = serde_json::from_slice(&bytes).map_err(|error| {
                     BrokerError::internal(format!("invalid {}: {error}", path.display()))
                 })?;
                 if file.v != REGISTRY_VERSION
@@ -208,6 +221,7 @@ impl Registry {
                 for feature in &file.required_features {
                     if feature != ARRIVALS_REQUIRED_FEATURE
                         && feature != NETWORK_REQUIRED_FEATURE
+                        && feature != NETWORK_POLICY_REQUIRED_FEATURE
                         && feature != OPERATIONS_REQUIRED_FEATURE
                         && feature != RESOURCE_OPERATIONS_REQUIRED_FEATURE
                     {
@@ -225,6 +239,52 @@ impl Registry {
                     .required_features
                     .iter()
                     .any(|f| f == NETWORK_REQUIRED_FEATURE);
+                let policy_required = file
+                    .required_features
+                    .iter()
+                    .any(|f| f == NETWORK_POLICY_REQUIRED_FEATURE);
+                if policy_required != file.network_authority.is_some()
+                    || (policy_required && file.v != NETWORK_REGISTRY_VERSION)
+                {
+                    return Err(BrokerError::internal(
+                        "registry policy revision guard is inconsistent",
+                    ));
+                }
+                if let Some(authority) = &file.network_authority {
+                    authority.policy.validate()?;
+                    if authority.generations.len() > 4096
+                        || authority.policy.devices.iter().any(|d| {
+                            authority.generations.get(&d.principal_id) != Some(&d.generation)
+                        })
+                    {
+                        return Err(BrokerError::internal(
+                            "registry policy generation history is inconsistent",
+                        ));
+                    }
+                }
+                if file.network_principals.is_none() {
+                    if let Some(authority) = &file.network_authority {
+                        file.network_principals = Some(
+                            authority
+                                .generations
+                                .iter()
+                                .map(|(id, generation)| {
+                                    (
+                                        id.clone(),
+                                        PrincipalGeneration {
+                                            generation: *generation,
+                                            active: authority
+                                                .policy
+                                                .devices
+                                                .iter()
+                                                .any(|d| d.principal_id == *id),
+                                        },
+                                    )
+                                })
+                                .collect(),
+                        );
+                    }
+                }
                 let operations_required = file
                     .required_features
                     .iter()
@@ -291,6 +351,7 @@ impl Registry {
                     file.revoked_token_hashes,
                     file.network,
                     file.network_principals,
+                    file.network_authority,
                 )
             }
             Err(error) if error.kind() == io::ErrorKind::NotFound => (
@@ -298,6 +359,7 @@ impl Registry {
                 Vec::new(),
                 BTreeMap::new(),
                 BTreeSet::new(),
+                None,
                 None,
                 None,
             ),
@@ -323,6 +385,7 @@ impl Registry {
             required_features,
             network,
             network_principals,
+            network_authority,
             activation_fenced: false,
             agents,
             tokens: HashMap::new(),
@@ -513,6 +576,7 @@ impl Registry {
     /// Persist revocation and generation fencing before publishing a policy.
     /// Removed principals are retained permanently and need a higher generation
     /// to return, including after process restart.
+    #[cfg(all(test, feature = "mbt-injection"))]
     pub(crate) fn apply_network_policy_generations(
         &mut self,
         generations: &[(String, u64)],
@@ -553,6 +617,136 @@ impl Registry {
         }
         self.fence_activation();
         self.network_principals = Some(next);
+        self.write_snapshot()?;
+        self.activation_fenced = false;
+        Ok(())
+    }
+
+    pub(crate) fn validate_network_policy(
+        &self,
+        policy: &crate::network::NetworkPolicy,
+    ) -> Result<(), BrokerError> {
+        self.proposed_network_authority(policy).map(|_| ())
+    }
+
+    fn proposed_network_authority(
+        &self,
+        policy: &crate::network::NetworkPolicy,
+    ) -> Result<Option<NetworkAuthority>, BrokerError> {
+        self.check_activation_ready()?;
+        policy.validate()?;
+        if self.network.is_none() {
+            return Err(BrokerError::internal("network root activation required"));
+        }
+        let mut generations = BTreeMap::new();
+        if let Some(principals) = &self.network_principals {
+            for device in &policy.devices {
+                if principals.get(&device.principal_id).is_some_and(|old| {
+                    device.generation < old.generation
+                        || (!old.active && device.generation == old.generation)
+                }) {
+                    return Err(BrokerError::invalid("network principal generation cannot revive or roll back a revoked principal"));
+                }
+            }
+            generations.extend(
+                principals
+                    .iter()
+                    .map(|(id, state)| (id.clone(), state.generation)),
+            );
+        }
+        for record in self.agents.values() {
+            if let Some(grant) = &record.network_grant {
+                generations
+                    .entry(grant.principal_id.clone())
+                    .and_modify(|g: &mut u64| *g = (*g).max(grant.principal_generation))
+                    .or_insert(grant.principal_generation);
+            }
+        }
+        if let Some(previous) = &self.network_authority {
+            if policy == &previous.policy {
+                return Ok(None);
+            }
+            if policy.revision <= previous.policy.revision {
+                return Err(BrokerError::invalid(
+                    "changed network policy requires a higher approved revision",
+                ));
+            }
+            generations = previous.generations.clone();
+            for device in &policy.devices {
+                if let Some(floor) = generations.get(&device.principal_id) {
+                    let prior = previous
+                        .policy
+                        .devices
+                        .iter()
+                        .find(|d| d.principal_id == device.principal_id);
+                    if device.generation < *floor
+                        || (device.generation == *floor && prior.is_none())
+                        || prior.is_some_and(|old| {
+                            old.generation == device.generation
+                                && old.expires_at_ms <= id::unix_millis()
+                                && device.expires_at_ms > old.expires_at_ms
+                        })
+                    {
+                        return Err(BrokerError::invalid("restored or expired principals require a newer generation; generations cannot decrease"));
+                    }
+                }
+            }
+        }
+        for device in &policy.devices {
+            if generations
+                .get(&device.principal_id)
+                .is_some_and(|floor| device.generation < *floor)
+            {
+                return Err(BrokerError::invalid(
+                    "policy generation is older than an issued identity",
+                ));
+            }
+            generations.insert(device.principal_id.clone(), device.generation);
+        }
+        if generations.len() > 4096 {
+            return Err(BrokerError::invalid(
+                "durable principal history capacity reached",
+            ));
+        }
+        Ok(Some(NetworkAuthority {
+            policy: policy.clone(),
+            generations,
+        }))
+    }
+
+    /// Persist approval and revocation fences before any new-policy request
+    /// can authenticate. An uncertain replacement fences all admissions.
+    pub(crate) fn approve_network_policy(
+        &mut self,
+        policy: &crate::network::NetworkPolicy,
+    ) -> Result<(), BrokerError> {
+        let Some(authority) = self.proposed_network_authority(policy)? else {
+            return Ok(());
+        };
+        let mut principals = self.network_principals.clone().unwrap_or_default();
+        for principal in principals.values_mut() {
+            principal.active = false;
+        }
+        for device in &policy.devices {
+            principals.insert(
+                device.principal_id.clone(),
+                PrincipalGeneration {
+                    generation: device.generation,
+                    active: true,
+                },
+            );
+        }
+        self.activation_fenced = true;
+        self.network_principals = Some(principals);
+        self.network_authority = Some(authority);
+        if !self
+            .required_features
+            .iter()
+            .any(|f| f == NETWORK_POLICY_REQUIRED_FEATURE)
+        {
+            self.required_features
+                .push(NETWORK_POLICY_REQUIRED_FEATURE.into());
+        }
         self.write_snapshot()?;
         self.activation_fenced = false;
         Ok(())
@@ -987,6 +1181,7 @@ impl Registry {
             revoked_token_hashes: self.revoked_token_hashes.clone(),
             network: self.network.clone(),
             network_principals: self.network_principals.clone(),
+            network_authority: self.network_authority.clone(),
         };
         let bytes = serde_json::to_vec_pretty(&file)
             .map_err(|error| BrokerError::internal(format!("serialize registry: {error}")))?;
@@ -1002,10 +1197,14 @@ impl Registry {
             drop(handle);
             fs::set_permissions(&temporary, fs::Permissions::from_mode(0o600))?;
             #[cfg(feature = "mbt-injection")]
+            crate::faults::reach(&self.path, crate::faults::FaultPoint::BeforeRegistryRename)?;
+            #[cfg(feature = "mbt-injection")]
             crate::faults::reach(&self.path, crate::faults::FaultPoint::BeforeRegistryReplace)?;
             fs::rename(&temporary, &self.path)?;
             #[cfg(feature = "mbt-injection")]
             crate::faults::reach(&self.path, crate::faults::FaultPoint::AfterRegistryReplace)?;
+            #[cfg(feature = "mbt-injection")]
+            crate::faults::reach(&self.path, crate::faults::FaultPoint::AfterRegistryRename)?;
             File::open(parent)?.sync_all()?;
             #[cfg(feature = "mbt-injection")]
             crate::faults::reach(&self.path, crate::faults::FaultPoint::AfterRegistrySync)?;

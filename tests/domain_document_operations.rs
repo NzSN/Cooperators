@@ -35,7 +35,7 @@ fn config(root: &Path, device: &str) -> DaemonConfig {
             principal_id: "device-a".into(),
             generation: 1,
             token_hash: token_hash(device),
-            expires_at_ms: cooperators::id::unix_millis() + 3_600_000,
+            expires_at_ms: 4_102_444_800_000,
             allow_enroll: true,
             max_instances: 8,
             instance_ttl_s: 3600,

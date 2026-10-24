@@ -29,11 +29,7 @@ async fn call(
         .expect("dispatch returns a response for a request with id")
         .into_result()
         .map_err(|error| {
-            let mut safe_params = params.clone();
-            if let Some(object) = safe_params.as_object_mut() {
-                object.remove("token");
-            }
-            eprintln!("rpc {method} {safe_params} failed: {error:?}");
+            eprintln!("rpc {method} failed: {error:?}");
             error
         })
 }

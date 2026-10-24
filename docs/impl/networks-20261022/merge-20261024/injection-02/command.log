@@ -1,0 +1,290 @@
+warning: use of deprecated method `std::sync::atomic::Atomic::<u64>::fetch_update`: renamed to `try_update` for consistency
+   --> src/faults.rs:141:14
+    |
+141 |             .fetch_update(Ordering::Relaxed, Ordering::Relaxed, |old| {
+    |              ^^^^^^^^^^^^
+    |
+    = note: `#[warn(deprecated)]` on by default
+help: replace the use of the deprecated method
+    |
+141 -             .fetch_update(Ordering::Relaxed, Ordering::Relaxed, |old| {
+141 +             .try_update(Ordering::Relaxed, Ordering::Relaxed, |old| {
+    |
+
+warning: `cooperators` (lib) generated 1 warning (run `cargo fix --lib -p cooperators` to apply 1 suggestion)
+warning: `cooperators` (lib test) generated 1 warning (1 duplicate)
+   Compiling cooperators v0.1.0 (/home/lsz/Codebase/Cooperators)
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 1.54s
+     Running unittests src/lib.rs (target/debug/deps/cooperators-a7d87b5031712bd4)
+
+running 34 tests
+test id::tests::generated_ulids_are_valid ... ok
+test id::tests::rfc3339_format_is_stable ... ok
+test id::tests::ulid_time_encoding_matches_spec_vector ... ok
+test operations::tests::canonical_inputs_sort_objects_but_keep_array_order_numbers_and_methods ... ok
+test mcp::domain_client_tests::mcp_domain_mutations_without_journal_fail_before_network ... ok
+test network::runtime::tests::enrollment_rechecks_authority_after_waiting_for_registry ... ok
+test operations::tests::dropped_owner_fences_until_authoritative_reopen_and_never_claims_terminal_error ... ok
+test operations::tests::scoped_identity_conflicts_across_send_and_every_domain_method ... ok
+test operations::tests::status_distinguishes_shared_pending_unknown_and_committed_without_scope_leaks ... ok
+test registry::tests::token_hash_is_sha256_and_tokens_are_128_bits ... ok
+test operations::tests::source_completion_checks_original_result_and_projection_recipe ... ok
+test registry::tests::registry_roundtrip_keeps_only_token_hashes ... ok
+test operations::tests::completed_maintenance_allows_terminal_no_effect_but_cannot_clear_other_uncertainty ... ok
+test server::tests::dispatch_handles_ping_echo_and_unknown_methods ... ok
+test operations::tests::terminal_no_effect_error_replays_exactly_with_bound_marker_and_scoped_status ... ok
+test server::tests::ndjson_request_response_framing_over_an_in_process_stream ... ok
+test server::tests::notifications_produce_no_response ... ok
+test registry::tests::uncertain_network_activation_fences_registry_until_disk_reopen ... ok
+test operations::tests::uncertain_outcome_sync_and_recovery_sync_failure_do_not_expose_terminal_result ... ok
+test server::tests::status_reports_identity_and_an_empty_head_map ... ok
+test network::runtime::tests::enrollment_cannot_return_a_retired_or_rotated_credential ... ok
+test registry::tests::uncertain_policy_commit_fences_and_reopen_observes_actual_revocation ... ok
+test registry::tests::uncertain_enrollment_recovers_the_persisted_launch_without_duplicate_identity ... ok
+test mcp::domain_client_tests::mcp_domain_http_schema_requires_explicit_operation_without_changing_local_schema ... ok
+test transport::journal::tests::client_journal_terminal_marker_binds_reference_method_and_scope ... ok
+test transport::journal::tests::client_journal_failed_terminal_save_preserves_resumable_original_intent ... ok
+test mcp::domain_client_tests::mcp_domain_full_reference_resume_rejects_cross_method_before_network ... ok
+test transport::journal::tests::client_journal_terminal_error_is_persistent_exact_and_monotonic ... ok
+test mcp::domain_client_tests::mcp_domain_catalog_requires_journal_and_advertised_method ... ok
+test network::runtime::tests::enrollment_rechecks_expiry_after_waiting_for_registry ... ok
+test operations::tests::oversized_result_is_rejected_before_effect_and_can_be_recorded_terminally ... ok
+test operations::tests::quota_is_shared_between_send_and_domain_reservations ... ok
+test operations::tests::finite_quota_rejects_new_admission_but_preserves_existing_completion ... ok
+test mcp::domain_client_tests::mcp_domain_large_original_or_resumed_receipt_keeps_complete_structured_outcome ... ok
+
+test result: ok. 34 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.24s
+
+     Running tests/domain_gateway.rs (target/debug/deps/domain_gateway-59f019b4e55ac670)
+
+running 3 tests
+test normalized_defaults_replay_and_malformed_inputs_never_reserve_identity ... ok
+test historical_domain_receipt_and_status_require_original_resource_permission ... ok
+test oversized_local_task_cannot_create_an_unreadable_remote_claim ... ok
+
+test result: ok. 3 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.29s
+
+     Running tests/network_authority_migration.rs (target/debug/deps/network_authority_migration-830b3fbb0bcdf66c)
+
+running 10 tests
+test network_activation_crash_child ... ok
+test activated_root_refuses_missing_policy_before_repair_and_invalid_policy_before_activation ... ok
+test orphan_metadata_is_adopted_and_conflicts_do_not_promote_arrivals ... ok
+test enrollment_expiry_and_budget_survive_reopen_without_revival ... ok
+test policy_revision_and_generation_fences_survive_restart_and_reject_stale_approval ... ok
+test upgrades_in_both_orders_preserve_bus_identity_and_historical_registry_fields ... ok
+test uncertain_policy_replacement_fails_closed_until_reopen ... ok
+test both_parent_registry_formats_preserve_tombstones_and_operation_epoch ... ok
+test real_process_kill_at_registry_replacement_recovers_one_stable_authority ... ok
+test actual_pre_network_binary_refuses_v3_before_any_source_repair ... ok
+
+test result: ok. 10 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.22s
+
+     Running tests/network_bounds.rs (target/debug/deps/network_bounds-ba5c86ef01e79e17)
+
+running 7 tests
+test duplicate_authorization_headers_never_select_one_credential ... ok
+test malformed_optional_values_and_http_statuses_are_explicit ... ok
+test agents_and_subscriptions_filter_before_counting_the_page_limit ... ok
+test inbox_cursors_and_document_blob_budgets_are_checked_before_returning_data ... ok
+test documents_are_authorized_before_paging_and_cursors_bind_scope_and_filters ... ok
+test document_metadata_pages_stop_at_bytes_and_resume_at_the_last_returned_name ... ok
+test channel_pages_count_escaped_bytes_and_never_skip_an_unreturned_record ... ok
+
+test result: ok. 7 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.97s
+
+     Running tests/network_facades.rs (target/debug/deps/network_facades-a73dacf53d61f26a)
+
+running 5 tests
+test mcp_rejects_ambiguous_authorization_and_oversized_response_ids ... ok
+test unknown_or_retired_scoped_bearer_cannot_use_unauthenticated_local_routes ... ok
+test mcp_admission_is_before_body_and_releases_capacity_after_oversized_body ... ok
+test scoped_session_never_switches_to_local_body_credential_or_falls_back_after_retirement ... ok
+test mcp_keeps_full_structured_result_when_duplicate_text_exceeds_budget ... ok
+
+test result: ok. 5 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.29s
+
+     Running tests/network_migration.rs (target/debug/deps/network_migration-71e2148b9f10bdae)
+
+running 11 tests
+test injection::network_migration_child ... ok
+test incomplete_v3_guard_or_principal_history_is_rejected_without_changes ... ok
+test invalid_policy_cannot_activate_arrivals_or_network ... ok
+test orphan_arrival_identity_is_adopted_without_enabling_arrivals ... ok
+test v1_activation_preserves_instances_and_persistent_network_identity ... ok
+test both_upgrade_orders_share_one_bus_and_preserve_arrival_feature ... ok
+test conflicting_or_corrupt_arrival_identity_refuses_before_guard_or_log_changes ... ok
+test injection::failed_activation_reopens_actual_disk_guard_without_repairing_logs_early ... ok
+test activated_v3_root_requires_policy_before_any_log_repair ... ok
+test injection::pre_network_binary_refuses_v3_before_log_repair ... ok
+test injection::process_kill_at_registry_boundaries_preserves_recoverable_identity ... ok
+
+test result: ok. 11 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.07s
+
+     Running tests/network_security.rs (target/debug/deps/network_security-441e7809a0a5d2c6)
+
+running 11 tests
+test policy_requires_exact_host_origin_and_unambiguous_patterns ... ok
+test poll_capacity_preserves_request_and_global_capacity_across_policy_replacement ... ok
+test enrollment_budget_is_atomic_and_retry_does_not_extend_or_duplicate ... ok
+test launch_retry_cannot_transfer_principal_or_change_metadata ... ok
+test principal_removal_and_generation_floor_survive_daemon_reopen ... ok
+test failed_policy_persistence_fences_runtime_until_reopen ... ok
+test scoped_authority_denies_local_credentials_resources_and_mutations ... ok
+test generation_changes_and_readdition_fence_existing_contexts ... ok
+test revoking_permission_cancels_an_already_admitted_wait ... ok
+test retirement_generation_and_principal_expiry_cancel_admitted_waits ... ok
+test credential_expiry_cancels_wait_and_retry_never_renews_it ... ok
+
+test result: ok. 11 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 1.01s
+
+     Running tests/operation_crash.rs (target/debug/deps/operation_crash-326af0ac205dc255)
+
+running 18 tests
+test domain_crash_child ... ok
+test operation_crash_child ... ok
+test preoperation_envelope_hash_and_absent_optional_fields_remain_identical ... ok
+coop daemon: MCP streamable HTTP on http://127.0.0.1:45225/mcp
+coop daemon: MCP streamable HTTP on http://127.0.0.1:44433/mcp
+coop daemon: MCP streamable HTTP on http://127.0.0.1:37981/mcp
+coop daemon: MCP streamable HTTP on http://127.0.0.1:33039/mcp
+coop daemon: MCP streamable HTTP on http://127.0.0.1:46787/mcp
+coop daemon: MCP streamable HTTP on http://127.0.0.1:42407/mcp
+coop daemon: MCP streamable HTTP on http://127.0.0.1:36253/mcp
+coop daemon: MCP streamable HTTP on http://127.0.0.1:33151/mcp
+
+thread 'sigkill_after_partial_write_repairs_then_replays_original_intent_once' (693612) panicked at tests/operation_crash.rs:350:9:
+child exited: /tmp/coop-test-operation-partial-write-693559-1792812364179759818-7
+note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
+test uncertain_registry_activation_must_sync_recovered_guard_before_source_repair ... ok
+test sigkill_after_partial_write_repairs_then_replays_original_intent_once ... FAILED
+test http_mcp_explicit_operation_replays_and_binds_header_credentials ... ok
+test remote_status_tracks_pending_commit_and_revokes_historical_receipt_access ... ok
+test lost_https_reply_after_commit_recovers_exact_original_receipt ... ok
+test empty_claim_terminal_error_is_journaled_after_lost_reply_and_later_enqueue ... ok
+coop daemon: MCP streamable HTTP on http://127.0.0.1:39811/mcp
+test remote_stdio_lost_reply_resumes_using_only_id_reported_in_error ... ok
+test remote_stdio_journals_fresh_intents_and_resumes_only_matching_saved_intent ... ok
+test cli_fresh_sends_are_distinct_and_explicit_resume_preserves_receipt ... ok
+coop daemon: MCP streamable HTTP on http://127.0.0.1:46369/mcp
+test resource_families_recover_dropped_https_receipts_from_source_after_restart ... ok
+test sigkill_after_inbox_sync_before_receipt_recovers_original_outcome ... ok
+test sigkill_before_inbox_sync_recovers_complete_operation_proof_once ... ok
+test publish_sigkill_before_sync_partial_write_and_after_sync_recovers_once ... ok
+test enqueue_sigkill_before_sync_partial_write_and_after_sync_recovers_once ... ok
+test update_doc_sigkill_before_sync_partial_write_and_after_sync_recovers_once ... ok
+
+failures:
+
+failures:
+    sigkill_after_partial_write_repairs_then_replays_original_intent_once
+
+test result: FAILED. 17 passed; 1 failed; 0 ignored; 0 measured; 2 filtered out; finished in 10.40s
+
+error: test failed, to rerun pass `--test operation_crash`
+     Running tests/operation_journal.rs (target/debug/deps/operation_journal-8030b48da857fe7c)
+
+running 17 tests
+test operation_journal_process_child ... ok
+test journal_rejects_unbounded_deadlines_and_noncanonical_scopes ... ok
+test current_credential_inside_application_payload_is_rejected_without_persistence ... ok
+test journal_refuses_symlinks_hardlinks_and_nonprivate_files ... ok
+test journal_rejects_credentials_and_out_of_scope_mutations ... ok
+test invalid_local_state_or_scope_fails_before_any_network_exchange ... ok
+test journal_refuses_symlink_scratch_without_touching_its_target ... ok
+test recovered_intent_is_not_submitted_until_file_and_directory_sync_succeed ... ok
+test corrupt_authoritative_state_fails_closed ... ok
+test reopening_repairs_existing_journal_directory_ancestry_before_use ... ok
+test persisted_intent_survives_reopen_and_fresh_invocations_get_new_ids ... ok
+test stale_temporary_file_is_not_an_admitted_intent ... ok
+test every_admitted_domain_method_roundtrips_with_immutable_method_and_fresh_identity ... ok
+test abrupt_process_death_preserves_the_prepared_operation ... ok
+test journal_entry_limit_is_checked_before_atomic_replacement ... ok
+test oversized_intent_and_state_are_rejected_before_unbounded_loading ... ok
+test simultaneous_process_updates_are_not_lost ... ok
+
+test result: ok. 17 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.26s
+
+     Running tests/operation_receipts.rs (target/debug/deps/operation_receipts-383a30e873c16fe7)
+
+running 9 tests
+test malformed_legacy_expired_and_far_future_intents_never_write ... ok
+test original_receipt_survives_submission_deadline_and_reduced_capacity ... ok
+test duplicate_authoritative_proofs_fail_closed_on_recovery ... ok
+test concurrent_duplicates_and_restart_return_identical_source_receipt ... ok
+test ttl_proof_matches_synced_companion_and_survives_replay ... ok
+test disabled_policy_replays_sources_but_rejects_new_durable_sends ... ok
+test global_scope_conflicts_do_not_create_effects_in_other_recipients ... ok
+test cancelled_admitted_send_finishes_and_uncertain_sync_is_fenced_until_replay ... ok
+test largest_admitted_remote_envelope_is_readable_and_next_byte_has_no_effect ... ok
+
+test result: ok. 9 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 1.56s
+
+     Running tests/remote_authorization.rs (target/debug/deps/remote_authorization-074b00279059226d)
+
+running 15 tests
+test policy_validation_and_header_controls_reject_ambiguous_authority ... ok
+test policy_removal_does_not_reset_capacity_or_restore_old_generations ... ok
+test unready_mutations_cannot_bypass_policy_through_any_dispatch ... ok
+test native_ingress_requires_approved_scoped_credentials_and_exact_authority ... ok
+test retired_or_expired_scope_never_falls_back_to_local_provisioning ... ok
+test body_credentials_and_resource_denials_apply_through_native_uds_and_mcp ... ok
+test generation_expiry_retirement_and_policy_replacement_fence_instances ... ok
+test agent_pages_filter_before_construction_and_cursors_cannot_cross_instances ... ok
+test enrollment_retries_keep_identity_expiry_and_persistent_budget ... ok
+test arrival_pages_and_subscription_lists_check_current_resource_policy ... ok
+test pagination_is_authorized_query_scoped_and_rejects_bad_types ... ok
+test revocation_during_a_wait_suppresses_the_result_and_releases_capacity ... ok
+test http_request_budgets_bound_native_and_mcp_admission_before_dispatch ... ok
+test bounded_inbox_and_document_reads_do_not_skip_oversized_contents ... ok
+test bounded_channel_pages_preserve_cursors_and_refuse_a_single_oversized_record ... ok
+
+test result: ok. 15 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.84s
+
+     Running tests/remote_transport.rs (target/debug/deps/remote_transport-d39febe885317853)
+
+running 20 tests
+test contracts_cover_every_mcp_alias_and_native_route ... ok
+test endpoint_rejects_plaintext_credentials_and_ambiguous_paths ... ok
+test profile_credentials_are_private_referenced_and_not_debugged ... ok
+coop daemon: MCP streamable HTTP on http://127.0.0.1:33545/mcp
+coop daemon: MCP streamable HTTP on http://127.0.0.1:37441/mcp
+coop daemon: MCP streamable HTTP on http://127.0.0.1:40657/mcp
+coop daemon: MCP streamable HTTP on http://127.0.0.1:41401/mcp
+coop daemon: MCP streamable HTTP on http://127.0.0.1:37667/mcp
+coop daemon: MCP streamable HTTP on http://127.0.0.1:46367/mcp
+coop daemon: MCP streamable HTTP on http://127.0.0.1:38295/mcp
+coop daemon: MCP streamable HTTP on http://127.0.0.1:36783/mcp
+coop daemon: MCP streamable HTTP on http://127.0.0.1:32901/mcp
+coop daemon: MCP streamable HTTP on http://127.0.0.1:44735/mcp
+coop daemon: MCP streamable HTTP on http://127.0.0.1:34757/mcp
+coop daemon: MCP streamable HTTP on http://127.0.0.1:38943/mcp
+coop daemon: MCP streamable HTTP on http://127.0.0.1:43131/mcp
+coop daemon: MCP streamable HTTP on http://127.0.0.1:36587/mcp
+coop daemon: MCP streamable HTTP on http://127.0.0.1:36987/mcp
+coop daemon: MCP streamable HTTP on http://127.0.0.1:41735/mcp
+test native_and_http_mcp_do_not_accept_different_body_identity ... ok
+test tls_rejects_untrusted_certificate_and_wrong_hostname ... ok
+test scoped_credentials_keep_authorization_over_a_real_uds_connection ... ok
+coop daemon: MCP streamable HTTP on http://127.0.0.1:39047/mcp
+test pinned_bus_identity_is_checked_before_rpc_and_enrollment ... ok
+test real_tls_mcp_preserves_header_identity_and_hides_unready_mutations ... ok
+test redirects_do_not_forward_credentials_or_retry ... ok
+test native_and_http_mcp_enforce_resource_permissions_and_read_only_catalog ... ok
+test uds_backed_stdio_cannot_replace_scoped_identity_or_register_unscoped_identity ... ok
+test https_host_and_origin_policy_applies_to_native_and_mcp ... ok
+test lost_mutation_response_is_unknown_and_is_never_automatically_retried ... ok
+test native_and_http_mcp_require_scoped_instance_credentials ... ok
+test actual_remote_stdio_cannot_resume_anonymous_or_local_unscoped_identity ... ok
+test actual_remote_stdio_enrolls_fresh_identity_and_enforces_resources ... ok
+test principal_generation_and_expiry_fence_native_mcp_and_stdio ... ok
+coop daemon: MCP streamable HTTP on http://127.0.0.1:40331/mcp
+test verified_tls_forwards_native_identity_and_wait_without_body_credentials ... ok
+test permission_revocation_interrupts_native_mcp_and_stdio_long_polls ... ok
+coop daemon: MCP streamable HTTP on http://127.0.0.1:38515/mcp
+test deadlines_and_response_limits_cover_the_tls_exchange ... ok
+
+test result: ok. 20 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.41s
+
+error: 1 target failed:
+    `--test operation_crash`

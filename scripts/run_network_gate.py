@@ -52,6 +52,10 @@ receipt = {
     "ignored_tests": sum(row[2] for row in counts),
     "reported_skips": skips,
     "required_sockets": required,
+    "gate_environment": {name: os.environ[name] for name in [
+        "COOP_REQUIRE_UDS", "COOP_REQUIRE_REMOTE", "COOP_PRENETWORK_BINARY",
+        "COOP_PREUPGRADE_BINARY", "MODEL_INTERFACE_GEN", "MIRROR_BIN",
+    ] if name in os.environ},
     "passed": result.returncode == 0 and before == after and (not required or skips == 0),
     "log_sha256": hashlib.sha256((args.output / "command.log").read_bytes()).hexdigest(),
 }

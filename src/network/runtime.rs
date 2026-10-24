@@ -88,6 +88,14 @@ impl NetworkRuntime {
     ) -> Result<(), BrokerError> {
         self.check_ready()?;
         policy.validate()?;
+        if !state
+            .network()
+            .is_some_and(|runtime| std::ptr::eq(runtime.as_ref(), self))
+        {
+            return Err(BrokerError::invalid(
+                "policy replacement requires its owning daemon state",
+            ));
+        }
         let mut registry = state.registry.write().await;
         self.check_ready()?;
         let mut current = self.policy.write().unwrap();
@@ -101,15 +109,8 @@ impl NetworkRuntime {
                 "network capacity or operation activation changes require restart",
             ));
         }
-        let generations = policy
-            .devices
-            .iter()
-            .map(|d| (d.principal_id.clone(), d.generation))
-            .collect::<Vec<_>>();
-        if let Err(error) = registry.apply_network_policy_generations(&generations) {
+        if let Err(error) = registry.approve_network_policy(&policy) {
             if !matches!(error, BrokerError::Invalid(_)) {
-                // Atomic replacement may already have happened before an I/O
-                // failure. Do not serve with an unproven authority snapshot.
                 self.policy_fenced.store(true, Ordering::Release);
                 self.policy_changes
                     .send_modify(|epoch| *epoch = epoch.wrapping_add(1));
@@ -565,6 +566,7 @@ mod tests {
         let locked = state.registry.write().await;
         let mut revoked = initial;
         revoked.devices.clear();
+        revoked.revision = network.policy().revision + 1;
         let replacement = network.replace_policy(&state, revoked);
         tokio::pin!(replacement);
         poll_fn(|cx| {
@@ -596,6 +598,7 @@ mod tests {
         let network = state.network().unwrap();
         let mut expiring = network.policy();
         expiring.devices[0].expires_at_ms = crate::id::unix_millis() + 100;
+        expiring.revision = network.policy().revision + 1;
         network.replace_policy(&state, expiring).await.unwrap();
         let locked = state.registry.write().await;
         let issuing = network.enroll(&state, &device, enrollment(&new_token().unwrap()));

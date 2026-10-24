@@ -234,19 +234,19 @@ impl DaemonState {
                 "an activated network root requires its approved policy on every reopen",
             ));
         }
+        if let Some(policy) = &config.network_policy {
+            policy.validate()?;
+            if registry.network_meta().is_some() {
+                registry.validate_network_policy(policy)?;
+            }
+        }
         // Validate/activate the format guard before any log recovery can repair
         // source files containing fields that an older binary cannot hash.
         let arrival_meta =
             arrivals::migration::prepare(&config.root, &mut registry, config.enable_arrivals)?;
         let network = if let Some(policy) = &config.network_policy {
             let mut meta = registry.prepare_network()?;
-            registry.apply_network_policy_generations(
-                &policy
-                    .devices
-                    .iter()
-                    .map(|d| (d.principal_id.clone(), d.generation))
-                    .collect::<Vec<_>>(),
-            )?;
+            registry.approve_network_policy(policy)?;
             if policy.enable_operations {
                 meta = registry.prepare_operations()?;
             }

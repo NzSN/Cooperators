@@ -40,6 +40,8 @@ pub enum FaultPoint {
     AfterDeadProjectionAppend,
     AfterDocCreate,
     AfterSegmentCreate,
+    BeforeRegistryRename,
+    AfterRegistryRename,
     BeforeRegistryReplace,
     AfterRegistryReplace,
     AfterRegistrySync,

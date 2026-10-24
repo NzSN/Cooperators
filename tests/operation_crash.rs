@@ -3,6 +3,8 @@
 #![cfg(all(feature = "mbt-injection", unix))]
 
 mod common;
+#[path = "common/policy.rs"]
+mod policy_approval;
 
 use std::collections::BTreeSet;
 use std::fs::{self, File, OpenOptions};
@@ -1495,11 +1497,7 @@ async fn remote_status_tracks_pending_commit_and_revokes_historical_receipt_acce
         policy.devices[0]
             .permissions
             .retain(|permission| permission.method != revoked);
-        prepared
-            .state
-            .network()
-            .unwrap()
-            .replace_policy(&prepared.state, policy)
+        policy_approval::replace_network_policy(&prepared.state, policy)
             .await
             .unwrap();
         let denied = client
@@ -1515,11 +1513,7 @@ async fn remote_status_tracks_pending_commit_and_revokes_historical_receipt_acce
             Some(cooperators::error::ErrorCode::Forbidden)
         );
     }
-    prepared
-        .state
-        .network()
-        .unwrap()
-        .replace_policy(&prepared.state, prepared.policy.clone())
+    policy_approval::replace_network_policy(&prepared.state, prepared.policy.clone())
         .await
         .unwrap();
     let restored = client
@@ -1670,16 +1664,36 @@ async fn uncertain_registry_activation_must_sync_recovered_guard_before_source_r
         .map(|path| fs::read(path).unwrap())
         .collect::<Vec<_>>();
     policy.enable_operations = true;
+    policy.revision += 1;
     let registry_path = root.join("registry.json");
+    // Approval now has its own durable snapshot before operation activation.
+    // Permit that write, then fail the operation guard's replacement so this
+    // control still proves recovery of the exact durable operation epoch.
+    let approval = arm_point(
+        &registry_path,
+        FaultPoint::AfterRegistryReplace,
+        PointFault::Pause,
+    )
+    .unwrap();
+    let activating = {
+        let root = root.clone();
+        let policy = policy.clone();
+        tokio::task::spawn_blocking(move || DaemonState::with_config(config(&root, policy)))
+    };
+    approval.wait_reached(Duration::from_secs(5)).unwrap();
     let activation = arm_point(
         &registry_path,
         FaultPoint::AfterRegistryReplace,
         PointFault::Fail,
     )
     .unwrap();
-    let activation_error = DaemonState::with_config(config(&root, policy.clone()))
+    approval.release(SyncOutcome::Succeed);
+    let activation_error = activating
+        .await
+        .unwrap()
         .err()
         .expect("activation must fail at injected boundary");
+    drop(approval);
     assert_eq!(
         activation.observation().stage,
         FaultStage::InjectedFailure,

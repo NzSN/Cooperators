@@ -437,6 +437,7 @@ async fn disabled_policy_replays_sources_but_rejects_new_durable_sends() {
     drop(state);
     let mut disabled = config(root.path());
     disabled.network_policy.as_mut().unwrap().enable_operations = false;
+    disabled.network_policy.as_mut().unwrap().revision += 1;
     let reopened = DaemonState::with_config(disabled).unwrap();
     assert_eq!(
         code(

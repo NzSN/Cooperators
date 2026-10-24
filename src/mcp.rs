@@ -249,7 +249,7 @@ pub const TOOL_SPECS: &[ToolSpec] = &[
         tool: "coop_list_arrival_subscriptions",
         method: "list_arrival_subscriptions",
         description: "List this identity's arrival subscriptions and stable bus identity.",
-        schema: schema_heartbeat,
+        schema: schema_list_page,
     },
     ToolSpec {
         tool: "coop_wait_arrivals",
@@ -1235,7 +1235,8 @@ pub fn http_service(state: Arc<DaemonState>) -> CoopHttpService {
     let mut config = StreamableHttpServerConfig::default()
         .with_legacy_session_mode(false)
         .with_json_response(true)
-        .with_sse_keep_alive(None);
+        .with_sse_keep_alive(None)
+        .with_max_request_body_bytes(crate::transport::MAX_RPC_BYTES);
     if let Some(network) = state.network() {
         let policy = network.policy();
         config = config
@@ -1674,9 +1675,17 @@ fn schema_operation_status() -> Value {
 fn schema_list_agents() -> Value {
     json!({
         "type": "object",
-        "properties": {"include_stale": {"type": "boolean"}},
+        "properties": {"include_stale": {"type": "boolean"},
+            "limit": {"type":"integer","minimum":1,"maximum":64},
+            "cursor": {"type":"object"}},
         "additionalProperties": false
     })
+}
+
+fn schema_list_page() -> Value {
+    json!({"type":"object", "properties":{
+        "limit":{"type":"integer","minimum":1,"maximum":64},
+        "cursor":{"type":"object"}}, "additionalProperties":false})
 }
 
 fn schema_publish() -> Value {
@@ -1867,7 +1876,9 @@ fn schema_read_doc() -> Value {
 fn schema_list_docs() -> Value {
     json!({
         "type": "object",
-        "properties": {"prefix": {"type": "string"}},
+        "properties": {"prefix": {"type": "string"},
+            "limit": {"type":"integer","minimum":1,"maximum":64},
+            "cursor": {"type":"object"}},
         "additionalProperties": false
     })
 }

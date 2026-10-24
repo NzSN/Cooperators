@@ -1,4 +1,6 @@
 mod common;
+#[path = "common/policy.rs"]
+mod policy_approval;
 
 use bytes::Bytes;
 use cooperators::{
@@ -223,10 +225,7 @@ async fn mcp_keeps_full_structured_result_when_duplicate_text_exceeds_budget() {
             method: "read_doc".into(),
             resources: vec!["document:large".into()],
         });
-    state
-        .network()
-        .unwrap()
-        .replace_policy(&state, policy)
+    policy_approval::replace_network_policy(&state, policy)
         .await
         .unwrap();
     call(

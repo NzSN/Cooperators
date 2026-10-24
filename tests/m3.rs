@@ -851,7 +851,11 @@ async fn tools_list_exposes_every_method_with_matching_schemas() {
         ("coop_wait_message", &[], &["cursor", "timeout_s"]),
         ("coop_ack", &["cursor"], &["cursor"]),
         ("coop_heartbeat", &[], &[]),
-        ("coop_list_agents", &[], &["include_stale"]),
+        (
+            "coop_list_agents",
+            &[],
+            &["include_stale", "limit", "cursor"],
+        ),
         (
             "coop_publish",
             &["channel"],
@@ -905,7 +909,7 @@ async fn tools_list_exposes_every_method_with_matching_schemas() {
             &["lease_id", "fence"],
         ),
         ("coop_read_doc", &["name"], &["name", "version"]),
-        ("coop_list_docs", &[], &["prefix"]),
+        ("coop_list_docs", &[], &["prefix", "limit", "cursor"]),
         ("coop_operation_status", &["operation"], &["operation"]),
         ("coop_get_status", &[], &[]),
         (
@@ -918,7 +922,7 @@ async fn tools_list_exposes_every_method_with_matching_schemas() {
             &["subscription_id"],
             &["subscription_id"],
         ),
-        ("coop_list_arrival_subscriptions", &[], &[]),
+        ("coop_list_arrival_subscriptions", &[], &["limit", "cursor"]),
         ("coop_wait_arrivals", &[], &["cursor", "timeout_s", "limit"]),
         ("coop_ack_arrivals", &["cursor"], &["cursor"]),
     ];
