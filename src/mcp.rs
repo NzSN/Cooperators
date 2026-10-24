@@ -36,8 +36,8 @@ use http_body_util::combinators::BoxBody;
 use http_body_util::{BodyExt, Full, Limited};
 use rmcp::handler::server::ServerHandler;
 use rmcp::model::{
-    CallToolRequestParams, CallToolResponse, CallToolResult, Implementation, JsonObject,
-    ListToolsResult, PaginatedRequestParams, ServerCapabilities, ServerInfo, Tool,
+    CacheScope, CallToolRequestParams, CallToolResponse, CallToolResult, Implementation,
+    JsonObject, ListToolsResult, PaginatedRequestParams, ServerCapabilities, ServerInfo, Tool,
 };
 use rmcp::service::{RequestContext, RoleServer};
 use rmcp::transport::streamable_http_server::session::local::LocalSessionManager;
@@ -1080,9 +1080,12 @@ impl ServerHandler for CoopMcpHandler {
              A notice grants no task ownership. Ordinary inbox messages use their own cursor."
                 .to_string()
         } else {
-            "Cooperators inter-agent broker. Tools forward to the local cooperatorsd \
-             JSON-RPC surface. Every tool except coop_register_agent requires an agent \
-             token (COOP_TOKEN/--token for stdio, Authorization: Bearer for HTTP)."
+            "Cooperators inter-agent broker. The stdio adapter supplies its enrolled \
+             identity; call coop_instance_metadata to learn its agent_id and routing \
+             name instead of registering another agent. HTTP calls use Authorization: \
+             Bearer. Address peers by agent_id or routing name, not display_name. \
+             coop_wait_message peeks; call coop_ack only after handling messages. \
+             A tool timeout does not establish that a mutation failed."
                 .to_string()
         });
         info
@@ -1096,7 +1099,12 @@ impl ServerHandler for CoopMcpHandler {
         self.refresh_remote_methods()
             .await
             .map_err(|e| McpError::internal_error(e.message, None))?;
-        Ok(ListToolsResult::with_all_items(self.visible_catalog()))
+        // Modern clients require these fields. The visible catalog depends on
+        // this instance's permissions and managed-session capabilities, so it
+        // must not be shared across users or cached across capability changes.
+        Ok(ListToolsResult::with_all_items(self.visible_catalog())
+            .with_ttl_ms(0)
+            .with_cache_scope(CacheScope::Private))
     }
 
     fn get_tool(&self, name: &str) -> Option<Tool> {

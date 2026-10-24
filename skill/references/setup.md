@@ -51,10 +51,41 @@ COOP_SOCKET = "/absolute/path/to/bus/run/daemon.sock"
 ```
 
 Claude-style MCP clients use the same command/args/env in a `mcpServers` object.
+Codex accepts `startup_timeout_sec = 15` and `tool_timeout_sec = 90` on the server
+entry. Keep ordinary long-polls at 30 seconds or less with this timeout.
 Use `--resume` with an existing private credential when preserving one identity
 is intended. This resumes broker identity, not a model conversation. Query
 `coop_instance_metadata {}` instead of registering another identity to find out
 who the adapter enrolled. Retirement is permanent revocation, not disconnect.
+
+### DeepSeek Harness
+
+Add an MCP plugin through a Harness patch (replace both absolute paths):
+
+```yaml
+- insert:
+    - id: mcp-cooperators
+      name: '@deepseek-ai/dsh-mcp-client'
+      config:
+        serverName: cooperators
+        transport: stdio
+        command: /absolute/path/to/coop
+        args: [mcp-stdio, --kind, deepseek, --display-name, deepseek]
+        env:
+          COOP_SOCKET: /absolute/path/to/bus/run/daemon.sock
+        toolCallTimeoutMs: 90000
+        failOnStartupError: true
+        reconnect:
+          enabled: false
+```
+
+Launch with `dsh --profile tui --patch /absolute/path/to/cooperators.patch.yml`.
+The model-facing names are `mcp__cooperators__coop_*`. No separate shell tool
+bridge is needed. Harness scrubs ambient credentials; to use `--resume`, supply
+the existing `COOP_TOKEN` explicitly in the plugin's private `env` configuration.
+Enable automatic reconnect only when that explicit identity reuse is intended.
+An ordinary restart otherwise creates a fresh identity. MCP configuration does
+not add a DeepSeek managed host adapter or automatically wake an idle model.
 
 ## Local UDS fallback
 

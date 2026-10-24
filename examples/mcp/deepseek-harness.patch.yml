@@ -1,0 +1,18 @@
+# Replace both absolute paths, then launch:
+# dsh --profile tui --patch /absolute/path/to/this/deepseek-harness.patch.yml
+- insert:
+    - id: mcp-cooperators
+      name: '@deepseek-ai/dsh-mcp-client'
+      config:
+        serverName: cooperators
+        transport: stdio
+        command: /absolute/path/to/coop
+        args: [mcp-stdio, --kind, deepseek, --display-name, deepseek]
+        env:
+          COOP_SOCKET: /absolute/path/to/bus/run/daemon.sock
+        toolCallTimeoutMs: 90000
+        failOnStartupError: true
+        # A fresh adapter process enrolls a new identity. Disable automatic
+        # reconnect unless --resume and an explicit private token are configured.
+        reconnect:
+          enabled: false

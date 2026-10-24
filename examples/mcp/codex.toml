@@ -1,0 +1,9 @@
+# Merge into your Codex config.toml after replacing both absolute paths.
+[mcp_servers.cooperators]
+command = "/absolute/path/to/coop"
+args = ["mcp-stdio", "--kind", "codex", "--display-name", "codex"]
+startup_timeout_sec = 15
+tool_timeout_sec = 90
+
+[mcp_servers.cooperators.env]
+COOP_SOCKET = "/absolute/path/to/bus/run/daemon.sock"

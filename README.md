@@ -26,7 +26,7 @@ Claude qualification and remaining performance scope.
 - Channels with replayable cursors.
 - Work queues with leases, fencing tokens, retries, and dead letters.
 - Versioned documents with compare-and-swap updates and exclusive edit leases.
-- 28 MCP tools prefixed `coop_*`, exposed identically over ordinary stdio and
+- 29 MCP tools prefixed `coop_*`, exposed identically over ordinary stdio and
   streamable HTTP.
 - Optional durable document/queue arrival subscriptions, separate peek/ACK
   feeds, and managed Codex/Claude host bridges. Managed sessions expose local
@@ -133,10 +133,65 @@ Add to `~/.codex/config.toml` (use the absolute path to your build):
 [mcp_servers.cooperators]
 command = "/home/you/Repos/Cooperators/target/release/coop"
 args = ["mcp-stdio", "--kind", "codex", "--display-name", "codex"]
+startup_timeout_sec = 15
+tool_timeout_sec = 90
 
 [mcp_servers.cooperators.env]
 COOP_SOCKET = "/home/you/.local/share/cooperators/run/daemon.sock"
 ```
+
+See the [copyable Codex configuration](examples/mcp/codex.toml) and
+[official MCP configuration documentation](https://learn.chatgpt.com/docs/extend/mcp).
+
+### DeepSeek Harness
+
+Use Harness's `@deepseek-ai/dsh-mcp-client` plugin. Replace the binary and socket
+paths in the [Cooperators patch](examples/mcp/deepseek-harness.patch.yml), then
+launch it with your existing Harness profile:
+
+```sh
+dsh --profile tui --patch /absolute/path/to/deepseek-harness.patch.yml
+```
+
+The tools appear as `mcp__cooperators__coop_instance_metadata`,
+`mcp__cooperators__coop_send_message`, and so on. The patch sets a 90-second tool
+timeout and disables automatic reconnect: a new adapter process otherwise
+enrolls a new broker identity. To preserve identity across adapter restarts, use
+`--resume` and explicitly provide the existing private `COOP_TOKEN` in the plugin's
+`env`; Harness scrubs ambient credentials. The broker must already be running.
+
+Both Codex and Harness configurations use native MCP tools, with no shell wrapper
+or model-provider API key needed by Cooperators. Call `coop_instance_metadata {}`
+first and address peers using its returned IDs/routing names. Keep ordinary
+long-polls at 30 seconds or less with these settings; a tool timeout is not proof
+that a write failed. MCP tool availability does not schedule an idle model turn;
+automatic arrival handling needs the separate managed host bridge. A DeepSeek
+managed host adapter is not included in this compatibility change.
+
+#### Repeatable installed-client check
+
+After building, run the offline interoperability check with Node.js 22+, Codex
+on PATH, an installed Harness package, and permission to bind local Unix sockets:
+
+```sh
+cargo build --offline --locked
+node scripts/check_mcp_clients.mjs \
+  --binary "$PWD/target/debug/coop" \
+  --dsh-package "$HOME/.local/lib/node_modules/@deepseek-ai/dsh/package.json"
+```
+
+Use the actual `@deepseek-ai/dsh/package.json` path for your installation;
+`--codex /absolute/path/to/codex` selects a specific Codex executable. The check
+creates a temporary daemon and Codex home, loads Harness's actual MCP plugin and
+tool registry, and uses Codex's app-server MCP interface. It verifies discovery,
+distinct identities, messages in both directions, peek/ACK behavior, and tool
+errors, then shuts down and removes its temporary state. It starts no model turns
+and does not change user configuration. Local checks passed with Codex 0.163.0 and
+Harness 0.2.1-rc.3; other versions and direct remote HTTP/OAuth are outside this
+installed-client check. Protocol regressions also cover MCP 2025-03-26,
+2025-11-25, and 2026-07-28 in `tests/m3.rs`.
+The [local validation record](docs/impl/mcp-clients-20261024/validation.json)
+includes client versions, scoped results, and source/binary hashes.
 
 ### Claude Code / Claude Desktop
 

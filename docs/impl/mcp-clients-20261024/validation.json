@@ -1,0 +1,58 @@
+{
+  "recorded_at": "2026-10-24T07:50:40.699714+00:00",
+  "base_commit": "f26595c080f35022b8e40273fc174c68d8f824bf",
+  "scope": "Local stdio MCP through the production UDS daemon; installed client interfaces without LLM turns. Does not qualify remote HTTP/OAuth, managed DeepSeek activation, or paused N3b network work.",
+  "installed_clients": {
+    "passed": true,
+    "codex": "codex-cli 0.163.0",
+    "dsh": "0.2.1-rc.3",
+    "toolCount": 29,
+    "transport": "stdio-to-UDS",
+    "checks": [
+      "discovery",
+      "distinct-identities",
+      "bidirectional-messages",
+      "peek-and-ack",
+      "tool-errors"
+    ],
+    "modelTurns": 0
+  },
+  "installed_client_command": "node scripts/check_mcp_clients.mjs --dsh-package /home/lsz/.local/lib/node_modules/@deepseek-ai/dsh/package.json",
+  "binary_sha256": "d955315b9c61f46599e55e18992717843b288ca1e62c73fbc5f926c6bf5f1a49",
+  "integration_regressions": {
+    "command": "COOP_REQUIRE_UDS=1 cargo test --offline --locked --test m3 --test instance_launch --test network_facades",
+    "passed": 18,
+    "failed": 0,
+    "skipped": 0
+  },
+  "protocol_regressions": [
+    "2025-03-26",
+    "2025-11-25",
+    "2026-07-28"
+  ],
+  "configuration_checks": [
+    "Codex TOML parsed with Python tomllib",
+    "Harness YAML parsed and validated against installed dsh-mcp-client Config"
+  ],
+  "source_sha256": {
+    "src/mcp.rs": "34405dd9f95f052bedb79a199e89998a2d700c80a2f48ea6a65b82e7c3665e60",
+    "tests/m3.rs": "a076661ac38a1f7b48d5c101039bbc33c5356327ba762fb187bcc08c2468a56d",
+    "scripts/check_mcp_clients.mjs": "73f72a840656921669d23539c36a4d8ad49bb09bd213d1f9473db5622d9cf0c3",
+    "examples/mcp/codex.toml": "e132e3155e72f32073ca7febe8b1398383892b4ed209a24247b8c205425eaf7c",
+    "examples/mcp/deepseek-harness.patch.yml": "558595147a5a6c367ca151c99a58e8588eb5a7e4962fe8d12e8d123ec6a518f1",
+    "README.md": "cbc2fa2be435d8a3c233dfb018fedd05a57961b3abfae0a11f528bf1582aedc9",
+    "skill/references/setup.md": "a6e42620b11d2bc0eb6a025c9763907d2aa4c817c7ff876a171c2acd0f6bf47f"
+  },
+  "unit_regressions": {
+    "command": "cargo test --offline --locked --lib mcp::",
+    "passed": 5,
+    "failed": 0,
+    "skipped": 0
+  },
+  "node_version": "v24.22.0",
+  "static_checks": [
+    "cargo fmt --check",
+    "git diff --check",
+    "node --check scripts/check_mcp_clients.mjs"
+  ]
+}

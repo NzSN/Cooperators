@@ -1072,6 +1072,108 @@ impl StdioProcess {
 }
 
 #[tokio::test]
+async fn mcp_stdio_discovery_and_calls_support_legacy_and_modern_clients() {
+    for version in ["2025-03-26", "2025-11-25", "2026-07-28"] {
+        let temp = common::TempDir::new("m3-client-compatibility");
+        let root = temp.path().join("root");
+        let state = Arc::new(DaemonState::with_config(DaemonConfig::new(root.clone())).unwrap());
+        let mut session = ConnectionSession::default();
+        let registration = server::dispatch(
+            &state,
+            &mut session,
+            RpcRequest {
+                id: Some(json!(1)),
+                method: "register_agent".into(),
+                params: json!({"name": "compatibility-client", "kind": "test"}),
+                is_notification: false,
+            },
+        )
+        .await
+        .unwrap()
+        .into_result()
+        .unwrap();
+        drop(state);
+        let mut process = StdioProcess::spawn(&root, registration["token"].as_str().unwrap()).await;
+        let modern = version == "2026-07-28";
+        let meta = json!({
+            "io.modelcontextprotocol/protocolVersion": version,
+            "io.modelcontextprotocol/clientInfo": {"name": "compatibility-test", "version": "1"},
+            "io.modelcontextprotocol/clientCapabilities": {}
+        });
+        let opener = if modern {
+            json!({"jsonrpc":"2.0", "id":1, "method":"server/discover", "params":{"_meta":meta}})
+        } else {
+            json!({"jsonrpc":"2.0", "id":1, "method":"initialize", "params":{
+                "protocolVersion":version, "capabilities":{},
+                "clientInfo":{"name":"compatibility-test", "version":"1"}
+            }})
+        };
+        process.send(opener).await;
+        let opened = process.read_response(1).await;
+        assert!(opened.get("error").is_none(), "{version}: {opened}");
+        let server_info = if modern {
+            &opened["result"]["_meta"]["io.modelcontextprotocol/serverInfo"]
+        } else {
+            &opened["result"]["serverInfo"]
+        };
+        assert_eq!(server_info["name"], "cooperators");
+        if !modern {
+            process
+                .send(json!({"jsonrpc":"2.0", "method":"notifications/initialized"}))
+                .await;
+        }
+        for (id, method, mut params) in [
+            (2, "tools/list", json!({})),
+            (
+                3,
+                "tools/call",
+                json!({"name":"coop_instance_metadata", "arguments":{}}),
+            ),
+            (
+                4,
+                "tools/call",
+                json!({"name":"coop_read_doc", "arguments":{"name":"missing"}}),
+            ),
+        ] {
+            if modern {
+                params["_meta"] = meta.clone();
+            }
+            process
+                .send(json!({"jsonrpc":"2.0", "id":id, "method":method, "params":params}))
+                .await;
+            let response = process.read_response(id).await;
+            assert!(
+                response.get("error").is_none(),
+                "{version} {method}: {response}"
+            );
+            let result = &response["result"];
+            if id == 2 {
+                assert_eq!(result["tools"].as_array().unwrap().len(), TOOL_SPECS.len());
+                if modern {
+                    assert_eq!(result["resultType"], "complete");
+                    assert_eq!(result["ttlMs"], 0);
+                    assert_eq!(result["cacheScope"], "private");
+                }
+            } else {
+                assert_eq!(result["isError"], id == 4);
+                let text: Value =
+                    serde_json::from_str(result["content"][0]["text"].as_str().unwrap()).unwrap();
+                assert_eq!(
+                    text, result["structuredContent"],
+                    "text-only clients receive the same outcome"
+                );
+                if id == 3 {
+                    assert_eq!(text["agent_id"], registration["agent_id"]);
+                } else {
+                    assert_eq!(text["data"]["code"], "NOT_FOUND");
+                }
+            }
+        }
+        assert!(process.shutdown().await.success());
+    }
+}
+
+#[tokio::test]
 async fn mcp_stdio_subprocess_roundtrip_over_pipes() {
     let temp = common::TempDir::new("m3-stdio");
     let root = temp.path().join("root");
