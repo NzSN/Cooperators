@@ -77,6 +77,7 @@ The P0 envelope is normative and unchanged:
 
 - The boundary is **loopback + filesystem permissions**: UDS at 0600, HTTP on 127.0.0.1, root dir 0700. Any local process able to open the socket still needs a token.
 - `agent_id` identifies one independently launched **agent instance**. A token is a credential for that instance; `kind` identifies its application family. Two Codex sessions must receive different IDs and credentials even when they share configuration and both have `kind = "codex"`.
+- Inbox message bodies and ACKs are scoped to the authenticated recipient's ID, never a caller-supplied mailbox ID/name. MCP tool arguments cannot replace the adapter's captured token or HTTP bearer. Explorer credentials expose metadata only and cannot read any inbox.
 - Existing `register_agent` issues `(agent_id, token)` for a unique name. Re-registration with the old token rotates credentials for that same instance. Starting another instance must use fresh-instance enrollment, never token rotation or a shared configured instance token.
 - Sandboxed agents that cannot read the home directory get the socket path and token via their MCP server config (`command: coop mcp-stdio`, `env: {COOP_TOKEN, COOP_SOCKET}`), which is the standard MCP provisioning channel.
 
@@ -178,6 +179,29 @@ corpus verification are prerequisites; closing a defect additionally requires
 actual failure-injected implementation replay with authoritative observations,
 plus the relevant existing protocol, writer, and progress checks. Missing
 capabilities must fail preflight rather than count as reproduced or fixed.
+
+### 4.3 Local human explorer credential
+
+An operator may provision a private raw token file before daemon startup, selected
+by `--explorer-token-file` or `COOP_EXPLORER_TOKEN_FILE`. Startup validates the file
+and retains only the credential digest in memory. It is independent of the agent
+registry and cannot reuse existing agent or approved network device credentials.
+No registry schema upgrade or agent enrollment is needed.
+
+The credential authorizes only local UDS `list_agents` and `daemon.status`.
+Explorer reads do not refresh presence, append transition events, or create an
+agent identity. All other methods are denied, including enrollment and identity
+mutation; an explorer-authenticated connection cannot switch credentials. HTTP,
+MCP bearer authentication, and native network authorization do not accept this
+credential. This is a credential capability boundary within the existing Unix
+account trust boundary, not isolation from the account owning the socket/root.
+
+CLI `--token-file` reads the private raw file without exposing the bearer in
+arguments and overrides `COOP_TOKEN`. Replacing the startup file takes effect
+only after daemon restart. Provisioning and systemd examples are in the
+[operator guide](../operator.md#human-read-only-explorer). Tests in
+`tests/explorer.rs` cover read-only state, denial paths, rotation, local/network
+separation, and actual CLI/daemon execution over UDS.
 
 ## 5. Message lifecycle
 

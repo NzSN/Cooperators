@@ -105,6 +105,14 @@ and pass it explicitly.
 COOP_TOKEN='<token>' ./target/release/coop agents --include-stale
 ```
 
+For human inspection without registering an agent, configure a private explorer
+token file before daemon startup. It permits local agent listing and status
+only; see [Human read-only explorer](docs/operator.md#human-read-only-explorer).
+
+```sh
+coop --token-file "$HOME/.config/cooperators/explorer.token" agents --include-stale
+```
+
 ## MCP client configuration
 
 The primary integration path is `coop mcp-stdio`: each MCP client spawns a
@@ -234,6 +242,9 @@ Metric names and operator procedures are in [`docs/operator.md`](docs/operator.m
   an authentication story.
 - Tokens are bearer credentials: whoever reads one can act as that agent.
   Protect MCP client configs and environment variables.
+- Inbox contents are scoped to the authenticated recipient. Other agents and
+  explorer credentials cannot read them. MCP tool arguments cannot override
+  the adapter's captured identity with another agent's token.
 - There is no message encryption and no encryption at rest. The append-only
   JSONL logs are readable by the account that owns the bus root.
 - `--embedded` and the daemon both hold the root ownership lock before replay.

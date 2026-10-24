@@ -272,12 +272,29 @@ impl DaemonState {
     /// agents are returned; otherwise every state is included.
     pub async fn list_agents(&self, include_stale: bool) -> Result<Vec<AgentView>, BrokerError> {
         self.sweep_presence().await?;
+        Ok(self.agent_snapshot(include_stale).await)
+    }
+
+    /// Observation without touching presence or emitting state-transition events.
+    pub(crate) async fn agent_snapshot(&self, include_stale: bool) -> Vec<AgentView> {
         let registry = self.registry.read().await;
         let presence = self.presence.lock().await;
+        let now = id::unix_millis();
+        let stale_ms = u64::try_from(self.config.stale_after.as_millis()).unwrap_or(u64::MAX);
+        let gone_ms = u64::try_from(self.config.gone_after.as_millis()).unwrap_or(u64::MAX);
         let mut views = Vec::new();
         for (name, record) in registry.records_with_names() {
             let entry = presence.entries.get(&record.agent_id);
-            let state = entry.map_or(AgentState::Active, |entry| entry.state);
+            let state = entry.map_or(AgentState::Active, |entry| {
+                let silence = now.saturating_sub(entry.last_seen_ms);
+                if silence >= gone_ms {
+                    AgentState::Gone
+                } else if silence >= stale_ms {
+                    AgentState::Stale
+                } else {
+                    AgentState::Active
+                }
+            });
             if !include_stale && state != AgentState::Active {
                 continue;
             }
@@ -295,7 +312,7 @@ impl DaemonState {
                 registered_at: record.registered_at.clone(),
             });
         }
-        Ok(views)
+        views
     }
 
     pub(crate) async fn list_agents_page(

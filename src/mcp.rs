@@ -922,25 +922,7 @@ impl CoopMcpHandler {
                 let replacement = map
                     .get("token")
                     .is_some_and(|body| body.as_str() != Some(&token));
-                let bind = if !replacement || managed || self.auth == AuthMode::HttpHeader {
-                    true
-                } else {
-                    match &self.backend {
-                        Backend::Remote(_) => true,
-                        Backend::Embedded(state) => {
-                            let registry = state.registry.read().await;
-                            registry.authenticate(&token).is_none_or(|identity| {
-                                registry.network_grant(&identity.agent_id).is_some()
-                            })
-                        }
-                        Backend::Uds { .. } => self
-                            .backend
-                            .call("instance_metadata", json!({"token":token}))
-                            .await
-                            .map_or(true, |metadata| metadata["network_scoped"] == true),
-                    }
-                };
-                if replacement && bind {
+                if replacement {
                     return tool_error(
                         ErrorCode::Forbidden.rpc_code(),
                         "body credential cannot replace captured transport identity",
@@ -948,10 +930,15 @@ impl CoopMcpHandler {
                     )
                     .into();
                 }
-                if bind {
-                    map.insert("token".into(), Value::String(token));
-                }
+                map.insert("token".into(), Value::String(token));
             }
+        } else if params.get("token").is_some() {
+            return tool_error(
+                ErrorCode::Forbidden.rpc_code(),
+                "body credential cannot establish a transport identity",
+                "FORBIDDEN",
+            )
+            .into();
         }
 
         let queue = params

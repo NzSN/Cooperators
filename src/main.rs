@@ -43,9 +43,13 @@ struct Cli {
     #[arg(long, global = true, value_name = "DIR")]
     root: Option<PathBuf>,
 
-    /// Agent token. Defaults to $COOP_TOKEN when omitted.
+    /// Agent or local explorer token. Defaults to $COOP_TOKEN when omitted.
     #[arg(long, global = true, value_name = "TOKEN")]
     token: Option<String>,
+
+    /// Private file containing a raw agent or explorer token; overrides COOP_TOKEN.
+    #[arg(long, global = true, value_name = "FILE", conflicts_with = "token")]
+    token_file: Option<PathBuf>,
 
     /// Private local intent journal required for remote mutations.
     #[arg(long, global = true, value_name = "DIR")]
@@ -187,6 +191,10 @@ enum DaemonCommand {
         /// Explicitly activate network authority using a private JSON policy.
         #[arg(long)]
         network_config: Option<PathBuf>,
+        /// Private read-only explorer token file, loaded once before serving.
+        /// Defaults to COOP_EXPLORER_TOKEN_FILE when omitted.
+        #[arg(long, value_name = "FILE")]
+        explorer_token_file: Option<PathBuf>,
     },
 }
 
@@ -234,6 +242,15 @@ enum ArrivalCommand {
 #[tokio::main]
 async fn main() -> ExitCode {
     let mut cli = Cli::parse();
+    if let Some(path) = &cli.token_file {
+        match cooperators::explorer::read_token_file(path) {
+            Ok(token) => cli.token = Some(token),
+            Err(error) => {
+                eprintln!("coop: {error}");
+                return ExitCode::from(2);
+            }
+        }
+    }
     let root = paths::resolve_root(cli.root.as_deref());
     let broker = match resolve_client(&mut cli, &root) {
         Ok(client) => client,
@@ -250,6 +267,7 @@ async fn main() -> ExitCode {
                     http_addr,
                     enable_arrivals,
                     network_config,
+                    explorer_token_file,
                 },
         } => {
             let http_addr = match resolve_http_addr(http_addr) {
@@ -262,6 +280,11 @@ async fn main() -> ExitCode {
             let options = server::ServerOptions {
                 http_addr,
                 enable_arrivals,
+                explorer_token_file: explorer_token_file.or_else(|| {
+                    std::env::var_os("COOP_EXPLORER_TOKEN_FILE")
+                        .filter(|value| !value.is_empty())
+                        .map(PathBuf::from)
+                }),
             };
             let policy = match network_config
                 .map(|path| cooperators::network::NetworkPolicy::load(&path))
@@ -728,7 +751,7 @@ fn token_option(flag: &Option<String>) -> Option<String> {
 
 fn require_token(flag: &Option<String>) -> Result<String, ExitCode> {
     token_option(flag).ok_or_else(|| {
-        eprintln!("coop: missing agent token; pass --token or set {TOKEN_ENV}");
+        eprintln!("coop: missing token; pass --token-file/--token or set {TOKEN_ENV}");
         ExitCode::from(2)
     })
 }

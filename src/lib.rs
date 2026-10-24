@@ -31,6 +31,7 @@ pub mod client;
 pub mod docs;
 pub mod envelope;
 pub mod error;
+pub mod explorer;
 #[cfg(feature = "mbt-injection")]
 pub mod faults;
 pub mod host;

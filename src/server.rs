@@ -6,7 +6,9 @@
 //!
 //! T1 methods (`ping`, `echo`, `daemon.status`) stay unauthenticated so the
 //! original gate and local operators can inspect a running bus. Every broker
-//! method except `register_agent` requires an agent token. Tokens arrive in
+//! method except registration/enrollment requires an agent token, with a separate
+//! optional startup-configured explorer credential for local agent/status reads.
+//! Tokens arrive in
 //! `params.token`; after a successful call the connection remembers the token
 //! so later requests on the same socket may omit it.
 //!
@@ -137,6 +139,8 @@ pub struct DaemonConfig {
     /// Explicit approved-principal policy; activates the incompatible network
     /// root format before source-log recovery. A client connection never does.
     pub network_policy: Option<crate::network::NetworkPolicy>,
+    /// Local observation credential loaded at startup; never registers an agent.
+    pub explorer_token_file: Option<PathBuf>,
 }
 
 impl DaemonConfig {
@@ -161,6 +165,7 @@ impl DaemonConfig {
             enable_arrivals: false,
             arrival_limits: ArrivalLimits::default(),
             network_policy: None,
+            explorer_token_file: None,
         }
     }
 }
@@ -168,6 +173,7 @@ impl DaemonConfig {
 /// Shared daemon state: identity plus the M1 indexes.
 #[derive(Debug)]
 pub struct DaemonState {
+    explorer: Option<crate::explorer::ExplorerCredential>,
     // Background tasks hold the state, so ownership outlives every writer even
     // if the listening future is cancelled before the process exits.
     _root_lease: Option<Arc<RootLease>>,
@@ -198,6 +204,12 @@ pub struct DaemonState {
 }
 
 impl DaemonState {
+    pub(crate) fn is_explorer(&self, token: &str) -> bool {
+        self.explorer
+            .as_ref()
+            .is_some_and(|credential| credential.matches(token))
+    }
+
     /// Production constructor: locks the root before replay and holds ownership
     /// until all state users, including background workers, have gone away.
     pub fn owned(config: DaemonConfig) -> Result<Self, BrokerError> {
@@ -224,11 +236,24 @@ impl DaemonState {
     /// Creates state with explicit tunables, replaying registry, inboxes, and
     /// the `#presence` channel before returning.
     pub fn with_config(config: DaemonConfig) -> Result<Self, BrokerError> {
+        let explorer = config
+            .explorer_token_file
+            .as_deref()
+            .map(crate::explorer::ExplorerCredential::load)
+            .transpose()
+            .map_err(|error| BrokerError::invalid(format!("explorer credential: {error}")))?;
         if let Some(policy) = &config.network_policy {
             policy.validate()?;
         }
         paths::ensure_layout(&config.root)?;
         let mut registry = Registry::load(&config.root)?;
+        if explorer.as_ref().is_some_and(|credential| {
+            credential.conflicts_with(&registry, config.network_policy.as_ref())
+        }) {
+            return Err(BrokerError::invalid(
+                "explorer token must differ from agent and network credentials",
+            ));
+        }
         if registry.network_meta().is_some() && config.network_policy.is_none() {
             return Err(BrokerError::invalid(
                 "an activated network root requires its approved policy on every reopen",
@@ -333,6 +358,7 @@ impl DaemonState {
         }
 
         Ok(Self {
+            explorer,
             _root_lease: None,
             root: config.root.clone(),
             started: Instant::now(),
@@ -495,6 +521,8 @@ pub struct ServerOptions {
     pub http_addr: Option<SocketAddr>,
     /// Explicitly activate durable arrival notifications for this root.
     pub enable_arrivals: bool,
+    /// Optional local explorer token file. A configured invalid file fails startup.
+    pub explorer_token_file: Option<PathBuf>,
 }
 
 impl Default for ServerOptions {
@@ -502,6 +530,7 @@ impl Default for ServerOptions {
         Self {
             http_addr: crate::mcp::DEFAULT_HTTP_ADDR.parse().ok(),
             enable_arrivals: false,
+            explorer_token_file: None,
         }
     }
 }
@@ -537,6 +566,7 @@ pub async fn run_with_network_policy(
     let mut config = DaemonConfig::new(root.to_path_buf());
     config.enable_arrivals = options.enable_arrivals;
     config.network_policy = policy;
+    config.explorer_token_file = options.explorer_token_file;
     let state = Arc::new(DaemonState::owned(config).map_err(|error| match error {
         BrokerError::Io(error) => error,
         error => io::Error::other(format!("initialize daemon state: {error}")),
@@ -601,6 +631,16 @@ pub async fn dispatch(
     session: &mut ConnectionSession,
     request: RpcRequest,
 ) -> Option<RpcResponse> {
+    // Recognize the local observer before network routing. It is never promoted
+    // to a network or agent principal. Trusted dispatch applies the same gate.
+    if session
+        .token
+        .as_deref()
+        .is_some_and(|token| state.is_explorer(token))
+        || request_token(&request.params, session).is_ok_and(|token| state.is_explorer(&token))
+    {
+        return dispatch_trusted(state, session, request).await;
+    }
     if state.network().is_some() {
         if request
             .params
@@ -676,6 +716,36 @@ async fn route(
     session: &mut ConnectionSession,
     request: &RpcRequest,
 ) -> Result<Value, RpcError> {
+    let explorer_session = session
+        .token
+        .as_deref()
+        .is_some_and(|token| state.is_explorer(token));
+    if explorer_session
+        || request_token(&request.params, session).is_ok_and(|token| state.is_explorer(&token))
+    {
+        let token = request_token(&request.params, session)?;
+        if !state.is_explorer(&token) {
+            return Err(RpcError::application(
+                ErrorCode::Forbidden,
+                "explorer session cannot change credentials",
+            ));
+        }
+        session.token = Some(token);
+        return match request.method.as_str() {
+            "list_agents" => {
+                let params: ListAgentsParams = parse_params(&request.params)?;
+                let agents = state
+                    .agent_snapshot(params.include_stale.unwrap_or(false))
+                    .await;
+                Ok(json!({"agents": agents}))
+            }
+            "daemon.status" => to_value(state.status()),
+            _ => Err(RpcError::application(
+                ErrorCode::Forbidden,
+                "explorer token permits only list_agents and daemon.status over local UDS",
+            )),
+        };
+    }
     match request.method.as_str() {
         "ping" => Ok(json!({
             "pong": true,
@@ -703,6 +773,12 @@ async fn route(
         }
         "enroll_agent" => {
             let params: EnrollParams = parse_params(&request.params)?;
+            if state.is_explorer(&params.launch_key) {
+                return Err(RpcError::application(
+                    ErrorCode::Forbidden,
+                    "explorer token cannot enroll an agent",
+                ));
+            }
             let enrollment = state
                 .enroll_agent(
                     params.launch_key,

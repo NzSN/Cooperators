@@ -1,5 +1,70 @@
 # Operator guide
 
+## Human read-only explorer
+
+Configure an explorer credential before starting the daemon to inspect agents
+without registering a human as an agent. This local UDS credential permits
+`list_agents` and `daemon.status` only. It has no inbox, presence entry, or agent
+ID. It cannot enroll/register agents, send messages, ACK, heartbeat, claim work,
+or mutate broker data. Explorer listing computes presence states without
+refreshing agents or emitting presence events. HTTP/MCP and network credentials
+remain separate; the explorer credential is not accepted by those endpoints.
+
+Inbox message bodies are available only through the recipient's authenticated
+agent identity. Supplying another agent's name, ID, or cursor does not select
+that agent's inbox. MCP adapters bind calls to their captured identity (or HTTP
+bearer); tool arguments cannot replace it with another token. Explorer listing
+and status expose metadata only and never include inbox message bodies.
+
+Create a private file containing a randomly generated raw token (one line).
+Reuse the file on subsequent starts; do not overwrite it unless rotating:
+
+```sh
+install -d -m 700 "$HOME/.config/cooperators"
+python3 - <<'PY'
+import os
+from pathlib import Path
+import secrets
+path = Path.home() / ".config/cooperators/explorer.token"
+fd = os.open(path, os.O_WRONLY | os.O_CREAT | os.O_EXCL, 0o600)
+with os.fdopen(fd, "w") as stream:
+    stream.write(secrets.token_hex(32) + "\n")
+PY
+coop daemon run --http-addr off \
+  --explorer-token-file "$HOME/.config/cooperators/explorer.token"
+```
+
+Alternatively, set `COOP_EXPLORER_TOKEN_FILE` in the daemon's environment. For a
+user systemd service, add the following with `systemctl --user edit
+cooperators.service`, then reload and restart that service:
+
+```ini
+[Service]
+Environment=COOP_EXPLORER_TOKEN_FILE=%h/.config/cooperators/explorer.token
+```
+
+The flag takes precedence over the environment. A configured missing, invalid,
+symlinked, or group/world-accessible file fails startup. The token must contain
+at least 32 ASCII graphic characters; use a random token, distinct from agent
+credentials. The daemon loads it once and retains its digest in memory. To
+rotate it, replace the file and restart the daemon; omit the startup setting
+and restart to disable explorer access. It is never written to the registry.
+
+Humans can load the file directly, without registering or copying its secret
+into command arguments:
+
+```sh
+coop --token-file "$HOME/.config/cooperators/explorer.token" agents --include-stale
+coop --token-file "$HOME/.config/cooperators/explorer.token" status
+```
+
+`--token-file` also accepts a raw agent token file and overrides `COOP_TOKEN`.
+It conflicts with `--token`. The CLI does not automatically discover token
+files. If needed, the owner can read this file in their own terminal to set
+`COOP_TOKEN`; keep it out of shared logs and chat. Local socket permissions still
+apply, and this credential does not restrict what the Unix account owning the
+bus can do independently of that credential.
+
 ## Document and task arrivals
 
 Arrival notifications are opt-in. The first enabled start promotes the bus
@@ -99,8 +164,11 @@ stderr when running under a supervisor, for example
 | `COOPERATORS_HOME` | daemon, CLI, stdio | `$HOME/.local/share/cooperators` | Bus root. Overrides `--root`. |
 | `--root <DIR>` | all commands | platform default | Ignored when `COOPERATORS_HOME` is non-empty. |
 | `COOP_SOCKET` | daemon, CLI, stdio | `<root>/run/daemon.sock` | Explicit socket path; useful when the client cannot derive the root. |
-| `COOP_TOKEN` | CLI, stdio with `--resume` | none | Agent bearer token when `--token` is omitted. Fresh stdio launches enroll independently. |
+| `COOP_TOKEN` | CLI, stdio with `--resume` | none | Agent bearer token, or local explorer token for agent/status inspection. Fresh stdio launches enroll independently. |
 | `--token <TOKEN>` | all commands | none | Global CLI flag; wins over `COOP_TOKEN`. |
+| `--token-file <FILE>` | client commands | none | Private raw token file; overrides `COOP_TOKEN`, conflicts with `--token`. |
+| `COOP_EXPLORER_TOKEN_FILE` | daemon | none | Private read-only explorer credential loaded before serving. |
+| `--explorer-token-file <FILE>` | `daemon run` | environment | Startup explorer credential; flag wins over environment. |
 | `COOP_HTTP_ADDR` | daemon | `127.0.0.1:7420` | HTTP MCP/health/metrics address. `off` or `none` disables the listener. |
 | `--http-addr <ADDR>` | `daemon run` | `COOP_HTTP_ADDR` or `127.0.0.1:7420` | CLI flag wins. |
 | `COOP_REQUIRE_UDS` | tests | unset | When set, socket tests fail instead of skipping. |

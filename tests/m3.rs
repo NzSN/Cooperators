@@ -314,7 +314,8 @@ enum Driver {
         session: ConnectionSession,
     },
     Mcp {
-        handler: CoopMcpHandler,
+        state: Arc<DaemonState>,
+        token: Option<String>,
     },
     Http {
         client: HttpDriver,
@@ -336,13 +337,28 @@ impl Driver {
                     .expect("dispatch returns a response for requests");
                 mcp::canonical_response(response)
             }
-            Self::Mcp { handler } => {
+            Self::Mcp { state, token } => {
+                // A multi-agent transcript chooses an adapter identity in the
+                // test host, just as the HTTP driver chooses its bearer header.
+                // Tool arguments cannot change a running adapter's identity.
+                let selected = args
+                    .get("token")
+                    .and_then(Value::as_str)
+                    .map(str::to_owned)
+                    .or_else(|| token.clone());
+                let handler =
+                    CoopMcpHandler::stdio(mcp::Backend::embedded(Arc::clone(state)), selected);
                 let arguments = args
                     .as_object()
                     .unwrap_or_else(|| panic!("tool arguments must be an object: {args}"))
                     .clone();
                 let response = handler.dispatch_tool(tool, Some(arguments)).await;
-                canonical_mcp_response(response)
+                let observation = canonical_mcp_response(response);
+                if observation["ok"] == true && matches!(method, "register_agent" | "retire_agent")
+                {
+                    *token = handler.captured_token().await;
+                }
+                observation
             }
             Self::Http { client } => client.call_tool(tool, args).await,
         }
@@ -564,9 +580,7 @@ async fn run_transcript(mode: Mode, transcript: &Transcript, root: &Path) -> Vec
             state,
             session: ConnectionSession::default(),
         },
-        Mode::Mcp => Driver::Mcp {
-            handler: CoopMcpHandler::stdio(mcp::Backend::embedded(state), None),
-        },
+        Mode::Mcp => Driver::Mcp { state, token: None },
         Mode::Http => Driver::Http {
             client: HttpDriver::start(root).await,
         },
